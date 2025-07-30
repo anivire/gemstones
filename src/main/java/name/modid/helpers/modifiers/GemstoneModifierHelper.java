@@ -9,6 +9,7 @@ import name.modid.helpers.modifiers.data.SapphireModifierData;
 import name.modid.helpers.modifiers.data.TopazModifierData;
 import name.modid.helpers.modifiers.data.ZirconModifierData;
 import name.modid.helpers.modifiers.types.ModifierOnHit;
+import name.modid.helpers.modifiers.types.ModifierOnHitEffect;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.item.ArmorItem;
@@ -103,6 +104,27 @@ public class GemstoneModifierHelper {
         if (modifier instanceof ModifierOnHit modifierOnHit) {
           ModifierOnHit newModifier = new ModifierOnHit(modifierOnHit.eventChance, modifierOnHit.eventType,
               modifierOnHit.itemType, modifierOnHit.gemstoneType);
+          newModifier.setRarityType(gem.gemstoneRarityType());
+          modifiers.add(newModifier);
+        }
+      }
+    }
+
+    return modifiers;
+  }
+
+  public static ArrayList<ModifierOnHitEffect> getOnHitEffectModifiers(ItemStack itemStack) {
+    ArrayList<ModifierOnHitEffect> modifiers = new ArrayList<>();
+    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+
+    for (Gemstone gem : gemstones) {
+      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
+        GemstoneModifier modifier = getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
+        if (modifier instanceof ModifierOnHitEffect modifierOnHitEffect) {
+          ModifierOnHitEffect newModifier = new ModifierOnHitEffect(modifierOnHitEffect.inflitChance,
+              modifierOnHitEffect.duration, modifierOnHitEffect.amplifier, modifierOnHitEffect.itemType,
+              modifierOnHitEffect.effect, modifierOnHitEffect.isStacking, modifierOnHitEffect.maxStackCount,
+              modifierOnHitEffect.gemstoneType);
           newModifier.setRarityType(gem.gemstoneRarityType());
           modifiers.add(newModifier);
         }

@@ -2,8 +2,10 @@ package name.modid.mixin;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -13,9 +15,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
+import name.modid.helpers.ItemGemstoneHelper;
 import name.modid.helpers.modifiers.GemstoneModifierHelper;
 import name.modid.helpers.modifiers.types.ModifierOnHit;
+import name.modid.helpers.modifiers.types.ModifierOnHitEffect;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,59 +33,82 @@ public class PersistentProjectileEntityMixin {
 
   @Inject(method = "onEntityHit", at = @At("HEAD"))
   protected void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) {
-    PersistentProjectileEntity entity = (PersistentProjectileEntity) (Object) this;
-    if (!(entity instanceof ArrowEntity arrow) || arrow.getWorld().isClient || !arrow.getWorld().isRaining()) {
-      return;
-    }
-
-    if (arrow.getOwner() instanceof PlayerEntity player) {
-      ItemStack bow = player.getMainHandStack();
-      ServerWorld world = (ServerWorld) arrow.getWorld();
-      Vec3d pos = entityHitResult.getPos();
-
-      applyGemstoneModifiers(bow, world, pos, arrow);
-    }
+    handleHit(entityHitResult);
   }
 
   @Inject(method = "onBlockHit", at = @At("HEAD"))
   protected void onBlockHit(BlockHitResult blockHitResult, CallbackInfo ci) {
+    handleHit(blockHitResult);
+  }
+
+  private void handleHit(HitResult hitResult) {
     PersistentProjectileEntity entity = (PersistentProjectileEntity) (Object) this;
     if (!(entity instanceof ArrowEntity arrow) || arrow.getWorld().isClient || !arrow.getWorld().isRaining()) {
       return;
     }
 
-    if (arrow.getOwner() instanceof PlayerEntity player) {
-      ItemStack bow = player.getMainHandStack();
-      ServerWorld world = (ServerWorld) arrow.getWorld();
-      Vec3d pos = blockHitResult.getPos();
-
-      applyGemstoneModifiers(bow, world, pos, arrow);
-    }
-  }
-
-  private void spawnLightning(ServerWorld world, Vec3d pos) {
-    LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, world);
-    lightning.setPosition(pos.getX(), pos.getY(), pos.getZ());
-    world.spawnEntity(lightning);
-  }
-
-  private void applyGemstoneModifiers(ItemStack itemStack, ServerWorld world, Vec3d pos, ArrowEntity arrow) {
-    if (!(itemStack.getItem() instanceof BowItem) && !(itemStack.getItem() instanceof CrossbowItem)) {
+    if (!(arrow.getOwner() instanceof PlayerEntity player)) {
       return;
     }
 
-    ArrayList<ModifierOnHit> modifiers = GemstoneModifierHelper.getOnHitModifiers(itemStack);
-    double totalChance = 0.0;
+    LivingEntity target = hitResult instanceof EntityHitResult entityHit
+        && entityHit.getEntity() instanceof LivingEntity living ? living : null;
+    ItemStack weapon = getWeaponStack(player);
+    if (weapon == null) {
+      return;
+    }
 
-    for (ModifierOnHit modifier : modifiers) {
-      if (modifier.eventType == ModifierOnHit.EventType.LIGHTNING_BOLT) {
-        totalChance += modifier.eventChance.get(modifier.getRarityType().getValue());
+    ServerWorld world = (ServerWorld) arrow.getWorld();
+    Vec3d pos = hitResult.getPos();
+    applyGemstoneModifiers(weapon, world, pos, arrow, target);
+  }
+
+  private ItemStack getWeaponStack(PlayerEntity player) {
+    ItemStack mainHand = player.getMainHandStack();
+    ItemStack offHand = player.getOffHandStack();
+
+    if (isBowOrCrossbow(mainHand)) {
+      return mainHand;
+    } else if (isBowOrCrossbow(offHand)) {
+      return offHand;
+    }
+    return null;
+  }
+
+  private boolean isBowOrCrossbow(ItemStack stack) {
+    return stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem;
+  }
+
+  private void applyGemstoneModifiers(ItemStack itemStack, ServerWorld world, Vec3d pos, ArrowEntity arrow,
+      LivingEntity target) {
+    // ModifierOnHit
+    // TODO: move to ItemGemstoneHelper or make correct realization (woth support for other modifiers)
+    ArrayList<ModifierOnHit> onHitModifiers = GemstoneModifierHelper.getOnHitModifiers(itemStack);
+    if (!onHitModifiers.isEmpty()) {
+      double applyTotalChance = 0.0;
+      for (ModifierOnHit modifier : onHitModifiers) {
+        if (modifier.eventType == ModifierOnHit.EventType.LIGHTNING_BOLT) {
+          applyTotalChance += modifier.eventChance.get(modifier.getRarityType().getValue());
+        }
+      }
+
+      // EventType.LIGHTNING_BOLT
+      if (applyTotalChance > 0 && RANDOM.nextDouble() < Math.min(applyTotalChance, 1.0)) {
+        LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
+        if (lightning != null) {
+          lightning.setPosition(pos.getX(), pos.getY(), pos.getZ());
+          world.spawnEntity(lightning);
+        }
+        arrow.discard();
       }
     }
 
-    if (totalChance > 0 && RANDOM.nextDouble() < Math.min(totalChance, 1.0)) {
-      spawnLightning(world, pos);
-      arrow.discard();
+    // ModifierOnHitEffect
+    if (target != null) {
+      ArrayList<ModifierOnHitEffect> effectModifiers = GemstoneModifierHelper.getOnHitEffectModifiers(itemStack);
+      if (!effectModifiers.isEmpty()) {
+        ItemGemstoneHelper.applyOnHitEffectModifiers(effectModifiers, itemStack.getItem(), itemStack, target, world);
+      }
     }
   }
 }

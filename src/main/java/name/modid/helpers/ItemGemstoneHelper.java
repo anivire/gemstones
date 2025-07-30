@@ -222,7 +222,7 @@ public class ItemGemstoneHelper {
     itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, itemAttributeModifiers);
   }
 
-  public static void applyOnHitModifiers(ArrayList<ModifierOnHitEffect> gemstoneModifiers, Item item,
+  public static void applyOnHitEffectModifiers(ArrayList<ModifierOnHitEffect> gemstoneModifiers, Item item,
       ItemStack itemStack, LivingEntity target, World world) {
     Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffect>> effectToModifiers = new HashMap<>();
     for (ModifierOnHitEffect modifier : gemstoneModifiers) {

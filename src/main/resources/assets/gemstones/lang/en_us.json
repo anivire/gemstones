@@ -30,7 +30,7 @@
   "item.gemstones.ruby_gemstone_legendary": "Ruby Gemstone",
 
   "tooltip.gemstones.ruby.melee_bonus": "%s to inflict %s",
-  "tooltip.gemstones.ruby.ranged_bonus": "ruby.ranged_bonus",
+  "tooltip.gemstones.ruby.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.ruby.tools_bonus": "ruby.tools_bonus",
   "tooltip.gemstones.ruby.armor_bonus": "gains %s max half-heart",
   

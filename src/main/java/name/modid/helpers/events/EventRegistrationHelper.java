@@ -19,7 +19,9 @@ import net.minecraft.util.ActionResult;
 
 public class EventRegistrationHelper {
   public static void initialize() {
-    // Register onHitEffect modifiers
+    /*
+     * Register MELEE onHitEffect modifiers
+     */
     AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
       if (!world.isClient && entity instanceof LivingEntity target) {
         Item item = player.getStackInHand(hand).getItem();
@@ -63,7 +65,7 @@ public class EventRegistrationHelper {
           }
         }
 
-        ItemGemstoneHelper.applyOnHitModifiers(gemstoneModifiers, item, itemStack, target, world);
+        ItemGemstoneHelper.applyOnHitEffectModifiers(gemstoneModifiers, item, itemStack, target, world);
       }
 
       return ActionResult.PASS;

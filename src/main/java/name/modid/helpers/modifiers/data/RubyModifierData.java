@@ -24,8 +24,8 @@ public record RubyModifierData() implements GemstonesModifierData {
             GemstoneModifierItemType.MELEE, EffectRegistrationHelper.BLEEDING_EFFECT, true, 5, GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.RANGED,
-        new ModifierAttribute(Operation.ADD_VALUE, new ArrayList<Double>(Arrays.asList(0.5, 1.0, 1.5, 2.0)),
-            GemstoneModifierItemType.RANGED, EntityAttributes.GENERIC_ATTACK_DAMAGE, GemstoneType.RUBY));
+        new ModifierOnHitEffect(new ArrayList<Double>(Arrays.asList(0.2, 0.3, 0.4, 0.5)), 6, 0,
+            GemstoneModifierItemType.RANGED, EffectRegistrationHelper.BLEEDING_EFFECT, true, 5, GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,
         new ModifierAttribute(Operation.ADD_MULTIPLIED_TOTAL, new ArrayList<Double>(Arrays.asList(0.5, 1.0, 1.5, 2.0)),
