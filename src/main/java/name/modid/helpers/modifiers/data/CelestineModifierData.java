@@ -24,8 +24,8 @@ public class CelestineModifierData implements GemstonesModifierData {
             EntityAttributes.GENERIC_ATTACK_SPEED, GemstoneType.CELESTINE));
 
     MODIFIERS.put(GemstoneModifierItemType.RANGED,
-        new ModifierAttribute(Operation.ADD_MULTIPLIED_BASE, new ArrayList<Double>(Arrays.asList(0.5, 1.2, 1.5, 2.2)),
-            GemstoneModifierItemType.RANGED, AttributeRegistrationHelper.DRAW_SPEED_ATTRIBUTE, GemstoneType.CELESTINE));
+        new ModifierAttribute(Operation.ADD_MULTIPLIED_BASE, new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.45)),
+            GemstoneModifierItemType.RANGED, AttributeRegistrationHelper.PULL_SPEED_ATTRIBUTE, GemstoneType.CELESTINE));
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,
         new ModifierAttribute(Operation.ADD_MULTIPLIED_BASE,

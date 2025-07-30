@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.BowItem;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
@@ -63,7 +64,7 @@ public class PersistentProjectileEntityMixin {
   }
 
   private void applyGemstoneModifiers(ItemStack itemStack, ServerWorld world, Vec3d pos, ArrowEntity arrow) {
-    if (!(itemStack.getItem() instanceof BowItem)) {
+    if (!(itemStack.getItem() instanceof BowItem) && !(itemStack.getItem() instanceof CrossbowItem)) {
       return;
     }
 

@@ -70,6 +70,7 @@
   "item.gemstones.zircon_gemstone_legendary": "Zircon Gemstone",
 
   "tooltip.gemstones.zircon.melee_bonus": "increase attack range by %s",
+  "tooltip.gemstones.zircon.ranged_bonus": "zircon.ranged_bonus",
   "tooltip.gemstones.zircon.tools_bonus": "increase block break range by %s",
   "tooltip.gemstones.zircon.armor_bonus": "increase jump height by %s",
 
@@ -78,10 +79,16 @@
   "item.gemstones.aquamarin_gemstone_rare": "Aquamarin Gemstone",
   "item.gemstones.aquamarin_gemstone_legendary": "Aquamarin Gemstone",
 
+  "tooltip.gemstones.aquamarin.melee_bonus": "increase attack damage by %s",
+  "tooltip.gemstones.aquamarin.ranged_bonus": "aquamarin.ranged_bonus",
+  "tooltip.gemstones.aquamarin.tools_bonus": "increase underwater block break speed by %s",
+  "tooltip.gemstones.aquamarin.armor_bonus": "increase oxygen by %s",
+
+
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
 
-  "attribute.name.generic.draw_speed": "Draw Speed",
+  "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",
   "attribute.name.generic.arrow_fly_distance": "Arrow Fly Distance"
 }

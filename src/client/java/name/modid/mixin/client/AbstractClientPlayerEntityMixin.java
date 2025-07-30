@@ -26,7 +26,7 @@ public class AbstractClientPlayerEntityMixin {
 
       float drawSpeedPercent = 0.0f;
       for (AttributeModifiersComponent.Entry mod : itemAttributeModifiers.modifiers()) {
-        if (AttributeRegistrationHelper.DRAW_SPEED_ATTRIBUTE == mod.attribute()) {
+        if (AttributeRegistrationHelper.PULL_SPEED_ATTRIBUTE == mod.attribute()) {
           drawSpeedPercent += (float) mod.modifier().value();
         }
       }

@@ -18,20 +18,22 @@ public record AquamarinModifierData() implements GemstonesModifierData {
 
   static {
     MODIFIERS.put(GemstoneModifierItemType.MELEE,
-        new ModifierAttribute(Operation.ADD_VALUE, new ArrayList<Double>(Arrays.asList(0.15, 0.20, 0.25, 0.35)),
-            GemstoneModifierItemType.MELEE, EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE, GemstoneType.AQUAMARIN));
+        new ModifierAttribute(Operation.ADD_VALUE, new ArrayList<Double>(Arrays.asList(0.5, 1.0, 1.55, 1.9)),
+            GemstoneModifierItemType.MELEE, EntityAttributes.GENERIC_ATTACK_DAMAGE, GemstoneType.AQUAMARIN));
 
     MODIFIERS.put(GemstoneModifierItemType.RANGED,
         new ModifierAttribute(Operation.ADD_VALUE, new ArrayList<Double>(Arrays.asList(1.0, 2.0, 3.0, 4.0)),
             GemstoneModifierItemType.RANGED, EntityAttributes.GENERIC_ATTACK_DAMAGE, GemstoneType.AQUAMARIN));
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,
-        new ModifierAttribute(Operation.ADD_VALUE, new ArrayList<Double>(Arrays.asList(0.1, 0.15, 0.25, 0.35)),
-            GemstoneModifierItemType.TOOLS, EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE, GemstoneType.AQUAMARIN));
+        new ModifierAttribute(Operation.ADD_MULTIPLIED_TOTAL,
+            new ArrayList<Double>(Arrays.asList(0.07, 0.14, 0.21, 0.28)), GemstoneModifierItemType.TOOLS,
+            EntityAttributes.PLAYER_SUBMERGED_MINING_SPEED, GemstoneType.AQUAMARIN));
 
     MODIFIERS.put(GemstoneModifierItemType.ARMOR,
-        new ModifierAttribute(Operation.ADD_VALUE, new ArrayList<Double>(Arrays.asList(0.025, 0.055, 0.075, 0.1)),
-            GemstoneModifierItemType.ARMOR, EntityAttributes.GENERIC_JUMP_STRENGTH, GemstoneType.AQUAMARIN));
+        new ModifierAttribute(Operation.ADD_MULTIPLIED_TOTAL,
+            new ArrayList<Double>(Arrays.asList(0.025, 0.055, 0.075, 0.1)), GemstoneModifierItemType.ARMOR,
+            EntityAttributes.GENERIC_OXYGEN_BONUS, GemstoneType.AQUAMARIN));
   }
 
   @Override
