@@ -19,8 +19,8 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import name.modid.helpers.ItemGemstoneHelper;
 import name.modid.helpers.modifiers.GemstoneModifierHelper;
-import name.modid.helpers.modifiers.types.ModifierOnHit;
-import name.modid.helpers.modifiers.types.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,14 +32,10 @@ public class PersistentProjectileEntityMixin {
   private static final Random RANDOM = new Random();
 
   @Inject(method = "onEntityHit", at = @At("HEAD"))
-  protected void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) {
-    handleHit(entityHitResult);
-  }
+  protected void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) { handleHit(entityHitResult); }
 
   @Inject(method = "onBlockHit", at = @At("HEAD"))
-  protected void onBlockHit(BlockHitResult blockHitResult, CallbackInfo ci) {
-    handleHit(blockHitResult);
-  }
+  protected void onBlockHit(BlockHitResult blockHitResult, CallbackInfo ci) { handleHit(blockHitResult); }
 
   private void handleHit(HitResult hitResult) {
     PersistentProjectileEntity entity = (PersistentProjectileEntity) (Object) this;

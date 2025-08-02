@@ -8,7 +8,7 @@ import name.modid.helpers.ItemGemstoneHelper;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.GemstoneModifierHelper;
-import name.modid.helpers.modifiers.types.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.types.GemstoneRarityType;
 import name.modid.helpers.types.GemstoneType;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -20,7 +20,7 @@ import net.minecraft.util.ActionResult;
 public class EventRegistrationHelper {
   public static void initialize() {
     /*
-     * Register MELEE onHitEffect modifiers
+     * Register only MELEE onHitEffect modifiers
      */
     AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
       if (!world.isClient && entity instanceof LivingEntity target) {

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import name.modid.helpers.ItemRegistrationHelper;
+import name.modid.helpers.GemstonesRegistrationHelper;
 import name.modid.helpers.types.GemstoneRarityType;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -72,14 +72,14 @@ public class GeodeItem extends Item {
     Item gemstoneItem = null;
     if (selectedType == GemstoneType.RUBY) {
       int index = selectedRarity.getValue();
-      List<Item> rubyList = ItemRegistrationHelper.getRubyGemstones();
+      List<Item> rubyList = GemstonesRegistrationHelper.getRubyGemstones();
 
       if (rubyList != null && !rubyList.isEmpty() && index >= 0 && index < rubyList.size()) {
         gemstoneItem = rubyList.get(index);
       }
     } else if (selectedType == GemstoneType.CELESTINE) {
       int index = selectedRarity.getValue();
-      List<Item> celestineList = ItemRegistrationHelper.getCelestineGemstones();
+      List<Item> celestineList = GemstonesRegistrationHelper.getCelestineGemstones();
 
       if (celestineList != null && !celestineList.isEmpty() && index >= 0 && index < celestineList.size()) {
         gemstoneItem = celestineList.get(index);

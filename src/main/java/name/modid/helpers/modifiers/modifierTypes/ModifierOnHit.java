@@ -1,4 +1,4 @@
-package name.modid.helpers.modifiers.types;
+package name.modid.helpers.modifiers.modifierTypes;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class ModifierOnHit implements GemstoneModifier {
-  public enum EventType {
-    LIGHTNING_BOLT
-  };
+  public enum EventType { LIGHTNING_BOLT };
 
   public ArrayList<Double> eventChance = new ArrayList<Double>();
   public EventType eventType;
@@ -50,15 +48,9 @@ public class ModifierOnHit implements GemstoneModifier {
             .formatted(Formatting.GOLD));
   }
 
-  public GemstoneType getGemstoneType() {
-    return this.gemstoneType;
-  }
+  public GemstoneType getGemstoneType() { return this.gemstoneType; }
 
-  public GemstoneRarityType getRarityType() {
-    return this.rarityType;
-  }
+  public GemstoneRarityType getRarityType() { return this.rarityType; }
 
-  public void setRarityType(GemstoneRarityType rarityType) {
-    this.rarityType = rarityType;
-  }
+  public void setRarityType(GemstoneRarityType rarityType) { this.rarityType = rarityType; }
 }

@@ -1,15 +1,11 @@
 package name.modid.helpers.modifiers;
 
+import java.util.ArrayList;
+import java.util.Map;
 import name.modid.helpers.ItemGemstoneHelper;
 import name.modid.helpers.components.Gemstone;
-import name.modid.helpers.modifiers.data.AquamarinModifierData;
-import name.modid.helpers.modifiers.data.CelestineModifierData;
-import name.modid.helpers.modifiers.data.RubyModifierData;
-import name.modid.helpers.modifiers.data.SapphireModifierData;
-import name.modid.helpers.modifiers.data.TopazModifierData;
-import name.modid.helpers.modifiers.data.ZirconModifierData;
-import name.modid.helpers.modifiers.types.ModifierOnHit;
-import name.modid.helpers.modifiers.types.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.item.ArmorItem;
@@ -22,28 +18,14 @@ import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 public class GemstoneModifierHelper {
-  private static final Map<GemstoneType, GemstonesModifierData> MODIFIER_REGISTRY = new HashMap<>();
-
-  static {
-    MODIFIER_REGISTRY.put(GemstoneType.RUBY, new RubyModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.CELESTINE, new CelestineModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.TOPAZ, new TopazModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.SAPPHIRE, new SapphireModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.ZIRCON, new ZirconModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.AQUAMARIN, new AquamarinModifierData());
-  }
-
-  public static Map<GemstoneModifierItemType, GemstoneModifier> getGemstoneModifiers(GemstoneType gemstoneType,
-      Item item) {
+  public static Map<GemstoneModifierItemType, GemstoneModifier> getGemstoneModifiers(
+      GemstoneType gemstoneType, Item item) {
     if (gemstoneType == GemstoneType.EMPTY || gemstoneType == GemstoneType.LOCKED)
       return null;
 
-    GemstonesModifierData modifiersData = MODIFIER_REGISTRY.get(gemstoneType);
+    GemstonesModifierData modifiersData =
+        GemstoneModifierRegistration.MODIFIER_REGISTRY().get(gemstoneType);
     Map<GemstoneModifierItemType, GemstoneModifier> modifiers = modifiersData.getModifiers();
 
     return modifiers;
@@ -53,7 +35,8 @@ public class GemstoneModifierHelper {
     if (gemstoneType == GemstoneType.EMPTY || gemstoneType == GemstoneType.LOCKED)
       return null;
 
-    GemstonesModifierData modifiersData = MODIFIER_REGISTRY.get(gemstoneType);
+    GemstonesModifierData modifiersData =
+        GemstoneModifierRegistration.MODIFIER_REGISTRY().get(gemstoneType);
     Map<GemstoneModifierItemType, GemstoneModifier> modifiers = modifiersData.getModifiers();
     GemstoneModifier modifier = modifiers.get(getModifieritemSlot(item));
 
@@ -63,11 +46,11 @@ public class GemstoneModifierHelper {
   public static AttributeModifierSlot getAttributeModifierSlot(Item item) {
     if (item instanceof ArmorItem armorItem) {
       return switch (armorItem.getSlotType()) {
-      case HEAD -> AttributeModifierSlot.HEAD;
-      case CHEST -> AttributeModifierSlot.CHEST;
-      case LEGS -> AttributeModifierSlot.LEGS;
-      case FEET -> AttributeModifierSlot.FEET;
-      default -> AttributeModifierSlot.CHEST;
+        case HEAD -> AttributeModifierSlot.HEAD;
+        case CHEST -> AttributeModifierSlot.CHEST;
+        case LEGS -> AttributeModifierSlot.LEGS;
+        case FEET -> AttributeModifierSlot.FEET;
+        default -> AttributeModifierSlot.CHEST;
       };
     }
 
@@ -100,10 +83,11 @@ public class GemstoneModifierHelper {
 
     for (Gemstone gem : gemstones) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
+        GemstoneModifier modifier =
+            getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
         if (modifier instanceof ModifierOnHit modifierOnHit) {
-          ModifierOnHit newModifier = new ModifierOnHit(modifierOnHit.eventChance, modifierOnHit.eventType,
-              modifierOnHit.itemType, modifierOnHit.gemstoneType);
+          ModifierOnHit newModifier = new ModifierOnHit(modifierOnHit.eventChance,
+              modifierOnHit.eventType, modifierOnHit.itemType, modifierOnHit.gemstoneType);
           newModifier.setRarityType(gem.gemstoneRarityType());
           modifiers.add(newModifier);
         }
@@ -119,12 +103,14 @@ public class GemstoneModifierHelper {
 
     for (Gemstone gem : gemstones) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
+        GemstoneModifier modifier =
+            getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
         if (modifier instanceof ModifierOnHitEffect modifierOnHitEffect) {
-          ModifierOnHitEffect newModifier = new ModifierOnHitEffect(modifierOnHitEffect.inflitChance,
-              modifierOnHitEffect.duration, modifierOnHitEffect.amplifier, modifierOnHitEffect.itemType,
-              modifierOnHitEffect.effect, modifierOnHitEffect.isStacking, modifierOnHitEffect.maxStackCount,
-              modifierOnHitEffect.gemstoneType);
+          ModifierOnHitEffect newModifier = new ModifierOnHitEffect(
+              modifierOnHitEffect.inflitChance, modifierOnHitEffect.duration,
+              modifierOnHitEffect.amplifier, modifierOnHitEffect.itemType,
+              modifierOnHitEffect.effect, modifierOnHitEffect.isStacking,
+              modifierOnHitEffect.maxStackCount, modifierOnHitEffect.gemstoneType);
           newModifier.setRarityType(gem.gemstoneRarityType());
           modifiers.add(newModifier);
         }

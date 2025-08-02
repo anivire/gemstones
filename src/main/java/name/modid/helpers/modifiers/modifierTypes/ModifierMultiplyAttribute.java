@@ -1,4 +1,4 @@
-package name.modid.helpers.modifiers.types;
+package name.modid.helpers.modifiers.modifierTypes;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,9 +19,7 @@ import net.minecraft.util.Identifier;
 public class ModifierMultiplyAttribute implements GemstoneModifier {
   public List<ModifierAttribute> instances = new ArrayList<>();
 
-  public ModifierMultiplyAttribute(List<ModifierAttribute> instances) {
-    this.instances = new ArrayList<>(instances);
-  }
+  public ModifierMultiplyAttribute(List<ModifierAttribute> instances) { this.instances = new ArrayList<>(instances); }
 
   public MutableText getTooltipString(GemstoneRarityType gemstoneRarityType, Boolean withCategoryString) {
     String tooltipCategoryType = withCategoryString
@@ -64,13 +62,9 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
     return bd.toPlainString();
   }
 
-  public GemstoneType getGemstoneType() {
-    return null;
-  }
+  public GemstoneType getGemstoneType() { return null; }
 
-  public GemstoneRarityType getRarityType() {
-    return null;
-  }
+  public GemstoneRarityType getRarityType() { return null; }
 
   public void setRarityType(GemstoneRarityType rarityType) {}
 }
