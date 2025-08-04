@@ -1,7 +1,6 @@
 package name.modid;
 
 import java.util.List;
-
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
 import name.modid.helpers.particles.BleedParticleFactory;
 import name.modid.helpers.particles.ParticlesRegistrationHelper;
@@ -27,8 +26,8 @@ public class GemstonesClient implements ClientModInitializer {
 
           float drawSpeedPercent = 0.00f;
 
-          AttributeModifiersComponent itemAttributeModifiers = itemStack
-              .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+          AttributeModifiersComponent itemAttributeModifiers = itemStack.getOrDefault(
+              DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
           List<Entry> modifiers = itemAttributeModifiers.modifiers();
 
           for (Entry mod : modifiers) {
@@ -54,8 +53,8 @@ public class GemstonesClient implements ClientModInitializer {
           }
 
           float drawSpeedPercent = 0.0f;
-          AttributeModifiersComponent itemAttributeModifiers = itemStack
-              .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+          AttributeModifiersComponent itemAttributeModifiers = itemStack.getOrDefault(
+              DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
           List<Entry> modifiers = itemAttributeModifiers.modifiers();
 
           for (Entry mod : modifiers) {
@@ -76,14 +75,15 @@ public class GemstonesClient implements ClientModInitializer {
 
     ModelPredicateProviderRegistry.register(Items.BOW, Identifier.of("minecraft", "pulling"),
         (stack, world, entity, seed) -> {
-          return entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f : 0.0f;
+          return entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f
+              : 0.0f;
         });
 
-    ModelPredicateProviderRegistry.register(Items.CROSSBOW, Identifier.of("minecraft", "pulling"), (stack, world,
-        entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f : 0.0f);
+    ModelPredicateProviderRegistry.register(Items.CROSSBOW, Identifier.of("minecraft", "pulling"),
+        (stack, world, entity, seed) -> entity != null && entity.isUsingItem()
+            && entity.getActiveItem() == stack ? 1.0f : 0.0f);
 
     ParticleFactoryRegistry.getInstance().register(ParticlesRegistrationHelper.BLEED_PARTICLE,
         BleedParticleFactory::new);
   }
-
 }

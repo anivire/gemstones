@@ -26,6 +26,15 @@
       "chars": [
         "\uE003"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/half_extra_heart_icon.png",
+      "height": 10,
+      "ascent": 8,
+      "chars": [
+        "\uE004"
+      ]
     }
   ]
 }

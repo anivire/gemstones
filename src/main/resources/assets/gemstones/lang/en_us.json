@@ -31,8 +31,8 @@
 
   "tooltip.gemstones.ruby.melee_bonus": "%s to inflict %s",
   "tooltip.gemstones.ruby.ranged_bonus": "%s to inflict %s",
-  "tooltip.gemstones.ruby.tools_bonus": "ruby.tools_bonus",
-  "tooltip.gemstones.ruby.armor_bonus": "gains %s max half-heart",
+  "tooltip.gemstones.ruby.tools_bonus": "%s to gain %s while mining",
+  "tooltip.gemstones.ruby.armor_bonus": "gains max %s",
   
   "item.gemstones.celestine_gemstone_common": "Celestine Gemstone",
   "item.gemstones.celestine_gemstone_uncommon": "Celestine Gemstone",

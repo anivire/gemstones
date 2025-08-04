@@ -8,7 +8,9 @@ import name.modid.entities.EffectRegistrationHelper;
 import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.GemstoneModifierItemType;
 import name.modid.helpers.modifiers.GemstonesModifierData;
+import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
@@ -29,10 +31,9 @@ public record RubyModifierData() implements GemstonesModifierData {
             GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,
-        new ModifierAttribute(Operation.ADD_MULTIPLIED_TOTAL,
-            new ArrayList<Double>(Arrays.asList(0.5, 1.0, 1.5, 2.0)),
-            GemstoneModifierItemType.TOOLS, EntityAttributes.PLAYER_BLOCK_BREAK_SPEED,
-            GemstoneType.RUBY));
+        new ModifierOnBlockBreak(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)),
+            new ArrayList<Double>(Arrays.asList(1.0, 1.5, 2.0, 2.5)),
+            GemstoneModifierItemType.TOOLS, EventType.EXTRA_HEALTH, GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.ARMOR, new ModifierAttribute(Operation.ADD_VALUE,
         new ArrayList<Double>(Arrays.asList(1.0, 2.0, 3.0, 4.0)), GemstoneModifierItemType.ARMOR,

@@ -2,7 +2,15 @@ package name.modid.mixin;
 
 import java.util.ArrayList;
 import java.util.Random;
-
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import name.modid.helpers.ItemGemstoneHelper;
+import name.modid.helpers.modifiers.GemstoneModifierHelper;
+import name.modid.helpers.modifiers.modifierTypes.EventType;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
@@ -17,29 +25,25 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
-import name.modid.helpers.ItemGemstoneHelper;
-import name.modid.helpers.modifiers.GemstoneModifierHelper;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PersistentProjectileEntity.class)
 public class PersistentProjectileEntityMixin {
   private static final Random RANDOM = new Random();
 
   @Inject(method = "onEntityHit", at = @At("HEAD"))
-  protected void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) { handleHit(entityHitResult); }
+  protected void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) {
+    handleHit(entityHitResult);
+  }
 
   @Inject(method = "onBlockHit", at = @At("HEAD"))
-  protected void onBlockHit(BlockHitResult blockHitResult, CallbackInfo ci) { handleHit(blockHitResult); }
+  protected void onBlockHit(BlockHitResult blockHitResult, CallbackInfo ci) {
+    handleHit(blockHitResult);
+  }
 
   private void handleHit(HitResult hitResult) {
     PersistentProjectileEntity entity = (PersistentProjectileEntity) (Object) this;
-    if (!(entity instanceof ArrowEntity arrow) || arrow.getWorld().isClient || !arrow.getWorld().isRaining()) {
+    if (!(entity instanceof ArrowEntity arrow) || arrow.getWorld().isClient
+        || !arrow.getWorld().isRaining()) {
       return;
     }
 
@@ -75,15 +79,16 @@ public class PersistentProjectileEntityMixin {
     return stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem;
   }
 
-  private void applyGemstoneModifiers(ItemStack itemStack, ServerWorld world, Vec3d pos, ArrowEntity arrow,
-      LivingEntity target) {
+  private void applyGemstoneModifiers(ItemStack itemStack, ServerWorld world, Vec3d pos,
+      ArrowEntity arrow, LivingEntity target) {
     // ModifierOnHit
-    // TODO: move to ItemGemstoneHelper or make correct realization (woth support for other modifiers)
+    // TODO: move to ItemGemstoneHelper or make correct realization (wont support for other
+    // modifiers)
     ArrayList<ModifierOnHit> onHitModifiers = GemstoneModifierHelper.getOnHitModifiers(itemStack);
     if (!onHitModifiers.isEmpty()) {
       double applyTotalChance = 0.0;
       for (ModifierOnHit modifier : onHitModifiers) {
-        if (modifier.eventType == ModifierOnHit.EventType.LIGHTNING_BOLT) {
+        if (modifier.eventType == EventType.LIGHTNING_BOLT) {
           applyTotalChance += modifier.eventChance.get(modifier.getRarityType().getValue());
         }
       }
@@ -101,9 +106,11 @@ public class PersistentProjectileEntityMixin {
 
     // ModifierOnHitEffect
     if (target != null) {
-      ArrayList<ModifierOnHitEffect> effectModifiers = GemstoneModifierHelper.getOnHitEffectModifiers(itemStack);
+      ArrayList<ModifierOnHitEffect> effectModifiers =
+          GemstoneModifierHelper.getOnHitEffectModifiers(itemStack);
       if (!effectModifiers.isEmpty()) {
-        ItemGemstoneHelper.applyOnHitEffectModifiers(effectModifiers, itemStack.getItem(), itemStack, target, world);
+        ItemGemstoneHelper.applyOnHitEffectModifiers(effectModifiers, itemStack.getItem(),
+            itemStack, target, world);
       }
     }
   }
