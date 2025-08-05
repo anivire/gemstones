@@ -303,9 +303,11 @@ public class ItemGemstoneHelper {
           valuePerProc = 1.0;
         }
 
+        int buffDuration = maxStack > 3 ? 1800 : maxStack > 5 ? 3600 : 4800;
+
         if (world.getRandom().nextDouble() < combinedProcChance) {
           float current = player.getAbsorptionAmount();
-          player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1800,
+          player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, buffDuration,
               (int) maxStack - 1, false, false, true));
           player.setAbsorptionAmount(current + (float) valuePerProc);
         }
