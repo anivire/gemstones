@@ -85,5 +85,21 @@ public class GemstonesClient implements ClientModInitializer {
 
     ParticleFactoryRegistry.getInstance().register(ParticlesRegistrationHelper.BLEED_PARTICLE,
         BleedParticleFactory::new);
+
+    // HudRenderCallback.EVENT.register((context, tickDeltaManager) -> {
+    // int color = 0xFFFF0000; // Red
+    // int targetColor = 0xFF00FF00; // Green
+
+    // // Total tick delta is stored in a field, so we can use it later.
+    // float totalTickDelta = tickDeltaManager.getTickDelta(true);
+
+    // // "lerp" simply means "linear interpolation", which is a fancy way of saying "blend".
+    // float lerpedAmount = MathHelper.abs(MathHelper.sin(totalTickDelta / 50F));
+    // int lerpedColor = ColorHelper.Argb.lerp(lerpedAmount, color, targetColor);
+
+    // // Draw a square with the lerped color.
+    // // x1, x2, y1, y2, z, color
+    // context.fill(0, 0, 100, 100, 0, lerpedColor);
+    // });
   }
 }

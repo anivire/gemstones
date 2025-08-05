@@ -32,7 +32,7 @@ public record RubyModifierData() implements GemstonesModifierData {
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,
         new ModifierOnBlockBreak(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)),
-            new ArrayList<Double>(Arrays.asList(1.0, 1.5, 2.0, 2.5)),
+            new ArrayList<Double>(Arrays.asList(1.0, 2.0, 3.0, 4.0)),
             GemstoneModifierItemType.TOOLS, EventType.EXTRA_HEALTH, GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.ARMOR, new ModifierAttribute(Operation.ADD_VALUE,

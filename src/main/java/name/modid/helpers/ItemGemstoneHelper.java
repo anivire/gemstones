@@ -1,13 +1,21 @@
 package name.modid.helpers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import name.modid.Gemstones;
 import name.modid.helpers.components.ComponentsHelper;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.components.GemstoneSlots;
 import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.GemstoneModifierHelper;
+import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.types.GemstoneRarityType;
 import name.modid.helpers.types.GemstoneType;
@@ -19,6 +27,8 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
@@ -31,13 +41,6 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class ItemGemstoneHelper {
   public static final int MAX_SLOTS = 5;
@@ -88,12 +91,14 @@ public class ItemGemstoneHelper {
     return null;
   }
 
-  public static ItemStack setGemstoneByIndex(ItemStack itemStack, int index, GemstoneItem gemstone) {
+  public static ItemStack setGemstoneByIndex(ItemStack itemStack, int index,
+      GemstoneItem gemstone) {
     GemstoneSlots sourceGemstoneSlots = getGemstonesSlot(itemStack);
     if (sourceGemstoneSlots == null && index < 0 || index >= MAX_SLOTS)
       return null;
 
-    Gemstone[] gemstones = Arrays.copyOf(sourceGemstoneSlots.gemstones(), sourceGemstoneSlots.gemstones().length);
+    Gemstone[] gemstones =
+        Arrays.copyOf(sourceGemstoneSlots.gemstones(), sourceGemstoneSlots.gemstones().length);
 
     gemstones[index] = new Gemstone(gemstone.getType(), gemstone.getRarityType());
     itemStack.set(ComponentsHelper.GEMSTONES, new GemstoneSlots(gemstones));
@@ -147,10 +152,12 @@ public class ItemGemstoneHelper {
       for (Map.Entry<GemstoneType, GemstoneRarityType> e : i.entrySet()) {
         GemstoneType gemstoneType = e.getKey();
         GemstoneRarityType gemstoneRarity = e.getValue();
-        GemstoneModifier gemstoneModifier = GemstoneModifierHelper.getGemstoneModifierForItem(gemstoneType, item);
+        GemstoneModifier gemstoneModifier =
+            GemstoneModifierHelper.getGemstoneModifierForItem(gemstoneType, item);
 
         if (gemstoneModifier != null) {
-          if (gemstoneModifier instanceof ModifierAttribute || gemstoneModifier instanceof ModifierMultiplyAttribute) {
+          if (gemstoneModifier instanceof ModifierAttribute
+              || gemstoneModifier instanceof ModifierMultiplyAttribute) {
             if (gemstoneModifier instanceof ModifierMultiplyAttribute gemstoneModifierInstances) {
               for (ModifierAttribute instance : gemstoneModifierInstances.instances) {
                 instance.setRarityType(gemstoneRarity);
@@ -168,10 +175,10 @@ public class ItemGemstoneHelper {
     applyAttributeModifiers(gemstoneModifiers, item, itemStack);
   }
 
-  public static void applyAttributeModifiers(ArrayList<GemstoneModifier> gemstoneModifiers, Item item,
-      ItemStack itemStack) {
-    AttributeModifiersComponent itemAttributeModifiers = itemStack.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS,
-        AttributeModifiersComponent.DEFAULT);
+  public static void applyAttributeModifiers(ArrayList<GemstoneModifier> gemstoneModifiers,
+      Item item, ItemStack itemStack) {
+    AttributeModifiersComponent itemAttributeModifiers = itemStack
+        .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
     List<AttributeModifiersComponent.Entry> newModifiers = new ArrayList<>();
 
     // Preserve non-gemstone modifiers
@@ -182,10 +189,12 @@ public class ItemGemstoneHelper {
     }
 
     // Group modifiers by attribute
-    Map<RegistryEntry<EntityAttribute>, List<ModifierAttribute>> attributeToModifiers = new HashMap<>();
+    Map<RegistryEntry<EntityAttribute>, List<ModifierAttribute>> attributeToModifiers =
+        new HashMap<>();
     for (GemstoneModifier modifier : gemstoneModifiers) {
       if (modifier instanceof ModifierAttribute singleModifier) {
-        attributeToModifiers.computeIfAbsent(singleModifier.attr, k -> new ArrayList<>()).add(singleModifier);
+        attributeToModifiers.computeIfAbsent(singleModifier.attr, k -> new ArrayList<>())
+            .add(singleModifier);
       } else if (modifier instanceof ModifierMultiplyAttribute multiModifier) {
         // Handle multiple attributes from ModifierMultiplyAttribute
         for (ModifierAttribute attr : multiModifier.instances) {
@@ -209,27 +218,32 @@ public class ItemGemstoneHelper {
       }
 
       // Create a unique modifier ID
-      EntityAttributeModifier scaledGemstoneModifier = new EntityAttributeModifier(Identifier.of(Gemstones.MOD_ID,
-          String.format("%s_gemstone_%s_modifier_slot%s", mod.gemstoneType.toString().toLowerCase(),
-              mod.itemType.toString().toLowerCase(), UUID.randomUUID().toString())),
-          totalValue, mod.operation);
+      EntityAttributeModifier scaledGemstoneModifier =
+          new EntityAttributeModifier(
+              Identifier.of(Gemstones.MOD_ID,
+                  String.format("%s_gemstone_%s_modifier_slot%s",
+                      mod.gemstoneType.toString().toLowerCase(),
+                      mod.itemType.toString().toLowerCase(), UUID.randomUUID().toString())),
+              totalValue, mod.operation);
 
       newModifiers.add(new AttributeModifiersComponent.Entry(attribute, scaledGemstoneModifier,
           GemstoneModifierHelper.getAttributeModifierSlot(item)));
     }
 
-    itemAttributeModifiers = new AttributeModifiersComponent(newModifiers, itemAttributeModifiers.showInTooltip());
+    itemAttributeModifiers =
+        new AttributeModifiersComponent(newModifiers, itemAttributeModifiers.showInTooltip());
     itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, itemAttributeModifiers);
   }
 
-  public static void applyOnHitEffectModifiers(ArrayList<ModifierOnHitEffect> gemstoneModifiers, Item item,
-      ItemStack itemStack, LivingEntity target, World world) {
+  public static void applyOnHitEffectModifiers(ArrayList<ModifierOnHitEffect> gemstoneModifiers,
+      Item item, ItemStack itemStack, LivingEntity target, World world) {
     Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffect>> effectToModifiers = new HashMap<>();
     for (ModifierOnHitEffect modifier : gemstoneModifiers) {
       effectToModifiers.computeIfAbsent(modifier.effect, k -> new ArrayList<>()).add(modifier);
     }
 
-    for (Map.Entry<RegistryEntry<StatusEffect>, List<ModifierOnHitEffect>> statusEntry : effectToModifiers.entrySet()) {
+    for (Map.Entry<RegistryEntry<StatusEffect>, List<ModifierOnHitEffect>> statusEntry : effectToModifiers
+        .entrySet()) {
       RegistryEntry<StatusEffect> statusEffect = statusEntry.getKey();
       List<ModifierOnHitEffect> modifiers = statusEntry.getValue();
 
@@ -249,16 +263,52 @@ public class ItemGemstoneHelper {
 
       double randomValue = world.getRandom().nextDouble();
       if (randomValue < combinedProcChance && selectedModifier != null) {
-        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects = target.getActiveStatusEffects();
+        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects =
+            target.getActiveStatusEffects();
         StatusEffectInstance existingEffect = activeEffects.get(statusEffect);
         int newAmplifier = selectedModifier.amplifier;
 
         if (existingEffect != null && selectedModifier.isStacking) {
-          newAmplifier = Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
+          newAmplifier =
+              Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
         }
 
-        target.addStatusEffect(new StatusEffectInstance(statusEffect, selectedModifier.duration * 20,
-            selectedModifier.isStacking ? newAmplifier : selectedModifier.amplifier));
+        target
+            .addStatusEffect(new StatusEffectInstance(statusEffect, selectedModifier.duration * 20,
+                selectedModifier.isStacking ? newAmplifier : selectedModifier.amplifier));
+      }
+    }
+  }
+
+  public static void applyOnBlockBreakModifiers(ArrayList<ModifierOnBlockBreak> gemstoneModifiers,
+      PlayerEntity player, World world) {
+    Map<EventType, List<ModifierOnBlockBreak>> eventToModifiers = new HashMap<>();
+    for (ModifierOnBlockBreak mod : gemstoneModifiers) {
+      eventToModifiers.computeIfAbsent(mod.eventType, k -> new ArrayList<>()).add(mod);
+    }
+
+    for (Map.Entry<EventType, List<ModifierOnBlockBreak>> entry : eventToModifiers.entrySet()) {
+      EventType eventType = entry.getKey();
+      List<ModifierOnBlockBreak> modifiers = entry.getValue();
+
+      if (eventType == EventType.EXTRA_HEALTH) {
+        double combinedProcChance = 0.0;
+        int maxStack = 0;
+        double valuePerProc = 0.0;
+
+        for (ModifierOnBlockBreak m : modifiers) {
+          GemstoneRarityType rarity = m.rarityType;
+          combinedProcChance += m.value.get(rarity.getValue());
+          maxStack += m.additionalValue.get(rarity.getValue());
+          valuePerProc = 1.0;
+        }
+
+        if (world.getRandom().nextDouble() < combinedProcChance) {
+          float current = player.getAbsorptionAmount();
+          player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1800,
+              (int) maxStack - 1, false, false, true));
+          player.setAbsorptionAmount(current + (float) valuePerProc);
+        }
       }
     }
   }
