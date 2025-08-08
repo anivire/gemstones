@@ -10,26 +10,26 @@ import net.minecraft.util.Identifier;
 public class GemstoneTooltipHelper {
   public static Formatting getGemstoneColor(GemstoneType gemType) {
     return switch (gemType) {
-    case EMPTY -> Formatting.DARK_GRAY;
-    case RUBY -> Formatting.RED;
-    case CELESTINE -> Formatting.BLUE;
-    case TOPAZ -> Formatting.GOLD;
-    case SAPPHIRE -> Formatting.DARK_BLUE;
-    case AQUAMARIN -> Formatting.BLUE;
-    default -> Formatting.GRAY;
+      case EMPTY -> Formatting.DARK_GRAY;
+      case RUBY -> Formatting.RED;
+      case CELESTINE -> Formatting.BLUE;
+      case TOPAZ -> Formatting.GOLD;
+      case SAPPHIRE -> Formatting.DARK_BLUE;
+      case AQUAMARINE -> Formatting.BLUE;
+      default -> Formatting.GRAY;
     };
   }
 
   public static String getSlotText(GemstoneType gemType) {
     return switch (gemType) {
-    case LOCKED -> "Locked";
-    case EMPTY -> "Empty";
-    case RUBY -> "Ruby";
-    case CELESTINE -> "Celestine";
-    case SAPPHIRE -> "Sapphire";
-    case TOPAZ -> "Topaz";
-    case AQUAMARIN -> "Aquamarin";
-    default -> "unknown";
+      case LOCKED -> "Locked";
+      case EMPTY -> "Empty";
+      case RUBY -> "Ruby";
+      case CELESTINE -> "Celestine";
+      case SAPPHIRE -> "Sapphire";
+      case TOPAZ -> "Topaz";
+      case AQUAMARINE -> "Aquamarine";
+      default -> "unknown";
     };
   }
 

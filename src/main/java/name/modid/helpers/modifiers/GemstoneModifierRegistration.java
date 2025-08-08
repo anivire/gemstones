@@ -2,8 +2,7 @@ package name.modid.helpers.modifiers;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import name.modid.helpers.modifiers.data.AquamarinModifierData;
+import name.modid.helpers.modifiers.data.AquamarineModifierData;
 import name.modid.helpers.modifiers.data.CelestineModifierData;
 import name.modid.helpers.modifiers.data.RubyModifierData;
 import name.modid.helpers.modifiers.data.SapphireModifierData;
@@ -20,8 +19,10 @@ public class GemstoneModifierRegistration {
     MODIFIER_REGISTRY.put(GemstoneType.TOPAZ, new TopazModifierData());
     MODIFIER_REGISTRY.put(GemstoneType.SAPPHIRE, new SapphireModifierData());
     MODIFIER_REGISTRY.put(GemstoneType.ZIRCON, new ZirconModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.AQUAMARIN, new AquamarinModifierData());
+    MODIFIER_REGISTRY.put(GemstoneType.AQUAMARINE, new AquamarineModifierData());
   }
 
-  public static Map<GemstoneType, GemstonesModifierData> MODIFIER_REGISTRY() { return MODIFIER_REGISTRY; }
+  public static Map<GemstoneType, GemstonesModifierData> MODIFIER_REGISTRY() {
+    return MODIFIER_REGISTRY;
+  }
 }

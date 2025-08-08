@@ -3,10 +3,9 @@ package name.modid.helpers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import name.modid.Gemstones;
 import name.modid.helpers.types.GemstoneRarityType;
-import name.modid.items.gemstones.AquamarinGemstoneItem;
+import name.modid.items.gemstones.AquamarineGemstoneItem;
 import name.modid.items.gemstones.CelestineGemstoneItem;
 import name.modid.items.gemstones.RubyGemstoneItem;
 import name.modid.items.gemstones.SapphireGemstoneItem;
@@ -33,9 +32,9 @@ public class GemstonesRegistrationHelper {
   private static final List<Item> TOPAZ_GEMSTONES = new ArrayList<>();
   private static final List<Item> SAPPHIRE_GEMSTONES = new ArrayList<>();
   private static final List<Item> ZIRCON_GEMSTONES = new ArrayList<>();
-  private static final List<Item> AQUAMARIN_GEMSTONES = new ArrayList<>();
-  public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
-      Identifier.of(Gemstones.MOD_ID, "item_group"));
+  private static final List<Item> AQUAMARINE_GEMSTONES = new ArrayList<>();
+  public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY =
+      RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(Gemstones.MOD_ID, "item_group"));
   public static ItemGroup GEMSTONES_ITEM_GROUP;
 
   public static void registerItemGroup() {
@@ -49,8 +48,8 @@ public class GemstonesRegistrationHelper {
   }
 
   public static void register() {
-    List<GemstoneRarityType> rarities = Arrays.asList(GemstoneRarityType.COMMON, GemstoneRarityType.UNCOMMON,
-        GemstoneRarityType.RARE, GemstoneRarityType.LEGENDARY);
+    List<GemstoneRarityType> rarities = Arrays.asList(GemstoneRarityType.COMMON,
+        GemstoneRarityType.UNCOMMON, GemstoneRarityType.RARE, GemstoneRarityType.LEGENDARY);
     for (GemstoneRarityType rarity : rarities) {
       String rarityName = rarity.toString().toLowerCase();
 
@@ -84,11 +83,11 @@ public class GemstonesRegistrationHelper {
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
       ZIRCON_GEMSTONES.add(zirconGemstone);
 
-      // AQUAMARIN
-      Item aquamarinGemstone = ItemRegistrationHelper.register("aquamarin_gemstone_" + rarityName,
-          settings -> new AquamarinGemstoneItem(settings, rarity),
+      // AQUAMARINE
+      Item aquamarineGemstone = ItemRegistrationHelper.register("aquamarine_gemstone_" + rarityName,
+          settings -> new AquamarineGemstoneItem(settings, rarity),
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      AQUAMARIN_GEMSTONES.add(aquamarinGemstone);
+      AQUAMARINE_GEMSTONES.add(aquamarineGemstone);
     }
   }
 
@@ -98,18 +97,30 @@ public class GemstonesRegistrationHelper {
     TOPAZ_GEMSTONES.forEach(entries::add);
     SAPPHIRE_GEMSTONES.forEach(entries::add);
     ZIRCON_GEMSTONES.forEach(entries::add);
-    AQUAMARIN_GEMSTONES.forEach(entries::add);
+    AQUAMARINE_GEMSTONES.forEach(entries::add);
   }
 
-  public static List<Item> getRubyGemstones() { return RUBY_GEMSTONES; }
+  public static List<Item> getRubyGemstones() {
+    return RUBY_GEMSTONES;
+  }
 
-  public static List<Item> getCelestineGemstones() { return CELESTINE_GEMSTONES; }
+  public static List<Item> getCelestineGemstones() {
+    return CELESTINE_GEMSTONES;
+  }
 
-  public static List<Item> getSapphireGemstones() { return SAPPHIRE_GEMSTONES; }
+  public static List<Item> getSapphireGemstones() {
+    return SAPPHIRE_GEMSTONES;
+  }
 
-  public static List<Item> getTopazGemstones() { return TOPAZ_GEMSTONES; }
+  public static List<Item> getTopazGemstones() {
+    return TOPAZ_GEMSTONES;
+  }
 
-  public static List<Item> getZirconGemstones() { return ZIRCON_GEMSTONES; }
+  public static List<Item> getZirconGemstones() {
+    return ZIRCON_GEMSTONES;
+  }
 
-  public static List<Item> getAquamarinGemstones() { return AQUAMARIN_GEMSTONES; }
+  public static List<Item> getAquamarineGemstones() {
+    return AQUAMARINE_GEMSTONES;
+  }
 }

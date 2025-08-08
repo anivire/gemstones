@@ -1,7 +1,6 @@
 package name.modid.helpers.modifiers.modifierTypes;
 
 import java.util.ArrayList;
-
 import name.modid.Gemstones;
 import name.modid.entities.EffectRegistrationHelper;
 import name.modid.helpers.modifiers.GemstoneModifier;
@@ -27,8 +26,8 @@ public class ModifierOnHitEffect implements GemstoneModifier {
   public GemstoneRarityType rarityType;
 
   public ModifierOnHitEffect(ArrayList<Double> inflitChance, int duration, int amplifier,
-      GemstoneModifierItemType itemType, RegistryEntry<StatusEffect> effect, boolean isStacking, int maxStackCount,
-      GemstoneType gemstoneType) {
+      GemstoneModifierItemType itemType, RegistryEntry<StatusEffect> effect, boolean isStacking,
+      int maxStackCount, GemstoneType gemstoneType) {
     this.inflitChance = inflitChance;
     this.duration = duration;
     this.amplifier = amplifier;
@@ -39,7 +38,8 @@ public class ModifierOnHitEffect implements GemstoneModifier {
     this.isStacking = isStacking;
   }
 
-  public MutableText getTooltipString(GemstoneRarityType gemstoneRarityType, Boolean withCategoryString) {
+  public MutableText getTooltipString(GemstoneRarityType gemstoneRarityType,
+      Boolean withCategoryString) {
     Object value = inflitChance.get(gemstoneRarityType.getValue()) * 100;
     String tooltipCategoryType = withCategoryString
         ? String.format("tooltip.gemstones.%s_type", itemType.toString().toLowerCase())
@@ -49,11 +49,14 @@ public class ModifierOnHitEffect implements GemstoneModifier {
 
     if (this.effect == EffectRegistrationHelper.BLEEDING_EFFECT) {
       effectString.append(Text.literal("Bleeding").formatted(Formatting.RED))
-          .append(Text.literal("\uE002")
-              .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+          .append(Text.literal("\uE002").styled(
+              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
           .formatted(Formatting.WHITE);
     } else if (this.effect == EffectRegistrationHelper.GUARDIAN_SMITE_EFFECT) {
-      effectString.append(Text.literal("Guardian Smite").formatted(Formatting.RED));
+      effectString.append(Text.literal("Guardian Smite").formatted(Formatting.RED))
+          .append(Text.literal("\uE003").styled(
+              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+          .formatted(Formatting.WHITE);
     } else if (this.effect == EffectRegistrationHelper.QUICK_SANDS_EFFECT) {
       effectString.append(Text.literal("Quick Sands").formatted(Formatting.RED));
     } else {
@@ -61,17 +64,25 @@ public class ModifierOnHitEffect implements GemstoneModifier {
     }
 
     return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
-        .append(Text
-            .translatable(
-                String.format("tooltip.gemstones.%s.%s_bonus", gemstoneType.toString().toLowerCase(),
-                    itemType.toString().toLowerCase()),
-                Text.literal(String.format("%.0f", value) + "%").formatted(Formatting.BLUE), effectString)
-            .formatted(Formatting.GOLD));
+        .append(Text.literal("\uE006").styled(
+            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+        .formatted(Formatting.GREEN)
+        .append(Text.translatable(
+            String.format("tooltip.gemstones.%s.%s_bonus", gemstoneType.toString().toLowerCase(),
+                itemType.toString().toLowerCase()),
+            Text.literal(String.format("%.0f", value) + "%").formatted(Formatting.GREEN),
+            effectString).formatted(Formatting.GOLD));
   }
 
-  public GemstoneType getGemstoneType() { return this.gemstoneType; }
+  public GemstoneType getGemstoneType() {
+    return this.gemstoneType;
+  }
 
-  public GemstoneRarityType getRarityType() { return this.rarityType; }
+  public GemstoneRarityType getRarityType() {
+    return this.rarityType;
+  }
 
-  public void setRarityType(GemstoneRarityType rarityType) { this.rarityType = rarityType; }
+  public void setRarityType(GemstoneRarityType rarityType) {
+    this.rarityType = rarityType;
+  }
 }

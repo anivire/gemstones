@@ -22,7 +22,7 @@
       "type": "bitmap",
       "file": "gemstones:gui/icons/guardian_smite_icon.png",
       "height": 10,
-      "ascent": 8,
+      "ascent": 9,
       "chars": [
         "\uE003"
       ]
@@ -34,6 +34,43 @@
       "ascent": 8,
       "chars": [
         "\uE004"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/tide_icon.png",
+      "height": 10,
+      "ascent": 9,
+      "chars": [
+        "\uE005"
+      ]
+    }
+    ,
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/arrow_icon.png",
+      "height": 7,
+      "ascent": 7,
+      "chars": [
+        "\uE006"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/lighting_strike_icon.png",
+      "height": 10,
+      "ascent": 9,
+      "chars": [
+        "\uE007"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/torrent_icon.png",
+      "height": 10,
+      "ascent": 9,
+      "chars": [
+        "\uE008"
       ]
     }
   ]

@@ -5,6 +5,7 @@ import java.util.Map;
 import name.modid.helpers.ItemGemstoneHelper;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.types.GemstoneType;
@@ -133,6 +134,27 @@ public class GemstoneModifierHelper {
           ModifierOnBlockBreak newModifier = new ModifierOnBlockBreak(modifierOnBlockBreak.value,
               modifierOnBlockBreak.additionalValue, modifierOnBlockBreak.itemType,
               modifierOnBlockBreak.eventType, modifierOnBlockBreak.gemstoneType);
+          newModifier.setRarityType(gem.gemstoneRarityType());
+          modifiers.add(newModifier);
+        }
+      }
+    }
+
+    return modifiers;
+  }
+
+  public static ArrayList<ModifierOnDamage> getOnDamageModifiers(ItemStack itemStack) {
+    ArrayList<ModifierOnDamage> modifiers = new ArrayList<>();
+    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+
+    for (Gemstone gem : gemstones) {
+      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
+        GemstoneModifier modifier =
+            getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
+        if (modifier instanceof ModifierOnDamage modifierOnDamage) {
+          ModifierOnDamage newModifier = new ModifierOnDamage(modifierOnDamage.value,
+              modifierOnDamage.additionalValue, modifierOnDamage.eventType,
+              modifierOnDamage.itemType, modifierOnDamage.gemstoneType);
           newModifier.setRarityType(gem.gemstoneRarityType());
           modifiers.add(newModifier);
         }

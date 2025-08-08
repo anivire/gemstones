@@ -56,7 +56,7 @@
     },
     {
       "type": "bitmap",
-      "file": "gemstones:gui/gemstone_socket_aquamarin.png",
+      "file": "gemstones:gui/gemstone_socket_aquamarine.png",
       "height": 26,
       "ascent": 13,
       "chars": [

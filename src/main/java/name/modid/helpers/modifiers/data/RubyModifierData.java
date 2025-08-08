@@ -9,12 +9,10 @@ import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.GemstoneModifierItemType;
 import name.modid.helpers.modifiers.GemstonesModifierData;
 import name.modid.helpers.modifiers.modifierTypes.EventType;
-import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.types.GemstoneType;
-import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
-import net.minecraft.entity.attribute.EntityAttributes;
 
 public record RubyModifierData() implements GemstonesModifierData {
   private static final Map<GemstoneModifierItemType, GemstoneModifier> MODIFIERS = new HashMap<>();
@@ -35,9 +33,10 @@ public record RubyModifierData() implements GemstonesModifierData {
             new ArrayList<Double>(Arrays.asList(1.0, 2.0, 3.0, 4.0)),
             GemstoneModifierItemType.TOOLS, EventType.EXTRA_HEALTH, GemstoneType.RUBY));
 
-    MODIFIERS.put(GemstoneModifierItemType.ARMOR, new ModifierAttribute(Operation.ADD_VALUE,
-        new ArrayList<Double>(Arrays.asList(1.0, 2.0, 3.0, 4.0)), GemstoneModifierItemType.ARMOR,
-        EntityAttributes.GENERIC_MAX_HEALTH, GemstoneType.RUBY));
+    MODIFIERS.put(GemstoneModifierItemType.ARMOR,
+        new ModifierOnDamage(new ArrayList<Double>(Arrays.asList(0.03, 0.05, 0.08, 0.1)),
+            new ArrayList<Double>(Arrays.asList(1.0, 1.0, 2.0, 2.0)), EventType.EXTRA_HEALTH,
+            GemstoneModifierItemType.ARMOR, GemstoneType.RUBY));
   }
 
   @Override

@@ -11,21 +11,21 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-public class ModifierOnBlockBreak implements GemstoneModifier {
+public class ModifierCustomCondition implements GemstoneModifier {
   public ArrayList<Double> value = new ArrayList<Double>();
   public ArrayList<Double> additionalValue = new ArrayList<Double>();
+  public ConditionType conditionType;
   public GemstoneModifierItemType itemType;
-  public EventType eventType;
   public GemstoneType gemstoneType;
   public GemstoneRarityType rarityType;
 
-  public ModifierOnBlockBreak(ArrayList<Double> value, ArrayList<Double> additionalValue,
-      GemstoneModifierItemType itemType, EventType eventType, GemstoneType gemstoneType) {
-    this.value = new ArrayList<Double>(value);
+  public ModifierCustomCondition(ArrayList<Double> value, ArrayList<Double> additionalValue,
+      ConditionType conditionType, GemstoneModifierItemType itemType, GemstoneType gemstoneType) {
+    this.value = value;
     this.additionalValue = new ArrayList<Double>(additionalValue);
     this.itemType = itemType;
-    this.eventType = eventType;
     this.gemstoneType = gemstoneType;
+    this.conditionType = conditionType;
   }
 
   public MutableText getTooltipString(GemstoneRarityType gemstoneRarityType,
@@ -37,9 +37,14 @@ public class ModifierOnBlockBreak implements GemstoneModifier {
     MutableText resultTooltip = Text.empty();
     MutableText eventString = Text.empty();
 
-    if (this.eventType == EventType.EXTRA_HEALTH) {
-      eventString.append(Text.literal("extra 1").formatted(Formatting.YELLOW))
-          .append(Text.literal("\uE004")
+    if (this.conditionType == ConditionType.ENTITY_IN_WATER) {
+      eventString.append(Text.literal("Water").formatted(Formatting.BLUE))
+          .append(Text.literal("\uE005")
+              .styled(style -> style.withFont(Identifier.of("gemstones", "gemstone_sprite_icons")))
+              .formatted(Formatting.WHITE));
+    } else if (this.conditionType == ConditionType.PLAYER_IN_WATER) {
+      eventString.append(Text.literal("Water").formatted(Formatting.BLUE))
+          .append(Text.literal("\uE005")
               .styled(style -> style.withFont(Identifier.of("gemstones", "gemstone_sprite_icons")))
               .formatted(Formatting.WHITE));
     }

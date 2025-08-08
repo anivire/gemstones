@@ -16,6 +16,7 @@ import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.types.GemstoneRarityType;
 import name.modid.helpers.types.GemstoneType;
@@ -303,13 +304,48 @@ public class ItemGemstoneHelper {
           valuePerProc = 1.0;
         }
 
-        int buffDuration = maxStack > 3 ? 1800 : maxStack > 5 ? 3600 : 4800;
+        int buffDuration = maxStack < 3 ? 1800 : maxStack <= 5 ? 3600 : 4800;
 
         if (world.getRandom().nextDouble() < combinedProcChance) {
           float current = player.getAbsorptionAmount();
           player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, buffDuration,
               (int) maxStack - 1, false, false, true));
           player.setAbsorptionAmount(current + (float) valuePerProc);
+        }
+      }
+    }
+  }
+
+  public static void applyOnDamageModifiers(ArrayList<ModifierOnDamage> gemstoneModifiers,
+      LivingEntity entity, World world) {
+    Map<EventType, List<ModifierOnDamage>> eventToModifiers = new HashMap<>();
+    for (ModifierOnDamage mod : gemstoneModifiers) {
+      eventToModifiers.computeIfAbsent(mod.eventType, k -> new ArrayList<>()).add(mod);
+    }
+
+    for (Map.Entry<EventType, List<ModifierOnDamage>> entry : eventToModifiers.entrySet()) {
+      EventType eventType = entry.getKey();
+      List<ModifierOnDamage> modifiers = entry.getValue();
+
+      if (eventType == EventType.EXTRA_HEALTH) {
+        double combinedProcChance = 0.0;
+        int maxStack = 0;
+        double valuePerProc = 0.0;
+
+        for (ModifierOnDamage m : modifiers) {
+          GemstoneRarityType rarity = m.rarityType;
+          combinedProcChance += m.value.get(rarity.getValue());
+          maxStack += m.additionalValue.get(rarity.getValue());
+          valuePerProc = 1.0;
+        }
+
+        int buffDuration = 600;
+
+        if (world.getRandom().nextDouble() < combinedProcChance) {
+          float current = entity.getAbsorptionAmount();
+          entity.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, buffDuration,
+              (int) maxStack - 1, false, false, true));
+          entity.setAbsorptionAmount(current + (float) valuePerProc);
         }
       }
     }

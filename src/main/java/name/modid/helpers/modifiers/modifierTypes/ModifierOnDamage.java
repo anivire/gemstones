@@ -11,21 +11,21 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-public class ModifierOnBlockBreak implements GemstoneModifier {
+public class ModifierOnDamage implements GemstoneModifier {
   public ArrayList<Double> value = new ArrayList<Double>();
   public ArrayList<Double> additionalValue = new ArrayList<Double>();
-  public GemstoneModifierItemType itemType;
   public EventType eventType;
+  public GemstoneModifierItemType itemType;
   public GemstoneType gemstoneType;
   public GemstoneRarityType rarityType;
 
-  public ModifierOnBlockBreak(ArrayList<Double> value, ArrayList<Double> additionalValue,
-      GemstoneModifierItemType itemType, EventType eventType, GemstoneType gemstoneType) {
-    this.value = new ArrayList<Double>(value);
+  public ModifierOnDamage(ArrayList<Double> value, ArrayList<Double> additionalValue,
+      EventType eventType, GemstoneModifierItemType itemType, GemstoneType gemstoneType) {
+    this.value = value;
     this.additionalValue = new ArrayList<Double>(additionalValue);
     this.itemType = itemType;
-    this.eventType = eventType;
     this.gemstoneType = gemstoneType;
+    this.eventType = eventType;
   }
 
   public MutableText getTooltipString(GemstoneRarityType gemstoneRarityType,
@@ -44,15 +44,17 @@ public class ModifierOnBlockBreak implements GemstoneModifier {
               .formatted(Formatting.WHITE));
     }
 
+    MutableText icon = Text.literal("\uE006")
+        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons")))
+        .formatted(Formatting.GREEN);
+
     return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
-        .append(Text.literal("\uE006").styled(
-            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
-        .formatted(Formatting.GREEN)
         .append(Text.translatable(
             String.format("tooltip.gemstones.%s.%s_bonus", gemstoneType.toString().toLowerCase(),
                 itemType.toString().toLowerCase()),
-            Text.literal(String.format("%.0f", v) + "%").formatted(Formatting.GREEN), eventString)
-            .formatted(Formatting.GOLD));
+            icon.append(Text.literal(String.format("%.0f", v) + "%").formatted(Formatting.GREEN)
+                .styled(style -> style.withFont(Identifier.of("minecraft", "default")))),
+            eventString).formatted(Formatting.GOLD));
   }
 
   public GemstoneType getGemstoneType() {

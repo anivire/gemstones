@@ -56,10 +56,13 @@ public class ModifierAttribute implements GemstoneModifier {
     MutableText resultTooltip = Text.empty();
 
     return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
+        .append(Text.literal("\uE006").styled(
+            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+        .formatted(Formatting.GREEN)
         .append(Text.translatable(
             String.format("tooltip.gemstones.%s.%s_bonus",
                 this.gemstoneType.toString().toLowerCase(), this.itemType.toString().toLowerCase()),
-            Text.literal(formattedValue).formatted(Formatting.BLUE).append(attributeBonusString))
+            Text.literal(formattedValue).formatted(Formatting.GREEN).append(attributeBonusString))
             .formatted(Formatting.GOLD));
   }
 
