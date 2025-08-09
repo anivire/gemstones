@@ -10,6 +10,7 @@ import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.GemstoneModifierItemType;
 import name.modid.helpers.modifiers.GemstonesModifierData;
 import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
+import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
 import name.modid.helpers.types.GemstoneType;
@@ -38,9 +39,14 @@ public record TopazModifierData() implements GemstonesModifierData {
             GemstoneType.TOPAZ));
 
     MODIFIERS.put(GemstoneModifierItemType.ARMOR,
-        new ModifierAttribute(Operation.ADD_MULTIPLIED_TOTAL,
-            new ArrayList<Double>(Arrays.asList(0.05, 0.10, 0.15, 0.25)),
-            GemstoneModifierItemType.ARMOR, EntityAttributes.GENERIC_LUCK, GemstoneType.TOPAZ));
+        new ModifierMultiplyAttribute(new ArrayList<ModifierAttribute>(Arrays.asList(
+            new ModifierAttribute(Operation.ADD_VALUE,
+                new ArrayList<Double>(Arrays.asList(0.5, 1.0, 1.5, 2.0)),
+                GemstoneModifierItemType.ARMOR, EntityAttributes.GENERIC_ARMOR, GemstoneType.TOPAZ),
+            new ModifierAttribute(Operation.ADD_VALUE,
+                new ArrayList<Double>(Arrays.asList(0.5, 0.5, 1.0, 1.5)),
+                GemstoneModifierItemType.ARMOR, EntityAttributes.GENERIC_ARMOR_TOUGHNESS,
+                GemstoneType.TOPAZ)))));
   }
 
   @Override

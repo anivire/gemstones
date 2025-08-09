@@ -62,7 +62,7 @@
   "tooltip.gemstones.topaz.melee_bonus": "%s crit damage",
   "tooltip.gemstones.topaz.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.topaz.tools_bonus": "%s to inflict %s",
-  "tooltip.gemstones.topaz.armor_bonus": "%s luck",
+  "tooltip.gemstones.topaz.armor_bonus": "%s armor and %s armor toughness",
   
   "item.gemstones.zircon_gemstone_common": "Zircon Gemstone",
   "item.gemstones.zircon_gemstone_uncommon": "Zircon Gemstone",
