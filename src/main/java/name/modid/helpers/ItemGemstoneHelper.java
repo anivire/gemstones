@@ -3,9 +3,10 @@ package name.modid.helpers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.function.Function;
 import name.modid.Gemstones;
 import name.modid.helpers.components.ComponentsHelper;
 import name.modid.helpers.components.Gemstone;
@@ -23,6 +24,7 @@ import name.modid.helpers.types.GemstoneType;
 import name.modid.items.gemstones.GemstoneItem;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -178,18 +180,29 @@ public class ItemGemstoneHelper {
 
   public static void applyAttributeModifiers(ArrayList<GemstoneModifier> gemstoneModifiers,
       Item item, ItemStack itemStack) {
-    AttributeModifiersComponent itemAttributeModifiers = itemStack
+    AttributeModifiersComponent baseModifiers = itemStack.getItem().getAttributeModifiers();
+    AttributeModifiersComponent customModifiers = itemStack
         .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
-    List<AttributeModifiersComponent.Entry> newModifiers = new ArrayList<>();
 
-    // Preserve non-gemstone modifiers
-    for (AttributeModifiersComponent.Entry entry : itemAttributeModifiers.modifiers()) {
-      if (!entry.modifier().id().getNamespace().equals(Gemstones.MOD_ID)) {
-        newModifiers.add(entry);
+    // Using LinkedHashMap for attributes order and eliminate possible duplicates
+    Map<String, AttributeModifiersComponent.Entry> combinedModifiersMap = new LinkedHashMap<>();
+    Function<AttributeModifiersComponent.Entry, String> entryKey =
+        entry -> entry.modifier().id().toString() + "|" + entry.slot() + "|"
+            + entry.attribute().value();
+
+    // Filter modifiers
+    baseModifiers.modifiers().forEach(e -> {
+      if (!e.modifier().id().getNamespace().equals(Gemstones.MOD_ID)) {
+        combinedModifiersMap.put(entryKey.apply(e), e);
       }
-    }
+    });
+    customModifiers.modifiers().forEach(e -> {
+      if (!e.modifier().id().getNamespace().equals(Gemstones.MOD_ID)) {
+        combinedModifiersMap.put(entryKey.apply(e), e);
+      }
+    });
 
-    // Group modifiers by attribute
+    // Gather modifiers
     Map<RegistryEntry<EntityAttribute>, List<ModifierAttribute>> attributeToModifiers =
         new HashMap<>();
     for (GemstoneModifier modifier : gemstoneModifiers) {
@@ -197,43 +210,44 @@ public class ItemGemstoneHelper {
         attributeToModifiers.computeIfAbsent(singleModifier.attr, k -> new ArrayList<>())
             .add(singleModifier);
       } else if (modifier instanceof ModifierMultiplyAttribute multiModifier) {
-        // Handle multiple attributes from ModifierMultiplyAttribute
         for (ModifierAttribute attr : multiModifier.instances) {
           attributeToModifiers.computeIfAbsent(attr.attr, k -> new ArrayList<>()).add(attr);
         }
       }
     }
 
-    // Process each attribute and its modifiers
     for (Map.Entry<RegistryEntry<EntityAttribute>, List<ModifierAttribute>> modifierEntry : attributeToModifiers
         .entrySet()) {
       RegistryEntry<EntityAttribute> attribute = modifierEntry.getKey();
       List<ModifierAttribute> modifiers = modifierEntry.getValue();
       ModifierAttribute mod = modifiers.get(0);
 
-      float totalValue = 0.0f;
-
-      for (ModifierAttribute modifier : modifiers) {
-        GemstoneRarityType rarity = modifier.getRarityType();
-        totalValue += modifier.modifierValuesList.get(rarity.getValue());
+      float totalValue = 0f;
+      for (ModifierAttribute m : modifiers) {
+        GemstoneRarityType rarity = m.getRarityType();
+        totalValue += m.modifierValuesList.get(rarity.getValue());
       }
 
-      // Create a unique modifier ID
-      EntityAttributeModifier scaledGemstoneModifier =
-          new EntityAttributeModifier(
-              Identifier.of(Gemstones.MOD_ID,
-                  String.format("%s_gemstone_%s_modifier_slot%s",
-                      mod.gemstoneType.toString().toLowerCase(),
-                      mod.itemType.toString().toLowerCase(), UUID.randomUUID().toString())),
-              totalValue, mod.operation);
+      EquipmentSlot slot = GemstoneModifierHelper.getEquipmentSlot(item);
 
-      newModifiers.add(new AttributeModifiersComponent.Entry(attribute, scaledGemstoneModifier,
-          GemstoneModifierHelper.getAttributeModifierSlot(item)));
+      Identifier modifierId = Identifier.of(Gemstones.MOD_ID,
+          String.format("%s_gemstone_%s_modifier_slot%s", mod.gemstoneType.toString().toLowerCase(),
+              mod.itemType.toString().toLowerCase(), slot.name().toLowerCase()));
+
+      EntityAttributeModifier scaledGemstoneModifier =
+          new EntityAttributeModifier(modifierId, totalValue, mod.operation);
+
+      AttributeModifiersComponent.Entry newEntry = new AttributeModifiersComponent.Entry(attribute,
+          scaledGemstoneModifier, GemstoneModifierHelper.getAttributeModifierSlot(item));
+      combinedModifiersMap.put(entryKey.apply(newEntry), newEntry);
     }
 
-    itemAttributeModifiers =
-        new AttributeModifiersComponent(newModifiers, itemAttributeModifiers.showInTooltip());
-    itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, itemAttributeModifiers);
+    List<AttributeModifiersComponent.Entry> finalModifiers =
+        new ArrayList<>(combinedModifiersMap.values());
+
+    AttributeModifiersComponent finalComponent =
+        new AttributeModifiersComponent(finalModifiers, true);
+    itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, finalComponent);
   }
 
   public static void applyOnHitEffectModifiers(ArrayList<ModifierOnHitEffect> gemstoneModifiers,

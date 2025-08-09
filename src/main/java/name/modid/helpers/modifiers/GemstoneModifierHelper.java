@@ -10,6 +10,7 @@ import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolItem;
 
 public class GemstoneModifierHelper {
   public static Map<GemstoneModifierItemType, GemstoneModifier> getGemstoneModifiers(
@@ -57,6 +59,16 @@ public class GemstoneModifierHelper {
     }
 
     return AttributeModifierSlot.MAINHAND;
+  }
+
+  public static EquipmentSlot getEquipmentSlot(Item item) {
+    if (item instanceof ArmorItem armorItem) {
+      return armorItem.getSlotType();
+    } else if (item instanceof SwordItem || item instanceof ToolItem) {
+      return EquipmentSlot.MAINHAND;
+    } else {
+      return EquipmentSlot.MAINHAND;
+    }
   }
 
   public static GemstoneModifierItemType getModifieritemSlot(Item item) {

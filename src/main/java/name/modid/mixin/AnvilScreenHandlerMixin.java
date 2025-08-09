@@ -1,6 +1,7 @@
 package name.modid.mixin;
 
 import name.modid.helpers.ItemGemstoneHelper;
+import name.modid.helpers.components.Gemstone;
 import name.modid.items.gemstones.GemstoneItem;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,6 +50,7 @@ public abstract class AnvilScreenHandlerMixin {
       if (emptySlotIndex != null) {
         ItemStack resultStack = left.copy();
 
+        // Pass new item name
         if (this.newItemName != null && !StringHelper.isBlank(this.newItemName)) {
           if (!this.newItemName.equals(left.getName().getString())) {
             resultStack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName));
@@ -61,7 +63,8 @@ public abstract class AnvilScreenHandlerMixin {
         // Gemstone newGemstone = new Gemstone(gemstoneItem.getType(),
         // gemstoneItem.getRarityType());
 
-        ItemStack modifiedStack = ItemGemstoneHelper.setGemstoneByIndex(resultStack, emptySlotIndex, gemstoneItem);
+        ItemStack modifiedStack =
+            ItemGemstoneHelper.setGemstoneByIndex(resultStack, emptySlotIndex, gemstoneItem);
 
         if (modifiedStack != null) {
           handler.getSlot(2).setStack(modifiedStack);
@@ -80,19 +83,22 @@ public abstract class AnvilScreenHandlerMixin {
 
     if (!left.isEmpty() && !right.isEmpty() && ItemGemstoneHelper.isItemValid(left.getItem()) &&
     // TODO: add exp level scaling or set to flat number
-        Objects.equals(right.getItem().getClass().getSuperclass().getSimpleName(), "GemstoneItem")) {
+        Objects.equals(right.getItem().getClass().getSuperclass().getSimpleName(),
+            "GemstoneItem")) {
       cir.setReturnValue(1);
     }
   }
 
   @Inject(method = "canTakeOutput", at = @At("HEAD"), cancellable = true)
-  protected void canTakeOutputMixin(PlayerEntity player, boolean present, CallbackInfoReturnable<Boolean> info) {
+  protected void canTakeOutputMixin(PlayerEntity player, boolean present,
+      CallbackInfoReturnable<Boolean> info) {
     AnvilScreenHandler handler = (AnvilScreenHandler) (Object) this;
     ItemStack left = handler.getSlot(0).getStack();
     ItemStack right = handler.getSlot(1).getStack();
 
     if (!left.isEmpty() && !right.isEmpty() && ItemGemstoneHelper.isItemValid(left.getItem())
-        && Objects.equals(right.getItem().getClass().getSuperclass().getSimpleName(), "GemstoneItem")) {
+        && Objects.equals(right.getItem().getClass().getSuperclass().getSimpleName(),
+            "GemstoneItem")) {
       info.setReturnValue(true);
     }
   }
