@@ -21,7 +21,7 @@ public record SapphireModifierData() implements GemstonesModifierData {
 
   static {
     MODIFIERS.put(GemstoneModifierItemType.MELEE,
-        new ModifierOnHitEffect(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)), 6, 0,
+        new ModifierOnHitEffect(new ArrayList<Double>(Arrays.asList(0.08, 0.16, 0.24, 0.36)), 6, 0,
             GemstoneModifierItemType.MELEE, EffectRegistrationHelper.GUARDIAN_SMITE_EFFECT, false,
             1, GemstoneType.RUBY));
 

@@ -20,18 +20,19 @@ public record RubyModifierData() implements GemstonesModifierData {
 
   static {
     MODIFIERS.put(GemstoneModifierItemType.MELEE,
-        new ModifierOnHitEffect(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)), 6, 0,
+        new ModifierOnHitEffect(new ArrayList<Double>(Arrays.asList(0.08, 0.15, 0.25, 0.3)), 6, 0,
             GemstoneModifierItemType.MELEE, EffectRegistrationHelper.BLEEDING_EFFECT, true, 5,
             GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.RANGED,
-        new ModifierOnHitEffectProjectile(new ArrayList<Double>(Arrays.asList(0.2, 0.3, 0.4, 0.5)),
-            6, 0, GemstoneModifierItemType.RANGED, EffectRegistrationHelper.BLEEDING_EFFECT, true,
-            5, GemstoneType.RUBY));
+        new ModifierOnHitEffectProjectile(
+            new ArrayList<Double>(Arrays.asList(0.16, 0.25, 0.35, 0.45)), 6, 0,
+            GemstoneModifierItemType.RANGED, EffectRegistrationHelper.BLEEDING_EFFECT, true, 5,
+            GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,
         new ModifierOnBlockBreak(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)),
-            new ArrayList<Double>(Arrays.asList(1.0, 2.0, 3.0, 4.0)),
+            new ArrayList<Double>(Arrays.asList(1.0, 1.0, 2.0, 2.0)),
             GemstoneModifierItemType.TOOLS, EventType.EXTRA_HEALTH, GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.ARMOR,

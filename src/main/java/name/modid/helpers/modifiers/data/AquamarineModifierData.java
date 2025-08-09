@@ -26,7 +26,7 @@ public record AquamarineModifierData() implements GemstonesModifierData {
             GemstoneModifierItemType.MELEE, GemstoneType.AQUAMARINE));
 
     MODIFIERS.put(GemstoneModifierItemType.RANGED,
-        new ModifierOnHit(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)),
+        new ModifierOnHit(new ArrayList<Double>(Arrays.asList(0.15, 0.25, 0.35, 0.45)),
             EventType.TORRENT, GemstoneModifierItemType.RANGED, GemstoneType.AQUAMARINE));
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,

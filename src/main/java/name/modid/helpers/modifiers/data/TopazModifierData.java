@@ -29,9 +29,9 @@ public record TopazModifierData() implements GemstonesModifierData {
             GemstoneType.TOPAZ));
 
     MODIFIERS.put(GemstoneModifierItemType.RANGED,
-        new ModifierOnHitEffectProjectile(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)),
-            11, 0, GemstoneModifierItemType.RANGED, StatusEffects.SLOWNESS, true, 3,
-            GemstoneType.TOPAZ));
+        new ModifierOnHitEffectProjectile(
+            new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.35, 0.45)), 11, 0,
+            GemstoneModifierItemType.RANGED, StatusEffects.SLOWNESS, true, 3, GemstoneType.TOPAZ));
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,
         new ModifierOnHitEffect(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)), 6, 0,
