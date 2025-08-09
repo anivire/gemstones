@@ -138,9 +138,7 @@ public class EventRegistrationHelper {
           }
         });
 
-    ServerTickEvents.END_SERVER_TICK.register(server ->
-
-    {
+    ServerTickEvents.END_SERVER_TICK.register(server -> {
       Set<LivingEntity> toRemove = new HashSet<>();
       for (LivingEntity target : affectedEntities) {
         if (!target.isAlive() || target.isRemoved()) {
@@ -162,6 +160,8 @@ public class EventRegistrationHelper {
       }
       affectedEntities.removeAll(toRemove);
     });
+
+    ServerLivingEntityEvents.AFTER_DEATH.register(EventHarvestMark::setupEvent);
   }
 
   private static void applyTorrentEffect(ServerWorld world, LivingEntity target) {
