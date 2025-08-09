@@ -11,9 +11,11 @@ import name.modid.helpers.modifiers.GemstoneModifierItemType;
 import name.modid.helpers.modifiers.GemstonesModifierData;
 import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffects;
 
 public record TopazModifierData() implements GemstonesModifierData {
   private static final Map<GemstoneModifierItemType, GemstoneModifier> MODIFIERS = new HashMap<>();
@@ -26,14 +28,13 @@ public record TopazModifierData() implements GemstonesModifierData {
             GemstoneType.TOPAZ));
 
     MODIFIERS.put(GemstoneModifierItemType.RANGED,
-        new ModifierOnHitEffect(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)), 6, 0,
-            GemstoneModifierItemType.MELEE, EffectRegistrationHelper.QUICK_SANDS_EFFECT, true, 5,
-            GemstoneType.RUBY));
+        new ModifierOnHitEffectProjectile(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)),
+            11, 0, GemstoneModifierItemType.RANGED, StatusEffects.SLOWNESS, true, 3,
+            GemstoneType.TOPAZ));
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,
-        new ModifierAttribute(Operation.ADD_MULTIPLIED_TOTAL,
-            new ArrayList<Double>(Arrays.asList(0.5, 1.0, 1.5, 2.0)),
-            GemstoneModifierItemType.TOOLS, EntityAttributes.PLAYER_BLOCK_BREAK_SPEED,
+        new ModifierOnHitEffect(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)), 6, 0,
+            GemstoneModifierItemType.TOOLS, EffectRegistrationHelper.HARVEST_MARK_EFFECT, true, 10,
             GemstoneType.TOPAZ));
 
     MODIFIERS.put(GemstoneModifierItemType.ARMOR,

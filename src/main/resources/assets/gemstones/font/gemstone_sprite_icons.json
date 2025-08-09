@@ -72,6 +72,24 @@
       "chars": [
         "\uE008"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/harvest_mark_icon.png",
+      "height": 10,
+      "ascent": 8,
+      "chars": [
+        "\uE009"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/slowness_icon.png",
+      "height": 10,
+      "ascent": 9,
+      "chars": [
+        "\uE010"
+      ]
     }
   ]
 }

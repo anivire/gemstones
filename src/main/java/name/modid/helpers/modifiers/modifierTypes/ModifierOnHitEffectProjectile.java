@@ -15,7 +15,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-public class ModifierOnHitEffect implements GemstoneModifier {
+public class ModifierOnHitEffectProjectile implements GemstoneModifier {
   public ArrayList<Double> inflitChance = new ArrayList<Double>();
   public GemstoneModifierItemType itemType;
   public int duration;
@@ -26,7 +26,7 @@ public class ModifierOnHitEffect implements GemstoneModifier {
   public GemstoneType gemstoneType;
   public GemstoneRarityType rarityType;
 
-  public ModifierOnHitEffect(ArrayList<Double> inflitChance, int duration, int amplifier,
+  public ModifierOnHitEffectProjectile(ArrayList<Double> inflitChance, int duration, int amplifier,
       GemstoneModifierItemType itemType, RegistryEntry<StatusEffect> effect, boolean isStacking,
       int maxStackCount, GemstoneType gemstoneType) {
     this.inflitChance = inflitChance;

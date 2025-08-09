@@ -12,6 +12,7 @@ import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
 import name.modid.helpers.types.GemstoneType;
 
 public record RubyModifierData() implements GemstonesModifierData {
@@ -24,9 +25,9 @@ public record RubyModifierData() implements GemstonesModifierData {
             GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.RANGED,
-        new ModifierOnHitEffect(new ArrayList<Double>(Arrays.asList(0.2, 0.3, 0.4, 0.5)), 6, 0,
-            GemstoneModifierItemType.RANGED, EffectRegistrationHelper.BLEEDING_EFFECT, true, 5,
-            GemstoneType.RUBY));
+        new ModifierOnHitEffectProjectile(new ArrayList<Double>(Arrays.asList(0.2, 0.3, 0.4, 0.5)),
+            6, 0, GemstoneModifierItemType.RANGED, EffectRegistrationHelper.BLEEDING_EFFECT, true,
+            5, GemstoneType.RUBY));
 
     MODIFIERS.put(GemstoneModifierItemType.TOOLS,
         new ModifierOnBlockBreak(new ArrayList<Double>(Arrays.asList(0.1, 0.2, 0.3, 0.4)),

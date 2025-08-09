@@ -10,7 +10,7 @@ import name.modid.helpers.ItemGemstoneHelper;
 import name.modid.helpers.modifiers.GemstoneModifierHelper;
 import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
@@ -20,11 +20,11 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 @Mixin(PersistentProjectileEntity.class)
 public class PersistentProjectileEntityMixin {
@@ -42,28 +42,39 @@ public class PersistentProjectileEntityMixin {
 
   private void handleHit(HitResult hitResult) {
     PersistentProjectileEntity entity = (PersistentProjectileEntity) (Object) this;
-    if (!(entity instanceof ArrowEntity arrow) || arrow.getWorld().isClient
-        || !arrow.getWorld().isRaining()) {
-      return;
-    }
-
-    if (!(arrow.getOwner() instanceof PlayerEntity player)) {
-      return;
-    }
-
+    ArrowEntity arrow = (ArrowEntity) entity;
+    ItemStack itemStack = getWeaponStack((PlayerEntity) arrow.getOwner());
     LivingEntity target = hitResult instanceof EntityHitResult entityHit
         && entityHit.getEntity() instanceof LivingEntity living ? living : null;
-    ItemStack weapon = getWeaponStack(player);
-    if (weapon == null) {
+    World world = arrow.getWorld();
+
+    if (world.isClient || itemStack == null) {
       return;
     }
 
-    ServerWorld world = (ServerWorld) arrow.getWorld();
+    if (arrow != null && target != null) {
+      ArrayList<ModifierOnHitEffectProjectile> onHitEffectProjectileModifiers =
+          GemstoneModifierHelper.getOnHitEffectProjectileModifiers(itemStack);
+
+      if (!onHitEffectProjectileModifiers.isEmpty()) {
+        ItemGemstoneHelper.applyOnHitEffectProjectileModifiers(onHitEffectProjectileModifiers,
+            itemStack.getItem(), itemStack, target, world);
+      }
+    }
+
+    if (!arrow.getWorld().isRaining()) {
+      return;
+    }
+
     Vec3d pos = hitResult.getPos();
-    applyGemstoneModifiers(weapon, world, pos, arrow, target);
+    applyGemstoneModifiers(itemStack, world, pos, arrow, target);
   }
 
   private ItemStack getWeaponStack(PlayerEntity player) {
+    if (player == null) {
+      return null;
+    }
+
     ItemStack mainHand = player.getMainHandStack();
     ItemStack offHand = player.getOffHandStack();
 
@@ -72,6 +83,7 @@ public class PersistentProjectileEntityMixin {
     } else if (isBowOrCrossbow(offHand)) {
       return offHand;
     }
+
     return null;
   }
 
@@ -79,7 +91,7 @@ public class PersistentProjectileEntityMixin {
     return stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem;
   }
 
-  private void applyGemstoneModifiers(ItemStack itemStack, ServerWorld world, Vec3d pos,
+  private void applyGemstoneModifiers(ItemStack itemStack, World world, Vec3d pos,
       ArrowEntity arrow, LivingEntity target) {
     // ModifierOnHit
     // TODO: move to ItemGemstoneHelper or make correct realization (wont support for other
@@ -101,16 +113,6 @@ public class PersistentProjectileEntityMixin {
           world.spawnEntity(lightning);
         }
         arrow.discard();
-      }
-    }
-
-    // ModifierOnHitEffect
-    if (target != null) {
-      ArrayList<ModifierOnHitEffect> effectModifiers =
-          GemstoneModifierHelper.getOnHitEffectModifiers(itemStack);
-      if (!effectModifiers.isEmpty()) {
-        ItemGemstoneHelper.applyOnHitEffectModifiers(effectModifiers, itemStack.getItem(),
-            itemStack, target, world);
       }
     }
   }

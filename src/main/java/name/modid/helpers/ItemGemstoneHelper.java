@@ -19,6 +19,7 @@ import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
 import name.modid.helpers.types.GemstoneRarityType;
 import name.modid.helpers.types.GemstoneType;
 import name.modid.items.gemstones.GemstoneItem;
@@ -267,6 +268,53 @@ public class ItemGemstoneHelper {
       int maxAmplifier = -1;
 
       for (ModifierOnHitEffect modifier : modifiers) {
+        GemstoneRarityType rarity = modifier.getRarityType();
+        combinedProcChance += modifier.inflitChance.get(rarity.getValue());
+
+        if (modifier.amplifier > maxAmplifier) {
+          maxAmplifier = modifier.amplifier;
+          selectedModifier = modifier;
+        }
+      }
+
+      double randomValue = world.getRandom().nextDouble();
+      if (randomValue < combinedProcChance && selectedModifier != null) {
+        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects =
+            target.getActiveStatusEffects();
+        StatusEffectInstance existingEffect = activeEffects.get(statusEffect);
+        int newAmplifier = selectedModifier.amplifier;
+
+        if (existingEffect != null && selectedModifier.isStacking) {
+          newAmplifier =
+              Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
+        }
+
+        target
+            .addStatusEffect(new StatusEffectInstance(statusEffect, selectedModifier.duration * 20,
+                selectedModifier.isStacking ? newAmplifier : selectedModifier.amplifier));
+      }
+    }
+  }
+
+  public static void applyOnHitEffectProjectileModifiers(
+      ArrayList<ModifierOnHitEffectProjectile> gemstoneModifiers, Item item, ItemStack itemStack,
+      LivingEntity target, World world) {
+    Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectProjectile>> effectToModifiers =
+        new HashMap<>();
+    for (ModifierOnHitEffectProjectile modifier : gemstoneModifiers) {
+      effectToModifiers.computeIfAbsent(modifier.effect, k -> new ArrayList<>()).add(modifier);
+    }
+
+    for (Map.Entry<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectProjectile>> statusEntry : effectToModifiers
+        .entrySet()) {
+      RegistryEntry<StatusEffect> statusEffect = statusEntry.getKey();
+      List<ModifierOnHitEffectProjectile> modifiers = statusEntry.getValue();
+
+      double combinedProcChance = 0.0;
+      ModifierOnHitEffectProjectile selectedModifier = null;
+      int maxAmplifier = -1;
+
+      for (ModifierOnHitEffectProjectile modifier : modifiers) {
         GemstoneRarityType rarity = modifier.getRarityType();
         combinedProcChance += modifier.inflitChance.get(rarity.getValue());
 

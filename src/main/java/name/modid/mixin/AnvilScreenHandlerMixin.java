@@ -1,15 +1,6 @@
 package name.modid.mixin;
 
-import name.modid.helpers.ItemGemstoneHelper;
-import name.modid.helpers.components.Gemstone;
-import name.modid.items.gemstones.GemstoneItem;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.AnvilScreenHandler;
-import net.minecraft.screen.Property;
-import net.minecraft.text.Text;
-import net.minecraft.util.StringHelper;
+import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -20,8 +11,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Objects;
+import name.modid.helpers.ItemGemstoneHelper;
+import name.modid.items.gemstones.GemstoneItem;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.AnvilScreenHandler;
+import net.minecraft.screen.Property;
+import net.minecraft.text.Text;
+import net.minecraft.util.StringHelper;
 
 @Mixin(AnvilScreenHandler.class)
 public abstract class AnvilScreenHandlerMixin {

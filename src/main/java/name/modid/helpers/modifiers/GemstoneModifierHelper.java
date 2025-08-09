@@ -8,6 +8,7 @@ import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.entity.EquipmentSlot;
@@ -125,6 +126,31 @@ public class GemstoneModifierHelper {
               modifierOnHitEffect.amplifier, modifierOnHitEffect.itemType,
               modifierOnHitEffect.effect, modifierOnHitEffect.isStacking,
               modifierOnHitEffect.maxStackCount, modifierOnHitEffect.gemstoneType);
+          newModifier.setRarityType(gem.gemstoneRarityType());
+          modifiers.add(newModifier);
+        }
+      }
+    }
+
+    return modifiers;
+  }
+
+  public static ArrayList<ModifierOnHitEffectProjectile> getOnHitEffectProjectileModifiers(
+      ItemStack itemStack) {
+    ArrayList<ModifierOnHitEffectProjectile> modifiers = new ArrayList<>();
+    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+
+    for (Gemstone gem : gemstones) {
+      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
+        GemstoneModifier modifier =
+            getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
+        if (modifier instanceof ModifierOnHitEffectProjectile modifierOnHitEffectProjectile) {
+          ModifierOnHitEffectProjectile newModifier = new ModifierOnHitEffectProjectile(
+              modifierOnHitEffectProjectile.inflitChance, modifierOnHitEffectProjectile.duration,
+              modifierOnHitEffectProjectile.amplifier, modifierOnHitEffectProjectile.itemType,
+              modifierOnHitEffectProjectile.effect, modifierOnHitEffectProjectile.isStacking,
+              modifierOnHitEffectProjectile.maxStackCount,
+              modifierOnHitEffectProjectile.gemstoneType);
           newModifier.setRarityType(gem.gemstoneRarityType());
           modifiers.add(newModifier);
         }
