@@ -83,13 +83,24 @@
   "tooltip.gemstones.aquamarine.ranged_bonus": "%s to trigger %s",
   "tooltip.gemstones.aquamarine.tools_bonus": "%s underwater block break speed",
   "tooltip.gemstones.aquamarine.armor_bonus": "%s oxygen bonus",
+  
+  "item.gemstones.obsidian_shard_gemstone_common": "Obsidian Shard Gemstone",
+  "item.gemstones.obsidian_shard_gemstone_uncommon": "Obsidian Shard Gemstone",
+  "item.gemstones.obsidian_shard_gemstone_rare": "Obsidian Shard Gemstone",
+  "item.gemstones.obsidian_shard_gemstone_legendary": "Obsidian Shard Gemstone",
 
+  "tooltip.gemstones.obsidian_shard.melee_bonus": "%s to inflict %s",
+  "tooltip.gemstones.obsidian_shard.ranged_bonus": "%s to inflict %s",
+  "tooltip.gemstones.obsidian_shard.tools_bonus": "%s max item durability",
+  "tooltip.gemstones.obsidian_shard.armor_bonus": "reduce incoming damage by %s but slow by %s",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
   "effect.gemstones.harvest_mark": "Harvest Mark",
+  "effect.gemstones.stunned": "Stunned",
 
   "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",
+  "attribute.name.generic.max_durability": "Max Durability Points",
   "attribute.name.generic.arrow_fly_distance": "Arrow Fly Distance"
 }

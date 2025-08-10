@@ -68,6 +68,11 @@ public class ModifierOnHitEffect implements GemstoneModifier {
           .append(Text.literal("\uE010").styled(
               style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
           .formatted(Formatting.WHITE);
+    } else if (this.effect == EffectRegistrationHelper.STUNNED_EFFECT) {
+      effectString.append(Text.literal("Stunned").formatted(Formatting.RED))
+          .append(Text.literal("\uE011").styled(
+              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+          .formatted(Formatting.WHITE);
     } else {
       effectString.append(Text.literal(this.effect.toString()).formatted(Formatting.WHITE));
     }

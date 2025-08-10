@@ -17,8 +17,13 @@ public class AttributeRegistrationHelper {
       new ClampedEntityAttribute("attribute.name.generic.crit_damage", 1.0, 0.1, 100.0)
           .setTracked(true);
 
+  public static final EntityAttribute MAX_DURABILITY =
+      new ClampedEntityAttribute("attribute.name.generic.max_durability", 10.0, 1.0, 1024.0)
+          .setTracked(true);
+
   public static RegistryEntry<EntityAttribute> PULL_SPEED_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> CRIT_DAMAGE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> MAX_DURABILITY_ATTRIBUTE;
 
   public static void initialize() {
     PULL_SPEED_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
@@ -26,5 +31,8 @@ public class AttributeRegistrationHelper {
 
     CRIT_DAMAGE_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
         Identifier.of(Gemstones.MOD_ID, "crit_damage"), CRIT_DAMAGE);
+
+    MAX_DURABILITY_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "max_durability"), MAX_DURABILITY);
   }
 }

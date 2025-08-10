@@ -162,6 +162,8 @@ public class EventRegistrationHelper {
     });
 
     ServerLivingEntityEvents.AFTER_DEATH.register(EventHarvestMark::setupEvent);
+
+    AttackEntityCallback.EVENT.register(EventStunned::setupEvent);
   }
 
   private static void applyTorrentEffect(ServerWorld world, LivingEntity target) {

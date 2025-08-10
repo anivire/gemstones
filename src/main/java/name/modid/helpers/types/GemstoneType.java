@@ -3,7 +3,7 @@ package name.modid.helpers.types;
 import com.mojang.serialization.Codec;
 
 public enum GemstoneType {
-  EMPTY, LOCKED, RUBY, CELESTINE, TOPAZ, SAPPHIRE, ZIRCON, AQUAMARINE;
+  EMPTY, LOCKED, RUBY, CELESTINE, TOPAZ, SAPPHIRE, ZIRCON, AQUAMARINE, OBSIDIAN_SHARD;
 
   public static final Codec<GemstoneType> CODEC =
       Codec.STRING.xmap(GemstoneType::valueOf, GemstoneType::name);
@@ -17,6 +17,7 @@ public enum GemstoneType {
       case TOPAZ -> "\uE005";
       case ZIRCON -> "\uE006";
       case AQUAMARINE -> "\uE007";
+      case OBSIDIAN_SHARD -> "\uE008";
       default -> "\uE000";
     };
   }

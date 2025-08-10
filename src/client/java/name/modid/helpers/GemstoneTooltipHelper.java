@@ -16,6 +16,7 @@ public class GemstoneTooltipHelper {
       case TOPAZ -> Formatting.GOLD;
       case SAPPHIRE -> Formatting.DARK_BLUE;
       case AQUAMARINE -> Formatting.BLUE;
+      case OBSIDIAN_SHARD -> Formatting.DARK_PURPLE;
       default -> Formatting.GRAY;
     };
   }
@@ -29,6 +30,7 @@ public class GemstoneTooltipHelper {
       case SAPPHIRE -> "Sapphire";
       case TOPAZ -> "Topaz";
       case AQUAMARINE -> "Aquamarine";
+      case OBSIDIAN_SHARD -> "Obsidian Shard";
       default -> "unknown";
     };
   }

@@ -38,7 +38,8 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
     ArrayList<MutableText> modifierTexts = new ArrayList<>();
 
     for (ModifierAttribute modifierInstance : instances) {
-      Double value = modifierInstance.modifierValuesList.get(gemstoneRarityType.getValue());
+      Double pureValue = modifierInstance.modifierValuesList.get(gemstoneRarityType.getValue());
+      Double value = Math.abs(pureValue);
       MutableText attributeBonus = Text.empty();
 
       if (modifierInstance.attr == EntityAttributes.GENERIC_MAX_HEALTH) {
@@ -53,12 +54,14 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
           modifierInstance.operation == Operation.ADD_VALUE ? value : value * 100;
       String formattedValue = formatValue(adjustedValue) + percent;
 
-      modifierTexts.add(Text.empty()
-          .append(Text.literal("\uE006")
-              .styled(
+      modifierTexts
+          .add(Text.empty()
+              .append(Text.literal(pureValue > 0 ? "\uE006" : "\uE012").styled(
                   style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons")))
-              .formatted(Formatting.GREEN))
-          .append(Text.literal(formattedValue).formatted(Formatting.GREEN).append(attributeBonus)));
+                  .formatted(pureValue > 0 ? Formatting.GREEN : Formatting.RED))
+              .append(Text.literal(formattedValue)
+                  .formatted(pureValue > 0 ? Formatting.GREEN : Formatting.RED)
+                  .append(attributeBonus)));
     }
 
     String translationKey = String.format("tooltip.gemstones.%s.%s_bonus",

@@ -4,6 +4,7 @@ import java.util.List;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
 import name.modid.helpers.particles.BleedParticleFactory;
 import name.modid.helpers.particles.ParticlesRegistrationHelper;
+import name.modid.helpers.particles.StunnedParticleFactory;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
@@ -85,6 +86,9 @@ public class GemstonesClient implements ClientModInitializer {
 
     ParticleFactoryRegistry.getInstance().register(ParticlesRegistrationHelper.BLEED_PARTICLE,
         BleedParticleFactory::new);
+
+    ParticleFactoryRegistry.getInstance().register(ParticlesRegistrationHelper.STUNNED_PARTICLE,
+        StunnedParticleFactory::new);
 
     // HudRenderCallback.EVENT.register((context, tickDeltaManager) -> {
     // int color = 0xFFFF0000; // Red

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import name.modid.Gemstones;
+import name.modid.entities.EffectRegistrationHelper;
 import name.modid.helpers.components.ComponentsHelper;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.components.GemstoneSlots;
@@ -20,6 +21,7 @@ import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
+import name.modid.helpers.particles.ParticlesRegistrationHelper;
 import name.modid.helpers.types.GemstoneRarityType;
 import name.modid.helpers.types.GemstoneType;
 import name.modid.items.gemstones.GemstoneItem;
@@ -43,6 +45,7 @@ import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -188,7 +191,7 @@ public class ItemGemstoneHelper {
     // Using LinkedHashMap for attributes order and eliminate possible duplicates
     Map<String, AttributeModifiersComponent.Entry> combinedModifiersMap = new LinkedHashMap<>();
     Function<AttributeModifiersComponent.Entry, String> entryKey =
-        entry -> entry.modifier().id().toString() + "|" + entry.slot() + "|"
+        entry -> entry.modifier().id().toString() + "." + entry.slot() + "."
             + entry.attribute().value();
 
     // Filter modifiers
@@ -251,6 +254,7 @@ public class ItemGemstoneHelper {
     itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, finalComponent);
   }
 
+
   public static void applyOnHitEffectModifiers(ArrayList<ModifierOnHitEffect> gemstoneModifiers,
       Item item, ItemStack itemStack, LivingEntity target, World world) {
     Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffect>> effectToModifiers = new HashMap<>();
@@ -287,6 +291,27 @@ public class ItemGemstoneHelper {
         if (existingEffect != null && selectedModifier.isStacking) {
           newAmplifier =
               Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
+        }
+
+        double centerY = target.getY() + target.getHeight() * 0.8;
+
+        if (statusEffect == EffectRegistrationHelper.STUNNED_EFFECT) {
+          if (world.isClient) {
+            double offsetX = (world.random.nextDouble() - 0.5) * 0.1;
+            double offsetY = (world.random.nextDouble() - 0.5) * 0.1;
+            double offsetZ = (world.random.nextDouble() - 0.5) * 0.1;
+            double velocityX = (world.random.nextDouble() - 0.5) * 0.15;
+            double velocityY = -0.05;
+            double velocityZ = (world.random.nextDouble() - 0.5) * 0.15;
+
+            world.addParticle(ParticlesRegistrationHelper.STUNNED_PARTICLE, target.getX() + offsetX,
+                centerY + offsetY, target.getZ() + offsetZ, velocityX, velocityY, velocityZ);
+          }
+
+          if (world instanceof ServerWorld serverWorld) {
+            serverWorld.spawnParticles(ParticlesRegistrationHelper.STUNNED_PARTICLE, target.getX(),
+                centerY, target.getZ(), 8, 0.1, 0.1, 0.1, 0.15);
+          }
         }
 
         target
@@ -334,6 +359,27 @@ public class ItemGemstoneHelper {
         if (existingEffect != null && selectedModifier.isStacking) {
           newAmplifier =
               Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
+        }
+
+        double centerY = target.getY() + target.getHeight() * 0.8;
+
+        if (statusEffect == EffectRegistrationHelper.STUNNED_EFFECT) {
+          if (world.isClient) {
+            double offsetX = (world.random.nextDouble() - 0.5) * 0.1;
+            double offsetY = (world.random.nextDouble() - 0.5) * 0.1;
+            double offsetZ = (world.random.nextDouble() - 0.5) * 0.1;
+            double velocityX = (world.random.nextDouble() - 0.5) * 0.15;
+            double velocityY = -0.05;
+            double velocityZ = (world.random.nextDouble() - 0.5) * 0.15;
+
+            world.addParticle(ParticlesRegistrationHelper.STUNNED_PARTICLE, target.getX() + offsetX,
+                centerY + offsetY, target.getZ() + offsetZ, velocityX, velocityY, velocityZ);
+          }
+
+          if (world instanceof ServerWorld serverWorld) {
+            serverWorld.spawnParticles(ParticlesRegistrationHelper.STUNNED_PARTICLE, target.getX(),
+                centerY, target.getZ(), 8, 0.1, 0.1, 0.1, 0.15);
+          }
         }
 
         target

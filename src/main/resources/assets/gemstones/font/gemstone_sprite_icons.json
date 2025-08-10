@@ -90,6 +90,24 @@
       "chars": [
         "\uE010"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/stunned_icon.png",
+      "height": 10,
+      "ascent": 9,
+      "chars": [
+        "\uE011"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/arrow_icon_bottom.png",
+      "height": 7,
+      "ascent": 7,
+      "chars": [
+        "\uE012"
+      ]
     }
   ]
 }

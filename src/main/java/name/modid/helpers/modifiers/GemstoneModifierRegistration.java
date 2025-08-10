@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import name.modid.helpers.modifiers.data.AquamarineModifierData;
 import name.modid.helpers.modifiers.data.CelestineModifierData;
+import name.modid.helpers.modifiers.data.ObsidianShardModifierData;
 import name.modid.helpers.modifiers.data.RubyModifierData;
 import name.modid.helpers.modifiers.data.SapphireModifierData;
 import name.modid.helpers.modifiers.data.TopazModifierData;
@@ -20,6 +21,7 @@ public class GemstoneModifierRegistration {
     MODIFIER_REGISTRY.put(GemstoneType.SAPPHIRE, new SapphireModifierData());
     MODIFIER_REGISTRY.put(GemstoneType.ZIRCON, new ZirconModifierData());
     MODIFIER_REGISTRY.put(GemstoneType.AQUAMARINE, new AquamarineModifierData());
+    MODIFIER_REGISTRY.put(GemstoneType.OBSIDIAN_SHARD, new ObsidianShardModifierData());
   }
 
   public static Map<GemstoneType, GemstonesModifierData> MODIFIER_REGISTRY() {

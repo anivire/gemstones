@@ -27,6 +27,9 @@ public class EffectRegistrationHelper {
       Registry.registerReference(Registries.STATUS_EFFECT,
           Identifier.of(Gemstones.MOD_ID, "harvest_mark"), new HarvestMarkEffect());
 
+  public static final RegistryEntry<StatusEffect> STUNNED_EFFECT = Registry.registerReference(
+      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "stunned"), new StunnedEffect());
+
   public static void initialize() {
     Gemstones.LOGGER.info("Registering mod effects for {}", Gemstones.MOD_ID);
   }
