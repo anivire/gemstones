@@ -62,6 +62,15 @@
       "chars": [
         "\uE007"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/gemstone_socket_obsidian_shard.png",
+      "height": 26,
+      "ascent": 13,
+      "chars": [
+        "\uE008"
+      ]
     }
   ]
 }
