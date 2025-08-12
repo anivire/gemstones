@@ -1,9 +1,12 @@
 package name.modid.helpers.modifiers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import name.modid.helpers.ItemGemstoneHelper;
 import name.modid.helpers.components.Gemstone;
+import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
+import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
@@ -90,6 +93,37 @@ public class GemstoneModifierHelper {
     }
 
     return GemstoneModifierItemType.TOOLS;
+  }
+
+  public static ArrayList<ModifierAttribute> getAttributeModifiers(ItemStack itemStack) {
+    ArrayList<ModifierAttribute> modifiers = new ArrayList<>();
+    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+
+    for (Gemstone gem : gemstones) {
+      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
+        GemstoneModifier modifier =
+            getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
+        if (modifier instanceof ModifierAttribute m) {
+          ModifierAttribute inst = new ModifierAttribute(m.operation, m.modifierValuesList,
+              m.itemType, m.attr, m.gemstoneType);
+          inst.setRarityType(gem.gemstoneRarityType());
+
+          modifiers.add(inst);
+        } else if (modifier instanceof ModifierMultiplyAttribute m) {
+          List<ModifierAttribute> instances = m.instances;
+
+          for (ModifierAttribute i : instances) {
+            ModifierAttribute inst = new ModifierAttribute(i.operation, i.modifierValuesList,
+                i.itemType, i.attr, i.gemstoneType);
+            inst.setRarityType(gem.gemstoneRarityType());
+
+            modifiers.add(inst);
+          }
+        }
+      }
+    }
+
+    return modifiers;
   }
 
   public static ArrayList<ModifierOnHit> getOnHitModifiers(ItemStack itemStack) {

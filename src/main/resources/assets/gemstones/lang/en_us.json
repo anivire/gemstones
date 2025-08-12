@@ -92,7 +92,7 @@
   "tooltip.gemstones.obsidian_shard.melee_bonus": "%s to inflict %s",
   "tooltip.gemstones.obsidian_shard.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.obsidian_shard.tools_bonus": "%s max item durability",
-  "tooltip.gemstones.obsidian_shard.armor_bonus": "reduce incoming damage by %s but slow by %s",
+  "tooltip.gemstones.obsidian_shard.armor_bonus": "%s max item durability",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",

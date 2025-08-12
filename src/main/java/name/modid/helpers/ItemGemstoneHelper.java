@@ -139,50 +139,13 @@ public class ItemGemstoneHelper {
     if (gemstones == null)
       return;
 
-    // Get all gemstones from item
-    Map<Integer, Map<GemstoneType, GemstoneRarityType>> itemGemstones = new HashMap<>();
-    for (int i = 0; i < gemstones.length; i++) {
-      Gemstone gem = gemstones[i];
+    ArrayList<ModifierAttribute> modifiers =
+        GemstoneModifierHelper.getAttributeModifiers(itemStack);
 
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        Map<GemstoneType, GemstoneRarityType> m = new HashMap<>();
-        m.put(gem.gemstoneType(), gem.gemstoneRarityType());
-        itemGemstones.put(i, m);
-      }
-    }
-
-    // Collect gemstone modifiers and apply bonuses
-    ArrayList<GemstoneModifier> gemstoneModifiers = new ArrayList<>();
-    for (Map.Entry<Integer, Map<GemstoneType, GemstoneRarityType>> m : itemGemstones.entrySet()) {
-      Map<GemstoneType, GemstoneRarityType> i = m.getValue();
-
-      for (Map.Entry<GemstoneType, GemstoneRarityType> e : i.entrySet()) {
-        GemstoneType gemstoneType = e.getKey();
-        GemstoneRarityType gemstoneRarity = e.getValue();
-        GemstoneModifier gemstoneModifier =
-            GemstoneModifierHelper.getGemstoneModifierForItem(gemstoneType, item);
-
-        if (gemstoneModifier != null) {
-          if (gemstoneModifier instanceof ModifierAttribute
-              || gemstoneModifier instanceof ModifierMultiplyAttribute) {
-            if (gemstoneModifier instanceof ModifierMultiplyAttribute gemstoneModifierInstances) {
-              for (ModifierAttribute instance : gemstoneModifierInstances.instances) {
-                instance.setRarityType(gemstoneRarity);
-              }
-            } else {
-              gemstoneModifier.setRarityType(gemstoneRarity);
-            }
-
-            gemstoneModifiers.add(gemstoneModifier);
-          }
-        }
-      }
-    }
-
-    applyAttributeModifiers(gemstoneModifiers, item, itemStack);
+    applyAttributeModifiers(modifiers, item, itemStack);
   }
 
-  public static void applyAttributeModifiers(ArrayList<GemstoneModifier> gemstoneModifiers,
+  public static void applyAttributeModifiers(ArrayList<ModifierAttribute> gemstoneModifiers,
       Item item, ItemStack itemStack) {
     AttributeModifiersComponent baseModifiers = itemStack.getItem().getAttributeModifiers();
     AttributeModifiersComponent customModifiers = itemStack

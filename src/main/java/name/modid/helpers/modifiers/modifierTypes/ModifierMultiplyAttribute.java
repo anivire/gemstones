@@ -31,10 +31,6 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
             : "tooltip.gemstones.without_type";
     MutableText resultTooltip = Text.empty();
 
-    if (withCategoryString) {
-      resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY));
-    }
-
     ArrayList<MutableText> modifierTexts = new ArrayList<>();
 
     for (ModifierAttribute modifierInstance : instances) {
@@ -68,7 +64,7 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
         instances.get(0).gemstoneType.toString().toLowerCase(),
         instances.get(0).itemType.toString().toLowerCase());
 
-    resultTooltip.append(
+    resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY)).append(
         Text.translatable(translationKey, modifierTexts.toArray()).formatted(Formatting.GOLD));
 
     return resultTooltip;
