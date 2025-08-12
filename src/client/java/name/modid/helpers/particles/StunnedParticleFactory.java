@@ -28,8 +28,8 @@ public class StunnedParticleFactory implements ParticleFactory<SimpleParticleTyp
         double velocityY, double velocityZ) {
       super(world, x, y, z, velocityX, velocityY, velocityZ);
       this.maxAge = 20;
-      this.scale = 0.1f;
-      this.gravityStrength = 0.6f;
+      this.scale = 0.15f;
+      this.gravityStrength = 0.7f;
       this.velocityX = velocityX;
       this.velocityY = velocityY;
       this.velocityZ = velocityZ;

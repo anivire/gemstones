@@ -46,6 +46,8 @@ import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -147,6 +149,7 @@ public class ItemGemstoneHelper {
 
   public static void applyAttributeModifiers(ArrayList<ModifierAttribute> gemstoneModifiers,
       Item item, ItemStack itemStack) {
+    @SuppressWarnings("deprecation")
     AttributeModifiersComponent baseModifiers = itemStack.getItem().getAttributeModifiers();
     AttributeModifiersComponent customModifiers = itemStack
         .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
@@ -272,6 +275,9 @@ public class ItemGemstoneHelper {
           }
 
           if (world instanceof ServerWorld serverWorld) {
+            serverWorld.playSound(null, target.getX(), target.getY(), target.getZ(),
+                SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.NEUTRAL, 0.5F,
+                ((world.random.nextFloat() - world.random.nextFloat()) * 0.2F + 0.7F) * 0.8F);
             serverWorld.spawnParticles(ParticlesRegistrationHelper.STUNNED_PARTICLE, target.getX(),
                 centerY, target.getZ(), 8, 0.1, 0.1, 0.1, 0.15);
           }

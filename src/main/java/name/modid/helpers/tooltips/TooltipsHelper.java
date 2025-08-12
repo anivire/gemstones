@@ -9,8 +9,4 @@ public class TooltipsHelper {
     this.tooltipCategory =
         String.format("tooltip.gemstones.%s_type", itemType.toString().toLowerCase());
   }
-
-  // public MutableText getTooltip() {
-
-  // }
 }
