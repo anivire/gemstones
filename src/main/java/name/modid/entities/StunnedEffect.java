@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 
 public class StunnedEffect extends StatusEffect {
   public StunnedEffect() {
-    super(StatusEffectCategory.NEUTRAL, 0xFFFF00);
+    super(StatusEffectCategory.HARMFUL, 0xFFFF00);
 
     this.addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
         Identifier.of(Gemstones.MOD_ID, "stunned_movement"), -1.0,
@@ -23,6 +23,12 @@ public class StunnedEffect extends StatusEffect {
         EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     this.addAttributeModifier(EntityAttributes.GENERIC_FOLLOW_RANGE,
         Identifier.of(Gemstones.MOD_ID, "stunned_follow_range"), -1.0,
+        EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+    this.addAttributeModifier(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
+        Identifier.of(Gemstones.MOD_ID, "stunned_interaction"), -1.0,
+        EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+    this.addAttributeModifier(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE,
+        Identifier.of(Gemstones.MOD_ID, "stunned_block_interaction"), -1.0,
         EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
   }
 

@@ -1,5 +1,7 @@
 package name.modid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import name.modid.entities.EffectRegistrationHelper;
 import name.modid.helpers.ItemRegistrationHelper;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
@@ -7,8 +9,6 @@ import name.modid.helpers.components.ComponentsHelper;
 import name.modid.helpers.events.EventRegistrationHelper;
 import name.modid.helpers.particles.ParticlesRegistrationHelper;
 import net.fabricmc.api.ModInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Gemstones implements ModInitializer {
   public static final String MOD_ID = "gemstones";
