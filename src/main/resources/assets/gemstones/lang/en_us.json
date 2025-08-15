@@ -2,7 +2,7 @@
   "item_group.gemstones": "Gemstones",
 
   "tooltip.gemstones.gemstone_slots": "Gemstone Max Slots: %d",
-  "tooltip.gemstones.gemstone_slots_info_with": "With gemstones:",
+  "tooltip.gemstones.gemstone_slots_gemstones_category": "With gemstones:",
   "tooltip.gemstones.gemstone_slots_info_rarities": "Gemstone rarities:",
   "tooltip.gemstones.gemstone_slots_info_rarities_fold": "(Hold left Shift for details)",
 
@@ -32,7 +32,7 @@
   "tooltip.gemstones.ruby.melee_bonus": "%s to inflict %s",
   "tooltip.gemstones.ruby.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.ruby.tools_bonus": "%s to gain %s while mining",
-  "tooltip.gemstones.ruby.armor_bonus": "after recieving damage %s to gain %s",
+  "tooltip.gemstones.ruby.armor_bonus": "%s attack damage but %s max health",
   
   "item.gemstones.celestine_gemstone_common": "Celestine Gemstone",
   "item.gemstones.celestine_gemstone_uncommon": "Celestine Gemstone",

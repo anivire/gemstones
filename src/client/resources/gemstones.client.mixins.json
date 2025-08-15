@@ -5,7 +5,6 @@
   "client": [
     "ItemStackMixin",
     "AbstractClientPlayerEntityMixin",
-    "InGameHudMixin",
     "LivingEntityRendererMixin"
   ],
   "injectors": {

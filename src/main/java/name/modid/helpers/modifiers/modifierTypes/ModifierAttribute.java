@@ -5,8 +5,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import name.modid.Gemstones;
 import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.modifiers.GemstoneModifierItemType;
-import name.modid.helpers.types.GemstoneRarityType;
+import name.modid.helpers.modifiers.ModifierItemCaregory;
+import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
@@ -19,14 +19,14 @@ import net.minecraft.util.Identifier;
 
 public class ModifierAttribute implements GemstoneModifier {
   public Operation operation;
-  public GemstoneModifierItemType itemType;
+  public ModifierItemCaregory itemType;
   public ArrayList<Double> modifierValuesList = new ArrayList<Double>();
   public RegistryEntry<EntityAttribute> attr;
   public GemstoneType gemstoneType;
-  public GemstoneRarityType rarityType;
+  public GemstoneRarity rarityType;
 
   public ModifierAttribute(Operation operation, ArrayList<Double> modifierValuesList,
-      GemstoneModifierItemType itemType, RegistryEntry<EntityAttribute> attr,
+      ModifierItemCaregory itemType, RegistryEntry<EntityAttribute> attr,
       GemstoneType gemstoneType) {
     this.operation = operation;
     this.modifierValuesList = new ArrayList<Double>(modifierValuesList);
@@ -35,7 +35,7 @@ public class ModifierAttribute implements GemstoneModifier {
     this.gemstoneType = gemstoneType;
   }
 
-  public MutableText getTooltipString(GemstoneRarityType gemstoneRarityType,
+  public MutableText getTooltipString(GemstoneRarity gemstoneRarityType,
       Boolean withCategoryString) {
     Double value = modifierValuesList.get(gemstoneRarityType.getValue());
     String tooltipCategoryType = withCategoryString
@@ -76,11 +76,11 @@ public class ModifierAttribute implements GemstoneModifier {
     return this.gemstoneType;
   }
 
-  public GemstoneRarityType getRarityType() {
+  public GemstoneRarity getRarityType() {
     return this.rarityType;
   }
 
-  public void setRarityType(GemstoneRarityType rarityType) {
+  public void setRarityType(GemstoneRarity rarityType) {
     this.rarityType = rarityType;
   }
 }

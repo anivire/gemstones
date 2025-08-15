@@ -20,6 +20,7 @@ public class StunnedParticleFactory implements ParticleFactory<SimpleParticleTyp
       double z, double velocityX, double velocityY, double velocityZ) {
     StunnedParticle particle = new StunnedParticle(world, x, y, z, velocityX, velocityY, velocityZ);
     particle.setSprite(spriteProvider);
+
     return particle;
   }
 

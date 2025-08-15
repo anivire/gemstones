@@ -6,16 +6,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import name.modid.helpers.ItemGemstoneHelper;
+import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.modifiers.GemstoneModifierHelper;
+import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
-import name.modid.helpers.types.GemstoneRarityType;
+import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -41,31 +41,30 @@ public class EventRegistrationHelper {
         Item item = player.getStackInHand(hand).getItem();
         ItemStack itemStack = player.getStackInHand(hand);
 
-        if (!ItemGemstoneHelper.isGemstonesExists(itemStack)) {
+        if (!GemstoneSocketingHelper.isGemstonesExists(itemStack)) {
           return ActionResult.PASS;
         }
 
-        Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
-        Map<Integer, Map<GemstoneType, GemstoneRarityType>> itemGemstones = new HashMap<>();
+        Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
+        Map<Integer, Map<GemstoneType, GemstoneRarity>> itemGemstones = new HashMap<>();
 
         for (int i = 0; i < gemstones.length; i++) {
           Gemstone gem = gemstones[i];
           if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-            Map<GemstoneType, GemstoneRarityType> m = new HashMap<>();
+            Map<GemstoneType, GemstoneRarity> m = new HashMap<>();
             m.put(gem.gemstoneType(), gem.gemstoneRarityType());
             itemGemstones.put(i, m);
           }
         }
 
         ArrayList<ModifierOnHitEffect> gemstoneModifiers = new ArrayList<>();
-        for (Map.Entry<Integer, Map<GemstoneType, GemstoneRarityType>> m : itemGemstones
-            .entrySet()) {
-          Map<GemstoneType, GemstoneRarityType> i = m.getValue();
-          for (Map.Entry<GemstoneType, GemstoneRarityType> e : i.entrySet()) {
+        for (Map.Entry<Integer, Map<GemstoneType, GemstoneRarity>> m : itemGemstones.entrySet()) {
+          Map<GemstoneType, GemstoneRarity> i = m.getValue();
+          for (Map.Entry<GemstoneType, GemstoneRarity> e : i.entrySet()) {
             GemstoneType gemstoneType = e.getKey();
-            GemstoneRarityType gemstoneRarity = e.getValue();
+            GemstoneRarity gemstoneRarity = e.getValue();
             GemstoneModifier gemstoneModifier =
-                GemstoneModifierHelper.getGemstoneModifierForItem(gemstoneType, item);
+                ModifierHelper.getGemstoneModifierForItem(gemstoneType, item);
             if (gemstoneModifier != null
                 && gemstoneModifier instanceof ModifierOnHitEffect modifierOnHitEffect) {
               ModifierOnHitEffect newModifier = new ModifierOnHitEffect(
@@ -79,8 +78,8 @@ public class EventRegistrationHelper {
           }
         }
 
-        ItemGemstoneHelper.applyOnHitEffectModifiers(gemstoneModifiers, item, itemStack, target,
-            world);
+        GemstoneSocketingHelper.applyOnHitEffectModifiers(gemstoneModifiers, item, itemStack,
+            target, world);
       }
       return ActionResult.PASS;
     });
@@ -88,13 +87,13 @@ public class EventRegistrationHelper {
     PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
       ItemStack itemStack = player.getMainHandStack();
       ArrayList<ModifierOnBlockBreak> modifiers =
-          GemstoneModifierHelper.getOnBlockBreakModifiers(itemStack);
+          ModifierHelper.getOnBlockBreakModifiers(itemStack);
 
       if (modifiers.isEmpty()) {
         return;
       }
 
-      ItemGemstoneHelper.applyOnBlockBreakModifiers(modifiers, player, world);
+      GemstoneSocketingHelper.applyOnBlockBreakModifiers(modifiers, player, world);
     });
 
     ServerLivingEntityEvents.AFTER_DAMAGE
@@ -106,7 +105,7 @@ public class EventRegistrationHelper {
           if (entity instanceof LivingEntity target && source.getSource() instanceof ArrowEntity) {
             if (entity.getWorld() instanceof ServerWorld serverWorld) {
               ItemStack itemStack = source.getWeaponStack();
-              allModifiersOnHit.addAll(GemstoneModifierHelper.getOnHitModifiers(itemStack));
+              allModifiersOnHit.addAll(ModifierHelper.getOnHitModifiers(itemStack));
 
               if (!allModifiersOnHit.isEmpty()) {
                 double applyTotalChance = 0.0;
@@ -126,15 +125,15 @@ public class EventRegistrationHelper {
 
 
           for (ItemStack armorItem : entity.getArmorItems()) {
-            if (armorItem != null && ItemGemstoneHelper.isGemstonesExists(armorItem)) {
-              allModifiersOnDamage.addAll(GemstoneModifierHelper.getOnDamageModifiers(armorItem));
+            if (armorItem != null && GemstoneSocketingHelper.isGemstonesExists(armorItem)) {
+              allModifiersOnDamage.addAll(ModifierHelper.getOnDamageModifiers(armorItem));
             }
           }
 
           if (allModifiersOnDamage.isEmpty()) {
             return;
           } else {
-            ItemGemstoneHelper.applyOnDamageModifiers(allModifiersOnDamage, entity, world);
+            GemstoneSocketingHelper.applyOnDamageModifiers(allModifiersOnDamage, entity, world);
           }
         });
 

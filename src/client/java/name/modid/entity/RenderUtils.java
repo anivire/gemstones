@@ -1,4 +1,4 @@
-package name.modid;
+package name.modid.entity;
 
 import org.joml.Matrix4f;
 import net.minecraft.client.render.RenderLayer;
@@ -10,10 +10,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 
 public class RenderUtils {
-  public static void renderSprite(Identifier sprite, LivingEntity entity, MatrixStack matrices,
+  public static void renderCubeSprite(Identifier sprite, LivingEntity entity, MatrixStack matrices,
       VertexConsumerProvider vertexConsumers, int light, float tickDelta) {
     matrices.push();
-    matrices.translate(0.0F, entity.getHeight() + 0.5F, 0.0F);
+    matrices.translate(0.0F, entity.getHeight() - entity.getHeight() - entity.getHeight() * 0.5F,
+        0.0F);
 
     float rotationSpeed = 10.0F;
     float rotationAngle =
@@ -29,53 +30,49 @@ public class RenderUtils {
 
 
     float half = 0.5F;
-
     float uMin = 0.0F;
     float vMin = 0.0F;
     float uMax = 1.0F;
     float vMax = 1.0F;
 
-    float uvTop = vMin;
-    float uvBottom = vMax;
-
     // FRONT FACE (+Z)
-    consumer.vertex(matrix, -half, -half, half).color(255, 255, 255, 255).texture(uMin, uvBottom)
+    consumer.vertex(matrix, -half, -half, half).color(255, 255, 255, 255).texture(uMin, vMin)
         .overlay(0, 10).light(light).normal(0.0F, 0.0F, 1.0F);
-    consumer.vertex(matrix, half, -half, half).color(255, 255, 255, 255).texture(uMax, uvBottom)
+    consumer.vertex(matrix, half, -half, half).color(255, 255, 255, 255).texture(uMax, vMin)
         .overlay(0, 10).light(light).normal(0.0F, 0.0F, 1.0F);
-    consumer.vertex(matrix, half, half, half).color(255, 255, 255, 255).texture(uMax, uvTop)
+    consumer.vertex(matrix, half, half, half).color(255, 255, 255, 255).texture(uMax, vMax)
         .overlay(0, 10).light(light).normal(0.0F, 0.0F, 1.0F);
-    consumer.vertex(matrix, -half, half, half).color(255, 255, 255, 255).texture(uMin, uvTop)
+    consumer.vertex(matrix, -half, half, half).color(255, 255, 255, 255).texture(uMin, vMax)
         .overlay(0, 10).light(light).normal(0.0F, 0.0F, 1.0F);
 
     // BACK FACE (-Z)
-    consumer.vertex(matrix, -half, half, -half).color(255, 255, 255, 255).texture(uMin, uvTop)
+    consumer.vertex(matrix, -half, half, -half).color(255, 255, 255, 255).texture(uMin, vMax)
         .overlay(0, 10).light(light).normal(0.0F, 0.0F, -1.0F);
-    consumer.vertex(matrix, half, half, -half).color(255, 255, 255, 255).texture(uMax, uvTop)
+    consumer.vertex(matrix, half, half, -half).color(255, 255, 255, 255).texture(uMax, vMax)
         .overlay(0, 10).light(light).normal(0.0F, 0.0F, -1.0F);
-    consumer.vertex(matrix, half, -half, -half).color(255, 255, 255, 255).texture(uMax, uvBottom)
+    consumer.vertex(matrix, half, -half, -half).color(255, 255, 255, 255).texture(uMax, vMin)
         .overlay(0, 10).light(light).normal(0.0F, 0.0F, -1.0F);
-    consumer.vertex(matrix, -half, -half, -half).color(255, 255, 255, 255).texture(uMin, uvBottom)
+    consumer.vertex(matrix, -half, -half, -half).color(255, 255, 255, 255).texture(uMin, vMin)
         .overlay(0, 10).light(light).normal(0.0F, 0.0F, -1.0F);
 
     // LEFT FACE (-X)
-    consumer.vertex(matrix, -half, -half, -half).color(255, 255, 255, 255).texture(uMin, uvBottom)
+    consumer.vertex(matrix, -half, -half, -half).color(255, 255, 255, 255).texture(uMin, vMin)
         .overlay(0, 10).light(light).normal(-1.0F, 0.0F, 0.0F);
-    consumer.vertex(matrix, -half, -half, half).color(255, 255, 255, 255).texture(uMax, uvBottom)
+    consumer.vertex(matrix, -half, -half, half).color(255, 255, 255, 255).texture(uMax, vMin)
         .overlay(0, 10).light(light).normal(-1.0F, 0.0F, 0.0F);
-    consumer.vertex(matrix, -half, half, half).color(255, 255, 255, 255).texture(uMax, uvTop)
+    consumer.vertex(matrix, -half, half, half).color(255, 255, 255, 255).texture(uMax, vMax)
         .overlay(0, 10).light(light).normal(-1.0F, 0.0F, 0.0F);
-    consumer.vertex(matrix, -half, half, -half).color(255, 255, 255, 255).texture(uMin, uvTop)
+    consumer.vertex(matrix, -half, half, -half).color(255, 255, 255, 255).texture(uMin, vMax)
         .overlay(0, 10).light(light).normal(-1.0F, 0.0F, 0.0F);
 
     // RIGHT FACE (+X)
-    consumer.vertex(matrix, half, half, -half).color(255, 255, 255, 255).texture(uMin, uvTop)
+    consumer.vertex(matrix, half, half, -half).color(255, 255, 255, 255).texture(uMin, vMax)
         .overlay(0, 10).light(light).normal(1.0F, 0.0F, 0.0F);
-    consumer.vertex(matrix, half, half, half).color(255, 255, 255, 255).texture(uMax, uvTop)
+    consumer.vertex(matrix, half, half, half).color(255, 255, 255, 255).texture(uMax, vMax)
         .overlay(0, 10).light(light).normal(1.0F, 0.0F, 0.0F);
-    consumer.vertex(matrix, half, -half, half).color(255, 255, 255, 255).texture(uMax, uvBottom)
+    consumer.vertex(matrix, half, -half, half).color(255, 255, 255, 255).texture(uMax, vMin)
         .overlay(0, 10).light(light).normal(1.0F, 0.0F, 0.0F);
-    consumer.vertex(matrix, half, -half, -half).color(255, 255, 255, 255).texture(uMin, uvBottom)
+    consumer.vertex(matrix, half, -half, -half).color(255, 255, 255, 255).texture(uMin, vMin)
         .overlay(0, 10).light(light).normal(1.0F, 0.0F, 0.0F);
 
     matrices.pop();

@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import name.modid.helpers.ItemGemstoneHelper;
+import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
@@ -36,19 +36,19 @@ public abstract class ItemStackMixin {
   private void onConstructWithChanges(RegistryEntry<Item> item, int count, ComponentChanges changes,
       CallbackInfo ci) {
     ItemStack itemStack = (ItemStack) (Object) this;
-    ItemGemstoneHelper.initItemSlots(itemStack, item.value());
+    GemstoneSocketingHelper.initItemSlots(itemStack, item.value());
   }
 
   @Inject(method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V", at = @At("TAIL"))
   private void onConstruct(RegistryEntry<Item> item, int count, CallbackInfo ci) {
     ItemStack itemStack = (ItemStack) (Object) this;
-    ItemGemstoneHelper.initItemSlots(itemStack, item.value());
+    GemstoneSocketingHelper.initItemSlots(itemStack, item.value());
   }
 
   @Inject(method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V", at = @At("TAIL"))
   private void onConstructSimple(RegistryEntry<Item> item, CallbackInfo ci) {
     ItemStack itemStack = (ItemStack) (Object) this;
-    ItemGemstoneHelper.initItemSlots(itemStack, item.value());
+    GemstoneSocketingHelper.initItemSlots(itemStack, item.value());
   }
 
   @Inject(method = "getMaxDamage", at = @At("RETURN"), cancellable = true)

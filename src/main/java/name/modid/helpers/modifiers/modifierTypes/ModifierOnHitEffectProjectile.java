@@ -2,10 +2,10 @@ package name.modid.helpers.modifiers.modifierTypes;
 
 import java.util.ArrayList;
 import name.modid.Gemstones;
-import name.modid.entities.EffectRegistrationHelper;
+import name.modid.effects.EffectRegistrationHelper;
 import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.modifiers.GemstoneModifierItemType;
-import name.modid.helpers.types.GemstoneRarityType;
+import name.modid.helpers.modifiers.ModifierItemCaregory;
+import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
@@ -17,17 +17,17 @@ import net.minecraft.util.Identifier;
 
 public class ModifierOnHitEffectProjectile implements GemstoneModifier {
   public ArrayList<Double> inflitChance = new ArrayList<Double>();
-  public GemstoneModifierItemType itemType;
+  public ModifierItemCaregory itemType;
   public int duration;
   public int amplifier;
   public RegistryEntry<StatusEffect> effect;
   public boolean isStacking;
   public int maxStackCount;
   public GemstoneType gemstoneType;
-  public GemstoneRarityType rarityType;
+  public GemstoneRarity rarityType;
 
   public ModifierOnHitEffectProjectile(ArrayList<Double> inflitChance, int duration, int amplifier,
-      GemstoneModifierItemType itemType, RegistryEntry<StatusEffect> effect, boolean isStacking,
+      ModifierItemCaregory itemType, RegistryEntry<StatusEffect> effect, boolean isStacking,
       int maxStackCount, GemstoneType gemstoneType) {
     this.inflitChance = inflitChance;
     this.duration = duration;
@@ -39,7 +39,7 @@ public class ModifierOnHitEffectProjectile implements GemstoneModifier {
     this.isStacking = isStacking;
   }
 
-  public MutableText getTooltipString(GemstoneRarityType gemstoneRarityType,
+  public MutableText getTooltipString(GemstoneRarity gemstoneRarityType,
       Boolean withCategoryString) {
     Object value = inflitChance.get(gemstoneRarityType.getValue()) * 100;
     String tooltipCategoryType = withCategoryString
@@ -92,11 +92,11 @@ public class ModifierOnHitEffectProjectile implements GemstoneModifier {
     return this.gemstoneType;
   }
 
-  public GemstoneRarityType getRarityType() {
+  public GemstoneRarity getRarityType() {
     return this.rarityType;
   }
 
-  public void setRarityType(GemstoneRarityType rarityType) {
+  public void setRarityType(GemstoneRarity rarityType) {
     this.rarityType = rarityType;
   }
 }

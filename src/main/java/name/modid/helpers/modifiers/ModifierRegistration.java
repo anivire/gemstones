@@ -11,8 +11,8 @@ import name.modid.helpers.modifiers.data.TopazModifierData;
 import name.modid.helpers.modifiers.data.ZirconModifierData;
 import name.modid.helpers.types.GemstoneType;
 
-public class GemstoneModifierRegistration {
-  private static final Map<GemstoneType, GemstonesModifierData> MODIFIER_REGISTRY = new HashMap<>();
+public class ModifierRegistration {
+  private static final Map<GemstoneType, ModifierData> MODIFIER_REGISTRY = new HashMap<>();
 
   static {
     MODIFIER_REGISTRY.put(GemstoneType.RUBY, new RubyModifierData());
@@ -24,7 +24,7 @@ public class GemstoneModifierRegistration {
     MODIFIER_REGISTRY.put(GemstoneType.OBSIDIAN_SHARD, new ObsidianShardModifierData());
   }
 
-  public static Map<GemstoneType, GemstonesModifierData> MODIFIER_REGISTRY() {
+  public static Map<GemstoneType, ModifierData> MODIFIER_REGISTRY() {
     return MODIFIER_REGISTRY;
   }
 }

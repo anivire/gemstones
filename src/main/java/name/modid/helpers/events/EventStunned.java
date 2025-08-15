@@ -1,7 +1,7 @@
 package name.modid.helpers.events;
 
 import org.jetbrains.annotations.Nullable;
-import name.modid.entities.EffectRegistrationHelper;
+import name.modid.effects.EffectRegistrationHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;

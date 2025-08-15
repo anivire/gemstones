@@ -9,6 +9,10 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
 public class AttributeRegistrationHelper {
+  public static RegistryEntry<EntityAttribute> PULL_SPEED_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> CRIT_DAMAGE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> MAX_DURABILITY_ATTRIBUTE;
+
   public static final EntityAttribute PULL_SPEED =
       new ClampedEntityAttribute("attribute.name.generic.pull_speed", 1.0, 0.1, 10.0)
           .setTracked(true);
@@ -20,10 +24,6 @@ public class AttributeRegistrationHelper {
   public static final EntityAttribute MAX_DURABILITY =
       new ClampedEntityAttribute("attribute.name.generic.max_durability", 10.0, 1.0, 1024.0)
           .setTracked(true);
-
-  public static RegistryEntry<EntityAttribute> PULL_SPEED_ATTRIBUTE;
-  public static RegistryEntry<EntityAttribute> CRIT_DAMAGE_ATTRIBUTE;
-  public static RegistryEntry<EntityAttribute> MAX_DURABILITY_ATTRIBUTE;
 
   public static void initialize() {
     PULL_SPEED_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,

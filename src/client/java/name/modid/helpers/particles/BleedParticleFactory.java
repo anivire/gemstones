@@ -21,6 +21,7 @@ public class BleedParticleFactory implements ParticleFactory<SimpleParticleType>
       double z, double velocityX, double velocityY, double velocityZ) {
     BleedParticle particle = new BleedParticle(world, x, y, z, velocityX, velocityY, velocityZ);
     particle.setSprite(spriteProvider);
+
     return particle;
   }
 

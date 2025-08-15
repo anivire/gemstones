@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import name.modid.Gemstones;
-import name.modid.entities.EffectRegistrationHelper;
+import name.modid.effects.EffectRegistrationHelper;
 import name.modid.helpers.components.ComponentsHelper;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.components.GemstoneSlots;
 import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.modifiers.GemstoneModifierHelper;
+import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
@@ -21,10 +21,10 @@ import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
-import name.modid.helpers.particles.ParticlesRegistrationHelper;
-import name.modid.helpers.types.GemstoneRarityType;
+import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import name.modid.items.gemstones.GemstoneItem;
+import name.modid.particles.ParticlesRegistrationHelper;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
@@ -51,7 +51,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-public class ItemGemstoneHelper {
+public class GemstoneSocketingHelper {
   public static final int MAX_SLOTS = 5;
 
   public static boolean isItemValid(Item item) {
@@ -125,7 +125,7 @@ public class ItemGemstoneHelper {
       Gemstone[] gemstones = new Gemstone[MAX_SLOTS];
 
       for (int i = 0; i < MAX_SLOTS; i++) {
-        gemstones[i] = new Gemstone(GemstoneType.EMPTY, GemstoneRarityType.NONE);
+        gemstones[i] = new Gemstone(GemstoneType.EMPTY, GemstoneRarity.NONE);
       }
 
       itemStack.set(ComponentsHelper.GEMSTONES, new GemstoneSlots(gemstones));
@@ -141,8 +141,7 @@ public class ItemGemstoneHelper {
     if (gemstones == null)
       return;
 
-    ArrayList<ModifierAttribute> modifiers =
-        GemstoneModifierHelper.getAttributeModifiers(itemStack);
+    ArrayList<ModifierAttribute> modifiers = ModifierHelper.getAttributeModifiers(itemStack);
 
     applyAttributeModifiers(modifiers, item, itemStack);
   }
@@ -194,11 +193,11 @@ public class ItemGemstoneHelper {
 
       float totalValue = 0f;
       for (ModifierAttribute m : modifiers) {
-        GemstoneRarityType rarity = m.getRarityType();
+        GemstoneRarity rarity = m.getRarityType();
         totalValue += m.modifierValuesList.get(rarity.getValue());
       }
 
-      EquipmentSlot slot = GemstoneModifierHelper.getEquipmentSlot(item);
+      EquipmentSlot slot = ModifierHelper.getEquipmentSlot(item);
 
       Identifier modifierId = Identifier.of(Gemstones.MOD_ID,
           String.format("%s_gemstone_%s_modifier_slot%s", mod.gemstoneType.toString().toLowerCase(),
@@ -208,7 +207,7 @@ public class ItemGemstoneHelper {
           new EntityAttributeModifier(modifierId, totalValue, mod.operation);
 
       AttributeModifiersComponent.Entry newEntry = new AttributeModifiersComponent.Entry(attribute,
-          scaledGemstoneModifier, GemstoneModifierHelper.getAttributeModifierSlot(item));
+          scaledGemstoneModifier, ModifierHelper.getAttributeModifierSlot(item));
       combinedModifiersMap.put(entryKey.apply(newEntry), newEntry);
     }
 
@@ -238,7 +237,7 @@ public class ItemGemstoneHelper {
       int maxAmplifier = -1;
 
       for (ModifierOnHitEffect modifier : modifiers) {
-        GemstoneRarityType rarity = modifier.getRarityType();
+        GemstoneRarity rarity = modifier.getRarityType();
         combinedProcChance += modifier.inflitChance.get(rarity.getValue());
 
         if (modifier.amplifier > maxAmplifier) {
@@ -309,7 +308,7 @@ public class ItemGemstoneHelper {
       int maxAmplifier = -1;
 
       for (ModifierOnHitEffectProjectile modifier : modifiers) {
-        GemstoneRarityType rarity = modifier.getRarityType();
+        GemstoneRarity rarity = modifier.getRarityType();
         combinedProcChance += modifier.inflitChance.get(rarity.getValue());
 
         if (modifier.amplifier > maxAmplifier) {
@@ -375,7 +374,7 @@ public class ItemGemstoneHelper {
         double valuePerProc = 0.0;
 
         for (ModifierOnBlockBreak m : modifiers) {
-          GemstoneRarityType rarity = m.rarityType;
+          GemstoneRarity rarity = m.rarityType;
           combinedProcChance += m.value.get(rarity.getValue());
           maxStack += m.additionalValue.get(rarity.getValue());
           valuePerProc = 1.0;
@@ -410,7 +409,7 @@ public class ItemGemstoneHelper {
         double valuePerProc = 0.0;
 
         for (ModifierOnDamage m : modifiers) {
-          GemstoneRarityType rarity = m.rarityType;
+          GemstoneRarity rarity = m.rarityType;
           combinedProcChance += m.value.get(rarity.getValue());
           maxStack += m.additionalValue.get(rarity.getValue());
           valuePerProc = 1.0;

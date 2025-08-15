@@ -1,116 +1,82 @@
 package name.modid.mixin.client;
 
-import name.modid.helpers.GemstoneTooltipHelper;
-import name.modid.helpers.ItemGemstoneHelper;
-import name.modid.helpers.components.Gemstone;
-import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.modifiers.GemstoneModifierHelper;
-import name.modid.helpers.modifiers.GemstoneModifierItemType;
-import name.modid.helpers.types.GemstoneRarityType;
-import name.modid.helpers.types.GemstoneType;
-import name.modid.items.gemstones.GemstoneItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import name.modid.helpers.GemstoneSocketingHelper;
+import name.modid.helpers.components.Gemstone;
+import name.modid.helpers.modifiers.GemstoneModifier;
+import name.modid.helpers.modifiers.ModifierHelper;
+import name.modid.helpers.modifiers.ModifierItemCaregory;
+import name.modid.helpers.tooltips.GemstoneTooltipHelper;
+import name.modid.helpers.types.GemstoneType;
+import name.modid.items.gemstones.GemstoneItem;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
-
-  @Inject(method = "getTooltip", at = @At("RETURN"), cancellable = true)
-  public void tooltip(Item.TooltipContext context, PlayerEntity player, TooltipType type,
-      CallbackInfoReturnable<List<Text>> cir) {
-    List<Text> tooltip = cir.getReturnValue();
+  @Inject(
+      method = "getTooltip", at = @At(value = "INVOKE",
+          target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0, shift = At.Shift.AFTER),
+      locals = LocalCapture.CAPTURE_FAILHARD)
+  private void tooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type,
+      CallbackInfoReturnable<List<Text>> cir, List<Text> tooltip) {
     ItemStack itemStack = (ItemStack) (Object) this;
 
-    if (ItemGemstoneHelper.isItemValid(itemStack.getItem()) && ItemGemstoneHelper.isGemstonesExists(itemStack)) {
-      Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
-      if (gemstones == null || gemstones.length == 0)
+    if (GemstoneSocketingHelper.isItemValid(itemStack.getItem())
+        && GemstoneSocketingHelper.isGemstonesExists(itemStack)) {
+      Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
+
+      if (gemstones == null || gemstones.length == 0) {
         return;
-
-      tooltip.add(1, Text.literal(""));
-      MutableText slotsText = Text.literal("");
-      for (var gemstoneSlot : gemstones) {
-        slotsText.append(GemstoneTooltipHelper.getGemstoneSprite(gemstoneSlot.gemstoneType()));
       }
 
-      tooltip.add(2, slotsText);
-      tooltip.add(3, Text.literal(""));
-      tooltip.add(4, Text.literal(""));
-      tooltip.add(5, Text.translatable("tooltip.gemstones.gemstone_slots_info_with").formatted(Formatting.GRAY));
-
-      int buffIndex = 6;
-      for (int i = 0; i < gemstones.length; i++) {
-        GemstoneType gemType = gemstones[i].gemstoneType();
-        GemstoneRarityType gemRarity = gemstones[i].gemstoneRarityType();
-
-        if (gemType != GemstoneType.LOCKED && gemType != GemstoneType.EMPTY) {
-          GemstoneModifier modifier = GemstoneModifierHelper.getGemstoneModifierForItem(gemType, itemStack.getItem());
-          tooltip.add(buffIndex++, modifier.getTooltipString(gemRarity, false));
-        } else {
-          tooltip.add(buffIndex++,
-              Text.translatable(String.format("tooltip.gemstones.gemstone_slots.%d", i + 1),
-                  GemstoneTooltipHelper.getSlotText(gemstones[i].gemstoneType()))
-                  .formatted(GemstoneTooltipHelper.getGemstoneColor(gemstones[i].gemstoneType())));
-        }
-      }
-
-      // Shift description
-      // tooltip.add(buffIndex++, Text.literal(""));
-      // if (Screen.hasShiftDown()) {
-      // tooltip.add(buffIndex++,
-      // Text.translatable("tooltip.gemstones.gemstone_slots_info_rarities").formatted(Formatting.GRAY));
-      // for (int i = 0; i < gemstones.length; i++) {
-      // GemstoneType gemType = gemstones[i].gemstoneType();
-      // GemstoneRarityType gemRarityType = gemstones[i].gemstoneRarityType();
-      // tooltip.add(buffIndex++,
-      // Text.literal(String.format("%s %s", gemRarityType.toString(),
-      // GemstoneTooltipHelper.getSlotText(gemType)))
-      // .formatted(GemstoneTooltipHelper.getGemstoneColor(gemType)));
-      // }
-      // } else {
-      // tooltip.add(buffIndex,
-      // Text.translatable("tooltip.gemstones.gemstone_slots_info_rarities_fold").formatted(Formatting.GRAY));
-      // }
-
+      // Empty rows for proper gemstones sprite visibility
+      tooltip.add(Text.empty());
+      tooltip.add(GemstoneTooltipHelper.getGemstoneSocketedRow(gemstones));
+      tooltip.add(Text.empty());
+      tooltip.add(Text.empty());
+      tooltip.add(Text.translatable("tooltip.gemstones.gemstone_slots_gemstones_category")
+          .formatted(Formatting.GRAY));
+      tooltip.addAll(GemstoneTooltipHelper.getItemGemstoneBonusesRows(gemstones, itemStack));
     } else if (itemStack.getItem() instanceof GemstoneItem) {
       ArrayList<Text> tooltipText = new ArrayList<>();
       GemstoneItem gemstoneItem = (GemstoneItem) itemStack.getItem();
       GemstoneType gemstoneType = gemstoneItem.getType();
-      Map<GemstoneModifierItemType, GemstoneModifier> gemstoneModifiers = new LinkedHashMap<>(
-          GemstoneModifierHelper.getGemstoneModifiers(gemstoneType, itemStack.getItem()));
+      Map<ModifierItemCaregory, GemstoneModifier> gemstoneModifiers = new LinkedHashMap<>(
+          ModifierHelper.getGemstoneModifiers(gemstoneType, itemStack.getItem()));
 
       tooltipText.add(GemstoneTooltipHelper.getGemstoneRaritySprite(gemstoneItem.getRarityType()));
-      tooltipText.add(Text.literal(""));
+      tooltipText.add(Text.empty());
 
-      List<GemstoneModifierItemType> modifierOrder = Arrays.asList(GemstoneModifierItemType.MELEE,
-          GemstoneModifierItemType.RANGED, GemstoneModifierItemType.TOOLS, GemstoneModifierItemType.ARMOR);
+      List<ModifierItemCaregory> modifierOrder = Arrays.asList(ModifierItemCaregory.MELEE,
+          ModifierItemCaregory.RANGED, ModifierItemCaregory.TOOLS, ModifierItemCaregory.ARMOR);
 
       gemstoneModifiers.entrySet().stream()
-          .sorted(Comparator.comparingInt(entry -> modifierOrder.indexOf(entry.getKey()))).forEachOrdered(entry -> {
+          .sorted(Comparator.comparingInt(entry -> modifierOrder.indexOf(entry.getKey())))
+          .forEachOrdered(entry -> {
             GemstoneModifier modifier = entry.getValue();
+
             if (gemstoneType != GemstoneType.LOCKED && gemstoneType != GemstoneType.EMPTY) {
               tooltipText.add(modifier.getTooltipString(gemstoneItem.getRarityType(), true));
             }
           });
 
-      tooltip.addAll(1, tooltipText);
+      tooltip.addAll(tooltipText);
     }
-
-    cir.setReturnValue(tooltip);
   }
 }

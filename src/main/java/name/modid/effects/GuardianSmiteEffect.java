@@ -1,4 +1,4 @@
-package name.modid.entities;
+package name.modid.effects;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;

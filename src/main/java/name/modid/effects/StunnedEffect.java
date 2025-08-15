@@ -1,4 +1,4 @@
-package name.modid.entities;
+package name.modid.effects;
 
 import name.modid.Gemstones;
 import net.minecraft.entity.LivingEntity;
@@ -39,34 +39,6 @@ public class StunnedEffect extends StatusEffect {
 
   @Override
   public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
-    // World world = entity.getWorld();
-    // double headY = entity.getY() + entity.getHeight() + 0.4;
-    // int particleCount = 4;
-    // double radius = 0.5;
-    // double speed = 0.2;
-
-    // if (world.isClient) {
-    // for (int i = 0; i < particleCount; i++) {
-    // double angle = (entity.age * speed + (2 * Math.PI * i / particleCount)) % (2 * Math.PI);
-    // double offsetX = radius * Math.cos(angle);
-    // double offsetZ = radius * Math.sin(angle);
-
-    // world.addParticle(new DustParticleEffect(new Vector3f(1f, 1f, 0f), 1f),
-    // entity.getX() + offsetX, headY, entity.getZ() + offsetZ, 0, 0, 0);
-    // }
-
-    // } else if (world instanceof ServerWorld serverWorld) {
-    // for (int i = 0; i < particleCount; i++) {
-    // double angle = (entity.age * speed + (2 * Math.PI * i / particleCount)) % (2 * Math.PI);
-    // double offsetX = radius * Math.cos(angle);
-    // double offsetZ = radius * Math.sin(angle);
-
-    // DustParticleEffect particle = new DustParticleEffect(new Vector3f(1f, 1f, 0f), 1f);
-    // serverWorld.spawnParticles(particle, entity.getX() + offsetX, headY,
-    // entity.getZ() + offsetZ, 1, 0, 0, 0, 0);
-    // }
-    // }
-
     return true;
   }
 }

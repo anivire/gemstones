@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import name.modid.helpers.ItemGemstoneHelper;
-import name.modid.helpers.modifiers.GemstoneModifierHelper;
+import name.modid.helpers.GemstoneSocketingHelper;
+import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
@@ -54,10 +54,10 @@ public class PersistentProjectileEntityMixin {
 
     if (arrow != null && target != null) {
       ArrayList<ModifierOnHitEffectProjectile> onHitEffectProjectileModifiers =
-          GemstoneModifierHelper.getOnHitEffectProjectileModifiers(itemStack);
+          ModifierHelper.getOnHitEffectProjectileModifiers(itemStack);
 
       if (!onHitEffectProjectileModifiers.isEmpty()) {
-        ItemGemstoneHelper.applyOnHitEffectProjectileModifiers(onHitEffectProjectileModifiers,
+        GemstoneSocketingHelper.applyOnHitEffectProjectileModifiers(onHitEffectProjectileModifiers,
             itemStack.getItem(), itemStack, target, world);
       }
     }
@@ -96,7 +96,7 @@ public class PersistentProjectileEntityMixin {
     // ModifierOnHit
     // TODO: move to ItemGemstoneHelper or make correct realization (wont support for other
     // modifiers)
-    ArrayList<ModifierOnHit> onHitModifiers = GemstoneModifierHelper.getOnHitModifiers(itemStack);
+    ArrayList<ModifierOnHit> onHitModifiers = ModifierHelper.getOnHitModifiers(itemStack);
     if (!onHitModifiers.isEmpty()) {
       double applyTotalChance = 0.0;
       for (ModifierOnHit modifier : onHitModifiers) {

@@ -1,4 +1,4 @@
-package name.modid.entities;
+package name.modid.effects;
 
 import name.modid.Gemstones;
 import net.minecraft.entity.effect.StatusEffect;

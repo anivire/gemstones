@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.modid.Gemstones;
 import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.types.GemstoneRarityType;
+import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -22,7 +22,7 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
     this.instances = new ArrayList<>(instances);
   }
 
-  public MutableText getTooltipString(GemstoneRarityType gemstoneRarityType,
+  public MutableText getTooltipString(GemstoneRarity gemstoneRarityType,
       Boolean withCategoryString) {
     String tooltipCategoryType =
         withCategoryString
@@ -80,9 +80,9 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
     return null;
   }
 
-  public GemstoneRarityType getRarityType() {
+  public GemstoneRarity getRarityType() {
     return null;
   }
 
-  public void setRarityType(GemstoneRarityType rarityType) {}
+  public void setRarityType(GemstoneRarity rarityType) {}
 }

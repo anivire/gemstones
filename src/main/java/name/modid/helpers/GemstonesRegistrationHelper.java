@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import name.modid.Gemstones;
-import name.modid.helpers.types.GemstoneRarityType;
+import name.modid.helpers.types.GemstoneRarity;
 import name.modid.items.gemstones.AquamarineGemstoneItem;
 import name.modid.items.gemstones.CelestineGemstoneItem;
 import name.modid.items.gemstones.ObsidianShardGemstoneItem;
@@ -51,9 +51,9 @@ public class GemstonesRegistrationHelper {
   }
 
   public static void register() {
-    List<GemstoneRarityType> rarities = Arrays.asList(GemstoneRarityType.COMMON,
-        GemstoneRarityType.UNCOMMON, GemstoneRarityType.RARE, GemstoneRarityType.LEGENDARY);
-    for (GemstoneRarityType rarity : rarities) {
+    List<GemstoneRarity> rarities = Arrays.asList(GemstoneRarity.COMMON, GemstoneRarity.UNCOMMON,
+        GemstoneRarity.RARE, GemstoneRarity.LEGENDARY);
+    for (GemstoneRarity rarity : rarities) {
       String rarityName = rarity.toString().toLowerCase();
 
       // RUBY

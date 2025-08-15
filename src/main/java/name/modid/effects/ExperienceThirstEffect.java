@@ -1,12 +1,13 @@
-package name.modid.entities;
+package name.modid.effects;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.player.PlayerEntity;
 
-public class HarvestMarkEffect extends StatusEffect {
-  public HarvestMarkEffect() {
-    super(StatusEffectCategory.NEUTRAL, 0x00ff00);
+public class ExperienceThirstEffect extends StatusEffect {
+  public ExperienceThirstEffect() {
+    super(StatusEffectCategory.BENEFICIAL, 0xe9b8b3);
   }
 
   @Override
@@ -16,6 +17,10 @@ public class HarvestMarkEffect extends StatusEffect {
 
   @Override
   public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
+    if (entity instanceof PlayerEntity) {
+      ((PlayerEntity) entity).addExperience(1 << amplifier);
+    }
+
     return true;
   }
 }

@@ -3,7 +3,7 @@ package name.modid.helpers.modifiers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import name.modid.helpers.ItemGemstoneHelper;
+import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
@@ -26,15 +26,14 @@ import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
 
-public class GemstoneModifierHelper {
-  public static Map<GemstoneModifierItemType, GemstoneModifier> getGemstoneModifiers(
+public class ModifierHelper {
+  public static Map<ModifierItemCaregory, GemstoneModifier> getGemstoneModifiers(
       GemstoneType gemstoneType, Item item) {
     if (gemstoneType == GemstoneType.EMPTY || gemstoneType == GemstoneType.LOCKED)
       return null;
 
-    GemstonesModifierData modifiersData =
-        GemstoneModifierRegistration.MODIFIER_REGISTRY().get(gemstoneType);
-    Map<GemstoneModifierItemType, GemstoneModifier> modifiers = modifiersData.getModifiers();
+    ModifierData modifiersData = ModifierRegistration.MODIFIER_REGISTRY().get(gemstoneType);
+    Map<ModifierItemCaregory, GemstoneModifier> modifiers = modifiersData.getModifiers();
 
     return modifiers;
   }
@@ -43,9 +42,8 @@ public class GemstoneModifierHelper {
     if (gemstoneType == GemstoneType.EMPTY || gemstoneType == GemstoneType.LOCKED)
       return null;
 
-    GemstonesModifierData modifiersData =
-        GemstoneModifierRegistration.MODIFIER_REGISTRY().get(gemstoneType);
-    Map<GemstoneModifierItemType, GemstoneModifier> modifiers = modifiersData.getModifiers();
+    ModifierData modifiersData = ModifierRegistration.MODIFIER_REGISTRY().get(gemstoneType);
+    Map<ModifierItemCaregory, GemstoneModifier> modifiers = modifiersData.getModifiers();
     GemstoneModifier modifier = modifiers.get(getModifieritemSlot(item));
 
     return modifier;
@@ -75,29 +73,29 @@ public class GemstoneModifierHelper {
     }
   }
 
-  public static GemstoneModifierItemType getModifieritemSlot(Item item) {
+  public static ModifierItemCaregory getModifieritemSlot(Item item) {
     if (item instanceof SwordItem) {
-      return GemstoneModifierItemType.MELEE;
+      return ModifierItemCaregory.MELEE;
     }
 
     if (item instanceof BowItem || item instanceof CrossbowItem) {
-      return GemstoneModifierItemType.RANGED;
+      return ModifierItemCaregory.RANGED;
     }
 
     if (item instanceof AxeItem || item instanceof PickaxeItem || item instanceof ShovelItem) {
-      return GemstoneModifierItemType.TOOLS;
+      return ModifierItemCaregory.TOOLS;
     }
 
     if (item instanceof ArmorItem) {
-      return GemstoneModifierItemType.ARMOR;
+      return ModifierItemCaregory.ARMOR;
     }
 
-    return GemstoneModifierItemType.TOOLS;
+    return ModifierItemCaregory.TOOLS;
   }
 
   public static ArrayList<ModifierAttribute> getAttributeModifiers(ItemStack itemStack) {
     ArrayList<ModifierAttribute> modifiers = new ArrayList<>();
-    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+    Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
 
     for (Gemstone gem : gemstones) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
@@ -128,7 +126,7 @@ public class GemstoneModifierHelper {
 
   public static ArrayList<ModifierOnHit> getOnHitModifiers(ItemStack itemStack) {
     ArrayList<ModifierOnHit> modifiers = new ArrayList<>();
-    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+    Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
 
     for (Gemstone gem : gemstones) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
@@ -148,7 +146,7 @@ public class GemstoneModifierHelper {
 
   public static ArrayList<ModifierOnHitEffect> getOnHitEffectModifiers(ItemStack itemStack) {
     ArrayList<ModifierOnHitEffect> modifiers = new ArrayList<>();
-    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+    Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
 
     for (Gemstone gem : gemstones) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
@@ -172,7 +170,7 @@ public class GemstoneModifierHelper {
   public static ArrayList<ModifierOnHitEffectProjectile> getOnHitEffectProjectileModifiers(
       ItemStack itemStack) {
     ArrayList<ModifierOnHitEffectProjectile> modifiers = new ArrayList<>();
-    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+    Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
 
     for (Gemstone gem : gemstones) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
@@ -196,7 +194,7 @@ public class GemstoneModifierHelper {
 
   public static ArrayList<ModifierOnBlockBreak> getOnBlockBreakModifiers(ItemStack itemStack) {
     ArrayList<ModifierOnBlockBreak> modifiers = new ArrayList<>();
-    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+    Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
 
     for (Gemstone gem : gemstones) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
@@ -217,7 +215,7 @@ public class GemstoneModifierHelper {
 
   public static ArrayList<ModifierOnDamage> getOnDamageModifiers(ItemStack itemStack) {
     ArrayList<ModifierOnDamage> modifiers = new ArrayList<>();
-    Gemstone[] gemstones = ItemGemstoneHelper.getGemstones(itemStack);
+    Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
 
     for (Gemstone gem : gemstones) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {

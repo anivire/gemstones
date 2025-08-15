@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import name.modid.helpers.ItemGemstoneHelper;
+import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.items.gemstones.GemstoneItem;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,9 +41,9 @@ public abstract class AnvilScreenHandlerMixin {
     ItemStack left = handler.getSlot(0).getStack();
     ItemStack right = handler.getSlot(1).getStack();
 
-    if (!left.isEmpty() && !right.isEmpty() && ItemGemstoneHelper.isItemValid(left.getItem())
+    if (!left.isEmpty() && !right.isEmpty() && GemstoneSocketingHelper.isItemValid(left.getItem())
         && right.getItem() instanceof GemstoneItem) {
-      Integer emptySlotIndex = ItemGemstoneHelper.getGemstoneFirstEmptyIndex(left);
+      Integer emptySlotIndex = GemstoneSocketingHelper.getGemstoneFirstEmptyIndex(left);
 
       if (emptySlotIndex != null) {
         ItemStack resultStack = left.copy();
@@ -62,7 +62,7 @@ public abstract class AnvilScreenHandlerMixin {
         // gemstoneItem.getRarityType());
 
         ItemStack modifiedStack =
-            ItemGemstoneHelper.setGemstoneByIndex(resultStack, emptySlotIndex, gemstoneItem);
+            GemstoneSocketingHelper.setGemstoneByIndex(resultStack, emptySlotIndex, gemstoneItem);
 
         if (modifiedStack != null) {
           handler.getSlot(2).setStack(modifiedStack);
@@ -79,8 +79,9 @@ public abstract class AnvilScreenHandlerMixin {
     ItemStack left = handler.getSlot(0).getStack();
     ItemStack right = handler.getSlot(1).getStack();
 
-    if (!left.isEmpty() && !right.isEmpty() && ItemGemstoneHelper.isItemValid(left.getItem()) &&
-    // TODO: add exp level scaling or set to flat number
+    if (!left.isEmpty() && !right.isEmpty() && GemstoneSocketingHelper.isItemValid(left.getItem())
+        &&
+        // TODO: add exp level scaling or set to flat number
         Objects.equals(right.getItem().getClass().getSuperclass().getSimpleName(),
             "GemstoneItem")) {
       cir.setReturnValue(1);
@@ -94,7 +95,7 @@ public abstract class AnvilScreenHandlerMixin {
     ItemStack left = handler.getSlot(0).getStack();
     ItemStack right = handler.getSlot(1).getStack();
 
-    if (!left.isEmpty() && !right.isEmpty() && ItemGemstoneHelper.isItemValid(left.getItem())
+    if (!left.isEmpty() && !right.isEmpty() && GemstoneSocketingHelper.isItemValid(left.getItem())
         && Objects.equals(right.getItem().getClass().getSuperclass().getSimpleName(),
             "GemstoneItem")) {
       info.setReturnValue(true);

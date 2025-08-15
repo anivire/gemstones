@@ -1,6 +1,6 @@
 package name.modid.helpers.events;
 
-import name.modid.entities.EffectRegistrationHelper;
+import name.modid.effects.EffectRegistrationHelper;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -31,7 +31,6 @@ public class EventHarvestMark {
           serverWorld.spawnEntity(new ExperienceOrbEntity(serverWorld, entity.getX(), entity.getY(),
               entity.getZ(), exp));
         }
-
       }
     }
   }

@@ -1,4 +1,4 @@
-package name.modid.helpers.particles;
+package name.modid.particles;
 
 import name.modid.Gemstones;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
