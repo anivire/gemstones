@@ -1,5 +1,9 @@
 package name.modid.helpers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Function;
+
 import name.modid.Gemstones;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
@@ -14,10 +18,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.function.Function;
 
 public final class ItemRegistrationHelper {
   public static final Item STONE_GEODE = register(
@@ -37,11 +37,8 @@ public final class ItemRegistrationHelper {
 
   public static Item register(String path, Function<Item.Settings, Item> factory,
       Item.Settings settings) {
-    final RegistryKey<Item> registryKey =
-        RegistryKey.of(RegistryKeys.ITEM, Identifier.of(Gemstones.MOD_ID, path));
-    return Registry.register(Registries.ITEM, registryKey, factory.apply(settings)); // Removed
-                                                                                     // registryKey
-                                                                                     // call
+    final RegistryKey<Item> registryKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(Gemstones.MOD_ID, path));
+    return Registry.register(Registries.ITEM, registryKey, factory.apply(settings));
   }
 
   public static void initialize() {

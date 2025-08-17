@@ -2,26 +2,16 @@ package name.modid.helpers.modifiers;
 
 import java.util.HashMap;
 import java.util.Map;
-import name.modid.helpers.modifiers.data.AquamarineModifierData;
-import name.modid.helpers.modifiers.data.CelestineModifierData;
-import name.modid.helpers.modifiers.data.ObsidianShardModifierData;
-import name.modid.helpers.modifiers.data.RubyModifierData;
-import name.modid.helpers.modifiers.data.SapphireModifierData;
-import name.modid.helpers.modifiers.data.TopazModifierData;
-import name.modid.helpers.modifiers.data.ZirconModifierData;
+
 import name.modid.helpers.types.GemstoneType;
 
 public class ModifierRegistration {
   private static final Map<GemstoneType, ModifierData> MODIFIER_REGISTRY = new HashMap<>();
 
   static {
-    MODIFIER_REGISTRY.put(GemstoneType.RUBY, new RubyModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.CELESTINE, new CelestineModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.TOPAZ, new TopazModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.SAPPHIRE, new SapphireModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.ZIRCON, new ZirconModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.AQUAMARINE, new AquamarineModifierData());
-    MODIFIER_REGISTRY.put(GemstoneType.OBSIDIAN_SHARD, new ObsidianShardModifierData());
+    for (GemstoneType type : GemstoneType.values()) {
+      MODIFIER_REGISTRY.put(type, new UniversalGemstoneModifierData(type));
+    }
   }
 
   public static Map<GemstoneType, ModifierData> MODIFIER_REGISTRY() {

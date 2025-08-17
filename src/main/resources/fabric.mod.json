@@ -11,6 +11,7 @@
   "license": "CC0-1.0",
   "icon": "assets/gemstones/icon.png",
   "environment": "*",
+  
   "entrypoints": {
     "main": [
       "name.modid.Gemstones"

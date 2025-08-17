@@ -1,0 +1,43 @@
+{
+  "gemstone_type": "RUBY",
+  "modifiers": {
+    "MELEE": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.08, 0.15, 0.25, 0.3],
+      "amplifier": 0,
+      "effect_id": "gemstones:bleeding",
+      "duration": 5,
+      "is_stacking": true,
+      "max_stack_count": 5
+    },
+    "RANGED": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.16, 0.25, 0.35, 0.45],
+      "amplifier": 0,
+      "effect_id": "gemstones:bleeding",
+      "duration": 5,
+      "is_stacking": true,
+      "max_stack_count": 5
+    },
+    "TOOLS": {
+      "type": "ON_BLOCK_BREAK",
+      "chance_levels": [0.1, 0.2, 0.3, 0.4],
+      "value_levels": [1.0, 1.0, 2.0, 2.0],
+      "event_type": "EXTRA_HEALTH"
+    },
+    "ARMOR": {
+      "type": "MULTIPLY_ATTRIBUTE",
+      "instances": [
+        {
+          "attribute_id": "minecraft:generic.attack_damage",
+          "value_levels": [0.5, 0.5, 1.0, 1.0],
+          "operation": "ADD_VALUE"
+        },{
+          "attribute_id": "minecraft:generic.max_health",
+          "value_levels": [-2.0, -1.0, -2.0, -2.0],
+          "operation": "ADD_VALUE"
+        }
+      ]
+    }
+  }
+}

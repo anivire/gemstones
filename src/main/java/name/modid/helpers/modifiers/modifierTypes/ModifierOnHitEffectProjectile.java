@@ -1,6 +1,7 @@
 package name.modid.helpers.modifiers.modifierTypes;
 
 import java.util.ArrayList;
+
 import name.modid.Gemstones;
 import name.modid.effects.EffectRegistrationHelper;
 import name.modid.helpers.modifiers.GemstoneModifier;
@@ -74,7 +75,8 @@ public class ModifierOnHitEffectProjectile implements GemstoneModifier {
               style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
           .formatted(Formatting.WHITE);
     } else {
-      effectString.append(Text.literal(this.effect.toString()).formatted(Formatting.WHITE));
+      StatusEffect e = this.effect.value();
+      effectString.append(e.getName()).formatted(e.isBeneficial() ? Formatting.GREEN : Formatting.RED);
     }
 
     return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))

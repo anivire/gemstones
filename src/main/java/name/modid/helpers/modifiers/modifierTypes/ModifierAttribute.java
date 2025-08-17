@@ -3,6 +3,8 @@ package name.modid.helpers.modifiers.modifierTypes;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.List;
+
 import name.modid.Gemstones;
 import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.ModifierItemCaregory;
@@ -25,11 +27,11 @@ public class ModifierAttribute implements GemstoneModifier {
   public GemstoneType gemstoneType;
   public GemstoneRarity rarityType;
 
-  public ModifierAttribute(Operation operation, ArrayList<Double> modifierValuesList,
+  public ModifierAttribute(Operation operation, List<Double> valueLevels,
       ModifierItemCaregory itemType, RegistryEntry<EntityAttribute> attr,
       GemstoneType gemstoneType) {
     this.operation = operation;
-    this.modifierValuesList = new ArrayList<Double>(modifierValuesList);
+    this.modifierValuesList = new ArrayList<Double>(valueLevels);
     this.itemType = itemType;
     this.attr = attr;
     this.gemstoneType = gemstoneType;
@@ -67,8 +69,7 @@ public class ModifierAttribute implements GemstoneModifier {
   }
 
   private String formatValue(double value) {
-    BigDecimal bd =
-        BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
+    BigDecimal bd = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
     return bd.toPlainString();
   }
 

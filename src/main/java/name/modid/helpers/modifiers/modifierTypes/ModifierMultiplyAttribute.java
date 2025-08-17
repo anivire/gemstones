@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+
 import name.modid.Gemstones;
 import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.types.GemstoneRarity;
@@ -19,16 +20,15 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
   public List<ModifierAttribute> instances = new ArrayList<>();
 
   public ModifierMultiplyAttribute(List<ModifierAttribute> instances) {
-    this.instances = new ArrayList<>(instances);
+    this.instances = new ArrayList<ModifierAttribute>(instances);
   }
 
   public MutableText getTooltipString(GemstoneRarity gemstoneRarityType,
       Boolean withCategoryString) {
-    String tooltipCategoryType =
-        withCategoryString
-            ? String.format("tooltip.gemstones.%s_type",
-                instances.get(0).itemType.toString().toLowerCase())
-            : "tooltip.gemstones.without_type";
+    String tooltipCategoryType = withCategoryString
+        ? String.format("tooltip.gemstones.%s_type",
+            instances.get(0).itemType.toString().toLowerCase())
+        : "tooltip.gemstones.without_type";
     MutableText resultTooltip = Text.empty();
 
     ArrayList<MutableText> modifierTexts = new ArrayList<>();
@@ -46,8 +46,7 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
       }
 
       String percent = modifierInstance.operation == Operation.ADD_VALUE ? "" : "%";
-      Double adjustedValue =
-          modifierInstance.operation == Operation.ADD_VALUE ? value : value * 100;
+      Double adjustedValue = modifierInstance.operation == Operation.ADD_VALUE ? value : value * 100;
       String formattedValue = formatValue(adjustedValue) + percent;
 
       modifierTexts
@@ -71,8 +70,7 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
   }
 
   private String formatValue(double value) {
-    BigDecimal bd =
-        BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
+    BigDecimal bd = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
     return bd.toPlainString();
   }
 
@@ -84,5 +82,6 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
     return null;
   }
 
-  public void setRarityType(GemstoneRarity rarityType) {}
+  public void setRarityType(GemstoneRarity rarityType) {
+  }
 }

@@ -2,6 +2,7 @@ package name.modid.helpers.tooltips;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import name.modid.Gemstones;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.GemstoneModifier;
@@ -18,13 +19,8 @@ public class GemstoneTooltipHelper {
   public static Formatting getGemstoneColor(GemstoneType gemType) {
     return switch (gemType) {
       case EMPTY -> Formatting.DARK_GRAY;
-      case RUBY -> Formatting.RED;
-      case CELESTINE -> Formatting.BLUE;
-      case TOPAZ -> Formatting.GOLD;
-      case SAPPHIRE -> Formatting.DARK_BLUE;
-      case AQUAMARINE -> Formatting.BLUE;
-      case OBSIDIAN_SHARD -> Formatting.DARK_PURPLE;
-      default -> Formatting.GRAY;
+      case LOCKED -> Formatting.DARK_GRAY;
+      default -> Formatting.WHITE;
     };
   }
 
@@ -32,12 +28,6 @@ public class GemstoneTooltipHelper {
     return switch (gemType) {
       case LOCKED -> "Locked slot";
       case EMPTY -> "Empty slot";
-      case RUBY -> "Ruby";
-      case CELESTINE -> "Celestine";
-      case SAPPHIRE -> "Sapphire";
-      case TOPAZ -> "Topaz";
-      case AQUAMARINE -> "Aquamarine";
-      case OBSIDIAN_SHARD -> "Obsidian Shard";
       default -> "unknown";
     };
   }
@@ -68,13 +58,15 @@ public class GemstoneTooltipHelper {
       GemstoneRarity gemRarity = gemstones[i].gemstoneRarityType();
 
       if (gemType != GemstoneType.LOCKED && gemType != GemstoneType.EMPTY) {
-        GemstoneModifier modifier =
-            ModifierHelper.getGemstoneModifierForItem(gemType, itemStack.getItem());
+        try {
+          GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gemType, itemStack.getItem());
+          rows.add(modifier.getTooltipString(gemRarity, false));
+        } catch (NullPointerException e) {
+          rows.add(Text.literal("Undefined modifier").formatted(Formatting.RED));
+        }
 
-        rows.add(modifier.getTooltipString(gemRarity, false));
       } else {
-        MutableText symbol =
-            Text.translatable("tooltip.gemstones.without_type").formatted(Formatting.GRAY);
+        MutableText symbol = Text.translatable("tooltip.gemstones.without_type").formatted(Formatting.GRAY);
         MutableText gemstoneSlot = Text
             .translatable(String.format("tooltip.gemstones.gemstone_slots.%d", i + 1),
                 GemstoneTooltipHelper.getSlotText(gemstones[i].gemstoneType()))
