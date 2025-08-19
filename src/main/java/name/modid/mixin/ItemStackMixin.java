@@ -1,38 +1,33 @@
 package name.modid.mixin;
 
 import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
+import name.modid.helpers.components.Gemstone;
+import name.modid.helpers.tooltips.GemstoneTooltipHelper;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
-  // @Inject(
-  // method =
-  // "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V",
-  // at = @At("TAIL"))
-  // private void onConstruct(RegistryEntry<?> item, int count, ComponentChanges changes,
-  // CallbackInfo ci) {
-  // ItemStack itemStack = (ItemStack) (Object) this;
-  // if (item instanceof RegistryEntry.Reference<?> reference
-  // && reference.value() instanceof Item actualItem) {
-  // ItemGemstoneHelper.initItemSlots(itemStack, actualItem);
-  // }
-  // }
-
-  @Inject(
-      method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V",
-      at = @At("TAIL"))
+  @Inject(method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V", at = @At("TAIL"))
   private void onConstructWithChanges(RegistryEntry<Item> item, int count, ComponentChanges changes,
       CallbackInfo ci) {
     ItemStack itemStack = (ItemStack) (Object) this;
@@ -71,6 +66,30 @@ public abstract class ItemStackMixin {
       cir.setReturnValue(baseMax + (int) bonusDurability);
     } else {
       cir.setReturnValue(cir.getReturnValue());
+    }
+  }
+
+  @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0, shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+  private void tooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type,
+      CallbackInfoReturnable<List<Text>> cir, List<Text> tooltip) {
+    ItemStack itemStack = (ItemStack) (Object) this;
+
+    if (GemstoneSocketingHelper.isItemValid(itemStack.getItem())
+        && GemstoneSocketingHelper.isGemstonesExists(itemStack)) {
+      Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
+
+      if (gemstones == null || gemstones.length == 0) {
+        return;
+      }
+
+      // Empty rows for proper gemstones sprite visibility
+      tooltip.add(Text.empty());
+      tooltip.add(GemstoneTooltipHelper.getGemstoneSocketedRow(gemstones));
+      tooltip.add(Text.empty());
+      tooltip.add(Text.empty());
+      tooltip.add(Text.translatable("tooltip.gemstones.gemstone_slots_gemstones_category")
+          .formatted(Formatting.GRAY));
+      tooltip.addAll(GemstoneTooltipHelper.getItemGemstoneBonusesRows(gemstones, itemStack));
     }
   }
 }

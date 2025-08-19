@@ -1,0 +1,22 @@
+{
+  "gemstone_type": "AQUAMARINE",
+  "modifiers": {
+    "RANGED": {
+      "type": "ON_HIT",
+      "chance_levels": [0.15, 0.25, 0.35, 0.45],
+      "event_type": "TORRENT"
+    },
+    "TOOLS": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "minecraft:player.submerged_mining_speed",
+      "value_levels": [0.07, 0.14, 0.21, 0.28],
+      "operation": "ADD_MULTIPLIED_TOTAL"
+    },
+    "ARMOR": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "minecraft:generic.oxygen_bonus",
+      "value_levels": [0.025, 0.055, 0.075, 0.1],
+      "operation": "ADD_MULTIPLIED_TOTAL"
+    }
+  }
+}

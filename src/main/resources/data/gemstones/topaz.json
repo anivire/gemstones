@@ -1,0 +1,43 @@
+{
+  "gemstone_type": "TOPAZ",
+  "modifiers": {
+    "MELEE": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:crit_damage",
+      "value_levels": [0.25, 0.35, 0.50, 0.65],
+      "operation": "ADD_MULTIPLIED_TOTAL"
+    },
+    "RANGED": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.1, 0.2, 0.35, 0.45],
+      "amplifier": 0,
+      "effect_id": "minecraft:slowness",
+      "duration": 11,
+      "is_stacking": true,
+      "max_stack_count": 3
+    },
+    "TOOLS": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.1, 0.2, 0.3, 0.4],
+      "amplifier": 0,
+      "effect_id": "gemstones:harvest_mark",
+      "duration": 6,
+      "is_stacking": true,
+      "max_stack_count": 10
+    },
+    "ARMOR": {
+      "type": "MULTIPLY_ATTRIBUTE",
+      "instances": [
+        {
+          "attribute_id": "minecraft:generic.armor",
+          "value_levels": [0.5, 1.0, 1.5, 2.0],
+          "operation": "ADD_VALUE"
+        },{
+          "attribute_id": "minecraft:generic.armor_toughness",
+          "value_levels": [0.5, 0.5, 1.0, 1.5],
+          "operation": "ADD_VALUE"
+        }
+      ]
+    }
+  }
+}

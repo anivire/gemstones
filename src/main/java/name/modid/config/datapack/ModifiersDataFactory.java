@@ -7,13 +7,18 @@ import java.util.Map;
 import org.slf4j.Logger;
 
 import name.modid.Gemstones;
-import name.modid.config.datapack.ModifiersConfig.AttributeModifierConfig;
+import name.modid.config.datapack.ModifiersConfig.AttributeConfig;
 import name.modid.config.datapack.ModifiersConfig.MultiplyAttributeConfig;
+import name.modid.config.datapack.ModifiersConfig.OnBlockBreakConfig;
+import name.modid.config.datapack.ModifiersConfig.OnHitConfig;
 import name.modid.config.datapack.ModifiersConfig.OnHitEffectConfig;
 import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.ModifierItemCaregory;
+import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
+import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
 import name.modid.helpers.types.GemstoneType;
@@ -127,10 +132,35 @@ public class ModifiersDataFactory {
           }
           break;
         case ON_BLOCK_BREAK: {
-          LOGGER.warn(
-              "[ModifiersConfig] ModifiersConfig.OnBlockBreakConfig found for category {} for gemstone {}, but processing logic is empty. Skipping.",
-              category,
-              gemstoneType);
+          if (!(entry instanceof OnBlockBreakConfig onBlockBreakConfig)) {
+            LOGGER.warn(
+                "[ModifiersConfig] Expected OnBlockBreakConfig for type {} but got {}. Skipping.",
+                entry.type,
+                entry.getClass().getSimpleName());
+            return;
+          }
+
+          EventType eventType = onBlockBreakConfig.eventType;
+
+          if (eventType == null) {
+            LOGGER.warn(
+                "Failed to retrieve EventType for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
+                onBlockBreakConfig.eventType,
+                category,
+                gemstoneType);
+          } else {
+            modifierInstance = new ModifierOnBlockBreak(new ArrayList<Double>(onBlockBreakConfig.chanceLevels),
+                new ArrayList<Double>(onBlockBreakConfig.valueLevels), category, eventType, gemstoneType);
+          }
+
+          if (modifierInstance != null) {
+            LOGGER.debug(
+                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
+                modifierInstance.getClass().getSimpleName(),
+                category,
+                gemstoneType);
+            modifiers.put(category, modifierInstance);
+          }
           break;
         }
         case MULTIPLY_ATTRIBUTE: {
@@ -144,7 +174,7 @@ public class ModifiersDataFactory {
 
           ArrayList<ModifierAttribute> instances = new ArrayList<>();
 
-          for (AttributeModifierConfig attributeInstance : multiplyAttributeConfig.attributes) {
+          for (AttributeConfig attributeInstance : multiplyAttributeConfig.attributes) {
             EntityAttribute attribute = Registries.ATTRIBUTE.get(attributeInstance.attributeId);
 
             if (attribute == null) {
@@ -174,6 +204,83 @@ public class ModifiersDataFactory {
 
           if (!instances.isEmpty()) {
             modifierInstance = new ModifierMultiplyAttribute(instances);
+          }
+
+          if (modifierInstance != null) {
+            LOGGER.debug(
+                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
+                modifierInstance.getClass().getSimpleName(),
+                category,
+                gemstoneType);
+            modifiers.put(category, modifierInstance);
+          }
+          break;
+        }
+        case ATTRIBUTE: {
+          if (!(entry instanceof AttributeConfig attributeModifierConfig)) {
+            LOGGER.warn(
+                "[ModifiersConfig] Expected AttributeConfig for type {} but got {}. Skipping.",
+                entry.type,
+                entry.getClass().getSimpleName());
+            return;
+          }
+
+          EntityAttribute attribute = Registries.ATTRIBUTE.get(attributeModifierConfig.attributeId);
+
+          if (attribute == null) {
+            LOGGER.warn(
+                "Failed to retrieve EntityAttribute for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
+                attributeModifierConfig.attributeId,
+                category,
+                gemstoneType);
+          } else {
+            RegistryEntry<EntityAttribute> attributeEntry = Registries.ATTRIBUTE
+                .getEntry(attributeModifierConfig.attributeId)
+                .orElse(null);
+
+            if (attributeEntry == null) {
+              LOGGER.warn(
+                  "Failed to retrieve EntityAttribute RegistryEntry for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
+                  attributeModifierConfig.attributeId,
+                  category,
+                  gemstoneType);
+              return;
+            }
+
+            modifierInstance = new ModifierAttribute(attributeModifierConfig.operation,
+                new ArrayList<Double>(attributeModifierConfig.valueLevels), category, attributeEntry, gemstoneType);
+          }
+
+          if (modifierInstance != null) {
+            LOGGER.debug(
+                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
+                modifierInstance.getClass().getSimpleName(),
+                category,
+                gemstoneType);
+            modifiers.put(category, modifierInstance);
+          }
+          break;
+        }
+        case ON_HIT: {
+          if (!(entry instanceof OnHitConfig onHitConfig)) {
+            LOGGER.warn(
+                "[ModifiersConfig] Expected OnHitConfig for type {} but got {}. Skipping.",
+                entry.type,
+                entry.getClass().getSimpleName());
+            return;
+          }
+
+          EventType eventType = onHitConfig.eventType;
+
+          if (eventType == null) {
+            LOGGER.warn(
+                "Failed to retrieve EventType for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
+                onHitConfig.eventType,
+                category,
+                gemstoneType);
+          } else {
+            modifierInstance = new ModifierOnHit(new ArrayList<Double>(onHitConfig.chanceLevels), eventType, category,
+                gemstoneType);
           }
 
           if (modifierInstance != null) {

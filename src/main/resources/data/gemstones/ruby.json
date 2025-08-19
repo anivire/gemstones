@@ -6,7 +6,7 @@
       "chance_levels": [0.08, 0.15, 0.25, 0.3],
       "amplifier": 0,
       "effect_id": "gemstones:bleeding",
-      "duration": 5,
+      "duration": 6,
       "is_stacking": true,
       "max_stack_count": 5
     },
@@ -15,7 +15,7 @@
       "chance_levels": [0.16, 0.25, 0.35, 0.45],
       "amplifier": 0,
       "effect_id": "gemstones:bleeding",
-      "duration": 5,
+      "duration": 6,
       "is_stacking": true,
       "max_stack_count": 5
     },

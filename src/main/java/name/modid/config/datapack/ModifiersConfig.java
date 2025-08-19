@@ -23,7 +23,11 @@ public class ModifiersConfig {
     @SerializedName("ON_BLOCK_BREAK")
     ON_BLOCK_BREAK,
     @SerializedName("MULTIPLY_ATTRIBUTE")
-    MULTIPLY_ATTRIBUTE
+    MULTIPLY_ATTRIBUTE,
+    @SerializedName("ATTRIBUTE")
+    ATTRIBUTE,
+    @SerializedName("ON_HIT")
+    ON_HIT
   }
 
   public static class ModifierConfigEntry {
@@ -54,14 +58,21 @@ public class ModifiersConfig {
 
   public static class MultiplyAttributeConfig extends ModifierConfigEntry {
     @SerializedName("instances")
-    public List<AttributeModifierConfig> attributes;
+    public List<AttributeConfig> attributes;
   }
 
-  public static class AttributeModifierConfig {
+  public static class AttributeConfig extends ModifierConfigEntry {
     @SerializedName("attribute_id")
     public Identifier attributeId;
     @SerializedName("value_levels")
     public List<Double> valueLevels;
     public Operation operation;
+  }
+
+  public static class OnHitConfig extends ModifierConfigEntry {
+    @SerializedName("chance_levels")
+    public List<Double> chanceLevels;
+    @SerializedName("event_type")
+    public EventType eventType;
   }
 }

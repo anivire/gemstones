@@ -3,11 +3,13 @@ package name.modid.helpers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import name.modid.Gemstones;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.items.gemstones.AquamarineGemstoneItem;
 import name.modid.items.gemstones.CelestineGemstoneItem;
 import name.modid.items.gemstones.ObsidianShardGemstoneItem;
+import name.modid.items.gemstones.OpalGemstoneItem;
 import name.modid.items.gemstones.RubyGemstoneItem;
 import name.modid.items.gemstones.SapphireGemstoneItem;
 import name.modid.items.gemstones.TopazGemstoneItem;
@@ -35,9 +37,10 @@ public class GemstonesRegistrationHelper {
   private static final List<Item> ZIRCON_GEMSTONES = new ArrayList<>();
   private static final List<Item> AQUAMARINE_GEMSTONES = new ArrayList<>();
   private static final List<Item> OBSIDIAN_SHARD_GEMSTONES = new ArrayList<>();
+  private static final List<Item> OPAL_GEMSTONES = new ArrayList<>();
 
-  public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY =
-      RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(Gemstones.MOD_ID, "item_group"));
+  public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
+      Identifier.of(Gemstones.MOD_ID, "item_group"));
   public static ItemGroup GEMSTONES_ITEM_GROUP;
 
   public static void registerItemGroup() {
@@ -98,6 +101,13 @@ public class GemstonesRegistrationHelper {
           settings -> new ObsidianShardGemstoneItem(settings, rarity),
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
       OBSIDIAN_SHARD_GEMSTONES.add(obsidianShardGemstone);
+
+      // OPAL
+      Item opalGemstone = ItemRegistrationHelper.register(
+          "opal_gemstone_" + rarityName,
+          settings -> new OpalGemstoneItem(settings, rarity),
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
+      OPAL_GEMSTONES.add(opalGemstone);
     }
   }
 
@@ -109,6 +119,7 @@ public class GemstonesRegistrationHelper {
     ZIRCON_GEMSTONES.forEach(entries::add);
     AQUAMARINE_GEMSTONES.forEach(entries::add);
     OBSIDIAN_SHARD_GEMSTONES.forEach(entries::add);
+    OPAL_GEMSTONES.forEach(entries::add);
   }
 
   public static List<Item> getRubyGemstones() {
@@ -137,5 +148,9 @@ public class GemstonesRegistrationHelper {
 
   public static List<Item> getObsidianShardGemstones() {
     return OBSIDIAN_SHARD_GEMSTONES;
+  }
+
+  public static List<Item> getOpalGemstones() {
+    return OPAL_GEMSTONES;
   }
 }

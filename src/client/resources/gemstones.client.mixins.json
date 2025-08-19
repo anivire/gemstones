@@ -3,7 +3,6 @@
   "package": "name.modid.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ItemStackMixin",
     "AbstractClientPlayerEntityMixin",
     "LivingEntityRendererMixin"
   ],

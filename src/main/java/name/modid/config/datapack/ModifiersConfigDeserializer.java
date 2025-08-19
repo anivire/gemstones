@@ -8,10 +8,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+import name.modid.config.datapack.ModifiersConfig.AttributeConfig;
 import name.modid.config.datapack.ModifiersConfig.ModifierConfigEntry;
 import name.modid.config.datapack.ModifiersConfig.ModifierType;
 import name.modid.config.datapack.ModifiersConfig.MultiplyAttributeConfig;
 import name.modid.config.datapack.ModifiersConfig.OnBlockBreakConfig;
+import name.modid.config.datapack.ModifiersConfig.OnHitConfig;
 import name.modid.config.datapack.ModifiersConfig.OnHitEffectConfig;
 
 public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierConfigEntry> {
@@ -45,6 +47,10 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
         return context.deserialize(jsonObject, OnBlockBreakConfig.class);
       case MULTIPLY_ATTRIBUTE:
         return context.deserialize(jsonObject, MultiplyAttributeConfig.class);
+      case ATTRIBUTE:
+        return context.deserialize(jsonObject, AttributeConfig.class);
+      case ON_HIT:
+        return context.deserialize(jsonObject, OnHitConfig.class);
       default:
         throw new JsonParseException("Unhandled modifier type: " + typeString + " in JSON: " + json);
     }

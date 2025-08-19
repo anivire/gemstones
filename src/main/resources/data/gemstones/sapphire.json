@@ -1,0 +1,31 @@
+{
+  "gemstone_type": "SAPPHIRE",
+  "modifiers": {
+    "MELEE": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.08, 0.16, 0.24, 0.36],
+      "amplifier": 0,
+      "effect_id": "gemstones:guardian_smite",
+      "duration": 6,
+      "is_stacking": false,
+      "max_stack_count": 1
+    },
+    "RANGED": {
+      "type": "ON_HIT",
+      "chance_levels": [0.05, 0.10, 0.15, 0.25],
+      "event_type": "LIGHTNING_BOLT"
+    },
+    "TOOLS": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "minecraft:player.submerged_mining_speed",
+      "value_levels": [0.15, 0.20, 0.25, 0.30],
+      "operation": "ADD_MULTIPLIED_TOTAL"
+    },
+    "ARMOR": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "minecraft:generic.water_movement_efficiency",
+      "value_levels": [0.10, 0.15, 0.20, 0.30],
+      "operation": "ADD_MULTIPLIED_TOTAL"
+    }
+  }
+}

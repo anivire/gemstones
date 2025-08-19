@@ -2,10 +2,12 @@ package name.modid.mixin;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.modifierTypes.EventType;
@@ -53,8 +55,8 @@ public class PersistentProjectileEntityMixin {
     }
 
     if (arrow != null && target != null) {
-      ArrayList<ModifierOnHitEffectProjectile> onHitEffectProjectileModifiers =
-          ModifierHelper.getOnHitEffectProjectileModifiers(itemStack);
+      ArrayList<ModifierOnHitEffectProjectile> onHitEffectProjectileModifiers = ModifierHelper
+          .getOnHitEffectProjectileModifiers(itemStack);
 
       if (!onHitEffectProjectileModifiers.isEmpty()) {
         GemstoneSocketingHelper.applyOnHitEffectProjectileModifiers(onHitEffectProjectileModifiers,
@@ -94,7 +96,8 @@ public class PersistentProjectileEntityMixin {
   private void applyGemstoneModifiers(ItemStack itemStack, World world, Vec3d pos,
       ArrowEntity arrow, LivingEntity target) {
     // ModifierOnHit
-    // TODO: move to ItemGemstoneHelper or make correct realization (wont support for other
+    // TODO: move to ItemGemstoneHelper or make correct realization (wont support
+    // for other
     // modifiers)
     ArrayList<ModifierOnHit> onHitModifiers = ModifierHelper.getOnHitModifiers(itemStack);
     if (!onHitModifiers.isEmpty()) {

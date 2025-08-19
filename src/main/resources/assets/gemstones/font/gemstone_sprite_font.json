@@ -71,6 +71,15 @@
       "chars": [
         "\uE008"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/gemstone_socket_opal.png",
+      "height": 26,
+      "ascent": 13,
+      "chars": [
+        "\uE009"
+      ]
     }
   ]
 }

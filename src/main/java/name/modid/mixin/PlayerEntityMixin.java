@@ -3,6 +3,7 @@ package name.modid.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -12,7 +13,8 @@ import net.minecraft.entity.player.PlayerEntity;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
   /**
-   * Replace default critical damage {@code 1.5F} with value based on {@code CRIT_DAMAGE_ATTRIBUTE}.
+   * Replace default critical damage {@code 1.5F} with value based on
+   * {@code CRIT_DAMAGE_ATTRIBUTE}.
    */
   @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5F))
   private float modifyCriticalDamage(float f, Entity target) {

@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
 import name.modid.Gemstones;
 import name.modid.effects.EffectRegistrationHelper;
 import name.modid.helpers.components.ComponentsHelper;
@@ -106,8 +107,7 @@ public class GemstoneSocketingHelper {
     if (sourceGemstoneSlots == null && index < 0 || index >= MAX_SLOTS)
       return null;
 
-    Gemstone[] gemstones =
-        Arrays.copyOf(sourceGemstoneSlots.gemstones(), sourceGemstoneSlots.gemstones().length);
+    Gemstone[] gemstones = Arrays.copyOf(sourceGemstoneSlots.gemstones(), sourceGemstoneSlots.gemstones().length);
 
     gemstones[index] = new Gemstone(gemstone.getType(), gemstone.getRarityType());
     itemStack.set(ComponentsHelper.GEMSTONES, new GemstoneSlots(gemstones));
@@ -155,9 +155,9 @@ public class GemstoneSocketingHelper {
 
     // Using LinkedHashMap for attributes order and eliminate possible duplicates
     Map<String, AttributeModifiersComponent.Entry> combinedModifiersMap = new LinkedHashMap<>();
-    Function<AttributeModifiersComponent.Entry, String> entryKey =
-        entry -> entry.modifier().id().toString() + "." + entry.slot() + "."
-            + entry.attribute().value();
+    Function<AttributeModifiersComponent.Entry, String> entryKey = entry -> entry.modifier().id().toString() + "."
+        + entry.slot() + "."
+        + entry.attribute().value();
 
     // Filter modifiers
     baseModifiers.modifiers().forEach(e -> {
@@ -172,8 +172,7 @@ public class GemstoneSocketingHelper {
     });
 
     // Gather modifiers
-    Map<RegistryEntry<EntityAttribute>, List<ModifierAttribute>> attributeToModifiers =
-        new HashMap<>();
+    Map<RegistryEntry<EntityAttribute>, List<ModifierAttribute>> attributeToModifiers = new HashMap<>();
     for (GemstoneModifier modifier : gemstoneModifiers) {
       if (modifier instanceof ModifierAttribute singleModifier) {
         attributeToModifiers.computeIfAbsent(singleModifier.attr, k -> new ArrayList<>())
@@ -200,25 +199,22 @@ public class GemstoneSocketingHelper {
       EquipmentSlot slot = ModifierHelper.getEquipmentSlot(item);
 
       Identifier modifierId = Identifier.of(Gemstones.MOD_ID,
-          String.format("%s_gemstone_%s_modifier_slot%s", mod.gemstoneType.toString().toLowerCase(),
+          String.format("%s.%s", mod.gemstoneType.toString().toLowerCase(),
               mod.itemType.toString().toLowerCase(), slot.name().toLowerCase()));
 
-      EntityAttributeModifier scaledGemstoneModifier =
-          new EntityAttributeModifier(modifierId, totalValue, mod.operation);
+      EntityAttributeModifier scaledGemstoneModifier = new EntityAttributeModifier(modifierId, totalValue,
+          mod.operation);
 
       AttributeModifiersComponent.Entry newEntry = new AttributeModifiersComponent.Entry(attribute,
           scaledGemstoneModifier, ModifierHelper.getAttributeModifierSlot(item));
       combinedModifiersMap.put(entryKey.apply(newEntry), newEntry);
     }
 
-    List<AttributeModifiersComponent.Entry> finalModifiers =
-        new ArrayList<>(combinedModifiersMap.values());
+    List<AttributeModifiersComponent.Entry> finalModifiers = new ArrayList<>(combinedModifiersMap.values());
 
-    AttributeModifiersComponent finalComponent =
-        new AttributeModifiersComponent(finalModifiers, true);
+    AttributeModifiersComponent finalComponent = new AttributeModifiersComponent(finalModifiers, true);
     itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, finalComponent);
   }
-
 
   public static void applyOnHitEffectModifiers(ArrayList<ModifierOnHitEffect> gemstoneModifiers,
       Item item, ItemStack itemStack, LivingEntity target, World world) {
@@ -248,14 +244,12 @@ public class GemstoneSocketingHelper {
 
       double randomValue = world.getRandom().nextDouble();
       if (randomValue < combinedProcChance && selectedModifier != null) {
-        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects =
-            target.getActiveStatusEffects();
+        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects = target.getActiveStatusEffects();
         StatusEffectInstance existingEffect = activeEffects.get(statusEffect);
         int newAmplifier = selectedModifier.amplifier;
 
         if (existingEffect != null && selectedModifier.isStacking) {
-          newAmplifier =
-              Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
+          newAmplifier = Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
         }
 
         double centerY = target.getY() + target.getHeight() * 0.8;
@@ -292,8 +286,7 @@ public class GemstoneSocketingHelper {
   public static void applyOnHitEffectProjectileModifiers(
       ArrayList<ModifierOnHitEffectProjectile> gemstoneModifiers, Item item, ItemStack itemStack,
       LivingEntity target, World world) {
-    Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectProjectile>> effectToModifiers =
-        new HashMap<>();
+    Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectProjectile>> effectToModifiers = new HashMap<>();
     for (ModifierOnHitEffectProjectile modifier : gemstoneModifiers) {
       effectToModifiers.computeIfAbsent(modifier.effect, k -> new ArrayList<>()).add(modifier);
     }
@@ -319,14 +312,12 @@ public class GemstoneSocketingHelper {
 
       double randomValue = world.getRandom().nextDouble();
       if (randomValue < combinedProcChance && selectedModifier != null) {
-        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects =
-            target.getActiveStatusEffects();
+        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects = target.getActiveStatusEffects();
         StatusEffectInstance existingEffect = activeEffects.get(statusEffect);
         int newAmplifier = selectedModifier.amplifier;
 
         if (existingEffect != null && selectedModifier.isStacking) {
-          newAmplifier =
-              Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
+          newAmplifier = Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
         }
 
         double centerY = target.getY() + target.getHeight() * 0.8;

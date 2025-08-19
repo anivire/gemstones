@@ -70,7 +70,7 @@
   "item.gemstones.zircon_gemstone_legendary": "Zircon Gemstone",
 
   "tooltip.gemstones.zircon.melee_bonus": "%s attack range",
-  "tooltip.gemstones.zircon.ranged_bonus": "zircon.ranged_bonus",
+  "tooltip.gemstones.zircon.ranged_bonus": "%s arrow speed",
   "tooltip.gemstones.zircon.tools_bonus": "%s increase block break range",
   "tooltip.gemstones.zircon.armor_bonus": "%s increase jump height",
 
@@ -93,6 +93,16 @@
   "tooltip.gemstones.obsidian_shard.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.obsidian_shard.tools_bonus": "%s max item durability",
   "tooltip.gemstones.obsidian_shard.armor_bonus": "%s max item durability",
+  
+  "item.gemstones.opal_gemstone_common": "Opal Gemstone",
+  "item.gemstones.opal_gemstone_uncommon": "Opal Gemstone",
+  "item.gemstones.opal_gemstone_rare": "Opal Gemstone",
+  "item.gemstones.opal_gemstone_legendary": "Opal Gemstone",
+
+  "tooltip.gemstones.opal.melee_bonus": "%s attack damage but %s attack speed",
+  "tooltip.gemstones.opal.ranged_bonus": "%s arrow speed but %s pull speed",
+  "tooltip.gemstones.opal.tools_bonus": "%s loot count but %s mining speed",
+  "tooltip.gemstones.opal.armor_bonus": "%s evasion chance",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
@@ -101,6 +111,7 @@
 
   "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",
+  "attribute.name.generic.evasion": "Evasion",
   "attribute.name.generic.max_durability": "Max Durability Points",
-  "attribute.name.generic.arrow_fly_distance": "Arrow Fly Distance"
+  "attribute.name.generic.prjectile_speed": "Projectile Speed"
 }
