@@ -122,6 +122,19 @@ public class GemstonesRegistrationHelper {
     OPAL_GEMSTONES.forEach(entries::add);
   }
 
+  public static List<Item> getAllGemstones() {
+    List<Item> all = new ArrayList<>();
+    all.addAll(RUBY_GEMSTONES);
+    all.addAll(CELESTINE_GEMSTONES);
+    all.addAll(TOPAZ_GEMSTONES);
+    all.addAll(SAPPHIRE_GEMSTONES);
+    all.addAll(ZIRCON_GEMSTONES);
+    all.addAll(AQUAMARINE_GEMSTONES);
+    all.addAll(OBSIDIAN_SHARD_GEMSTONES);
+    all.addAll(OPAL_GEMSTONES);
+    return all;
+  }
+
   public static List<Item> getRubyGemstones() {
     return RUBY_GEMSTONES;
   }

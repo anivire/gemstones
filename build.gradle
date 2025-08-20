@@ -18,6 +18,21 @@ repositories {
 	// for more information about repositories.
 }
 
+fabricApi {
+  configureDataGeneration() {
+    client = true
+    modId = "gemstones"
+  }
+}
+
+sourceSets {
+  main {
+    resources {
+      srcDir "src/main/resources"
+    }
+  }
+}
+
 loom {
 	splitEnvironmentSourceSets()
 
@@ -27,7 +42,6 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
-
 }
 
 dependencies {
