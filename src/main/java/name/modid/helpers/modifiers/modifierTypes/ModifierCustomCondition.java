@@ -1,6 +1,7 @@
 package name.modid.helpers.modifiers.modifierTypes;
 
 import java.util.ArrayList;
+
 import name.modid.Gemstones;
 import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.ModifierItemCaregory;
@@ -40,18 +41,18 @@ public class ModifierCustomCondition implements GemstoneModifier {
     if (this.conditionType == ConditionType.ENTITY_IN_WATER) {
       eventString.append(Text.literal("Water").formatted(Formatting.BLUE))
           .append(Text.literal("\uE005")
-              .styled(style -> style.withFont(Identifier.of("gemstones", "gemstone_sprite_icons")))
+              .styled(style -> style.withFont(Identifier.of("gemstones", "icons_font")))
               .formatted(Formatting.WHITE));
     } else if (this.conditionType == ConditionType.PLAYER_IN_WATER) {
       eventString.append(Text.literal("Water").formatted(Formatting.BLUE))
           .append(Text.literal("\uE005")
-              .styled(style -> style.withFont(Identifier.of("gemstones", "gemstone_sprite_icons")))
+              .styled(style -> style.withFont(Identifier.of("gemstones", "icons_font")))
               .formatted(Formatting.WHITE));
     }
 
     return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
         .append(Text.literal("\uE006").styled(
-            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
         .formatted(Formatting.GREEN)
         .append(Text.translatable(
             String.format("tooltip.gemstones.%s.%s_bonus", gemstoneType.toString().toLowerCase(),

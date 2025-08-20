@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "gemstones:item/obsidian_shard_gemstone"
+    "layer0": "gemstones:item/obsidian_shard_gemstone.png"
   }
 }

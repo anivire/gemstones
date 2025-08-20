@@ -48,7 +48,7 @@ public class ModifierAttribute implements GemstoneModifier {
     if (this.attr == EntityAttributes.GENERIC_MAX_HEALTH) {
       attributeBonusString
           .append(Text.literal("\uE001").styled(
-              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
           .formatted(Formatting.WHITE);
     }
 
@@ -59,7 +59,7 @@ public class ModifierAttribute implements GemstoneModifier {
 
     return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
         .append(Text.literal("\uE006").styled(
-            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
         .formatted(Formatting.GREEN)
         .append(Text.translatable(
             String.format("tooltip.gemstones.%s.%s_bonus",

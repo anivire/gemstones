@@ -41,7 +41,7 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
       if (modifierInstance.attr == EntityAttributes.GENERIC_MAX_HEALTH) {
         attributeBonus.append(Text.literal("\uE001")
             .styled(
-                style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons")))
+                style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font")))
             .formatted(Formatting.WHITE));
       }
 
@@ -52,7 +52,7 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
       modifierTexts
           .add(Text.empty()
               .append(Text.literal(pureValue > 0 ? "\uE006" : "\uE012").styled(
-                  style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons")))
+                  style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font")))
                   .formatted(pureValue > 0 ? Formatting.GREEN : Formatting.RED))
               .append(Text.literal(formattedValue)
                   .formatted(pureValue > 0 ? Formatting.GREEN : Formatting.RED)

@@ -8,11 +8,11 @@ import net.minecraft.util.Identifier;
 
 public enum IconsType {
   ABSORPTION_HALF_HEART("\uE004"), HALF_HEART("\uE001"), BLEEDING("\uE002"), GUARDIAN_SMITE(
-      "\uE003"), TIDE("\uE005"), BONUS_ARROW("\uE006"), LIGHTNING_BOLT("\uE007");
+      "\uE003"),
+  TIDE("\uE005"), BONUS_ARROW("\uE006"), LIGHTNING_BOLT("\uE007");
 
   private final String unicodeChar;
-  private static final Identifier FONT_IDENTIFIER =
-      Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons");
+  private static final Identifier FONT_IDENTIFIER = Identifier.of(Gemstones.MOD_ID, "icons_font");
 
   IconsType(String unicodeChar) {
     this.unicodeChar = unicodeChar;

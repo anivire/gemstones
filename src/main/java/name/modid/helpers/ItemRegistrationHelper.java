@@ -2,6 +2,7 @@ package name.modid.helpers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 import name.modid.Gemstones;
@@ -39,6 +40,14 @@ public final class ItemRegistrationHelper {
       Item.Settings settings) {
     final RegistryKey<Item> registryKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(Gemstones.MOD_ID, path));
     return Registry.register(Registries.ITEM, registryKey, factory.apply(settings));
+  }
+
+  public static List<Item> getAllItems() {
+    List<Item> all = new ArrayList<>();
+    all.addAll(GemstonesRegistrationHelper.getAllGemstones());
+    all.add(STONE_GEODE);
+    all.add(DEEPSLATE_GEODE);
+    return all;
   }
 
   public static void initialize() {

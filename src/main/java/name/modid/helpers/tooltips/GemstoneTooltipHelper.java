@@ -34,12 +34,12 @@ public class GemstoneTooltipHelper {
 
   public static Text getGemstoneSprite(GemstoneType gemType) {
     return Text.literal(GemstoneType.getGemstoneLiteral(gemType))
-        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_font")));
+        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sockets_font")));
   }
 
   public static Text getGemstoneRaritySprite(GemstoneRarity rarityType) {
     return Text.literal(GemstoneRarity.getRarityLiteral(rarityType))
-        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "rarity_sprite_font")));
+        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "rarity_font")));
   }
 
   public static Text getGemstoneSocketedRow(Gemstone[] gemstones) {

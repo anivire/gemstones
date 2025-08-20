@@ -52,27 +52,27 @@ public class ModifierOnHitEffect implements GemstoneModifier {
     if (this.effect == EffectRegistrationHelper.BLEEDING_EFFECT) {
       effectString.append(Text.literal("Bleeding").formatted(Formatting.RED))
           .append(Text.literal("\uE002").styled(
-              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
           .formatted(Formatting.WHITE);
     } else if (this.effect == EffectRegistrationHelper.GUARDIAN_SMITE_EFFECT) {
       effectString.append(Text.literal("Guardian Smite").formatted(Formatting.RED))
           .append(Text.literal("\uE003").styled(
-              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
           .formatted(Formatting.WHITE);
     } else if (this.effect == EffectRegistrationHelper.HARVEST_MARK_EFFECT) {
       effectString.append(Text.literal("Harvest Mark").formatted(Formatting.GREEN))
           .append(Text.literal("\uE009").styled(
-              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
           .formatted(Formatting.WHITE);
     } else if (this.effect == StatusEffects.SLOWNESS) {
       effectString.append(Text.literal("Slowness").formatted(Formatting.RED))
           .append(Text.literal("\uE010").styled(
-              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
           .formatted(Formatting.WHITE);
     } else if (this.effect == EffectRegistrationHelper.STUNNED_EFFECT) {
       effectString.append(Text.literal("Stunned").formatted(Formatting.RED))
           .append(Text.literal("\uE011").styled(
-              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
           .formatted(Formatting.WHITE);
     } else {
       StatusEffect e = this.effect.value();
@@ -81,7 +81,7 @@ public class ModifierOnHitEffect implements GemstoneModifier {
 
     return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
         .append(Text.literal("\uE006").styled(
-            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sprite_icons"))))
+            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
         .formatted(Formatting.GREEN)
         .append(Text.translatable(
             String.format("tooltip.gemstones.%s.%s_bonus", gemstoneType.toString().toLowerCase(),
