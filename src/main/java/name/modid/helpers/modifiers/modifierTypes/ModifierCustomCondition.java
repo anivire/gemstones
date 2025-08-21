@@ -31,23 +31,16 @@ public class ModifierCustomCondition implements GemstoneModifier {
 
   public MutableText getTooltipString(GemstoneRarity gemstoneRarityType,
       Boolean withCategoryString) {
-    Object v = value.get(gemstoneRarityType.getValue()) * 100;
+    boolean isPercent = this.conditionType != ConditionType.POTION_DURATION ? true : false;
+    Object v = value.get(gemstoneRarityType.getValue()) * (isPercent ? 100 : 1);
     String tooltipCategoryType = withCategoryString
         ? String.format("tooltip.gemstones.%s_type", itemType.toString().toLowerCase())
         : "tooltip.gemstones.without_type";
     MutableText resultTooltip = Text.empty();
     MutableText eventString = Text.empty();
 
-    if (this.conditionType == ConditionType.ENTITY_IN_WATER) {
-      eventString.append(Text.literal("Water").formatted(Formatting.BLUE))
-          .append(Text.literal("\uE005")
-              .styled(style -> style.withFont(Identifier.of("gemstones", "icons_font")))
-              .formatted(Formatting.WHITE));
-    } else if (this.conditionType == ConditionType.PLAYER_IN_WATER) {
-      eventString.append(Text.literal("Water").formatted(Formatting.BLUE))
-          .append(Text.literal("\uE005")
-              .styled(style -> style.withFont(Identifier.of("gemstones", "icons_font")))
-              .formatted(Formatting.WHITE));
+    if (this.conditionType == ConditionType.POTION_DURATION) {
+
     }
 
     return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
@@ -57,7 +50,8 @@ public class ModifierCustomCondition implements GemstoneModifier {
         .append(Text.translatable(
             String.format("tooltip.gemstones.%s.%s_bonus", gemstoneType.toString().toLowerCase(),
                 itemType.toString().toLowerCase()),
-            Text.literal(String.format("%.0f", v) + "%").formatted(Formatting.GREEN), eventString)
+            Text.literal(String.format("%.0f", v) + (isPercent ? "%" : " seconds")).formatted(Formatting.GREEN),
+            eventString)
             .formatted(Formatting.GOLD));
   }
 

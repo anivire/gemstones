@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.gson.annotations.SerializedName;
 
 import name.modid.helpers.modifiers.ModifierItemCaregory;
+import name.modid.helpers.modifiers.modifierTypes.ConditionType;
 import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
@@ -27,7 +28,9 @@ public class ModifiersConfig {
     @SerializedName("ATTRIBUTE")
     ATTRIBUTE,
     @SerializedName("ON_HIT")
-    ON_HIT
+    ON_HIT,
+    @SerializedName("CUSTOM_CONDITION")
+    CUSTOM_CONDITION
   }
 
   public static class ModifierConfigEntry {
@@ -74,5 +77,14 @@ public class ModifiersConfig {
     public List<Double> chanceLevels;
     @SerializedName("event_type")
     public EventType eventType;
+  }
+
+  public static class CustomConditionConfig extends ModifierConfigEntry {
+    @SerializedName("value_levels")
+    public List<Double> valueLevels;
+    @SerializedName("additional_value_levels")
+    public List<Double> additionalValueLevels;
+    @SerializedName("condition_type")
+    public ConditionType conditionType;
   }
 }

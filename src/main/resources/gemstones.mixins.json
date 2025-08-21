@@ -9,7 +9,11 @@
     "PlayerEntityMixin",
     "PersistentProjectileEntityMixin",
     "LivingEntityMixin",
-    "CrossbowItemMixin"
+    "CrossbowItemMixin",
+    "BrewingStandScreenHandlerMixin",
+    "BrewingStandScreenHandlerAccessor",
+    "BrewingStandBlockEntityMixin",
+    "BrewingStandAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -8,6 +8,7 @@ import name.modid.Gemstones;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.items.gemstones.AquamarineGemstoneItem;
 import name.modid.items.gemstones.CelestineGemstoneItem;
+import name.modid.items.gemstones.JadeGemstoneItem;
 import name.modid.items.gemstones.ObsidianShardGemstoneItem;
 import name.modid.items.gemstones.OpalGemstoneItem;
 import name.modid.items.gemstones.RubyGemstoneItem;
@@ -38,6 +39,7 @@ public class GemstonesRegistrationHelper {
   private static final List<Item> AQUAMARINE_GEMSTONES = new ArrayList<>();
   private static final List<Item> OBSIDIAN_SHARD_GEMSTONES = new ArrayList<>();
   private static final List<Item> OPAL_GEMSTONES = new ArrayList<>();
+  private static final List<Item> JADE_GEMSTONES = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -108,6 +110,13 @@ public class GemstonesRegistrationHelper {
           settings -> new OpalGemstoneItem(settings, rarity),
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
       OPAL_GEMSTONES.add(opalGemstone);
+
+      // JADE
+      Item jadeGemstone = ItemRegistrationHelper.register(
+          "jade_gemstone_" + rarityName,
+          settings -> new JadeGemstoneItem(settings, rarity),
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
+      JADE_GEMSTONES.add(jadeGemstone);
     }
   }
 
@@ -120,6 +129,7 @@ public class GemstonesRegistrationHelper {
     AQUAMARINE_GEMSTONES.forEach(entries::add);
     OBSIDIAN_SHARD_GEMSTONES.forEach(entries::add);
     OPAL_GEMSTONES.forEach(entries::add);
+    JADE_GEMSTONES.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -132,6 +142,7 @@ public class GemstonesRegistrationHelper {
     all.addAll(AQUAMARINE_GEMSTONES);
     all.addAll(OBSIDIAN_SHARD_GEMSTONES);
     all.addAll(OPAL_GEMSTONES);
+    all.addAll(JADE_GEMSTONES);
     return all;
   }
 
@@ -165,5 +176,9 @@ public class GemstonesRegistrationHelper {
 
   public static List<Item> getOpalGemstones() {
     return OPAL_GEMSTONES;
+  }
+
+  public static List<Item> getJadeGemstones() {
+    return JADE_GEMSTONES;
   }
 }

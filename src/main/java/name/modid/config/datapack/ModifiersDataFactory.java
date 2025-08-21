@@ -8,14 +8,17 @@ import org.slf4j.Logger;
 
 import name.modid.Gemstones;
 import name.modid.config.datapack.ModifiersConfig.AttributeConfig;
+import name.modid.config.datapack.ModifiersConfig.CustomConditionConfig;
 import name.modid.config.datapack.ModifiersConfig.MultiplyAttributeConfig;
 import name.modid.config.datapack.ModifiersConfig.OnBlockBreakConfig;
 import name.modid.config.datapack.ModifiersConfig.OnHitConfig;
 import name.modid.config.datapack.ModifiersConfig.OnHitEffectConfig;
 import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.ModifierItemCaregory;
+import name.modid.helpers.modifiers.modifierTypes.ConditionType;
 import name.modid.helpers.modifiers.modifierTypes.EventType;
 import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
+import name.modid.helpers.modifiers.modifierTypes.ModifierCustomCondition;
 import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
@@ -280,6 +283,40 @@ public class ModifiersDataFactory {
                 gemstoneType);
           } else {
             modifierInstance = new ModifierOnHit(new ArrayList<Double>(onHitConfig.chanceLevels), eventType, category,
+                gemstoneType);
+          }
+
+          if (modifierInstance != null) {
+            LOGGER.debug(
+                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
+                modifierInstance.getClass().getSimpleName(),
+                category,
+                gemstoneType);
+            modifiers.put(category, modifierInstance);
+          }
+          break;
+        }
+        case CUSTOM_CONDITION: {
+          if (!(entry instanceof CustomConditionConfig customConditionConfig)) {
+            LOGGER.warn(
+                "[ModifiersConfig] Expected CustomConditionConfig for type {} but got {}. Skipping.",
+                entry.type,
+                entry.getClass().getSimpleName());
+            return;
+          }
+
+          ConditionType conditionType = customConditionConfig.conditionType;
+
+          if (conditionType == null) {
+            LOGGER.warn(
+                "Failed to retrieve ConditionType for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
+                customConditionConfig.conditionType,
+                category,
+                gemstoneType);
+          } else {
+            modifierInstance = new ModifierCustomCondition(new ArrayList<Double>(customConditionConfig.valueLevels),
+                new ArrayList<Double>(customConditionConfig.additionalValueLevels), customConditionConfig.conditionType,
+                category,
                 gemstoneType);
           }
 

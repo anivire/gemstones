@@ -80,6 +80,15 @@
       "chars": [
         "\uE009"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/gemstone_socket_jade.png",
+      "height": 26,
+      "ascent": 13,
+      "chars": [
+        "\uE010"
+      ]
     }
   ]
 }

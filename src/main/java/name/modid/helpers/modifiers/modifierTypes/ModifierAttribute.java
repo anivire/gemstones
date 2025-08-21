@@ -39,33 +39,50 @@ public class ModifierAttribute implements GemstoneModifier {
 
   public MutableText getTooltipString(GemstoneRarity gemstoneRarityType,
       Boolean withCategoryString) {
-    Double value = modifierValuesList.get(gemstoneRarityType.getValue());
     String tooltipCategoryType = withCategoryString
-        ? String.format("tooltip.gemstones.%s_type", itemType.toString().toLowerCase())
+        ? String.format("tooltip.gemstones.%s_type",
+            this.itemType.toString().toLowerCase())
         : "tooltip.gemstones.without_type";
-    MutableText attributeBonusString = Text.empty();
 
+    MutableText resultTooltip = Text.empty();
+
+    Double pureValue = modifierValuesList.get(gemstoneRarityType.getValue());
+    Double value = Math.abs(pureValue);
+
+    MutableText attributeBonus = Text.empty();
     if (this.attr == EntityAttributes.GENERIC_MAX_HEALTH) {
-      attributeBonusString
-          .append(Text.literal("\uE001").styled(
-              style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
-          .formatted(Formatting.WHITE);
+      attributeBonus.append(Text.literal("\uE001")
+          .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font")))
+          .formatted(Formatting.WHITE));
     }
 
     String percent = this.operation == Operation.ADD_VALUE ? "" : "%";
     Double adjustedValue = this.operation == Operation.ADD_VALUE ? value : value * 100;
     String formattedValue = formatValue(adjustedValue) + percent;
-    MutableText resultTooltip = Text.empty();
 
-    return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
-        .append(Text.literal("\uE006").styled(
-            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
-        .formatted(Formatting.GREEN)
-        .append(Text.translatable(
-            String.format("tooltip.gemstones.%s.%s_bonus",
-                this.gemstoneType.toString().toLowerCase(), this.itemType.toString().toLowerCase()),
-            Text.literal(formattedValue).formatted(Formatting.GREEN).append(attributeBonusString))
-            .formatted(Formatting.GOLD));
+    boolean isPositive = pureValue > 0;
+    Formatting valueColor = this.attr == EntityAttributes.GENERIC_SCALE
+        ? !isPositive ? Formatting.GREEN : Formatting.RED
+        : isPositive ? Formatting.GREEN : Formatting.RED;
+    String icon = isPositive ? "\uE006" : "\uE012";
+
+    MutableText modifierText = Text.empty()
+        .append(Text.literal(icon)
+            .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font")))
+            .formatted(valueColor))
+        .append(Text.literal(formattedValue)
+            .formatted(valueColor)
+            .append(attributeBonus));
+
+    String translationKey = String.format("tooltip.gemstones.%s.%s_bonus",
+        this.gemstoneType.toString().toLowerCase(),
+        this.itemType.toString().toLowerCase());
+
+    resultTooltip
+        .append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
+        .append(Text.translatable(translationKey, modifierText).formatted(Formatting.GOLD));
+
+    return resultTooltip;
   }
 
   private String formatValue(double value) {

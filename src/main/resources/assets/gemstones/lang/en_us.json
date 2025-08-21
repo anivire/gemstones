@@ -103,6 +103,16 @@
   "tooltip.gemstones.opal.ranged_bonus": "%s arrow speed but %s pull speed",
   "tooltip.gemstones.opal.tools_bonus": "%s loot count but %s mining speed",
   "tooltip.gemstones.opal.armor_bonus": "%s evasion chance",
+  
+  "item.gemstones.jade_gemstone_common": "Jade Gemstone",
+  "item.gemstones.jade_gemstone_uncommon": "Jade Gemstone",
+  "item.gemstones.jade_gemstone_rare": "Jade Gemstone",
+  "item.gemstones.jade_gemstone_legendary": "Jade Gemstone",
+
+  "tooltip.gemstones.jade.melee_bonus": "%s to inflict %s",
+  "tooltip.gemstones.jade.ranged_bonus": "%s to inflict %s",
+  "tooltip.gemstones.jade.tools_bonus": "while holding %s player model scale",
+  "tooltip.gemstones.jade.armor_bonus": "%s for potion duration after brewing",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",

@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import name.modid.config.datapack.ModifiersConfig.AttributeConfig;
+import name.modid.config.datapack.ModifiersConfig.CustomConditionConfig;
 import name.modid.config.datapack.ModifiersConfig.ModifierConfigEntry;
 import name.modid.config.datapack.ModifiersConfig.ModifierType;
 import name.modid.config.datapack.ModifiersConfig.MultiplyAttributeConfig;
@@ -51,6 +52,8 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
         return context.deserialize(jsonObject, AttributeConfig.class);
       case ON_HIT:
         return context.deserialize(jsonObject, OnHitConfig.class);
+      case CUSTOM_CONDITION:
+        return context.deserialize(jsonObject, CustomConditionConfig.class);
       default:
         throw new JsonParseException("Unhandled modifier type: " + typeString + " in JSON: " + json);
     }
