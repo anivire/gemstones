@@ -6,14 +6,19 @@ import java.util.Map;
 
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.components.Gemstone;
-import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
-import name.modid.helpers.modifiers.modifierTypes.ModifierCustomCondition;
-import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.category.ModifierAreaEffect;
+import name.modid.helpers.modifiers.category.ModifierAttribute;
+import name.modid.helpers.modifiers.category.ModifierCustomCondition;
+import name.modid.helpers.modifiers.category.ModifierMultiplyAttribute;
+import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
+import name.modid.helpers.modifiers.category.ModifierOnDamage;
+import name.modid.helpers.modifiers.category.ModifierOnFirstHit;
+import name.modid.helpers.modifiers.category.ModifierOnHit;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.instance.GemstoneModifier;
+import name.modid.helpers.modifiers.instance.ModifierData;
+import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.entity.EquipmentSlot;
@@ -29,13 +34,13 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
 
 public class ModifierHelper {
-  public static Map<ModifierItemCaregory, GemstoneModifier> getGemstoneModifiers(
+  public static Map<ModifierItemCategory, GemstoneModifier> getGemstoneModifiers(
       GemstoneType gemstoneType, Item item) {
     if (gemstoneType == GemstoneType.EMPTY || gemstoneType == GemstoneType.LOCKED)
       return null;
 
     ModifierData modifiersData = ModifierRegistration.MODIFIER_REGISTRY().get(gemstoneType);
-    Map<ModifierItemCaregory, GemstoneModifier> modifiers = modifiersData.getModifiers();
+    Map<ModifierItemCategory, GemstoneModifier> modifiers = modifiersData.getModifiers();
 
     return modifiers;
   }
@@ -45,7 +50,7 @@ public class ModifierHelper {
       return null;
 
     ModifierData modifiersData = ModifierRegistration.MODIFIER_REGISTRY().get(gemstoneType);
-    Map<ModifierItemCaregory, GemstoneModifier> modifiers = modifiersData.getModifiers();
+    Map<ModifierItemCategory, GemstoneModifier> modifiers = modifiersData.getModifiers();
     GemstoneModifier modifier = modifiers.get(getModifieritemSlot(item));
 
     return modifier;
@@ -75,24 +80,24 @@ public class ModifierHelper {
     }
   }
 
-  public static ModifierItemCaregory getModifieritemSlot(Item item) {
+  public static ModifierItemCategory getModifieritemSlot(Item item) {
     if (item instanceof SwordItem) {
-      return ModifierItemCaregory.MELEE;
+      return ModifierItemCategory.MELEE;
     }
 
     if (item instanceof BowItem || item instanceof CrossbowItem) {
-      return ModifierItemCaregory.RANGED;
+      return ModifierItemCategory.RANGED;
     }
 
     if (item instanceof AxeItem || item instanceof PickaxeItem || item instanceof ShovelItem) {
-      return ModifierItemCaregory.TOOLS;
+      return ModifierItemCategory.TOOLS;
     }
 
     if (item instanceof ArmorItem) {
-      return ModifierItemCaregory.ARMOR;
+      return ModifierItemCategory.ARMOR;
     }
 
-    return ModifierItemCaregory.TOOLS;
+    return ModifierItemCategory.TOOLS;
   }
 
   public static ArrayList<ModifierAttribute> getAttributeModifiers(ItemStack itemStack) {
@@ -144,6 +149,25 @@ public class ModifierHelper {
     return modifiers;
   }
 
+  public static ArrayList<ModifierOnFirstHit> getOnHitFirstModifiers(ItemStack itemStack) {
+    ArrayList<ModifierOnFirstHit> modifiers = new ArrayList<>();
+    Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
+
+    for (Gemstone gem : gemstones) {
+      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
+        GemstoneModifier modifier = getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
+        if (modifier instanceof ModifierOnFirstHit modifierOnFirstHit) {
+          ModifierOnFirstHit newModifier = new ModifierOnFirstHit(modifierOnFirstHit.values,
+              modifierOnFirstHit.eventType, modifierOnFirstHit.itemType, modifierOnFirstHit.gemstoneType);
+          newModifier.setRarityType(gem.gemstoneRarityType());
+          modifiers.add(newModifier);
+        }
+      }
+    }
+
+    return modifiers;
+  }
+
   public static ArrayList<ModifierOnHitEffect> getOnHitEffectModifiers(ItemStack itemStack) {
     ArrayList<ModifierOnHitEffect> modifiers = new ArrayList<>();
     Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
@@ -157,6 +181,27 @@ public class ModifierHelper {
               modifierOnHitEffect.amplifier, modifierOnHitEffect.itemType,
               modifierOnHitEffect.effect, modifierOnHitEffect.isStacking,
               modifierOnHitEffect.maxStackCount, modifierOnHitEffect.gemstoneType);
+          newModifier.setRarityType(gem.gemstoneRarityType());
+          modifiers.add(newModifier);
+        }
+      }
+    }
+
+    return modifiers;
+  }
+
+  public static ArrayList<ModifierAreaEffect> getAreaEffectModifiers(ItemStack itemStack) {
+    ArrayList<ModifierAreaEffect> modifiers = new ArrayList<>();
+    Gemstone[] gemstones = GemstoneSocketingHelper.getGemstones(itemStack);
+
+    for (Gemstone gem : gemstones) {
+      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
+        GemstoneModifier modifier = getGemstoneModifierForItem(gem.gemstoneType(), itemStack.getItem());
+        if (modifier instanceof ModifierAreaEffect modifierAreaEffect) {
+          ModifierAreaEffect newModifier = new ModifierAreaEffect(modifierAreaEffect.radiusLevels,
+              modifierAreaEffect.amplifier, modifierAreaEffect.duration,
+              modifierAreaEffect.itemType, modifierAreaEffect.notMe,
+              modifierAreaEffect.effect, modifierAreaEffect.gemstoneType);
           newModifier.setRarityType(gem.gemstoneRarityType());
           modifiers.add(newModifier);
         }

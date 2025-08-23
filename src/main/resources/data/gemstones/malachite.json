@@ -1,0 +1,33 @@
+{
+  "gemstone_type": "MALACHITE",
+  "modifiers": {
+    "MELEE": {
+      "type": "ON_FIRST_HIT",
+      "value_levels": [0.1, 0.15, 0.25, 0.3],
+      "event_type": "ADDITIONAL_DAMAGE"
+    },
+    "RANGED": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.06, 0.12, 0.18, 0.24],
+      "amplifier": 0,
+      "effect_id": "gemstones:detonate",
+      "duration": 10,
+      "is_stacking": false,
+      "max_stack_count": 0
+    },
+    "TOOLS": {
+      "type": "ON_BLOCK_BREAK",
+      "chance_levels": [0.03, 0.055, 0.1, 0.155],
+      "value_levels": [0.0, 0.0, 0.0, 0.0],
+      "event_type": "INCREASE_GEODES_DROP"
+    },
+    "ARMOR": {
+      "type": "AREA_EFFECT",
+      "effect_id": "gemstones:plague",
+      "radius_levels": [1.0, 2.0, 3.0, 4.0],
+      "amplifier": 0,
+      "duration": 10,
+      "not_me": true
+    }
+  }
+}

@@ -1,4 +1,4 @@
-package name.modid.helpers.modifiers.modifierTypes;
+package name.modid.helpers.modifiers.category;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import name.modid.Gemstones;
-import name.modid.helpers.modifiers.GemstoneModifier;
+import name.modid.helpers.modifiers.instance.GemstoneModifier;
+import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
@@ -30,7 +31,6 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
             instances.get(0).itemType.toString().toLowerCase())
         : "tooltip.gemstones.without_type";
     MutableText resultTooltip = Text.empty();
-
     ArrayList<MutableText> modifierTexts = new ArrayList<>();
 
     for (ModifierAttribute modifierInstance : instances) {
@@ -84,4 +84,8 @@ public class ModifierMultiplyAttribute implements GemstoneModifier {
 
   public void setRarityType(GemstoneRarity rarityType) {
   }
+
+  public ModifierItemCategory getItemCategory() {
+    return this.instances.get(0).itemType;
+  };
 }

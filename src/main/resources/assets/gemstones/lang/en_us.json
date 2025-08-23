@@ -113,11 +113,23 @@
   "tooltip.gemstones.jade.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.jade.tools_bonus": "while holding %s player model scale",
   "tooltip.gemstones.jade.armor_bonus": "%s for potion duration after brewing",
+  
+  "item.gemstones.malachite_gemstone_common": "Malachite Gemstone",
+  "item.gemstones.malachite_gemstone_uncommon": "Malachite Gemstone",
+  "item.gemstones.malachite_gemstone_rare": "Malachite Gemstone",
+  "item.gemstones.malachite_gemstone_legendary": "Malachite Gemstone",
+
+  "tooltip.gemstones.malachite.melee_bonus": "%s bonus damage on first hit",
+  "tooltip.gemstones.malachite.ranged_bonus": "%s to inflict %s",
+  "tooltip.gemstones.malachite.tools_bonus": "%s loot geodes from ores",
+  "tooltip.gemstones.malachite.armor_bonus": "always inflict %s in %s radius",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
   "effect.gemstones.harvest_mark": "Harvest Mark",
   "effect.gemstones.stunned": "Stunned",
+  "effect.gemstones.detonate": "Detonate",
+  "effect.gemstones.plague": "Plague",
 
   "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",

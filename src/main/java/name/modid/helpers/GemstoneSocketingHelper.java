@@ -13,19 +13,21 @@ import name.modid.effects.EffectRegistrationHelper;
 import name.modid.helpers.components.ComponentsHelper;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.components.GemstoneSlots;
-import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.modifierTypes.EventType;
-import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
-import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.category.ModifierAttribute;
+import name.modid.helpers.modifiers.category.ModifierMultiplyAttribute;
+import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
+import name.modid.helpers.modifiers.category.ModifierOnDamage;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.instance.GemstoneModifier;
+import name.modid.helpers.modifiers.type.EventType;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import name.modid.items.gemstones.GemstoneItem;
 import name.modid.particles.ParticlesRegistrationHelper;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
@@ -50,6 +52,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GemstoneSocketingHelper {
@@ -75,7 +78,12 @@ public class GemstoneSocketingHelper {
   }
 
   public static Gemstone[] getGemstones(ItemStack itemStack) {
-    return itemStack.get(ComponentsHelper.GEMSTONES).gemstones();
+    if (itemStack == null || itemStack.isEmpty()) {
+      return new Gemstone[0];
+    }
+
+    GemstoneSlots slots = itemStack.get(ComponentsHelper.GEMSTONES);
+    return slots != null ? slots.gemstones() : new Gemstone[0];
   }
 
   public static GemstoneSlots getGemstonesSlot(ItemStack itemStack) {
@@ -199,7 +207,7 @@ public class GemstoneSocketingHelper {
       EquipmentSlot slot = ModifierHelper.getEquipmentSlot(item);
 
       Identifier modifierId = Identifier.of(Gemstones.MOD_ID,
-          String.format("%s.%s", mod.gemstoneType.toString().toLowerCase(),
+          String.format("%s.%s.%s", mod.gemstoneType.toString().toLowerCase(),
               mod.itemType.toString().toLowerCase(), slot.name().toLowerCase()));
 
       EntityAttributeModifier scaledGemstoneModifier = new EntityAttributeModifier(modifierId, totalValue,
@@ -349,7 +357,7 @@ public class GemstoneSocketingHelper {
   }
 
   public static void applyOnBlockBreakModifiers(ArrayList<ModifierOnBlockBreak> gemstoneModifiers,
-      PlayerEntity player, World world) {
+      PlayerEntity player, World world, BlockState state, BlockPos pos) {
     Map<EventType, List<ModifierOnBlockBreak>> eventToModifiers = new HashMap<>();
     for (ModifierOnBlockBreak mod : gemstoneModifiers) {
       eventToModifiers.computeIfAbsent(mod.eventType, k -> new ArrayList<>()).add(mod);
@@ -359,25 +367,55 @@ public class GemstoneSocketingHelper {
       EventType eventType = entry.getKey();
       List<ModifierOnBlockBreak> modifiers = entry.getValue();
 
-      if (eventType == EventType.EXTRA_HEALTH) {
-        double combinedProcChance = 0.0;
-        int maxStack = 0;
-        double valuePerProc = 0.0;
+      switch (eventType) {
+        case EXTRA_HEALTH: {
+          double combinedProcChance = 0.0;
+          int maxStack = 0;
+          double valuePerProc = 0.0;
 
-        for (ModifierOnBlockBreak m : modifiers) {
-          GemstoneRarity rarity = m.rarityType;
-          combinedProcChance += m.value.get(rarity.getValue());
-          maxStack += m.additionalValue.get(rarity.getValue());
-          valuePerProc = 1.0;
+          for (ModifierOnBlockBreak m : modifiers) {
+            GemstoneRarity rarity = m.rarityType;
+            combinedProcChance += m.value.get(rarity.getValue());
+            maxStack += m.additionalValue.get(rarity.getValue());
+            valuePerProc = 1.0;
+          }
+
+          int buffDuration = maxStack < 3 ? 1800 : maxStack <= 5 ? 3600 : 4800;
+
+          if (world.getRandom().nextDouble() < combinedProcChance) {
+            float current = player.getAbsorptionAmount();
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, buffDuration,
+                (int) maxStack - 1, false, false, true));
+            player.setAbsorptionAmount(current + (float) valuePerProc);
+          }
+
+          break;
         }
 
-        int buffDuration = maxStack < 3 ? 1800 : maxStack <= 5 ? 3600 : 4800;
+        case INCREASE_GEODES_DROP: {
+          double combinedProcChance = 0.0;
 
-        if (world.getRandom().nextDouble() < combinedProcChance) {
-          float current = player.getAbsorptionAmount();
-          player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, buffDuration,
-              (int) maxStack - 1, false, false, true));
-          player.setAbsorptionAmount(current + (float) valuePerProc);
+          if (!(state.isIn(TagsRegistrationHelper.ALL_ORES))) {
+            break;
+          }
+
+          for (ModifierOnBlockBreak m : modifiers) {
+            GemstoneRarity rarity = m.rarityType;
+            combinedProcChance += m.value.get(rarity.getValue());
+          }
+
+          if (world.getRandom().nextDouble() < combinedProcChance) {
+            ItemStack geode = state.isIn(TagsRegistrationHelper.DEEPSLATE_ORES)
+                ? new ItemStack(ItemRegistrationHelper.DEEPSLATE_GEODE)
+                : new ItemStack(ItemRegistrationHelper.STONE_GEODE);
+
+            Block.dropStack(world, pos, geode);
+          }
+
+          break;
+        }
+        default: {
+          break;
         }
       }
     }

@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class EventRegistrationHelper {
   public static void initialize() {
@@ -17,5 +18,11 @@ public class EventRegistrationHelper {
     ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnDamage::setupEvent);
     ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnHit::setupEvent);
     ServerLivingEntityEvents.AFTER_DEATH.register(EventHarvestMark::setupEvent);
+    ServerLivingEntityEvents.AFTER_DEATH.register(EventDetonate::setupEvent);
+    ServerTickEvents.END_SERVER_TICK.register(server -> {
+      for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+        EventAreaEffect.setupEvent(player);
+      }
+    });
   }
 }

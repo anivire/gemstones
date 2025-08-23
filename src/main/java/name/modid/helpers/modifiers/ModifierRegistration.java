@@ -3,6 +3,8 @@ package name.modid.helpers.modifiers;
 import java.util.HashMap;
 import java.util.Map;
 
+import name.modid.helpers.modifiers.instance.ModifierData;
+import name.modid.helpers.modifiers.instance.UniversalGemstoneModifierData;
 import name.modid.helpers.types.GemstoneType;
 
 public class ModifierRegistration {

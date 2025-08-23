@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import name.modid.config.datapack.ModifiersDataLoader;
 import name.modid.effects.EffectRegistrationHelper;
 import name.modid.helpers.ItemRegistrationHelper;
+import name.modid.helpers.TagsRegistrationHelper;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
 import name.modid.helpers.components.ComponentsHelper;
 import name.modid.helpers.events.EventRegistrationHelper;
@@ -26,6 +27,7 @@ public class Gemstones implements ModInitializer {
 
     AttributeRegistrationHelper.initialize();
     ComponentsHelper.initialize();
+    TagsRegistrationHelper.initialize();
     EventRegistrationHelper.initialize();
     ItemRegistrationHelper.initialize();
     EffectRegistrationHelper.initialize();

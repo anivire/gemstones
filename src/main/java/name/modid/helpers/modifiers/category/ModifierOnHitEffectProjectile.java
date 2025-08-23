@@ -1,11 +1,11 @@
-package name.modid.helpers.modifiers.modifierTypes;
+package name.modid.helpers.modifiers.category;
 
 import java.util.ArrayList;
 
 import name.modid.Gemstones;
 import name.modid.effects.EffectRegistrationHelper;
-import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.modifiers.ModifierItemCaregory;
+import name.modid.helpers.modifiers.instance.GemstoneModifier;
+import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.effect.StatusEffect;
@@ -18,7 +18,7 @@ import net.minecraft.util.Identifier;
 
 public class ModifierOnHitEffectProjectile implements GemstoneModifier {
   public ArrayList<Double> inflitChance = new ArrayList<Double>();
-  public ModifierItemCaregory itemType;
+  public ModifierItemCategory itemType;
   public int duration;
   public int amplifier;
   public RegistryEntry<StatusEffect> effect;
@@ -28,7 +28,7 @@ public class ModifierOnHitEffectProjectile implements GemstoneModifier {
   public GemstoneRarity rarityType;
 
   public ModifierOnHitEffectProjectile(ArrayList<Double> inflitChance, int duration, int amplifier,
-      ModifierItemCaregory itemType, RegistryEntry<StatusEffect> effect, boolean isStacking,
+      ModifierItemCategory itemType, RegistryEntry<StatusEffect> effect, boolean isStacking,
       int maxStackCount, GemstoneType gemstoneType) {
     this.inflitChance = inflitChance;
     this.duration = duration;
@@ -101,4 +101,8 @@ public class ModifierOnHitEffectProjectile implements GemstoneModifier {
   public void setRarityType(GemstoneRarity rarityType) {
     this.rarityType = rarityType;
   }
+
+  public ModifierItemCategory getItemCategory() {
+    return this.itemType;
+  };
 }

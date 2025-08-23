@@ -10,9 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.modifierTypes.EventType;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.category.ModifierOnHit;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.type.EventType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;

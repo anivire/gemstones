@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.modifierTypes.ConditionType;
-import name.modid.helpers.modifiers.modifierTypes.ModifierCustomCondition;
+import name.modid.helpers.modifiers.category.ModifierCustomCondition;
+import name.modid.helpers.modifiers.type.ConditionType;
 import name.modid.utils.BrewingStandBlockEntityAccess;
 import name.modid.utils.PotionUtil;
 import net.minecraft.block.entity.BrewingStandBlockEntity;

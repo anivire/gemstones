@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnDamage;
+import name.modid.helpers.modifiers.category.ModifierOnDamage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;

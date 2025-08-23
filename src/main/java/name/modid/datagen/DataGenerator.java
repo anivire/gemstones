@@ -9,5 +9,6 @@ public class DataGenerator implements DataGeneratorEntrypoint {
     FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
     pack.addProvider(ModelProvider::new);
+    pack.addProvider(BlockTagProvider::new);
   }
 }

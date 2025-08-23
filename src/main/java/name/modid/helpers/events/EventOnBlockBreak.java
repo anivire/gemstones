@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
+import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,6 +22,6 @@ public class EventOnBlockBreak {
       return;
     }
 
-    GemstoneSocketingHelper.applyOnBlockBreakModifiers(modifiers, player, world);
+    GemstoneSocketingHelper.applyOnBlockBreakModifiers(modifiers, player, world, state, pos);
   }
 }

@@ -1,10 +1,11 @@
-package name.modid.helpers.modifiers.modifierTypes;
+package name.modid.helpers.modifiers.category;
 
 import java.util.ArrayList;
 
 import name.modid.Gemstones;
-import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.modifiers.ModifierItemCaregory;
+import name.modid.helpers.modifiers.instance.GemstoneModifier;
+import name.modid.helpers.modifiers.type.ConditionType;
+import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.text.MutableText;
@@ -16,12 +17,12 @@ public class ModifierCustomCondition implements GemstoneModifier {
   public ArrayList<Double> value = new ArrayList<Double>();
   public ArrayList<Double> additionalValue = new ArrayList<Double>();
   public ConditionType conditionType;
-  public ModifierItemCaregory itemType;
+  public ModifierItemCategory itemType;
   public GemstoneType gemstoneType;
   public GemstoneRarity rarityType;
 
   public ModifierCustomCondition(ArrayList<Double> value, ArrayList<Double> additionalValue,
-      ConditionType conditionType, ModifierItemCaregory itemType, GemstoneType gemstoneType) {
+      ConditionType conditionType, ModifierItemCategory itemType, GemstoneType gemstoneType) {
     this.value = value;
     this.additionalValue = new ArrayList<Double>(additionalValue);
     this.itemType = itemType;
@@ -66,4 +67,8 @@ public class ModifierCustomCondition implements GemstoneModifier {
   public void setRarityType(GemstoneRarity rarityType) {
     this.rarityType = rarityType;
   }
+
+  public ModifierItemCategory getItemCategory() {
+    return this.itemType;
+  };
 }

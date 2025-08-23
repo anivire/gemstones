@@ -1,10 +1,11 @@
-package name.modid.helpers.modifiers.modifierTypes;
+package name.modid.helpers.modifiers.category;
 
 import java.util.ArrayList;
 
 import name.modid.Gemstones;
-import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.modifiers.ModifierItemCaregory;
+import name.modid.helpers.modifiers.instance.GemstoneModifier;
+import name.modid.helpers.modifiers.type.EventType;
+import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.text.MutableText;
@@ -15,12 +16,12 @@ import net.minecraft.util.Identifier;
 public class ModifierOnHit implements GemstoneModifier {
   public ArrayList<Double> eventChance = new ArrayList<Double>();
   public EventType eventType;
-  public ModifierItemCaregory itemType;
+  public ModifierItemCategory itemType;
   public GemstoneType gemstoneType;
   public GemstoneRarity rarityType;
 
   public ModifierOnHit(ArrayList<Double> eventChance, EventType eventType,
-      ModifierItemCaregory itemType, GemstoneType gemstoneType) {
+      ModifierItemCategory itemType, GemstoneType gemstoneType) {
     this.eventChance = eventChance;
     this.itemType = itemType;
     this.gemstoneType = gemstoneType;
@@ -70,4 +71,8 @@ public class ModifierOnHit implements GemstoneModifier {
   public void setRarityType(GemstoneRarity rarityType) {
     this.rarityType = rarityType;
   }
+
+  public ModifierItemCategory getItemCategory() {
+    return this.itemType;
+  };
 }

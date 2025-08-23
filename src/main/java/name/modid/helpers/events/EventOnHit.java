@@ -8,8 +8,8 @@ import java.util.Random;
 import java.util.Set;
 
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.modifierTypes.EventType;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
+import name.modid.helpers.modifiers.category.ModifierOnHit;
+import name.modid.helpers.modifiers.type.EventType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -47,7 +47,6 @@ public class EventOnHit {
         }
       }
     }
-
   }
 
   public static void setupEffect(MinecraftServer server) {

@@ -1,8 +1,9 @@
-package name.modid.helpers.modifiers;
+package name.modid.helpers.modifiers.instance;
 
 import java.util.Map;
 
 import name.modid.config.datapack.ModifiersRegistry;
+import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import name.modid.helpers.types.GemstoneType;
 
 public class UniversalGemstoneModifierData implements ModifierData {
@@ -13,7 +14,7 @@ public class UniversalGemstoneModifierData implements ModifierData {
   }
 
   @Override
-  public Map<ModifierItemCaregory, GemstoneModifier> getModifiers() {
+  public Map<ModifierItemCategory, GemstoneModifier> getModifiers() {
     return ModifiersRegistry.getModifiersForGemstone(gemstoneType);
   }
 }

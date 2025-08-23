@@ -7,23 +7,27 @@ import java.util.Map;
 import org.slf4j.Logger;
 
 import name.modid.Gemstones;
+import name.modid.config.datapack.ModifiersConfig.AreaEffectConfig;
 import name.modid.config.datapack.ModifiersConfig.AttributeConfig;
 import name.modid.config.datapack.ModifiersConfig.CustomConditionConfig;
 import name.modid.config.datapack.ModifiersConfig.MultiplyAttributeConfig;
 import name.modid.config.datapack.ModifiersConfig.OnBlockBreakConfig;
+import name.modid.config.datapack.ModifiersConfig.OnFirstHitConfig;
 import name.modid.config.datapack.ModifiersConfig.OnHitConfig;
 import name.modid.config.datapack.ModifiersConfig.OnHitEffectConfig;
-import name.modid.helpers.modifiers.GemstoneModifier;
-import name.modid.helpers.modifiers.ModifierItemCaregory;
-import name.modid.helpers.modifiers.modifierTypes.ConditionType;
-import name.modid.helpers.modifiers.modifierTypes.EventType;
-import name.modid.helpers.modifiers.modifierTypes.ModifierAttribute;
-import name.modid.helpers.modifiers.modifierTypes.ModifierCustomCondition;
-import name.modid.helpers.modifiers.modifierTypes.ModifierMultiplyAttribute;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnBlockBreak;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHit;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffect;
-import name.modid.helpers.modifiers.modifierTypes.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.category.ModifierAreaEffect;
+import name.modid.helpers.modifiers.category.ModifierAttribute;
+import name.modid.helpers.modifiers.category.ModifierCustomCondition;
+import name.modid.helpers.modifiers.category.ModifierMultiplyAttribute;
+import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
+import name.modid.helpers.modifiers.category.ModifierOnFirstHit;
+import name.modid.helpers.modifiers.category.ModifierOnHit;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.instance.GemstoneModifier;
+import name.modid.helpers.modifiers.type.ConditionType;
+import name.modid.helpers.modifiers.type.EventType;
+import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.effect.StatusEffect;
@@ -33,12 +37,12 @@ import net.minecraft.registry.entry.RegistryEntry;
 public class ModifiersDataFactory {
   private static final Logger LOGGER = Gemstones.LOGGER;
 
-  public static Map<ModifierItemCaregory, GemstoneModifier> createModifiers(
+  public static Map<ModifierItemCategory, GemstoneModifier> createModifiers(
       GemstoneType gemstoneType) {
     LOGGER.info(
         "[ModifiersConfig] Attempting to create modifiers for gemstone type: {}",
         gemstoneType);
-    Map<ModifierItemCaregory, GemstoneModifier> modifiers = new HashMap<>();
+    Map<ModifierItemCategory, GemstoneModifier> modifiers = new HashMap<>();
     ModifiersConfig config = ModifiersDataLoader.getLoadedConfigs().get(gemstoneType);
 
     if (config == null) {
@@ -71,7 +75,7 @@ public class ModifiersDataFactory {
       }
 
       switch (entry.type) {
-        case ON_HIT_EFFECT:
+        case ON_HIT_EFFECT: {
           if (!(entry instanceof OnHitEffectConfig onHitConfig)) {
             LOGGER.warn(
                 "[ModifiersConfig] Expected OnHitEffectConfig for type {} but got {}. Skipping.",
@@ -102,7 +106,7 @@ public class ModifiersDataFactory {
               return;
             }
 
-            if (category != ModifierItemCaregory.RANGED) {
+            if (category != ModifierItemCategory.RANGED) {
               modifierInstance = new ModifierOnHitEffect(
                   new ArrayList<>(onHitConfig.chanceLevels),
                   onHitConfig.duration,
@@ -134,6 +138,53 @@ public class ModifiersDataFactory {
             modifiers.put(category, modifierInstance);
           }
           break;
+        }
+        case AREA_EFFECT: {
+          if (!(entry instanceof AreaEffectConfig areaEffectConfig)) {
+            LOGGER.warn(
+                "[ModifiersConfig] Expected AreaEffectConfig for type {} but got {}. Skipping.",
+                entry.type,
+                entry.getClass().getSimpleName());
+            return;
+          }
+
+          StatusEffect statusEffect = Registries.STATUS_EFFECT.get(areaEffectConfig.effectId);
+
+          if (statusEffect == null) {
+            LOGGER.warn(
+                "Failed to retrieve StatusEffect for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
+                areaEffectConfig.effectId,
+                category,
+                gemstoneType);
+          } else {
+            RegistryEntry<StatusEffect> effectEntry = Registries.STATUS_EFFECT
+                .getEntry(areaEffectConfig.effectId)
+                .orElse(null);
+
+            if (effectEntry == null) {
+              LOGGER.warn(
+                  "Failed to retrieve StatusEffect RegistryEntry for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
+                  areaEffectConfig.effectId,
+                  category,
+                  gemstoneType);
+              return;
+            }
+
+            modifierInstance = new ModifierAreaEffect(new ArrayList<>(areaEffectConfig.radiusLevels),
+                areaEffectConfig.amplifier, areaEffectConfig.duration, category, areaEffectConfig.notMe, effectEntry,
+                gemstoneType);
+          }
+
+          if (modifierInstance != null) {
+            LOGGER.debug(
+                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
+                modifierInstance.getClass().getSimpleName(),
+                category,
+                gemstoneType);
+            modifiers.put(category, modifierInstance);
+          }
+          break;
+        }
         case ON_BLOCK_BREAK: {
           if (!(entry instanceof OnBlockBreakConfig onBlockBreakConfig)) {
             LOGGER.warn(
@@ -316,6 +367,39 @@ public class ModifiersDataFactory {
           } else {
             modifierInstance = new ModifierCustomCondition(new ArrayList<Double>(customConditionConfig.valueLevels),
                 new ArrayList<Double>(customConditionConfig.additionalValueLevels), customConditionConfig.conditionType,
+                category,
+                gemstoneType);
+          }
+
+          if (modifierInstance != null) {
+            LOGGER.debug(
+                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
+                modifierInstance.getClass().getSimpleName(),
+                category,
+                gemstoneType);
+            modifiers.put(category, modifierInstance);
+          }
+          break;
+        }
+        case ON_FIRST_HIT: {
+          if (!(entry instanceof OnFirstHitConfig onFirstHitConfig)) {
+            LOGGER.warn(
+                "[ModifiersConfig] Expected OnFirstHitConfig for type {} but got {}. Skipping.",
+                entry.type,
+                entry.getClass().getSimpleName());
+            return;
+          }
+
+          EventType eventType = onFirstHitConfig.eventType;
+
+          if (eventType == null) {
+            LOGGER.warn(
+                "Failed to retrieve EventType for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
+                onFirstHitConfig.eventType,
+                category,
+                gemstoneType);
+          } else {
+            modifierInstance = new ModifierOnFirstHit(new ArrayList<Double>(onFirstHitConfig.valueLevels), eventType,
                 category,
                 gemstoneType);
           }

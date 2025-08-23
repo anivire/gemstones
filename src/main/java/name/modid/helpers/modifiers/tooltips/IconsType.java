@@ -1,4 +1,4 @@
-package name.modid.helpers.tooltips;
+package name.modid.helpers.modifiers.tooltips;
 
 import name.modid.Gemstones;
 import net.minecraft.text.MutableText;

@@ -6,10 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import name.modid.helpers.modifiers.GemstoneModifier;
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.ModifierItemCaregory;
-import name.modid.helpers.tooltips.GemstoneTooltipHelper;
+import name.modid.helpers.modifiers.instance.GemstoneModifier;
+import name.modid.helpers.modifiers.tooltips.GemstoneTooltipHelper;
+import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
 import net.minecraft.item.Item;
@@ -40,14 +40,14 @@ public class GemstoneItem extends Item {
   public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
     GemstoneItem gemstoneItem = (GemstoneItem) stack.getItem();
     GemstoneType gemstoneType = gemstoneItem.getType();
-    Map<ModifierItemCaregory, GemstoneModifier> gemstoneModifiers = new LinkedHashMap<>(
+    Map<ModifierItemCategory, GemstoneModifier> gemstoneModifiers = new LinkedHashMap<>(
         ModifierHelper.getGemstoneModifiers(gemstoneType, stack.getItem()));
 
     tooltip.add(GemstoneTooltipHelper.getGemstoneRaritySprite(gemstoneItem.getRarityType()));
     tooltip.add(Text.empty());
 
-    List<ModifierItemCaregory> modifierOrder = Arrays.asList(ModifierItemCaregory.MELEE,
-        ModifierItemCaregory.RANGED, ModifierItemCaregory.TOOLS, ModifierItemCaregory.ARMOR);
+    List<ModifierItemCategory> modifierOrder = Arrays.asList(ModifierItemCategory.MELEE,
+        ModifierItemCategory.RANGED, ModifierItemCategory.TOOLS, ModifierItemCategory.ARMOR);
 
     gemstoneModifiers.entrySet().stream()
         .sorted(Comparator.comparingInt(entry -> modifierOrder.indexOf(entry.getKey())))

@@ -9,6 +9,7 @@ import name.modid.helpers.types.GemstoneRarity;
 import name.modid.items.gemstones.AquamarineGemstoneItem;
 import name.modid.items.gemstones.CelestineGemstoneItem;
 import name.modid.items.gemstones.JadeGemstoneItem;
+import name.modid.items.gemstones.MalachiteGemstoneItem;
 import name.modid.items.gemstones.ObsidianShardGemstoneItem;
 import name.modid.items.gemstones.OpalGemstoneItem;
 import name.modid.items.gemstones.RubyGemstoneItem;
@@ -40,6 +41,7 @@ public class GemstonesRegistrationHelper {
   private static final List<Item> OBSIDIAN_SHARD_GEMSTONES = new ArrayList<>();
   private static final List<Item> OPAL_GEMSTONES = new ArrayList<>();
   private static final List<Item> JADE_GEMSTONES = new ArrayList<>();
+  private static final List<Item> MALACHITE_GEMSTONES = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -117,6 +119,13 @@ public class GemstonesRegistrationHelper {
           settings -> new JadeGemstoneItem(settings, rarity),
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
       JADE_GEMSTONES.add(jadeGemstone);
+
+      // MALACHITE
+      Item malachiteGemstone = ItemRegistrationHelper.register(
+          "malachite_gemstone_" + rarityName,
+          settings -> new MalachiteGemstoneItem(settings, rarity),
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
+      MALACHITE_GEMSTONES.add(malachiteGemstone);
     }
   }
 
@@ -130,6 +139,7 @@ public class GemstonesRegistrationHelper {
     OBSIDIAN_SHARD_GEMSTONES.forEach(entries::add);
     OPAL_GEMSTONES.forEach(entries::add);
     JADE_GEMSTONES.forEach(entries::add);
+    MALACHITE_GEMSTONES.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -143,6 +153,7 @@ public class GemstonesRegistrationHelper {
     all.addAll(OBSIDIAN_SHARD_GEMSTONES);
     all.addAll(OPAL_GEMSTONES);
     all.addAll(JADE_GEMSTONES);
+    all.addAll(MALACHITE_GEMSTONES);
     return all;
   }
 
@@ -180,5 +191,9 @@ public class GemstonesRegistrationHelper {
 
   public static List<Item> getJadeGemstones() {
     return JADE_GEMSTONES;
+  }
+
+  public static List<Item> getMalachiteGemstones() {
+    return MALACHITE_GEMSTONES;
   }
 }
