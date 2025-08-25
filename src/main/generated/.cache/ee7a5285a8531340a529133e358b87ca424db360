@@ -1,6 +1,7 @@
-// 1.21.1	2025-08-23T21:49:44.5939943	Gemstones/Model Definitions
+// 1.21.1	2025-08-25T22:47:46.521851	Gemstones/Model Definitions
 a190a8968a48e2a65e4947c38188070658fa044c assets\gemstones\models\item\sapphire_gemstone_rare.json
 75d84b4d5ece1691232c37fe879c04708f5362b5 assets\gemstones\models\item\ruby_gemstone_uncommon.json
+90d78bfe4362df48c9bf6d1e8fc07bff02a20aeb assets\gemstones\models\item\mossy_box.json
 31e6732fdffe2cc239c6809129123ea47bf476fa assets\gemstones\models\item\zircon_gemstone_common.json
 03803d4f5c4ec8ef8c35d771b18f78800b1a1274 assets\gemstones\models\item\opal_gemstone_uncommon.json
 280661bc010f8dc5d3a121c884b7ffc1611b7c4a assets\gemstones\models\item\jade_gemstone_rare.json

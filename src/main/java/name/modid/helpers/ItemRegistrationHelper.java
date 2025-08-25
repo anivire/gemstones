@@ -8,6 +8,7 @@ import java.util.function.Function;
 import name.modid.Gemstones;
 import name.modid.helpers.types.GemstoneRarity;
 import name.modid.helpers.types.GemstoneType;
+import name.modid.items.MossyBox;
 import name.modid.items.geodes.GeodeDeepslateItem;
 import name.modid.items.geodes.GeodeStoneItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -36,6 +37,10 @@ public final class ItemRegistrationHelper {
           new ArrayList<>(Arrays.asList(GemstoneType.RUBY, GemstoneType.CELESTINE))),
       new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 64));
 
+  public static final Item MOSSY_BOX = register("mossy_box",
+      settings -> new MossyBox(settings),
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 64));
+
   public static Item register(String path, Function<Item.Settings, Item> factory,
       Item.Settings settings) {
     final RegistryKey<Item> registryKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(Gemstones.MOD_ID, path));
@@ -47,6 +52,7 @@ public final class ItemRegistrationHelper {
     all.addAll(GemstonesRegistrationHelper.getAllGemstones());
     all.add(STONE_GEODE);
     all.add(DEEPSLATE_GEODE);
+    all.add(MOSSY_BOX);
     return all;
   }
 
@@ -60,6 +66,7 @@ public final class ItemRegistrationHelper {
         .register(entries -> {
           entries.add(STONE_GEODE);
           entries.add(DEEPSLATE_GEODE);
+          entries.add(MOSSY_BOX);
         });
   }
 }

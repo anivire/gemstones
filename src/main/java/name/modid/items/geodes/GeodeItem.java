@@ -124,8 +124,7 @@ public class GeodeItem extends Item {
     for (int i = 0; i < 3; i++) {
       if (i < gemstoneRarities.size()) {
         String rarityName = gemstoneRarities.get(i).toString().toLowerCase();
-        String transformedRarityName =
-            Character.toUpperCase(rarityName.charAt(0)) + rarityName.substring(1);
+        String transformedRarityName = Character.toUpperCase(rarityName.charAt(0)) + rarityName.substring(1);
 
         int color = switch (gemstoneRarities.get(i)) {
           case COMMON -> 0xa8a8a8;
@@ -142,6 +141,6 @@ public class GeodeItem extends Item {
     tooltip.add(Text.translatable("tooltip.gemstones.geode.info", rarityTexts[0], rarityTexts[1],
         rarityTexts[2]).formatted(Formatting.WHITE));
     tooltip.add(Text.literal(""));
-    tooltip.add(Text.translatable("tooltip.gemstones.geode.info_open").formatted(Formatting.GRAY));
+    tooltip.add(Text.translatable("tooltip.gemstones.opening_item.info").formatted(Formatting.GRAY));
   }
 }
