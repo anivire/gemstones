@@ -39,8 +39,8 @@ public class MossyBox extends Item {
     ServerWorld serverWorld = (ServerWorld) world;
 
     world.playSound(null, user.getX(), user.getY(), user.getZ(),
-        SoundEvents.BLOCK_BAMBOO_WOOD_TRAPDOOR_OPEN, SoundCategory.PLAYERS, 1.0F,
-        1.5F);
+        SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.PLAYERS, 0.5F,
+        ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
     world.playSound(null, user.getX(), user.getY(), user.getZ(),
         SoundEvents.BLOCK_VINE_PLACE, SoundCategory.PLAYERS, 0.4F,
         1.0F);
