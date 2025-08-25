@@ -36,6 +36,9 @@ public class EffectRegistrationHelper {
   public static final RegistryEntry<StatusEffect> PLAGUE_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "plague"), new PlagueEffect());
 
+  public static final RegistryEntry<StatusEffect> FREEZING_EFFECT = Registry.registerReference(
+      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "freezing"), new FreezingEffect());
+
   public static void initialize() {
     Gemstones.LOGGER.info("Registering mod effects for {}", Gemstones.MOD_ID);
   }

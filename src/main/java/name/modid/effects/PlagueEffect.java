@@ -19,7 +19,7 @@ public class PlagueEffect extends StatusEffect {
   public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
     if (!entity.getWorld().isClient) {
       if (entity.age % 60 == 0) {
-        float damage = 0.5f + amplifier;
+        float damage = 1.5f + amplifier;
 
         entity.damage(
             ((ServerWorld) entity.getWorld()).getDamageSources().magic(),

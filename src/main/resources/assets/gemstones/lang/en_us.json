@@ -32,14 +32,14 @@
   "tooltip.gemstones.ruby.melee_bonus": "%s to inflict %s",
   "tooltip.gemstones.ruby.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.ruby.tools_bonus": "%s to gain %s while mining",
-  "tooltip.gemstones.ruby.armor_bonus": "%s attack damage but %s max health",
+  "tooltip.gemstones.ruby.armor_bonus": "%s evasion chance",
   
   "item.gemstones.celestine_gemstone_common": "Celestine Gemstone",
   "item.gemstones.celestine_gemstone_uncommon": "Celestine Gemstone",
   "item.gemstones.celestine_gemstone_rare": "Celestine Gemstone",
   "item.gemstones.celestine_gemstone_legendary": "Celestine Gemstone",
 
-  "tooltip.gemstones.celestine.melee_bonus": "%s attack speed ",
+  "tooltip.gemstones.celestine.melee_bonus": "%s attack speed",
   "tooltip.gemstones.celestine.ranged_bonus": "%s pull speed",
   "tooltip.gemstones.celestine.tools_bonus": "%s block break speed",
   "tooltip.gemstones.celestine.armor_bonus": "%s movement speed",
@@ -101,8 +101,8 @@
 
   "tooltip.gemstones.opal.melee_bonus": "%s attack damage but %s attack speed",
   "tooltip.gemstones.opal.ranged_bonus": "%s arrow speed but %s pull speed",
-  "tooltip.gemstones.opal.tools_bonus": "%s loot count but %s mining speed",
-  "tooltip.gemstones.opal.armor_bonus": "%s evasion chance",
+  "tooltip.gemstones.opal.tools_bonus": "%s mining speed but %s block break range",
+  "tooltip.gemstones.opal.armor_bonus": "%s attack damage but %s max health",
   
   "item.gemstones.jade_gemstone_common": "Jade Gemstone",
   "item.gemstones.jade_gemstone_uncommon": "Jade Gemstone",
@@ -130,6 +130,7 @@
   "effect.gemstones.stunned": "Stunned",
   "effect.gemstones.detonate": "Detonate",
   "effect.gemstones.plague": "Plague",
+  "effect.gemstones.freezing": "Freezing",
 
   "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",
