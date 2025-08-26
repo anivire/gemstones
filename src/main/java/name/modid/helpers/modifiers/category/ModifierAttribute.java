@@ -1,57 +1,44 @@
 package name.modid.helpers.modifiers.category;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
-import name.modid.helpers.modifiers.instance.GemstoneModifier;
-import name.modid.helpers.modifiers.tooltips.GemstoneTooltipBuilder;
+import name.modid.helpers.modifiers.instance.AbstractModifier;
+import name.modid.helpers.modifiers.instance.LevelValues;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.text.MutableText;
 
-public class ModifierAttribute implements GemstoneModifier {
-  public Operation operation;
-  public ModifierItemCategory itemType;
-  public ArrayList<Double> modifierValuesList = new ArrayList<Double>();
-  public RegistryEntry<EntityAttribute> attr;
-  public GemstoneType gemstoneType;
-  public GemstoneRarity rarityType;
+public class ModifierAttribute extends AbstractModifier {
+  private LevelValues values;
+  private Operation operation;
+  private RegistryEntry<EntityAttribute> attributeEntry;
 
-  public ModifierAttribute(Operation operation, List<Double> valueLevels,
-      ModifierItemCategory itemType, RegistryEntry<EntityAttribute> attr,
-      GemstoneType gemstoneType) {
+  public ModifierAttribute(
+      GemstoneType gemstoneType,
+      GemstoneRarity rarityType,
+      ModifierItemCategory itemCategory,
+      ArrayList<Double> values,
+      Operation operation,
+      RegistryEntry<EntityAttribute> attributeEntry) {
+    super(gemstoneType, itemCategory, rarityType);
+
     this.operation = operation;
-    this.modifierValuesList = new ArrayList<Double>(valueLevels);
-    this.itemType = itemType;
-    this.attr = attr;
-    this.gemstoneType = gemstoneType;
+    this.attributeEntry = attributeEntry;
+    this.values = new LevelValues(values);
   }
 
-  public MutableText getTooltipString(GemstoneRarity gemstoneRarityType,
-      Boolean withCategoryString) {
-    this.rarityType = gemstoneRarityType;
-    return new GemstoneTooltipBuilder(this.gemstoneType, this.itemType, (ModifierAttribute) this)
-        .withCategoryString(withCategoryString)
-        .build(this.rarityType);
+  public LevelValues getLevelValues() {
+    return values;
   }
 
-  public GemstoneType getGemstoneType() {
-    return this.gemstoneType;
+  public Operation getOperation() {
+    return operation;
   }
 
-  public GemstoneRarity getRarityType() {
-    return this.rarityType;
+  public RegistryEntry<EntityAttribute> getAttributeEntry() {
+    return attributeEntry;
   }
-
-  public void setRarityType(GemstoneRarity rarityType) {
-    this.rarityType = rarityType;
-  }
-
-  public ModifierItemCategory getItemCategory() {
-    return this.itemType;
-  };
 }

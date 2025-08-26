@@ -55,7 +55,7 @@ public class GemstoneItem extends Item {
           GemstoneModifier modifier = entry.getValue();
 
           if (gemstoneType != GemstoneType.LOCKED && gemstoneType != GemstoneType.EMPTY) {
-            tooltip.add(modifier.getTooltipString(gemstoneItem.getRarityType(), true));
+            tooltip.add(modifier.getTooltipText(gemstoneItem.getRarityType(), true));
           }
         });
   }

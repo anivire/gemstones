@@ -70,9 +70,9 @@ public abstract class BrewingStandBlockEntityMixin implements BrewingStandBlockE
 
     for (ItemStack armorPiece : equippedArmorPieces) {
       ArrayList<ModifierCustomCondition> modifiers = ModifierHelper.getCustomConditionModifiers(armorPiece);
-      if (modifiers.stream().anyMatch(o -> o.conditionType == ConditionType.POTION_DURATION)) {
+      if (modifiers.stream().anyMatch(o -> o.getConditionType() == ConditionType.POTION_DURATION)) {
         for (ModifierCustomCondition m : modifiers) {
-          totalIncreasedDurationValue += m.value.get(m.rarityType.getValue());
+          totalIncreasedDurationValue += m.getValues().get(m.getRarityType());
         }
       }
     }

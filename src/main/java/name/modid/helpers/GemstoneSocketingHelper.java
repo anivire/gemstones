@@ -90,12 +90,14 @@ public class GemstoneSocketingHelper {
 
   public static Integer getGemstoneFirstEmptyIndex(ItemStack itemStack) {
     GemstoneSlots gemstoneSlots = getGemstonesSlot(itemStack);
-    if (gemstoneSlots == null)
+    if (gemstoneSlots == null) {
       return null;
+    }
 
     Gemstone[] gemstones = gemstoneSlots.gemstones();
-    if (gemstones == null)
+    if (gemstones == null) {
       return null;
+    }
 
     for (int i = 0; i < gemstones.length; i++) {
       Gemstone gemstone = gemstones[i];
@@ -107,15 +109,18 @@ public class GemstoneSocketingHelper {
     return null;
   }
 
-  public static ItemStack setGemstoneByIndex(ItemStack itemStack, int index,
-      GemstoneItem gemstone) {
+  public static ItemStack setGemstoneByIndex(ItemStack itemStack, int index, GemstoneItem gemstone) {
     GemstoneSlots sourceGemstoneSlots = getGemstonesSlot(itemStack);
-    if (sourceGemstoneSlots == null && index < 0 || index >= MAX_SLOTS)
+    if (sourceGemstoneSlots == null || index < 0 || index >= MAX_SLOTS) {
       return null;
+    }
 
     Gemstone[] gemstones = Arrays.copyOf(sourceGemstoneSlots.gemstones(), sourceGemstoneSlots.gemstones().length);
 
-    gemstones[index] = new Gemstone(gemstone.getType(), gemstone.getRarityType());
+    gemstones[index] = new Gemstone(
+        gemstone.getType(),
+        gemstone.getRarityType());
+
     itemStack.set(ComponentsHelper.GEMSTONES, new GemstoneSlots(gemstones));
     updateItemSlotBonuses(itemStack, itemStack.getItem());
 
@@ -181,11 +186,11 @@ public class GemstoneSocketingHelper {
     Map<RegistryEntry<EntityAttribute>, List<ModifierAttribute>> attributeToModifiers = new HashMap<>();
     for (GemstoneModifier modifier : gemstoneModifiers) {
       if (modifier instanceof ModifierAttribute singleModifier) {
-        attributeToModifiers.computeIfAbsent(singleModifier.attr, k -> new ArrayList<>())
+        attributeToModifiers.computeIfAbsent(singleModifier.getAttributeEntry(), k -> new ArrayList<>())
             .add(singleModifier);
       } else if (modifier instanceof ModifierMultiplyAttribute multiModifier) {
-        for (ModifierAttribute attr : multiModifier.instances) {
-          attributeToModifiers.computeIfAbsent(attr.attr, k -> new ArrayList<>()).add(attr);
+        for (ModifierAttribute attr : multiModifier.getInstances()) {
+          attributeToModifiers.computeIfAbsent(attr.getAttributeEntry(), k -> new ArrayList<>()).add(attr);
         }
       }
     }
@@ -199,17 +204,17 @@ public class GemstoneSocketingHelper {
       float totalValue = 0f;
       for (ModifierAttribute m : modifiers) {
         GemstoneRarity rarity = m.getRarityType();
-        totalValue += m.modifierValuesList.get(rarity.getValue());
+        totalValue += m.getLevelValues().get(rarity);
       }
 
       EquipmentSlot slot = ModifierHelper.getEquipmentSlot(item);
 
       Identifier modifierId = Identifier.of(Gemstones.MOD_ID,
-          String.format("%s.%s.%s", mod.gemstoneType.toString().toLowerCase(),
-              mod.itemType.toString().toLowerCase(), slot.name().toLowerCase()));
+          String.format("%s.%s.%s", mod.getGemstoneType().toString().toLowerCase(),
+              mod.getItemCategory().toString().toLowerCase(), slot.name().toLowerCase()));
 
       EntityAttributeModifier scaledGemstoneModifier = new EntityAttributeModifier(modifierId, totalValue,
-          mod.operation);
+          mod.getOperation());
 
       AttributeModifiersComponent.Entry newEntry = new AttributeModifiersComponent.Entry(attribute,
           scaledGemstoneModifier, ModifierHelper.getAttributeModifierSlot(item));
@@ -226,7 +231,7 @@ public class GemstoneSocketingHelper {
       Item item, ItemStack itemStack, LivingEntity target, World world) {
     Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffect>> effectToModifiers = new HashMap<>();
     for (ModifierOnHitEffect modifier : gemstoneModifiers) {
-      effectToModifiers.computeIfAbsent(modifier.effect, k -> new ArrayList<>()).add(modifier);
+      effectToModifiers.computeIfAbsent(modifier.getEffectEntry(), k -> new ArrayList<>()).add(modifier);
     }
 
     for (Map.Entry<RegistryEntry<StatusEffect>, List<ModifierOnHitEffect>> statusEntry : effectToModifiers
@@ -240,7 +245,7 @@ public class GemstoneSocketingHelper {
 
       for (ModifierOnHitEffect modifier : modifiers) {
         GemstoneRarity rarity = modifier.getRarityType();
-        combinedProcChance += modifier.inflitChance.get(rarity.getValue());
+        combinedProcChance += modifier.getInflitChanceValues().get(rarity);
 
         if (modifier.amplifier > maxAmplifier) {
           maxAmplifier = modifier.amplifier;
@@ -294,7 +299,7 @@ public class GemstoneSocketingHelper {
       LivingEntity target, World world) {
     Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectProjectile>> effectToModifiers = new HashMap<>();
     for (ModifierOnHitEffectProjectile modifier : gemstoneModifiers) {
-      effectToModifiers.computeIfAbsent(modifier.effect, k -> new ArrayList<>()).add(modifier);
+      effectToModifiers.computeIfAbsent(modifier.getEffectEntry(), k -> new ArrayList<>()).add(modifier);
     }
 
     for (Map.Entry<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectProjectile>> statusEntry : effectToModifiers
@@ -308,10 +313,10 @@ public class GemstoneSocketingHelper {
 
       for (ModifierOnHitEffectProjectile modifier : modifiers) {
         GemstoneRarity rarity = modifier.getRarityType();
-        combinedProcChance += modifier.inflitChance.get(rarity.getValue());
+        combinedProcChance += modifier.getInflitChanceValues().get(rarity);
 
-        if (modifier.amplifier > maxAmplifier) {
-          maxAmplifier = modifier.amplifier;
+        if (modifier.getAmplifier() > maxAmplifier) {
+          maxAmplifier = modifier.getAmplifier();
           selectedModifier = modifier;
         }
       }
@@ -320,10 +325,10 @@ public class GemstoneSocketingHelper {
       if (randomValue < combinedProcChance && selectedModifier != null) {
         Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects = target.getActiveStatusEffects();
         StatusEffectInstance existingEffect = activeEffects.get(statusEffect);
-        int newAmplifier = selectedModifier.amplifier;
+        int newAmplifier = selectedModifier.getAmplifier();
 
-        if (existingEffect != null && selectedModifier.isStacking) {
-          newAmplifier = Math.min(existingEffect.getAmplifier() + 1, selectedModifier.maxStackCount - 1);
+        if (existingEffect != null && selectedModifier.isStacking()) {
+          newAmplifier = Math.min(existingEffect.getAmplifier() + 1, selectedModifier.getMaxStackCount() - 1);
         }
 
         double centerY = target.getY() + target.getHeight() * 0.8;
@@ -348,8 +353,8 @@ public class GemstoneSocketingHelper {
         }
 
         target
-            .addStatusEffect(new StatusEffectInstance(statusEffect, selectedModifier.duration * 20,
-                selectedModifier.isStacking ? newAmplifier : selectedModifier.amplifier));
+            .addStatusEffect(new StatusEffectInstance(statusEffect, selectedModifier.getDuration() * 20,
+                selectedModifier.isStacking() ? newAmplifier : selectedModifier.getAmplifier()));
       }
     }
   }
@@ -358,7 +363,7 @@ public class GemstoneSocketingHelper {
       PlayerEntity player, World world, BlockState state, BlockPos pos) {
     Map<EventType, List<ModifierOnBlockBreak>> eventToModifiers = new HashMap<>();
     for (ModifierOnBlockBreak mod : gemstoneModifiers) {
-      eventToModifiers.computeIfAbsent(mod.eventType, k -> new ArrayList<>()).add(mod);
+      eventToModifiers.computeIfAbsent(mod.getEventType(), k -> new ArrayList<>()).add(mod);
     }
 
     for (Map.Entry<EventType, List<ModifierOnBlockBreak>> entry : eventToModifiers.entrySet()) {
@@ -372,9 +377,9 @@ public class GemstoneSocketingHelper {
           double valuePerProc = 0.0;
 
           for (ModifierOnBlockBreak m : modifiers) {
-            GemstoneRarity rarity = m.rarityType;
-            combinedProcChance += m.value.get(rarity.getValue());
-            maxStack += m.additionalValue.get(rarity.getValue());
+            GemstoneRarity rarity = m.getRarityType();
+            combinedProcChance += m.getLevelValues().get(rarity);
+            maxStack += m.getAdditionalLevelValues().get(rarity);
             valuePerProc = 1.0;
           }
 
@@ -398,8 +403,8 @@ public class GemstoneSocketingHelper {
           }
 
           for (ModifierOnBlockBreak m : modifiers) {
-            GemstoneRarity rarity = m.rarityType;
-            combinedProcChance += m.value.get(rarity.getValue());
+            GemstoneRarity rarity = m.getRarityType();
+            combinedProcChance += m.getLevelValues().get(rarity);
           }
 
           if (world.getRandom().nextDouble() < combinedProcChance) {
@@ -423,7 +428,7 @@ public class GemstoneSocketingHelper {
       LivingEntity entity, World world) {
     Map<EventType, List<ModifierOnDamage>> eventToModifiers = new HashMap<>();
     for (ModifierOnDamage mod : gemstoneModifiers) {
-      eventToModifiers.computeIfAbsent(mod.eventType, k -> new ArrayList<>()).add(mod);
+      eventToModifiers.computeIfAbsent(mod.getEventType(), k -> new ArrayList<>()).add(mod);
     }
 
     for (Map.Entry<EventType, List<ModifierOnDamage>> entry : eventToModifiers.entrySet()) {
@@ -436,9 +441,9 @@ public class GemstoneSocketingHelper {
         double valuePerProc = 0.0;
 
         for (ModifierOnDamage m : modifiers) {
-          GemstoneRarity rarity = m.rarityType;
-          combinedProcChance += m.value.get(rarity.getValue());
-          maxStack += m.additionalValue.get(rarity.getValue());
+          GemstoneRarity rarity = m.getRarityType();
+          combinedProcChance += m.getValues().get(rarity);
+          maxStack += m.getAdditionalValues().get(rarity);
           valuePerProc = 1.0;
         }
 

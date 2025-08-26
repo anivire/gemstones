@@ -30,6 +30,36 @@ public class GemstoneTooltipHelper {
     }
   }
 
+  public enum InlineIcons {
+    HALF_HEART("\uE001"),
+    BLEEDING("\uE002"),
+    GUARDIAN_SMITE("\uE003"),
+    HALF_EXTRA_HEART("\uE004"),
+    TIDE("\uE005"),
+    ARROW_UP("\uE006"),
+    LIGHTNING_STRIKE("\uE007"),
+    TORRENT("\uE008"),
+    HARVEST_MARK("\uE009"),
+    SLOWNESS("\uE010"),
+    STUNNED("\uE011"),
+    ARROW_DOWN("\uE012");
+
+    private final String symbol;
+
+    InlineIcons(String symbol) {
+      this.symbol = symbol;
+    }
+
+    public String getSymbol() {
+      return symbol;
+    }
+
+    public MutableText asText() {
+      return Text.literal(symbol)
+          .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())));
+    }
+  }
+
   private static Formatting getSlotColor(GemstoneType gemType) {
     return switch (gemType) {
       case EMPTY -> Formatting.DARK_GRAY;
@@ -74,7 +104,7 @@ public class GemstoneTooltipHelper {
       if (gemType != GemstoneType.LOCKED && gemType != GemstoneType.EMPTY) {
         try {
           GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gemType, itemStack.getItem());
-          rows.add(modifier.getTooltipString(gemRarity, false));
+          rows.add(modifier.getTooltipText(gemRarity, false));
         } catch (NullPointerException e) {
           rows.add(Text.literal("Undefined modifier").formatted(Formatting.RED));
         }

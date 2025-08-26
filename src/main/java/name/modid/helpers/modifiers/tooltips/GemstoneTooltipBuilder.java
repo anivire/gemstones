@@ -1,14 +1,20 @@
 package name.modid.helpers.modifiers.tooltips;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+
 import name.modid.Gemstones;
 import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.category.ModifierAttribute;
+import name.modid.helpers.modifiers.category.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.category.ModifierOnDamage;
 import name.modid.helpers.modifiers.category.ModifierOnFirstHit;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.tooltips.GemstoneTooltipHelper.Icons;
+import name.modid.helpers.modifiers.tooltips.GemstoneTooltipHelper.InlineIcons;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.text.MutableText;
@@ -17,123 +23,136 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class GemstoneTooltipBuilder {
-  public enum ModifierTooltipType {
+  public enum ModifierCategoryType {
     ATTRIBUTE,
+    MULTIPLY_ATTRIBUTE,
     ON_FIRST_HIT,
     ON_DAMAGE,
-    ON_BLOCK_BREAK
+    ON_BLOCK_BREAK,
+    UNDEFINED,
   }
 
-  private final GemstoneType gemstoneType;
-  private final ModifierItemCategory itemType;
-  private final GemstoneModifier modifier;
-  private final ModifierTooltipType tooltipType;
+  private final Formatting DEFAULT_TEXT_COLOR = Formatting.GOLD;
 
-  private boolean withCategoryString = false;
+  protected final GemstoneType gemstoneType;
+  protected final ModifierItemCategory itemCategory;
+  protected final GemstoneRarity rarityType;
+  protected final ModifierCategoryType modifierCategory;
+  protected final GemstoneModifier modifier;
+  protected Boolean isItemTooltip = false;
 
-  public GemstoneTooltipBuilder(
-      GemstoneType gemstoneType,
-      ModifierItemCategory itemType,
-      GemstoneModifier modifier) {
+  public GemstoneTooltipBuilder(GemstoneType gemstoneType, ModifierItemCategory itemCategory,
+      GemstoneRarity rarityType, GemstoneModifier modifier) {
     this.gemstoneType = gemstoneType;
-    this.itemType = itemType;
+    this.itemCategory = itemCategory;
+    this.rarityType = rarityType;
     this.modifier = modifier;
-    this.tooltipType = resolveType(modifier);
+    this.modifierCategory = this.resolveType(modifier);
   }
 
-  private ModifierTooltipType resolveType(GemstoneModifier modifier) {
+  protected ModifierCategoryType resolveType(GemstoneModifier modifier) {
     if (modifier instanceof ModifierAttribute)
-      return ModifierTooltipType.ATTRIBUTE;
+      return ModifierCategoryType.ATTRIBUTE;
+    if (modifier instanceof ModifierMultiplyAttribute)
+      return ModifierCategoryType.MULTIPLY_ATTRIBUTE;
     if (modifier instanceof ModifierOnFirstHit)
-      return ModifierTooltipType.ON_FIRST_HIT;
+      return ModifierCategoryType.ON_FIRST_HIT;
     if (modifier instanceof ModifierOnDamage)
-      return ModifierTooltipType.ON_DAMAGE;
+      return ModifierCategoryType.ON_DAMAGE;
     if (modifier instanceof ModifierOnBlockBreak)
-      return ModifierTooltipType.ON_BLOCK_BREAK;
-    throw new IllegalArgumentException("Unknown modifier type: " + modifier.getClass());
+      return ModifierCategoryType.ON_BLOCK_BREAK;
+
+    return ModifierCategoryType.UNDEFINED;
   }
 
-  public GemstoneTooltipBuilder withCategoryString(boolean withCategory) {
-    this.withCategoryString = withCategory;
-    return this;
-  }
+  private String formatValue(Double value, String percentString) {
+    BigDecimal v = BigDecimal.valueOf(value)
+        .setScale(2, RoundingMode.HALF_UP)
+        .stripTrailingZeros();
 
-  public MutableText build(GemstoneRarity rarity) {
-    String tooltipCategoryType = withCategoryString
-        ? String.format("tooltip.gemstones.%s_type", this.itemType.toString().toLowerCase())
-        : "tooltip.gemstones.without_type";
-
-    MutableText tooltip = Text.empty()
-        .append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY));
-
-    switch (tooltipType) {
-      case ATTRIBUTE -> buildAttributeTooltip(tooltip, rarity);
-      case ON_FIRST_HIT -> {
-        ModifierOnFirstHit m = (ModifierOnFirstHit) modifier;
-        double value = m.values.get(rarity.getValue()) * 100;
-        appendValueTooltip(tooltip, value, Formatting.GREEN);
-      }
-      case ON_DAMAGE -> {
-        ModifierOnDamage m = (ModifierOnDamage) modifier;
-        double value = m.value.get(rarity.getValue()) * 100;
-        appendValueTooltip(tooltip, value, Formatting.GREEN);
-      }
-      case ON_BLOCK_BREAK -> {
-        ModifierOnBlockBreak m = (ModifierOnBlockBreak) modifier;
-        double value = m.value.get(rarity.getValue()) * 100;
-        appendValueTooltip(tooltip, value, Formatting.GREEN);
-      }
+    if (percentString.isBlank()) {
+      return v.toPlainString();
+    } else {
+      return v.toPlainString() + "%";
     }
-
-    return tooltip;
-  }
-
-  private void buildAttributeTooltip(MutableText tooltip, GemstoneRarity rarity) {
-    ModifierAttribute m = (ModifierAttribute) modifier;
-    double pureValue = m.modifierValuesList.get(rarity.getValue());
-
-    double value = Math.abs(pureValue);
-    String percent = m.operation == Operation.ADD_VALUE ? "" : "%";
-    double adjustedValue = m.operation == Operation.ADD_VALUE ? value : value * 100;
-    String formattedValue = formatValue(adjustedValue) + percent;
-
-    boolean isPositive = pureValue > 0;
-    Formatting valueColor = isPositive ? Formatting.GREEN : Formatting.RED;
-    String icon = isPositive ? "\uE006" : "\uE012";
-
-    MutableText modifierText = Text.empty()
-        .append(Text.literal(icon)
-            .styled(style -> style.withFont(
-                Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-            .formatted(valueColor))
-        .append(Text.literal(formattedValue).formatted(valueColor));
-
-    String translationKey = getTranslationKey();
-    tooltip.append(Text.translatable(translationKey, modifierText).formatted(Formatting.GOLD));
-  }
-
-  private void appendValueTooltip(MutableText tooltip, double value, Formatting color) {
-    MutableText icon = Text.literal("\uE006")
-        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font")))
-        .formatted(color);
-
-    String translationKey = getTranslationKey();
-    tooltip.append(Text.translatable(translationKey,
-        icon.append(Text.literal(String.format("%.0f%%", value)).formatted(color)))
-        .formatted(Formatting.GOLD));
   }
 
   private String getTranslationKey() {
     return String.format("tooltip.gemstones.%s.%s_bonus",
         this.gemstoneType.toString().toLowerCase(),
-        this.itemType.toString().toLowerCase());
+        this.itemCategory.toString().toLowerCase());
   }
 
-  private String formatValue(double value) {
-    if (value == (long) value) {
-      return String.format("%d", (long) value);
-    } else {
-      return String.format("%.2f", value);
+  public GemstoneTooltipBuilder withItemTooltip(Boolean flag) {
+    this.isItemTooltip = flag;
+    return this;
+  }
+
+  public MutableText build() {
+    String tooltipItemType = isItemTooltip
+        ? String.format("tooltip.gemstones.%s_type", this.itemCategory.toString().toLowerCase())
+        : "tooltip.gemstones.without_type";
+
+    // Item or gemstone item category prefix
+    MutableText tooltipItemPrefix = Text.translatable(tooltipItemType).formatted(Formatting.GRAY);
+
+    switch (modifierCategory) {
+      case ATTRIBUTE -> {
+        ModifierAttribute m = (ModifierAttribute) modifier;
+
+        Double value = m.getLevelValues().get(this.rarityType);
+        Boolean isPositive = value > 0;
+        Double adjustedValue = m.getOperation().equals(Operation.ADD_VALUE) ? value : value * 100;
+        String percentString = m.getOperation().equals(Operation.ADD_VALUE) ? "" : "%";
+        String formattedValue = this.formatValue(Math.abs(adjustedValue), percentString);
+
+        Formatting prefixColor = isPositive ? Formatting.GREEN : Formatting.RED;
+        MutableText arrowPrefix = Text
+            .literal(isPositive ? InlineIcons.ARROW_UP.getSymbol() : InlineIcons.ARROW_DOWN.getSymbol())
+            .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+            .formatted(prefixColor);
+
+        MutableText attributeText = Text
+            .empty()
+            .append(arrowPrefix)
+            .append(Text.literal(formattedValue).formatted(prefixColor));
+        String translationKey = this.getTranslationKey();
+
+        return tooltipItemPrefix.append(Text.translatable(translationKey, attributeText).formatted(DEFAULT_TEXT_COLOR));
+      }
+      case MULTIPLY_ATTRIBUTE -> {
+        ModifierMultiplyAttribute multiplyAttribute = (ModifierMultiplyAttribute) modifier;
+        ArrayList<MutableText> attributeParts = new ArrayList<>();
+
+        for (ModifierAttribute attr : multiplyAttribute.getInstances()) {
+          Double value = attr.getLevelValues().get(this.rarityType);
+          boolean isPositive = value > 0;
+          Double adjustedValue = attr.getOperation().equals(Operation.ADD_VALUE) ? value : value * 100;
+          String percentString = attr.getOperation().equals(Operation.ADD_VALUE) ? "" : "%";
+          String formattedValue = this.formatValue(Math.abs(adjustedValue), percentString);
+
+          Formatting prefixColor = isPositive ? Formatting.GREEN : Formatting.RED;
+          MutableText arrowPrefix = Text
+              .literal(isPositive ? InlineIcons.ARROW_UP.getSymbol() : InlineIcons.ARROW_DOWN.getSymbol())
+              .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+              .formatted(prefixColor);
+
+          MutableText attributeText = Text.empty()
+              .append(arrowPrefix)
+              .append(Text.literal(formattedValue).formatted(prefixColor));
+
+          attributeParts.add(attributeText);
+        }
+
+        String translationKey = this.getTranslationKey();
+
+        return tooltipItemPrefix.append(
+            Text.translatable(translationKey, attributeParts.toArray())
+                .formatted(DEFAULT_TEXT_COLOR));
+      }
+      default -> {
+        return tooltipItemPrefix.append(Text.literal("Undefined bonus").formatted(Formatting.RED));
+      }
     }
   }
 }

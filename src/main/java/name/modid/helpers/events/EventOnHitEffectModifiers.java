@@ -10,7 +10,6 @@ import name.modid.helpers.GemstoneType;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
-import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,26 +43,7 @@ public class EventOnHitEffectModifiers {
         }
       }
 
-      ArrayList<ModifierOnHitEffect> gemstoneModifiers = new ArrayList<>();
-      for (Map.Entry<Integer, Map<GemstoneType, GemstoneRarity>> m : itemGemstones.entrySet()) {
-        Map<GemstoneType, GemstoneRarity> i = m.getValue();
-        for (Map.Entry<GemstoneType, GemstoneRarity> e : i.entrySet()) {
-          GemstoneType gemstoneType = e.getKey();
-          GemstoneRarity gemstoneRarity = e.getValue();
-          GemstoneModifier gemstoneModifier = ModifierHelper.getGemstoneModifierForItem(gemstoneType, item);
-          if (gemstoneModifier != null
-              && gemstoneModifier instanceof ModifierOnHitEffect modifierOnHitEffect) {
-            ModifierOnHitEffect newModifier = new ModifierOnHitEffect(
-                modifierOnHitEffect.inflitChance, modifierOnHitEffect.duration,
-                modifierOnHitEffect.amplifier, modifierOnHitEffect.itemType,
-                modifierOnHitEffect.effect, modifierOnHitEffect.isStacking,
-                modifierOnHitEffect.maxStackCount, modifierOnHitEffect.gemstoneType);
-            newModifier.setRarityType(gemstoneRarity);
-            gemstoneModifiers.add(newModifier);
-          }
-        }
-      }
-
+      ArrayList<ModifierOnHitEffect> gemstoneModifiers = ModifierHelper.getOnHitEffectModifiers(itemStack);
       GemstoneSocketingHelper.applyOnHitEffectModifiers(gemstoneModifiers, item, itemStack,
           target, world);
     }

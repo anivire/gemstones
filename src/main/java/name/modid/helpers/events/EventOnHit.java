@@ -36,8 +36,8 @@ public class EventOnHit {
         if (!allModifiersOnHit.isEmpty()) {
           double applyTotalChance = 0.0;
           for (ModifierOnHit modifier : allModifiersOnHit) {
-            if (modifier.eventType == EventType.TORRENT) {
-              applyTotalChance += modifier.eventChance.get(modifier.getRarityType().getValue());
+            if (modifier.getEventType() == EventType.TORRENT) {
+              applyTotalChance += modifier.getEventChances().get(modifier.getRarityType());
             }
           }
 
