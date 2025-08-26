@@ -40,7 +40,7 @@ public class GemstoneItem extends Item {
   public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
     GemstoneItem gemstoneItem = (GemstoneItem) stack.getItem();
     GemstoneType gemstoneType = gemstoneItem.getType();
-    Map<ModifierItemCategory, GemstoneModifier> gemstoneModifiers = new LinkedHashMap<>(
+    Map<ModifierItemCategory, Map<GemstoneRarity, GemstoneModifier>> gemstoneModifiers = new LinkedHashMap<>(
         ModifierHelper.getGemstoneModifiers(gemstoneType, stack.getItem()));
 
     tooltip.add(GemstoneTooltipHelper.getGemstoneRaritySprite(gemstoneItem.getRarityType()));
@@ -52,9 +52,10 @@ public class GemstoneItem extends Item {
     gemstoneModifiers.entrySet().stream()
         .sorted(Comparator.comparingInt(entry -> modifierOrder.indexOf(entry.getKey())))
         .forEachOrdered(entry -> {
-          GemstoneModifier modifier = entry.getValue();
+          Map<GemstoneRarity, GemstoneModifier> rarityMap = entry.getValue();
+          GemstoneModifier modifier = rarityMap.get(gemstoneItem.getRarityType());
 
-          if (gemstoneType != GemstoneType.LOCKED && gemstoneType != GemstoneType.EMPTY) {
+          if (modifier != null && gemstoneType != GemstoneType.LOCKED && gemstoneType != GemstoneType.EMPTY) {
             tooltip.add(modifier.getTooltipText(gemstoneItem.getRarityType(), true));
           }
         });

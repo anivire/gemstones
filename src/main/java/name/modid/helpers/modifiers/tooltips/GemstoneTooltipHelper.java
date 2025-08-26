@@ -103,16 +103,17 @@ public class GemstoneTooltipHelper {
 
       if (gemType != GemstoneType.LOCKED && gemType != GemstoneType.EMPTY) {
         try {
-          GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gemType, itemStack.getItem());
+          GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gemType, gemRarity,
+              itemStack.getItem());
           rows.add(modifier.getTooltipText(gemRarity, false));
         } catch (NullPointerException e) {
           rows.add(Text.literal("Undefined modifier").formatted(Formatting.RED));
         }
       } else {
         MutableText symbol = Text.translatable("tooltip.gemstones.without_type").formatted(Formatting.GRAY);
-        MutableText gemstoneSlot = Text
-            .translatable(String.format("tooltip.gemstones.gemstone_slots.%d", i + 1),
-                GemstoneTooltipHelper.getSlotText(gemstones[i].gemstoneType()))
+        MutableText gemstoneSlot = Text.translatable(
+            String.format("tooltip.gemstones.gemstone_slots.%d", i + 1),
+            GemstoneTooltipHelper.getSlotText(gemstones[i].gemstoneType()))
             .formatted(GemstoneTooltipHelper.getSlotColor(gemstones[i].gemstoneType()));
 
         rows.add(symbol.append(gemstoneSlot));
