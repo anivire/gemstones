@@ -29,6 +29,10 @@ public class GemstoneTooltipBuilder {
     ON_FIRST_HIT,
     ON_DAMAGE,
     ON_BLOCK_BREAK,
+    ON_HIT,
+    ON_HIT_EFFECT,
+    AREA_EFFECT,
+    CUSTOM_CONDITION,
     UNDEFINED,
   }
 
