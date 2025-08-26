@@ -22,8 +22,6 @@ import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.type.EventType;
-import name.modid.helpers.types.GemstoneRarity;
-import name.modid.helpers.types.GemstoneType;
 import name.modid.items.gemstones.GemstoneItem;
 import name.modid.particles.ParticlesRegistrationHelper;
 import net.minecraft.block.Block;

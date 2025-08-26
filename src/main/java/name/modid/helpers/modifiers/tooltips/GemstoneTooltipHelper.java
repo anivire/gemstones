@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import name.modid.Gemstones;
+import name.modid.helpers.GemstoneRarity;
+import name.modid.helpers.GemstoneType;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
-import name.modid.helpers.types.GemstoneRarity;
-import name.modid.helpers.types.GemstoneType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

@@ -84,8 +84,8 @@
   "item.gemstones.aquamarine_gemstone_rare": "Aquamarine Gemstone",
   "item.gemstones.aquamarine_gemstone_legendary": "Aquamarine Gemstone",
 
-  "tooltip.gemstones.aquamarine.melee_bonus": "%s attack damage in %s",
-  "tooltip.gemstones.aquamarine.ranged_bonus": "%s to trigger %s",
+  "tooltip.gemstones.aquamarine.melee_bonus": "%s to inflict %s",
+  "tooltip.gemstones.aquamarine.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.aquamarine.tools_bonus": "%s underwater block break speed",
   "tooltip.gemstones.aquamarine.armor_bonus": "%s oxygen bonus",
   
@@ -128,6 +128,16 @@
   "tooltip.gemstones.malachite.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.malachite.tools_bonus": "%s loot geodes from ores",
   "tooltip.gemstones.malachite.armor_bonus": "always inflict %s in %s radius",
+  
+  "item.gemstones.spawner_core_gemstone_common": "Spawner Core",
+  "item.gemstones.spawner_core_gemstone_uncommon": "Spawner Core",
+  "item.gemstones.spawner_core_gemstone_rare": "Spawner Core",
+  "item.gemstones.spawner_core_gemstone_legendary": "Spawner Core",
+
+  "tooltip.gemstones.spawner_core.melee_bonus": "",
+  "tooltip.gemstones.spawner_core.ranged_bonus": "",
+  "tooltip.gemstones.spawner_core.tools_bonus": "",
+  "tooltip.gemstones.spawner_core.armor_bonus": "",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",

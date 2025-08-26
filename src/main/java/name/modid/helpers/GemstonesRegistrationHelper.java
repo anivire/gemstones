@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import name.modid.Gemstones;
-import name.modid.helpers.types.GemstoneRarity;
 import name.modid.items.gemstones.AquamarineGemstoneItem;
 import name.modid.items.gemstones.CelestineGemstoneItem;
 import name.modid.items.gemstones.JadeGemstoneItem;
@@ -14,6 +13,7 @@ import name.modid.items.gemstones.ObsidianShardGemstoneItem;
 import name.modid.items.gemstones.OpalGemstoneItem;
 import name.modid.items.gemstones.RubyGemstoneItem;
 import name.modid.items.gemstones.SapphireGemstoneItem;
+import name.modid.items.gemstones.SpawnerCoreGemstoneItem;
 import name.modid.items.gemstones.TopazGemstoneItem;
 import name.modid.items.gemstones.ZirconGemstoneItem;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -42,6 +42,7 @@ public class GemstonesRegistrationHelper {
   private static final List<Item> OPAL_GEMSTONES = new ArrayList<>();
   private static final List<Item> JADE_GEMSTONES = new ArrayList<>();
   private static final List<Item> MALACHITE_GEMSTONES = new ArrayList<>();
+  private static final List<Item> SPAWNER_CORE_GEMSTONES = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -63,69 +64,54 @@ public class GemstonesRegistrationHelper {
     for (GemstoneRarity rarity : rarities) {
       String rarityName = rarity.toString().toLowerCase();
 
-      // RUBY
-      Item rubyGemstone = ItemRegistrationHelper.register("ruby_gemstone_" + rarityName,
+      RUBY_GEMSTONES.add(ItemRegistrationHelper.register("ruby_gemstone_" + rarityName,
           settings -> new RubyGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      RUBY_GEMSTONES.add(rubyGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      // CELESTINE
-      Item celestineGemstone = ItemRegistrationHelper.register("celestine_gemstone_" + rarityName,
+      CELESTINE_GEMSTONES.add(ItemRegistrationHelper.register("celestine_gemstone_" + rarityName,
           settings -> new CelestineGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      CELESTINE_GEMSTONES.add(celestineGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      // TOPAZ
-      Item topazGemstone = ItemRegistrationHelper.register("topaz_gemstone_" + rarityName,
+      TOPAZ_GEMSTONES.add(ItemRegistrationHelper.register("topaz_gemstone_" + rarityName,
           settings -> new TopazGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      TOPAZ_GEMSTONES.add(topazGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      // CELESTINE
-      Item sapphireGemstone = ItemRegistrationHelper.register("sapphire_gemstone_" + rarityName,
+      SAPPHIRE_GEMSTONES.add(ItemRegistrationHelper.register("sapphire_gemstone_" + rarityName,
           settings -> new SapphireGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      SAPPHIRE_GEMSTONES.add(sapphireGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      // ZIRCON
-      Item zirconGemstone = ItemRegistrationHelper.register("zircon_gemstone_" + rarityName,
+      ZIRCON_GEMSTONES.add(ItemRegistrationHelper.register("zircon_gemstone_" + rarityName,
           settings -> new ZirconGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      ZIRCON_GEMSTONES.add(zirconGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      // AQUAMARINE
-      Item aquamarineGemstone = ItemRegistrationHelper.register("aquamarine_gemstone_" + rarityName,
+      AQUAMARINE_GEMSTONES.add(ItemRegistrationHelper.register("aquamarine_gemstone_" + rarityName,
           settings -> new AquamarineGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      AQUAMARINE_GEMSTONES.add(aquamarineGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      // AQUAMARINE
-      Item obsidianShardGemstone = ItemRegistrationHelper.register(
+      OBSIDIAN_SHARD_GEMSTONES.add(ItemRegistrationHelper.register(
           "obsidian_shard_gemstone_" + rarityName,
           settings -> new ObsidianShardGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      OBSIDIAN_SHARD_GEMSTONES.add(obsidianShardGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      // OPAL
-      Item opalGemstone = ItemRegistrationHelper.register(
+      OPAL_GEMSTONES.add(ItemRegistrationHelper.register(
           "opal_gemstone_" + rarityName,
           settings -> new OpalGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      OPAL_GEMSTONES.add(opalGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      // JADE
-      Item jadeGemstone = ItemRegistrationHelper.register(
+      JADE_GEMSTONES.add(ItemRegistrationHelper.register(
           "jade_gemstone_" + rarityName,
           settings -> new JadeGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      JADE_GEMSTONES.add(jadeGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      // MALACHITE
-      Item malachiteGemstone = ItemRegistrationHelper.register(
+      MALACHITE_GEMSTONES.add(ItemRegistrationHelper.register(
           "malachite_gemstone_" + rarityName,
           settings -> new MalachiteGemstoneItem(settings, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1));
-      MALACHITE_GEMSTONES.add(malachiteGemstone);
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+      SPAWNER_CORE_GEMSTONES.add(ItemRegistrationHelper.register(
+          "spawner_core_gemstone_" + rarityName,
+          settings -> new SpawnerCoreGemstoneItem(settings, rarity),
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
     }
   }
 
@@ -140,6 +126,7 @@ public class GemstonesRegistrationHelper {
     OPAL_GEMSTONES.forEach(entries::add);
     JADE_GEMSTONES.forEach(entries::add);
     MALACHITE_GEMSTONES.forEach(entries::add);
+    SPAWNER_CORE_GEMSTONES.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -154,6 +141,7 @@ public class GemstonesRegistrationHelper {
     all.addAll(OPAL_GEMSTONES);
     all.addAll(JADE_GEMSTONES);
     all.addAll(MALACHITE_GEMSTONES);
+    all.addAll(SPAWNER_CORE_GEMSTONES);
     return all;
   }
 
@@ -195,5 +183,9 @@ public class GemstonesRegistrationHelper {
 
   public static List<Item> getMalachiteGemstones() {
     return MALACHITE_GEMSTONES;
+  }
+
+  public static List<Item> getSpawnerCoreGemstones() {
+    return SPAWNER_CORE_GEMSTONES;
   }
 }

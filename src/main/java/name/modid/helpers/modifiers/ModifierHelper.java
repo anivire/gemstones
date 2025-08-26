@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import name.modid.helpers.GemstoneSocketingHelper;
+import name.modid.helpers.GemstoneType;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.category.ModifierAreaEffect;
 import name.modid.helpers.modifiers.category.ModifierAttribute;
@@ -19,7 +20,6 @@ import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.instance.ModifierData;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
-import name.modid.helpers.types.GemstoneType;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;

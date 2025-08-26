@@ -3,11 +3,11 @@ package name.modid.helpers.modifiers.category;
 import java.util.ArrayList;
 import java.util.List;
 
+import name.modid.helpers.GemstoneRarity;
+import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.tooltips.GemstoneTooltipBuilder;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
-import name.modid.helpers.types.GemstoneRarity;
-import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.registry.entry.RegistryEntry;

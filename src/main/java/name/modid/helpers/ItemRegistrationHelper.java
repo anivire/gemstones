@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import name.modid.Gemstones;
-import name.modid.helpers.types.GemstoneRarity;
-import name.modid.helpers.types.GemstoneType;
 import name.modid.items.MossyBox;
 import name.modid.items.geodes.GeodeDeepslateItem;
 import name.modid.items.geodes.GeodeStoneItem;

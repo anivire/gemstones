@@ -5,10 +5,10 @@ import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
+import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.type.ConditionType;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
-import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.util.Identifier;
 

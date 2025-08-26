@@ -3,11 +3,11 @@ package name.modid.helpers.modifiers.category;
 import java.util.ArrayList;
 
 import name.modid.Gemstones;
+import name.modid.helpers.GemstoneRarity;
+import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.type.ConditionType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
-import name.modid.helpers.types.GemstoneRarity;
-import name.modid.helpers.types.GemstoneType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;

@@ -1,6 +1,8 @@
 package name.modid.helpers.modifiers.tooltips;
 
 import name.modid.Gemstones;
+import name.modid.helpers.GemstoneRarity;
+import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.category.ModifierAttribute;
 import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.category.ModifierOnDamage;
@@ -8,8 +10,6 @@ import name.modid.helpers.modifiers.category.ModifierOnFirstHit;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.tooltips.GemstoneTooltipHelper.Icons;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
-import name.modid.helpers.types.GemstoneRarity;
-import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

@@ -98,6 +98,15 @@
       "chars": [
         "\uE011"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/gemstone_socket_spawner_core.png",
+      "height": 26,
+      "ascent": 13,
+      "chars": [
+        "\uE012"
+      ]
     }
   ]
 }

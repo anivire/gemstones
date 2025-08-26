@@ -1,8 +1,8 @@
 package name.modid.helpers.modifiers.instance;
 
+import name.modid.helpers.GemstoneRarity;
+import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
-import name.modid.helpers.types.GemstoneRarity;
-import name.modid.helpers.types.GemstoneType;
 import net.minecraft.text.MutableText;
 
 public interface GemstoneModifier {

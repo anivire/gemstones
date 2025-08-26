@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneSocketingHelper;
+import name.modid.helpers.GemstoneType;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
-import name.modid.helpers.types.GemstoneRarity;
-import name.modid.helpers.types.GemstoneType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

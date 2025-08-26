@@ -2,8 +2,9 @@ package name.modid.helpers.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import name.modid.helpers.types.GemstoneRarity;
-import name.modid.helpers.types.GemstoneType;
+
+import name.modid.helpers.GemstoneRarity;
+import name.modid.helpers.GemstoneType;
 
 public record Gemstone(GemstoneType gemstoneType, GemstoneRarity gemstoneRarityType) {
   public static final Codec<Gemstone> GEMSTONE_CODEC = RecordCodecBuilder.create(builder -> {

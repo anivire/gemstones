@@ -1,4 +1,4 @@
-package name.modid.helpers.types;
+package name.modid.helpers;
 
 import com.mojang.serialization.Codec;
 
@@ -15,8 +15,7 @@ public enum GemstoneRarity {
     return value;
   }
 
-  public static final Codec<GemstoneRarity> CODEC =
-      Codec.STRING.xmap(GemstoneRarity::valueOf, GemstoneRarity::name);
+  public static final Codec<GemstoneRarity> CODEC = Codec.STRING.xmap(GemstoneRarity::valueOf, GemstoneRarity::name);
 
   public static String getRarityLiteral(GemstoneRarity type) {
     return switch (type) {

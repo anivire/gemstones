@@ -34,7 +34,7 @@ public class MossyBoxLootTableProvider extends SimpleFabricLootTableProvider {
         RegistryKey.of(RegistryKeys.LOOT_TABLE, Identifier.of(Gemstones.MOD_ID, "mossy_box_loot")),
         LootTable.builder()
             .pool(LootPool.builder()
-                .rolls(UniformLootNumberProvider.create(1.0f, 3.0f))
+                .rolls(UniformLootNumberProvider.create(1.0f, 2.0f))
                 .with(ItemEntry.builder(Items.CARROT).weight(5)).apply(SetCountLootFunction.builder(
                     UniformLootNumberProvider.create(1.0f, 3.0f)))
                 .with(ItemEntry.builder(Items.DRIED_KELP).weight(5).apply(SetCountLootFunction.builder(

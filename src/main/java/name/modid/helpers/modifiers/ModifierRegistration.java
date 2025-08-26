@@ -3,9 +3,9 @@ package name.modid.helpers.modifiers;
 import java.util.HashMap;
 import java.util.Map;
 
+import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.instance.ModifierData;
 import name.modid.helpers.modifiers.instance.UniversalGemstoneModifierData;
-import name.modid.helpers.types.GemstoneType;
 
 public class ModifierRegistration {
   private static final Map<GemstoneType, ModifierData> MODIFIER_REGISTRY = new HashMap<>();

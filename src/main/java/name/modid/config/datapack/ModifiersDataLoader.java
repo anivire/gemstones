@@ -12,7 +12,7 @@ import com.google.gson.GsonBuilder;
 
 import name.modid.Gemstones;
 import name.modid.config.datapack.ModifiersConfig.ModifierConfigEntry;
-import name.modid.helpers.types.GemstoneType;
+import name.modid.helpers.GemstoneType;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
