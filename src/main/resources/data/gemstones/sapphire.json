@@ -22,10 +22,19 @@
       "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "ARMOR": {
-      "type": "ATTRIBUTE",
-      "attribute_id": "minecraft:generic.water_movement_efficiency",
-      "value_levels": [0.10, 0.15, 0.20, 0.30],
-      "operation": "ADD_MULTIPLIED_TOTAL"
+      "type": "MULTIPLY_ATTRIBUTE",
+      "instances": [
+        {
+          "attribute_id": "minecraft:generic.water_movement_efficiency",
+          "value_levels": [0.10, 0.15, 0.20, 0.30],
+          "operation": "ADD_MULTIPLIED_TOTAL"
+        },{
+          "type": "ATTRIBUTE",
+          "attribute_id": "minecraft:generic.oxygen_bonus",
+          "value_levels": [0.025, 0.055, 0.075, 0.1],
+          "operation": "ADD_MULTIPLIED_TOTAL"
+        }
+      ]
     }
   }
 }

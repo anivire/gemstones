@@ -26,10 +26,10 @@
       "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "ARMOR": {
-      "type": "ATTRIBUTE",
-      "attribute_id": "minecraft:generic.oxygen_bonus",
-      "value_levels": [0.025, 0.055, 0.075, 0.1],
-      "operation": "ADD_MULTIPLIED_TOTAL"
+      "type": "CUSTOM_CONDITION",
+      "value_levels": [0.03, 0.055, 0.1, 0.155],
+      "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
+      "event_type": "INCREASE_MOSSY_BOX_DROP"
     }
   }
 }

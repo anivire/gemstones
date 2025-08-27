@@ -24,5 +24,6 @@ public class EventRegistrationHelper {
         EventAreaEffect.setupEvent(player);
       }
     });
+
   }
 }

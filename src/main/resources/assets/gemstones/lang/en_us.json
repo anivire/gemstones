@@ -56,7 +56,7 @@
   "tooltip.gemstones.sapphire.melee_bonus": "%s to inflict %s",
   "tooltip.gemstones.sapphire.ranged_bonus": "%s to trigger %s in rainy weather",
   "tooltip.gemstones.sapphire.tools_bonus": "%s underwater block break speed",
-  "tooltip.gemstones.sapphire.armor_bonus": "%s increase movement speed in water",
+  "tooltip.gemstones.sapphire.armor_bonus": "%s movement speed in water and %s oxygen",
 
   "item.gemstones.topaz_gemstone_common": "Topaz Gemstone",
   "item.gemstones.topaz_gemstone_uncommon": "Topaz Gemstone",
@@ -86,7 +86,7 @@
   "tooltip.gemstones.aquamarine.melee_bonus": "%s to inflict %s",
   "tooltip.gemstones.aquamarine.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.aquamarine.tools_bonus": "%s underwater block break speed",
-  "tooltip.gemstones.aquamarine.armor_bonus": "%s oxygen bonus",
+  "tooltip.gemstones.aquamarine.armor_bonus": "%s %s from fishing",
   
   "item.gemstones.obsidian_shard_gemstone_common": "Obsidian Shard Gemstone",
   "item.gemstones.obsidian_shard_gemstone_uncommon": "Obsidian Shard Gemstone",
@@ -115,7 +115,7 @@
 
   "tooltip.gemstones.jade.melee_bonus": "%s to inflict %s",
   "tooltip.gemstones.jade.ranged_bonus": "%s to inflict %s",
-  "tooltip.gemstones.jade.tools_bonus": "while holding %s player model scale",
+  "tooltip.gemstones.jade.tools_bonus": "%s player model scale",
   "tooltip.gemstones.jade.armor_bonus": "%s %s after brewing",
   
   "item.gemstones.malachite_gemstone_common": "Malachite Gemstone",
@@ -125,7 +125,7 @@
 
   "tooltip.gemstones.malachite.melee_bonus": "%s %s on first hit",
   "tooltip.gemstones.malachite.ranged_bonus": "%s to inflict %s",
-  "tooltip.gemstones.malachite.tools_bonus": "%s loot geodes from ores",
+  "tooltip.gemstones.malachite.tools_bonus": "%s %s from ores",
   "tooltip.gemstones.malachite.armor_bonus": "always inflict %s in %s radius",
   
   "item.gemstones.spawner_core_gemstone_common": "Spawner Core",

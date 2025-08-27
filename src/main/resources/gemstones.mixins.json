@@ -13,7 +13,8 @@
     "BrewingStandScreenHandlerMixin",
     "BrewingStandScreenHandlerAccessor",
     "BrewingStandBlockEntityMixin",
-    "BrewingStandAccessor"
+    "BrewingStandAccessor",
+    "FishingBobberEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
