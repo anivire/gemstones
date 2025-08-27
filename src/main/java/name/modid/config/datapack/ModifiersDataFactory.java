@@ -15,6 +15,7 @@ import name.modid.config.datapack.ModifiersConfig.OnBlockBreakConfig;
 import name.modid.config.datapack.ModifiersConfig.OnFirstHitConfig;
 import name.modid.config.datapack.ModifiersConfig.OnHitConfig;
 import name.modid.config.datapack.ModifiersConfig.OnHitEffectConfig;
+import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.category.ModifierAreaEffect;
 import name.modid.helpers.modifiers.category.ModifierAttribute;
@@ -26,7 +27,6 @@ import name.modid.helpers.modifiers.category.ModifierOnHit;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
-import name.modid.helpers.modifiers.type.ConditionType;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -37,399 +37,217 @@ import net.minecraft.registry.entry.RegistryEntry;
 public class ModifiersDataFactory {
   private static final Logger LOGGER = Gemstones.LOGGER;
 
-  public static Map<ModifierItemCategory, GemstoneModifier> createModifiers(
+  public static Map<ModifierItemCategory, Map<GemstoneRarity, GemstoneModifier>> createModifiers(
       GemstoneType gemstoneType) {
-    LOGGER.info(
-        "[ModifiersConfig] Attempting to create modifiers for gemstone type: {}",
-        gemstoneType);
-    Map<ModifierItemCategory, GemstoneModifier> modifiers = new HashMap<>();
+    LOGGER.info("[ModifiersConfig] Attempting to create modifiers for gemstone type: {}", gemstoneType);
+    Map<ModifierItemCategory, Map<GemstoneRarity, GemstoneModifier>> modifiers = new HashMap<>();
     ModifiersConfig config = ModifiersDataLoader.getLoadedConfigs().get(gemstoneType);
 
-    if (config == null) {
+    if (config == null || config.modifiers == null || config.modifiers.isEmpty()) {
       LOGGER.warn(
-          "[ModifiersConfig] No datapack config found for gemstone type: {}. Returning empty modifiers.",
+          "[ModifiersConfig] No datapack config found or empty for gemstone type: {}. Returning empty modifiers.",
           gemstoneType);
       return modifiers;
     }
-
-    if (config.modifiers == null || config.modifiers.isEmpty()) {
-      LOGGER.warn(
-          "[ModifiersConfig] No 'modifiers' defined for gemstone type: {} in datapack config. Returning empty modifiers.",
-          gemstoneType);
-      return modifiers;
-    }
-
-    LOGGER.info(
-        "[ModifiersConfig] Processing {} modifier categories for gemstone type: {}",
-        config.modifiers.size(),
-        gemstoneType);
 
     config.modifiers.forEach((category, entry) -> {
-      GemstoneModifier modifierInstance = null;
       if (entry == null) {
-        LOGGER.warn(
-            "[ModifiersConfig] Invalid modifier entry (null) for category {} in gemstone {}. Skipping.",
-            category,
+        LOGGER.warn("[ModifiersConfig] Null modifier entry for category {} in gemstone {}. Skipping.", category,
             gemstoneType);
         return;
       }
 
-      switch (entry.type) {
-        case ON_HIT_EFFECT: {
-          if (!(entry instanceof OnHitEffectConfig onHitConfig)) {
-            LOGGER.warn(
-                "[ModifiersConfig] Expected OnHitEffectConfig for type {} but got {}. Skipping.",
-                entry.type,
-                entry.getClass().getSimpleName());
-            return;
-          }
+      Map<GemstoneRarity, GemstoneModifier> rarityMap = new HashMap<>();
 
-          StatusEffect statusEffect = Registries.STATUS_EFFECT.get(onHitConfig.effectId);
-
-          if (statusEffect == null) {
-            LOGGER.warn(
-                "Failed to retrieve StatusEffect for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                onHitConfig.effectId,
-                category,
-                gemstoneType);
-          } else {
-            RegistryEntry<StatusEffect> effectEntry = Registries.STATUS_EFFECT
-                .getEntry(onHitConfig.effectId)
-                .orElse(null);
-
-            if (effectEntry == null) {
-              LOGGER.warn(
-                  "Failed to retrieve StatusEffect RegistryEntry for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                  onHitConfig.effectId,
-                  category,
-                  gemstoneType);
-              return;
-            }
-
-            if (category != ModifierItemCategory.RANGED) {
-              modifierInstance = new ModifierOnHitEffect(
-                  new ArrayList<>(onHitConfig.chanceLevels),
-                  onHitConfig.duration,
-                  onHitConfig.amplifier,
-                  category,
-                  effectEntry,
-                  onHitConfig.isStacking,
-                  onHitConfig.maxStackCount,
-                  gemstoneType);
-            } else {
-              modifierInstance = new ModifierOnHitEffectProjectile(
-                  new ArrayList<>(onHitConfig.chanceLevels),
-                  onHitConfig.duration,
-                  onHitConfig.amplifier,
-                  category,
-                  effectEntry,
-                  onHitConfig.isStacking,
-                  onHitConfig.maxStackCount,
-                  gemstoneType);
-            }
-          }
-
-          if (modifierInstance != null) {
-            LOGGER.debug(
-                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
-                modifierInstance.getClass().getSimpleName(),
-                category,
-                gemstoneType);
-            modifiers.put(category, modifierInstance);
-          }
-          break;
+      for (GemstoneRarity rarity : GemstoneRarity.values()) {
+        if (rarity == GemstoneRarity.NONE || rarity == GemstoneRarity.UNUSUAL) {
+          continue;
         }
-        case AREA_EFFECT: {
-          if (!(entry instanceof AreaEffectConfig areaEffectConfig)) {
-            LOGGER.warn(
-                "[ModifiersConfig] Expected AreaEffectConfig for type {} but got {}. Skipping.",
-                entry.type,
-                entry.getClass().getSimpleName());
-            return;
-          }
 
-          StatusEffect statusEffect = Registries.STATUS_EFFECT.get(areaEffectConfig.effectId);
+        GemstoneModifier modifierInstance = null;
 
-          if (statusEffect == null) {
-            LOGGER.warn(
-                "Failed to retrieve StatusEffect for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                areaEffectConfig.effectId,
-                category,
-                gemstoneType);
-          } else {
-            RegistryEntry<StatusEffect> effectEntry = Registries.STATUS_EFFECT
-                .getEntry(areaEffectConfig.effectId)
-                .orElse(null);
-
-            if (effectEntry == null) {
-              LOGGER.warn(
-                  "Failed to retrieve StatusEffect RegistryEntry for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                  areaEffectConfig.effectId,
-                  category,
-                  gemstoneType);
-              return;
-            }
-
-            modifierInstance = new ModifierAreaEffect(new ArrayList<>(areaEffectConfig.radiusLevels),
-                areaEffectConfig.amplifier, areaEffectConfig.duration, category, areaEffectConfig.notMe, effectEntry,
-                gemstoneType);
-          }
-
-          if (modifierInstance != null) {
-            LOGGER.debug(
-                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
-                modifierInstance.getClass().getSimpleName(),
-                category,
-                gemstoneType);
-            modifiers.put(category, modifierInstance);
-          }
-          break;
-        }
-        case ON_BLOCK_BREAK: {
-          if (!(entry instanceof OnBlockBreakConfig onBlockBreakConfig)) {
-            LOGGER.warn(
-                "[ModifiersConfig] Expected OnBlockBreakConfig for type {} but got {}. Skipping.",
-                entry.type,
-                entry.getClass().getSimpleName());
-            return;
-          }
-
-          EventType eventType = onBlockBreakConfig.eventType;
-
-          if (eventType == null) {
-            LOGGER.warn(
-                "Failed to retrieve EventType for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                onBlockBreakConfig.eventType,
-                category,
-                gemstoneType);
-          } else {
-            modifierInstance = new ModifierOnBlockBreak(new ArrayList<Double>(onBlockBreakConfig.chanceLevels),
-                new ArrayList<Double>(onBlockBreakConfig.valueLevels), category, eventType, gemstoneType);
-          }
-
-          if (modifierInstance != null) {
-            LOGGER.debug(
-                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
-                modifierInstance.getClass().getSimpleName(),
-                category,
-                gemstoneType);
-            modifiers.put(category, modifierInstance);
-          }
-          break;
-        }
-        case MULTIPLY_ATTRIBUTE: {
-          if (!(entry instanceof MultiplyAttributeConfig multiplyAttributeConfig)) {
-            LOGGER.warn(
-                "[ModifiersConfig] Expected MultiplyAttributeConfig for type {} but got {}. Skipping.",
-                entry.type,
-                entry.getClass().getSimpleName());
-            return;
-          }
-
-          ArrayList<ModifierAttribute> instances = new ArrayList<>();
-
-          for (AttributeConfig attributeInstance : multiplyAttributeConfig.attributes) {
-            EntityAttribute attribute = Registries.ATTRIBUTE.get(attributeInstance.attributeId);
-
-            if (attribute == null) {
-              LOGGER.warn(
-                  "Failed to retrieve EntityAttribute for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                  attributeInstance.attributeId,
-                  category,
-                  gemstoneType);
-            } else {
-              RegistryEntry<EntityAttribute> attributeEntry = Registries.ATTRIBUTE
-                  .getEntry(attributeInstance.attributeId)
-                  .orElse(null);
-
-              if (attributeEntry == null) {
-                LOGGER.warn(
-                    "Failed to retrieve EntityAttribute RegistryEntry for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                    attributeInstance.attributeId,
-                    category,
-                    gemstoneType);
-                return;
+        switch (entry.type) {
+          case ON_HIT_EFFECT -> {
+            if (entry instanceof OnHitEffectConfig onHitConfig) {
+              StatusEffect statusEffect = Registries.STATUS_EFFECT.get(onHitConfig.effectId);
+              if (statusEffect == null) {
+                LOGGER.warn("Invalid StatusEffect '{}' for gemstone {}. Skipping.", onHitConfig.effectId, gemstoneType);
+                continue;
               }
+              RegistryEntry<StatusEffect> effectEntry = Registries.STATUS_EFFECT.getEntry(onHitConfig.effectId)
+                  .orElse(null);
+              if (effectEntry == null)
+                continue;
 
-              instances.add(new ModifierAttribute(attributeInstance.operation,
-                  new ArrayList<Double>(attributeInstance.valueLevels), category, attributeEntry, gemstoneType));
+              if (category != ModifierItemCategory.RANGED) {
+                modifierInstance = new ModifierOnHitEffect(
+                    gemstoneType,
+                    rarity,
+                    category,
+                    new ArrayList<>(onHitConfig.chanceLevels),
+                    effectEntry,
+                    onHitConfig.duration,
+                    onHitConfig.amplifier,
+                    onHitConfig.maxStackCount,
+                    onHitConfig.isStacking);
+              } else {
+                modifierInstance = new ModifierOnHitEffectProjectile(
+                    gemstoneType,
+                    rarity,
+                    category,
+                    new ArrayList<>(onHitConfig.chanceLevels),
+                    effectEntry,
+                    onHitConfig.duration,
+                    onHitConfig.amplifier,
+                    onHitConfig.maxStackCount,
+                    onHitConfig.isStacking);
+              }
             }
           }
+          case AREA_EFFECT -> {
+            if (entry instanceof AreaEffectConfig areaEffectConfig) {
+              StatusEffect statusEffect = Registries.STATUS_EFFECT.get(areaEffectConfig.effectId);
+              if (statusEffect == null)
+                continue;
+              RegistryEntry<StatusEffect> effectEntry = Registries.STATUS_EFFECT.getEntry(areaEffectConfig.effectId)
+                  .orElse(null);
+              if (effectEntry == null)
+                continue;
 
-          if (!instances.isEmpty()) {
-            modifierInstance = new ModifierMultiplyAttribute(instances);
-          }
-
-          if (modifierInstance != null) {
-            LOGGER.debug(
-                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
-                modifierInstance.getClass().getSimpleName(),
-                category,
-                gemstoneType);
-            modifiers.put(category, modifierInstance);
-          }
-          break;
-        }
-        case ATTRIBUTE: {
-          if (!(entry instanceof AttributeConfig attributeModifierConfig)) {
-            LOGGER.warn(
-                "[ModifiersConfig] Expected AttributeConfig for type {} but got {}. Skipping.",
-                entry.type,
-                entry.getClass().getSimpleName());
-            return;
-          }
-
-          EntityAttribute attribute = Registries.ATTRIBUTE.get(attributeModifierConfig.attributeId);
-
-          if (attribute == null) {
-            LOGGER.warn(
-                "Failed to retrieve EntityAttribute for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                attributeModifierConfig.attributeId,
-                category,
-                gemstoneType);
-          } else {
-            RegistryEntry<EntityAttribute> attributeEntry = Registries.ATTRIBUTE
-                .getEntry(attributeModifierConfig.attributeId)
-                .orElse(null);
-
-            if (attributeEntry == null) {
-              LOGGER.warn(
-                  "Failed to retrieve EntityAttribute RegistryEntry for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                  attributeModifierConfig.attributeId,
+              modifierInstance = new ModifierAreaEffect(
+                  gemstoneType,
+                  rarity,
                   category,
-                  gemstoneType);
-              return;
+                  new ArrayList<>(areaEffectConfig.radiusLevels),
+                  areaEffectConfig.amplifier,
+                  areaEffectConfig.duration,
+                  areaEffectConfig.notMe,
+                  effectEntry);
             }
-
-            modifierInstance = new ModifierAttribute(attributeModifierConfig.operation,
-                new ArrayList<Double>(attributeModifierConfig.valueLevels), category, attributeEntry, gemstoneType);
           }
+          case ON_BLOCK_BREAK -> {
+            if (entry instanceof OnBlockBreakConfig onBlockBreakConfig) {
+              EventType eventType = onBlockBreakConfig.eventType;
+              if (eventType == null)
+                continue;
 
-          if (modifierInstance != null) {
-            LOGGER.debug(
-                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
-                modifierInstance.getClass().getSimpleName(),
-                category,
-                gemstoneType);
-            modifiers.put(category, modifierInstance);
+              modifierInstance = new ModifierOnBlockBreak(
+                  gemstoneType,
+                  rarity,
+                  category,
+                  new ArrayList<>(onBlockBreakConfig.chanceLevels),
+                  new ArrayList<>(onBlockBreakConfig.valueLevels),
+                  eventType);
+            }
           }
-          break;
+          case MULTIPLY_ATTRIBUTE -> {
+            if (entry instanceof MultiplyAttributeConfig multiplyAttributeConfig) {
+              ArrayList<ModifierAttribute> instances = new ArrayList<>();
+              for (AttributeConfig attributeInstance : multiplyAttributeConfig.attributes) {
+                EntityAttribute attribute = Registries.ATTRIBUTE.get(attributeInstance.attributeId);
+                if (attribute == null)
+                  continue;
+                RegistryEntry<EntityAttribute> attributeEntry = Registries.ATTRIBUTE
+                    .getEntry(attributeInstance.attributeId).orElse(null);
+                if (attributeEntry == null)
+                  continue;
+
+                instances.add(new ModifierAttribute(
+                    gemstoneType,
+                    rarity,
+                    category,
+                    new ArrayList<>(attributeInstance.valueLevels),
+                    attributeInstance.operation,
+                    attributeEntry));
+              }
+              if (!instances.isEmpty()) {
+                modifierInstance = new ModifierMultiplyAttribute(
+                    gemstoneType,
+                    rarity,
+                    category,
+                    instances);
+              }
+            }
+          }
+          case ATTRIBUTE -> {
+            if (entry instanceof AttributeConfig attributeModifierConfig) {
+              EntityAttribute attribute = Registries.ATTRIBUTE.get(attributeModifierConfig.attributeId);
+              if (attribute == null)
+                continue;
+              RegistryEntry<EntityAttribute> attributeEntry = Registries.ATTRIBUTE
+                  .getEntry(attributeModifierConfig.attributeId).orElse(null);
+              if (attributeEntry == null)
+                continue;
+
+              modifierInstance = new ModifierAttribute(
+                  gemstoneType,
+                  rarity,
+                  category,
+                  new ArrayList<>(attributeModifierConfig.valueLevels),
+                  attributeModifierConfig.operation,
+                  attributeEntry);
+            }
+          }
+          case ON_HIT -> {
+            if (entry instanceof OnHitConfig onHitConfig) {
+              EventType eventType = onHitConfig.eventType;
+              if (eventType == null)
+                continue;
+
+              modifierInstance = new ModifierOnHit(
+                  gemstoneType,
+                  rarity,
+                  category,
+                  new ArrayList<>(onHitConfig.chanceLevels),
+                  eventType);
+            }
+          }
+          case CUSTOM_CONDITION -> {
+            if (entry instanceof CustomConditionConfig customConditionConfig) {
+              EventType eventType = customConditionConfig.eventType;
+              if (eventType == null)
+                continue;
+
+              modifierInstance = new ModifierCustomCondition(
+                  gemstoneType,
+                  rarity,
+                  category,
+                  new ArrayList<>(customConditionConfig.valueLevels),
+                  new ArrayList<>(customConditionConfig.additionalValueLevels),
+                  eventType);
+            }
+          }
+          case ON_FIRST_HIT -> {
+            if (entry instanceof OnFirstHitConfig onFirstHitConfig) {
+              EventType eventType = onFirstHitConfig.eventType;
+              if (eventType == null)
+                continue;
+
+              modifierInstance = new ModifierOnFirstHit(
+                  gemstoneType,
+                  rarity,
+                  category,
+                  new ArrayList<>(onFirstHitConfig.valueLevels),
+                  eventType);
+            }
+          }
+          default -> {
+            LOGGER.warn("[ModifiersConfig] Unhandled modifier type {} for gemstone {}.", entry.type, gemstoneType);
+          }
         }
-        case ON_HIT: {
-          if (!(entry instanceof OnHitConfig onHitConfig)) {
-            LOGGER.warn(
-                "[ModifiersConfig] Expected OnHitConfig for type {} but got {}. Skipping.",
-                entry.type,
-                entry.getClass().getSimpleName());
-            return;
-          }
 
-          EventType eventType = onHitConfig.eventType;
-
-          if (eventType == null) {
-            LOGGER.warn(
-                "Failed to retrieve EventType for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                onHitConfig.eventType,
-                category,
-                gemstoneType);
-          } else {
-            modifierInstance = new ModifierOnHit(new ArrayList<Double>(onHitConfig.chanceLevels), eventType, category,
-                gemstoneType);
-          }
-
-          if (modifierInstance != null) {
-            LOGGER.debug(
-                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
-                modifierInstance.getClass().getSimpleName(),
-                category,
-                gemstoneType);
-            modifiers.put(category, modifierInstance);
-          }
-          break;
+        if (modifierInstance != null) {
+          rarityMap.put(rarity, modifierInstance);
         }
-        case CUSTOM_CONDITION: {
-          if (!(entry instanceof CustomConditionConfig customConditionConfig)) {
-            LOGGER.warn(
-                "[ModifiersConfig] Expected CustomConditionConfig for type {} but got {}. Skipping.",
-                entry.type,
-                entry.getClass().getSimpleName());
-            return;
-          }
+      }
 
-          ConditionType conditionType = customConditionConfig.conditionType;
-
-          if (conditionType == null) {
-            LOGGER.warn(
-                "Failed to retrieve ConditionType for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                customConditionConfig.conditionType,
-                category,
-                gemstoneType);
-          } else {
-            modifierInstance = new ModifierCustomCondition(new ArrayList<Double>(customConditionConfig.valueLevels),
-                new ArrayList<Double>(customConditionConfig.additionalValueLevels), customConditionConfig.conditionType,
-                category,
-                gemstoneType);
-          }
-
-          if (modifierInstance != null) {
-            LOGGER.debug(
-                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
-                modifierInstance.getClass().getSimpleName(),
-                category,
-                gemstoneType);
-            modifiers.put(category, modifierInstance);
-          }
-          break;
-        }
-        case ON_FIRST_HIT: {
-          if (!(entry instanceof OnFirstHitConfig onFirstHitConfig)) {
-            LOGGER.warn(
-                "[ModifiersConfig] Expected OnFirstHitConfig for type {} but got {}. Skipping.",
-                entry.type,
-                entry.getClass().getSimpleName());
-            return;
-          }
-
-          EventType eventType = onFirstHitConfig.eventType;
-
-          if (eventType == null) {
-            LOGGER.warn(
-                "Failed to retrieve EventType for ID '{}' in category {} for gemstone {}. Skipping this modifier.",
-                onFirstHitConfig.eventType,
-                category,
-                gemstoneType);
-          } else {
-            modifierInstance = new ModifierOnFirstHit(new ArrayList<Double>(onFirstHitConfig.valueLevels), eventType,
-                category,
-                gemstoneType);
-          }
-
-          if (modifierInstance != null) {
-            LOGGER.debug(
-                "[ModifiersConfig] Created {} modifier for category {} for gemstone {}.",
-                modifierInstance.getClass().getSimpleName(),
-                category,
-                gemstoneType);
-            modifiers.put(category, modifierInstance);
-          }
-          break;
-        }
-        default: {
-          LOGGER.warn(
-              "[ModifiersConfig] Unhandled modifier type for category {} in gemstone {}. Class: {}. Skipping.",
-              category,
-              gemstoneType,
-              entry.getClass().getSimpleName());
-          break;
-        }
+      if (!rarityMap.isEmpty()) {
+        modifiers.put(category, rarityMap);
       }
     });
 
-    LOGGER.info(
-        "[ModifiersConfig] Finished creating {} modifiers for gemstone type: {}. Final map size: {}",
-        modifiers.size(),
-        gemstoneType,
-        modifiers.size());
+    LOGGER.info("[ModifiersConfig] Finished creating {} modifier categories for gemstone type: {}.", modifiers.size(),
+        gemstoneType);
     return modifiers;
   }
 }

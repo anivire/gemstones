@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
 import name.modid.helpers.components.Gemstone;
-import name.modid.helpers.modifiers.tooltips.GemstoneTooltipHelper;
+import name.modid.helpers.modifiers.tooltips.TooltipHelper;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -84,12 +84,12 @@ public abstract class ItemStackMixin {
 
       // Empty rows for proper gemstones sprite visibility
       tooltip.add(Text.empty());
-      tooltip.add(GemstoneTooltipHelper.getGemstoneSocketedRow(gemstones));
+      tooltip.add(TooltipHelper.getGemstoneSocketedRow(gemstones));
       tooltip.add(Text.empty());
       tooltip.add(Text.empty());
       tooltip.add(Text.translatable("tooltip.gemstones.gemstone_slots_gemstones_category")
           .formatted(Formatting.GRAY));
-      tooltip.addAll(GemstoneTooltipHelper.getItemGemstoneBonusesRows(gemstones, itemStack));
+      tooltip.addAll(TooltipHelper.getItemGemstoneBonusesRows(gemstones, itemStack));
     }
   }
 }

@@ -38,8 +38,8 @@ public class EventAreaEffect {
     }
 
     Map<RegistryEntry<StatusEffect>, List<ModifierAreaEffect>> grouped = allModifiers.stream()
-        .filter(m -> m.effect != null)
-        .collect(Collectors.groupingBy(m -> m.effect));
+        .filter(m -> m.getEffectEntry() != null)
+        .collect(Collectors.groupingBy(m -> m.getEffectEntry()));
 
     for (Map.Entry<RegistryEntry<StatusEffect>, List<ModifierAreaEffect>> entry : grouped.entrySet()) {
       RegistryEntry<StatusEffect> effect = entry.getKey();
@@ -51,10 +51,10 @@ public class EventAreaEffect {
       boolean notMeFlag = false;
 
       for (ModifierAreaEffect modifier : modifiers) {
-        totalRadius += modifier.radiusLevels.get(modifier.rarityType.getValue());
-        maxAmplifier = Math.max(maxAmplifier, modifier.amplifier);
-        maxDuration = Math.max(maxDuration, modifier.duration);
-        if (modifier.notMe)
+        totalRadius += modifier.getRadiusLevels().get(modifier.getRarityType());
+        maxAmplifier = Math.max(maxAmplifier, modifier.getAmplifier());
+        maxDuration = Math.max(maxDuration, modifier.getDuration());
+        if (modifier.isNotMe())
           notMeFlag = true;
       }
 

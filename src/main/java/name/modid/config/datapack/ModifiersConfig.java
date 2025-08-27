@@ -6,7 +6,6 @@ import java.util.Map;
 import com.google.gson.annotations.SerializedName;
 
 import name.modid.helpers.GemstoneType;
-import name.modid.helpers.modifiers.type.ConditionType;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
@@ -106,7 +105,7 @@ public class ModifiersConfig {
     public List<Double> valueLevels;
     @SerializedName("additional_value_levels")
     public List<Double> additionalValueLevels;
-    @SerializedName("condition_type")
-    public ConditionType conditionType;
+    @SerializedName("event_type")
+    public EventType eventType;
   }
 }

@@ -103,8 +103,8 @@ public class PersistentProjectileEntityMixin {
     if (!onHitModifiers.isEmpty()) {
       double applyTotalChance = 0.0;
       for (ModifierOnHit modifier : onHitModifiers) {
-        if (modifier.eventType == EventType.LIGHTNING_BOLT) {
-          applyTotalChance += modifier.eventChance.get(modifier.getRarityType().getValue());
+        if (modifier.getEventType() == EventType.LIGHTNING_BOLT) {
+          applyTotalChance += modifier.getEventChances().get(modifier.getRarityType());
         }
       }
 

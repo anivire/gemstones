@@ -1,6 +1,7 @@
 package name.modid.mixin;
 
 import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -11,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.items.gemstones.GemstoneItem;
 import net.minecraft.component.DataComponentTypes;
@@ -58,11 +60,7 @@ public abstract class AnvilScreenHandlerMixin {
         }
 
         GemstoneItem gemstoneItem = (GemstoneItem) right.getItem();
-        // Gemstone newGemstone = new Gemstone(gemstoneItem.getType(),
-        // gemstoneItem.getRarityType());
-
-        ItemStack modifiedStack =
-            GemstoneSocketingHelper.setGemstoneByIndex(resultStack, emptySlotIndex, gemstoneItem);
+        ItemStack modifiedStack = GemstoneSocketingHelper.setGemstoneByIndex(resultStack, emptySlotIndex, gemstoneItem);
 
         if (modifiedStack != null) {
           handler.getSlot(2).setStack(modifiedStack);

@@ -23,7 +23,6 @@
   "item.gemstones.deepslate_geode": "Deepslate Geode",
   "tooltip.gemstones.geode.info": "Open to obtain %s, %s and %s gemstones",
   
-  
   "item.gemstones.mossy_box": "Mossy Box",
   "tooltip.gemstones.mossy_box.info": "Open to obtaon a small gift from the depths",
 
@@ -117,14 +116,14 @@
   "tooltip.gemstones.jade.melee_bonus": "%s to inflict %s",
   "tooltip.gemstones.jade.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.jade.tools_bonus": "while holding %s player model scale",
-  "tooltip.gemstones.jade.armor_bonus": "%s for potion duration after brewing",
+  "tooltip.gemstones.jade.armor_bonus": "%s %s after brewing",
   
   "item.gemstones.malachite_gemstone_common": "Malachite Gemstone",
   "item.gemstones.malachite_gemstone_uncommon": "Malachite Gemstone",
   "item.gemstones.malachite_gemstone_rare": "Malachite Gemstone",
   "item.gemstones.malachite_gemstone_legendary": "Malachite Gemstone",
 
-  "tooltip.gemstones.malachite.melee_bonus": "%s bonus damage on first hit",
+  "tooltip.gemstones.malachite.melee_bonus": "%s %s on first hit",
   "tooltip.gemstones.malachite.ranged_bonus": "%s to inflict %s",
   "tooltip.gemstones.malachite.tools_bonus": "%s loot geodes from ores",
   "tooltip.gemstones.malachite.armor_bonus": "always inflict %s in %s radius",

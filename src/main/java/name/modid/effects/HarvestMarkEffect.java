@@ -6,7 +6,7 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 
 public class HarvestMarkEffect extends StatusEffect {
   public HarvestMarkEffect() {
-    super(StatusEffectCategory.NEUTRAL, 0x00ff00);
+    super(StatusEffectCategory.BENEFICIAL, 0x00ff00);
   }
 
   @Override

@@ -6,14 +6,12 @@ import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.text.MutableText;
 
 public interface GemstoneModifier {
-  public MutableText getTooltipString(GemstoneRarity gemstoneRarityType,
-      Boolean withCategoryString);
-
   public GemstoneType getGemstoneType();
-
-  public ModifierItemCategory getItemCategory();
 
   public GemstoneRarity getRarityType();
 
-  public void setRarityType(GemstoneRarity type);
+  public ModifierItemCategory getItemCategory();
+
+  public MutableText getTooltipText(GemstoneRarity gemstoneRarityType,
+      Boolean withCategoryString);
 }

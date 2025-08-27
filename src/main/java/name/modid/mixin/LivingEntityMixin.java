@@ -81,8 +81,8 @@ public class LivingEntityMixin {
       if (!allModifiersOnFirstHit.isEmpty()) {
         double additionalDamagePercent = 0.0;
         for (ModifierOnFirstHit modifier : allModifiersOnFirstHit) {
-          if (modifier.eventType == EventType.ADDITIONAL_DAMAGE) {
-            additionalDamagePercent += modifier.values.get(modifier.getRarityType().getValue());
+          if (modifier.getEventType() == EventType.ADDITIONAL_DAMAGE) {
+            additionalDamagePercent += modifier.getValues().get(modifier.getRarityType());
           }
         }
 
@@ -160,9 +160,8 @@ public class LivingEntityMixin {
           if (!allModifiersOnFirstHit.isEmpty()) {
             double additionalDamagePercent = 0.0;
             for (ModifierOnFirstHit modifier : allModifiersOnFirstHit) {
-              if (modifier.eventType == EventType.ADDITIONAL_DAMAGE) {
-                additionalDamagePercent += modifier.values.get(
-                    modifier.getRarityType().getValue());
+              if (modifier.getEventType() == EventType.ADDITIONAL_DAMAGE) {
+                additionalDamagePercent += modifier.getValues().get(modifier.getRarityType());
               }
             }
             amount += amount * additionalDamagePercent;

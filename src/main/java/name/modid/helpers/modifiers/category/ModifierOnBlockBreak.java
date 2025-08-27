@@ -2,74 +2,40 @@ package name.modid.helpers.modifiers.category;
 
 import java.util.ArrayList;
 
-import name.modid.Gemstones;
 import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
-import name.modid.helpers.modifiers.instance.GemstoneModifier;
+import name.modid.helpers.modifiers.instance.AbstractModifier;
+import name.modid.helpers.modifiers.instance.LevelValues;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
-public class ModifierOnBlockBreak implements GemstoneModifier {
-  public ArrayList<Double> value = new ArrayList<Double>();
-  public ArrayList<Double> additionalValue = new ArrayList<Double>();
-  public ModifierItemCategory itemType;
-  public EventType eventType;
-  public GemstoneType gemstoneType;
-  public GemstoneRarity rarityType;
+public class ModifierOnBlockBreak extends AbstractModifier {
+  private final LevelValues values;
+  private final LevelValues additionalValues;
+  private final EventType eventType;
 
-  public ModifierOnBlockBreak(ArrayList<Double> value, ArrayList<Double> additionalValue,
-      ModifierItemCategory itemType, EventType eventType, GemstoneType gemstoneType) {
-    this.value = new ArrayList<Double>(value);
-    this.additionalValue = new ArrayList<Double>(additionalValue);
-    this.itemType = itemType;
+  public ModifierOnBlockBreak(
+      GemstoneType gemstoneType,
+      GemstoneRarity rarityType,
+      ModifierItemCategory itemCategory,
+      ArrayList<Double> values,
+      ArrayList<Double> additionalValues,
+      EventType eventType) {
+    super(gemstoneType, itemCategory, rarityType);
+    this.values = new LevelValues(values);
+    this.additionalValues = new LevelValues(additionalValues);
     this.eventType = eventType;
-    this.gemstoneType = gemstoneType;
   }
 
-  public MutableText getTooltipString(GemstoneRarity gemstoneRarityType,
-      Boolean withCategoryString) {
-    Object v = value.get(gemstoneRarityType.getValue()) * 100;
-    String tooltipCategoryType = withCategoryString
-        ? String.format("tooltip.gemstones.%s_type", itemType.toString().toLowerCase())
-        : "tooltip.gemstones.without_type";
-    MutableText resultTooltip = Text.empty();
-    MutableText eventString = Text.empty();
-
-    if (this.eventType == EventType.EXTRA_HEALTH) {
-      eventString.append(Text.literal("extra 1").formatted(Formatting.YELLOW))
-          .append(Text.literal("\uE004")
-              .styled(style -> style.withFont(Identifier.of("gemstones", "icons_font")))
-              .formatted(Formatting.WHITE));
-    }
-
-    return resultTooltip.append(Text.translatable(tooltipCategoryType).formatted(Formatting.GRAY))
-        .append(Text.literal("\uE006").styled(
-            style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "icons_font"))))
-        .formatted(Formatting.GREEN)
-        .append(Text.translatable(
-            String.format("tooltip.gemstones.%s.%s_bonus", gemstoneType.toString().toLowerCase(),
-                itemType.toString().toLowerCase()),
-            Text.literal(String.format("%.0f", v) + "%").formatted(Formatting.GREEN), eventString)
-            .formatted(Formatting.GOLD));
+  public LevelValues getLevelValues() {
+    return values;
   }
 
-  public GemstoneType getGemstoneType() {
-    return this.gemstoneType;
+  public LevelValues getAdditionalLevelValues() {
+    return additionalValues;
   }
 
-  public GemstoneRarity getRarityType() {
-    return this.rarityType;
+  public EventType getEventType() {
+    return eventType;
   }
-
-  public void setRarityType(GemstoneRarity rarityType) {
-    this.rarityType = rarityType;
-  }
-
-  public ModifierItemCategory getItemCategory() {
-    return this.itemType;
-  };
 }

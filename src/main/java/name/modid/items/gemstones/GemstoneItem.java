@@ -10,7 +10,7 @@ import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
-import name.modid.helpers.modifiers.tooltips.GemstoneTooltipHelper;
+import name.modid.helpers.modifiers.tooltips.TooltipHelper;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,10 +40,10 @@ public class GemstoneItem extends Item {
   public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
     GemstoneItem gemstoneItem = (GemstoneItem) stack.getItem();
     GemstoneType gemstoneType = gemstoneItem.getType();
-    Map<ModifierItemCategory, GemstoneModifier> gemstoneModifiers = new LinkedHashMap<>(
+    Map<ModifierItemCategory, Map<GemstoneRarity, GemstoneModifier>> gemstoneModifiers = new LinkedHashMap<>(
         ModifierHelper.getGemstoneModifiers(gemstoneType, stack.getItem()));
 
-    tooltip.add(GemstoneTooltipHelper.getGemstoneRaritySprite(gemstoneItem.getRarityType()));
+    tooltip.add(TooltipHelper.getGemstoneRaritySprite(gemstoneItem.getRarityType()));
     tooltip.add(Text.empty());
 
     List<ModifierItemCategory> modifierOrder = Arrays.asList(ModifierItemCategory.MELEE,
@@ -52,10 +52,11 @@ public class GemstoneItem extends Item {
     gemstoneModifiers.entrySet().stream()
         .sorted(Comparator.comparingInt(entry -> modifierOrder.indexOf(entry.getKey())))
         .forEachOrdered(entry -> {
-          GemstoneModifier modifier = entry.getValue();
+          Map<GemstoneRarity, GemstoneModifier> rarityMap = entry.getValue();
+          GemstoneModifier modifier = rarityMap.get(gemstoneItem.getRarityType());
 
-          if (gemstoneType != GemstoneType.LOCKED && gemstoneType != GemstoneType.EMPTY) {
-            tooltip.add(modifier.getTooltipString(gemstoneItem.getRarityType(), true));
+          if (modifier != null && gemstoneType != GemstoneType.LOCKED && gemstoneType != GemstoneType.EMPTY) {
+            tooltip.add(modifier.getTooltipText(gemstoneItem.getRarityType(), true));
           }
         });
   }
