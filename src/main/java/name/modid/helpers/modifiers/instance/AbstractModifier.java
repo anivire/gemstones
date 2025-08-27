@@ -2,7 +2,7 @@ package name.modid.helpers.modifiers.instance;
 
 import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
-import name.modid.helpers.modifiers.tooltips.GemstoneTooltipBuilder;
+import name.modid.helpers.modifiers.tooltips.TooltipBuilder;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.text.MutableText;
 
@@ -35,7 +35,7 @@ public abstract class AbstractModifier implements GemstoneModifier {
   @Override
   public MutableText getTooltipText(GemstoneRarity gemstoneRarityType,
       Boolean isItemTooltip) {
-    return new GemstoneTooltipBuilder(
+    return new TooltipBuilder(
         this.gemstoneType,
         this.itemCategory,
         gemstoneRarityType,

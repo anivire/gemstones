@@ -10,7 +10,7 @@ import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
-import name.modid.helpers.modifiers.tooltips.GemstoneTooltipHelper;
+import name.modid.helpers.modifiers.tooltips.TooltipHelper;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,7 +43,7 @@ public class GemstoneItem extends Item {
     Map<ModifierItemCategory, Map<GemstoneRarity, GemstoneModifier>> gemstoneModifiers = new LinkedHashMap<>(
         ModifierHelper.getGemstoneModifiers(gemstoneType, stack.getItem()));
 
-    tooltip.add(GemstoneTooltipHelper.getGemstoneRaritySprite(gemstoneItem.getRarityType()));
+    tooltip.add(TooltipHelper.getGemstoneRaritySprite(gemstoneItem.getRarityType()));
     tooltip.add(Text.empty());
 
     List<ModifierItemCategory> modifierOrder = Arrays.asList(ModifierItemCategory.MELEE,

@@ -27,7 +27,6 @@ import name.modid.helpers.modifiers.category.ModifierOnHit;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
-import name.modid.helpers.modifiers.type.ConditionType;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -205,8 +204,8 @@ public class ModifiersDataFactory {
           }
           case CUSTOM_CONDITION -> {
             if (entry instanceof CustomConditionConfig customConditionConfig) {
-              ConditionType conditionType = customConditionConfig.conditionType;
-              if (conditionType == null)
+              EventType eventType = customConditionConfig.eventType;
+              if (eventType == null)
                 continue;
 
               modifierInstance = new ModifierCustomCondition(
@@ -215,7 +214,7 @@ public class ModifiersDataFactory {
                   category,
                   new ArrayList<>(customConditionConfig.valueLevels),
                   new ArrayList<>(customConditionConfig.additionalValueLevels),
-                  conditionType);
+                  eventType);
             }
           }
           case ON_FIRST_HIT -> {

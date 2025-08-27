@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.category.ModifierCustomCondition;
-import name.modid.helpers.modifiers.type.ConditionType;
+import name.modid.helpers.modifiers.type.EventType;
 import name.modid.utils.BrewingStandBlockEntityAccess;
 import name.modid.utils.PotionUtil;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
@@ -70,7 +70,7 @@ public abstract class BrewingStandBlockEntityMixin implements BrewingStandBlockE
 
     for (ItemStack armorPiece : equippedArmorPieces) {
       ArrayList<ModifierCustomCondition> modifiers = ModifierHelper.getCustomConditionModifiers(armorPiece);
-      if (modifiers.stream().anyMatch(o -> o.getConditionType() == ConditionType.POTION_DURATION)) {
+      if (modifiers.stream().anyMatch(o -> o.getEventType() == EventType.POTION_DURATION)) {
         for (ModifierCustomCondition m : modifiers) {
           totalIncreasedDurationValue += m.getValues().get(m.getRarityType());
         }

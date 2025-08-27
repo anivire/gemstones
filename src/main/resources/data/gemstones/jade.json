@@ -29,7 +29,7 @@
       "type": "CUSTOM_CONDITION",
       "value_levels": [15.0, 30.0, 45.0, 60.0],
       "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
-      "condition_type": "POTION_DURATION"
+      "event_type": "POTION_DURATION"
     }
   }
 }

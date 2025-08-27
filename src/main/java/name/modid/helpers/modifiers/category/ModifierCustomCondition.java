@@ -6,13 +6,13 @@ import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.instance.AbstractModifier;
 import name.modid.helpers.modifiers.instance.LevelValues;
-import name.modid.helpers.modifiers.type.ConditionType;
+import name.modid.helpers.modifiers.type.EventType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 
 public class ModifierCustomCondition extends AbstractModifier {
   private final LevelValues value;
   private final LevelValues additionalValue;
-  private final ConditionType conditionType;
+  private final EventType eventType;
 
   public ModifierCustomCondition(
       GemstoneType gemstoneType,
@@ -20,12 +20,12 @@ public class ModifierCustomCondition extends AbstractModifier {
       ModifierItemCategory itemCategory,
       ArrayList<Double> value,
       ArrayList<Double> additionalValue,
-      ConditionType conditionType) {
+      EventType eventType) {
     super(gemstoneType, itemCategory, rarityType);
 
     this.value = new LevelValues(value);
     this.additionalValue = new LevelValues(additionalValue);
-    this.conditionType = conditionType;
+    this.eventType = eventType;
   }
 
   public LevelValues getValues() {
@@ -36,7 +36,7 @@ public class ModifierCustomCondition extends AbstractModifier {
     return additionalValue;
   }
 
-  public ConditionType getConditionType() {
-    return conditionType;
+  public EventType getEventType() {
+    return eventType;
   }
 }

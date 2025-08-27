@@ -51,7 +51,7 @@ public class ModifierAreaEffect extends AbstractModifier {
     return notMe;
   }
 
-  public RegistryEntry<StatusEffect> getEffect() {
+  public RegistryEntry<StatusEffect> getEffectEntry() {
     return effect;
   }
 }

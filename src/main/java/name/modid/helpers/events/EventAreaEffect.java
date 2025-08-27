@@ -38,8 +38,8 @@ public class EventAreaEffect {
     }
 
     Map<RegistryEntry<StatusEffect>, List<ModifierAreaEffect>> grouped = allModifiers.stream()
-        .filter(m -> m.getEffect() != null)
-        .collect(Collectors.groupingBy(m -> m.getEffect()));
+        .filter(m -> m.getEffectEntry() != null)
+        .collect(Collectors.groupingBy(m -> m.getEffectEntry()));
 
     for (Map.Entry<RegistryEntry<StatusEffect>, List<ModifierAreaEffect>> entry : grouped.entrySet()) {
       RegistryEntry<StatusEffect> effect = entry.getKey();

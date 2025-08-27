@@ -15,7 +15,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-public class GemstoneTooltipHelper {
+public class TooltipHelper {
   public enum Icons {
     SOCKET("gemstone_sockets_font"), INLINE("icons_font"), RARITY("rarity_font");
 
@@ -113,8 +113,8 @@ public class GemstoneTooltipHelper {
         MutableText symbol = Text.translatable("tooltip.gemstones.without_type").formatted(Formatting.GRAY);
         MutableText gemstoneSlot = Text.translatable(
             String.format("tooltip.gemstones.gemstone_slots.%d", i + 1),
-            GemstoneTooltipHelper.getSlotText(gemstones[i].gemstoneType()))
-            .formatted(GemstoneTooltipHelper.getSlotColor(gemstones[i].gemstoneType()));
+            TooltipHelper.getSlotText(gemstones[i].gemstoneType()))
+            .formatted(TooltipHelper.getSlotColor(gemstones[i].gemstoneType()));
 
         rows.add(symbol.append(gemstoneSlot));
       }
