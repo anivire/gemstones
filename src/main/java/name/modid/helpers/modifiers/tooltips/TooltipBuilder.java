@@ -160,7 +160,7 @@ public class TooltipBuilder {
     eventIcon.styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
         .formatted(Formatting.WHITE);
 
-    if (eventIcon.getString() != null) {
+    if (!eventIcon.getString().isBlank()) {
       eventIcon.append(Text.literal(" ").styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
     }
 
