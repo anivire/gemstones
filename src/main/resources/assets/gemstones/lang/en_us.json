@@ -3,6 +3,7 @@
 
   "tooltip.gemstones.gemstone_slots": "Gemstone Max Slots: %d",
   "tooltip.gemstones.gemstone_slots_gemstones_category": "With gemstones:",
+  "tooltip.gemstones.gemstones_bonus": "Bonuses:",
   "tooltip.gemstones.gemstone_slots_info_rarities": "Gemstone rarities:",
   "tooltip.gemstones.gemstone_slots_info_rarities_fold": "(Hold left Shift for details)",
 
@@ -12,10 +13,10 @@
   "tooltip.gemstones.gemstone_slots.4": "%d",
   "tooltip.gemstones.gemstone_slots.5": "%d",
   
-  "tooltip.gemstones.melee_type": "Melee: ",
-  "tooltip.gemstones.ranged_type": "Ranged: ",
-  "tooltip.gemstones.tools_type": "Tools: ",
-  "tooltip.gemstones.armor_type": "Armor: ",
+  "tooltip.gemstones.melee_type": "∙ Melee: ",
+  "tooltip.gemstones.ranged_type": "∙ Ranged: ",
+  "tooltip.gemstones.tools_type": "∙ Tools: ",
+  "tooltip.gemstones.armor_type": "∙ Armor: ",
   
   "tooltip.gemstones.without_type": "∙ ",
 
@@ -28,7 +29,7 @@
   "tooltip.gemstones.EVENT.LIGHTNING_BOLT": "%s trigger %s in rainy weather",
   "tooltip.gemstones.EVENT.EXTRA_HEALTH": "%s gain %s while mining",
   "tooltip.gemstones.EVENT.TORRENT": "%s",
-  "tooltip.gemstones.EVENT.ADDITIONAL_DAMAGE": "%s on first hit",
+  "tooltip.gemstones.EVENT.ADDITIONAL_DAMAGE": "%s %s on first hit",
   "tooltip.gemstones.EVENT.INCREASE_GEODES_DROP": "%s loot %s from ores",
   "tooltip.gemstones.EVENT.INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
   "tooltip.gemstones.EVENT.POTION_DURATION": "%s %s after brewing",
@@ -52,7 +53,7 @@
   "tooltip.gemstones.geode.info": "Open to obtain %s, %s and %s gemstones",
   
   "item.gemstones.mossy_box": "Mossy Box",
-  "tooltip.gemstones.mossy_box.info": "Open to obtaon a small gift from the depths",
+  "tooltip.gemstones.mossy_box.info": "Open to obtain a small gift from the depths",
 
   "tooltip.gemstones.opening_item.info": "(Click RMB in hand for open)",
 

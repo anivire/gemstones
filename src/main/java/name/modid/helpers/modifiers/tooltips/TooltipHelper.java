@@ -83,7 +83,8 @@ public class TooltipHelper {
 
   public static Text getGemstoneRaritySprite(GemstoneRarity rarityType) {
     return Text.literal(GemstoneRarity.getRarityLiteral(rarityType))
-        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "rarity_font")));
+        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "quality_font")))
+        .formatted(Formatting.WHITE);
   }
 
   public static Text getGemstoneSocketedRow(Gemstone[] gemstones) {

@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class GemstoneItem extends Item {
   protected GemstoneType gemstoneType;
@@ -49,6 +50,7 @@ public class GemstoneItem extends Item {
     List<ModifierItemCategory> modifierOrder = Arrays.asList(ModifierItemCategory.MELEE,
         ModifierItemCategory.RANGED, ModifierItemCategory.TOOLS, ModifierItemCategory.ARMOR);
 
+    tooltip.add(Text.translatable("tooltip.gemstones.gemstones_bonus").formatted(Formatting.GRAY));
     gemstoneModifiers.entrySet().stream()
         .sorted(Comparator.comparingInt(entry -> modifierOrder.indexOf(entry.getKey())))
         .forEachOrdered(entry -> {

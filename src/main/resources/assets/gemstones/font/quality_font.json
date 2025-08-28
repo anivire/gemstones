@@ -1,0 +1,40 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/quality/crude.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "\uE001"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/quality/polished.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "\uE002"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/quality/flawless.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "\uE003"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/quality/radiant.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "\uE004"
+      ]
+    }
+  ]
+}
