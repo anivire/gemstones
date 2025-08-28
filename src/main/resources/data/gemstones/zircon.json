@@ -20,10 +20,18 @@
       "operation": "ADD_VALUE"
     },
     "ARMOR": {
-      "type": "ATTRIBUTE",
-      "attribute_id": "minecraft:generic.jump_strength",
-      "value_levels": [0.025, 0.055, 0.075, 0.1],
-      "operation": "ADD_VALUE"
+      "type": "MULTIPLY_ATTRIBUTE",
+      "instances": [
+        {
+          "attribute_id": "minecraft:generic.jump_strength",
+          "value_levels": [0.025, 0.055, 0.075, 0.1],
+          "operation": "ADD_VALUE"
+        },{
+          "attribute_id": "minecraft:generic.step_height",
+          "value_levels": [0.15, 0.25, 0.4, 0.5],
+          "operation": "ADD_VALUE"
+        }
+      ]
     }
   }
 }

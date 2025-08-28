@@ -18,7 +18,35 @@
   "tooltip.gemstones.armor_type": "Armor: ",
   
   "tooltip.gemstones.without_type": "∙ ",
-  
+
+  "tooltip.gemstones.ATTRIBUTE": "%s %s",
+  "tooltip.gemstones.MULTIPLY_ATTRIBUTE": "%s %s and %s %s",
+  "tooltip.gemstones.ON_HIT_EFFECT": "%s to inflict %s",
+  "tooltip.gemstones.ON_HIT_EFFECT_PROJ": "%s to inflict %s",
+  "tooltip.gemstones.AREA_EFFECT": "always inflict %s in %s radius",
+
+  "tooltip.gemstones.EVENT.LIGHTNING_BOLT": "%s trigger %s in rainy weather",
+  "tooltip.gemstones.EVENT.EXTRA_HEALTH": "%s gain %s while mining",
+  "tooltip.gemstones.EVENT.TORRENT": "%s",
+  "tooltip.gemstones.EVENT.ADDITIONAL_DAMAGE": "%s on first hit",
+  "tooltip.gemstones.EVENT.INCREASE_GEODES_DROP": "%s loot %s from ores",
+  "tooltip.gemstones.EVENT.INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
+  "tooltip.gemstones.EVENT.POTION_DURATION": "%s %s after brewing",
+
+  "effect.gemstones.bleeding": "Bleeding",
+  "effect.gemstones.guardian_smite": "Guardian Smite",
+  "effect.gemstones.harvest_mark": "Harvest Mark",
+  "effect.gemstones.stunned": "Stunned",
+  "effect.gemstones.detonate": "Detonate",
+  "effect.gemstones.plague": "Plague",
+  "effect.gemstones.freezing": "Freezing",
+
+  "attribute.name.generic.pull_speed": "Pull Speed",
+  "attribute.name.generic.crit_damage": "Critical Hit Damage",
+  "attribute.name.generic.evasion": "Evasion",
+  "attribute.name.generic.max_durability": "Max Durability",
+  "attribute.name.generic.projectile_speed": "Projectile Speed",
+
   "item.gemstones.stone_geode": "Stone Geode",
   "item.gemstones.deepslate_geode": "Deepslate Geode",
   "tooltip.gemstones.geode.info": "Open to obtain %s, %s and %s gemstones",
@@ -32,123 +60,54 @@
   "item.gemstones.ruby_gemstone_uncommon": "Ruby Gemstone",
   "item.gemstones.ruby_gemstone_rare": "Ruby Gemstone",
   "item.gemstones.ruby_gemstone_legendary": "Ruby Gemstone",
-
-  "tooltip.gemstones.ruby.melee_bonus": "%s to inflict %s",
-  "tooltip.gemstones.ruby.ranged_bonus": "%s to inflict %s",
-  "tooltip.gemstones.ruby.tools_bonus": "%s to gain %s while mining",
-  "tooltip.gemstones.ruby.armor_bonus": "%s evasion chance",
   
   "item.gemstones.celestine_gemstone_common": "Celestine Gemstone",
   "item.gemstones.celestine_gemstone_uncommon": "Celestine Gemstone",
   "item.gemstones.celestine_gemstone_rare": "Celestine Gemstone",
   "item.gemstones.celestine_gemstone_legendary": "Celestine Gemstone",
 
-  "tooltip.gemstones.celestine.melee_bonus": "%s attack speed",
-  "tooltip.gemstones.celestine.ranged_bonus": "%s pull speed",
-  "tooltip.gemstones.celestine.tools_bonus": "%s block break speed",
-  "tooltip.gemstones.celestine.armor_bonus": "%s movement speed",
-
   "item.gemstones.sapphire_gemstone_common": "Sapphire Gemstone",
   "item.gemstones.sapphire_gemstone_uncommon": "Sapphire Gemstone",
   "item.gemstones.sapphire_gemstone_rare": "Sapphire Gemstone",
   "item.gemstones.sapphire_gemstone_legendary": "Sapphire Gemstone",
 
-  "tooltip.gemstones.sapphire.melee_bonus": "%s to inflict %s",
-  "tooltip.gemstones.sapphire.ranged_bonus": "%s to trigger %s in rainy weather",
-  "tooltip.gemstones.sapphire.tools_bonus": "%s underwater block break speed",
-  "tooltip.gemstones.sapphire.armor_bonus": "%s movement speed in water and %s oxygen",
-
   "item.gemstones.topaz_gemstone_common": "Topaz Gemstone",
   "item.gemstones.topaz_gemstone_uncommon": "Topaz Gemstone",
   "item.gemstones.topaz_gemstone_rare": "Topaz Gemstone",
   "item.gemstones.topaz_gemstone_legendary": "Topaz Gemstone",
-
-  "tooltip.gemstones.topaz.melee_bonus": "%s crit damage",
-  "tooltip.gemstones.topaz.ranged_bonus": "%s to inflict %s",
-  "tooltip.gemstones.topaz.tools_bonus": "%s to inflict %s",
-  "tooltip.gemstones.topaz.armor_bonus": "%s armor and %s armor toughness",
   
   "item.gemstones.zircon_gemstone_common": "Zircon Gemstone",
   "item.gemstones.zircon_gemstone_uncommon": "Zircon Gemstone",
   "item.gemstones.zircon_gemstone_rare": "Zircon Gemstone",
   "item.gemstones.zircon_gemstone_legendary": "Zircon Gemstone",
 
-  "tooltip.gemstones.zircon.melee_bonus": "%s attack range",
-  "tooltip.gemstones.zircon.ranged_bonus": "%s arrow speed",
-  "tooltip.gemstones.zircon.tools_bonus": "%s increase block break range",
-  "tooltip.gemstones.zircon.armor_bonus": "%s increase jump height",
-
   "item.gemstones.aquamarine_gemstone_common": "Aquamarine Gemstone",
   "item.gemstones.aquamarine_gemstone_uncommon": "Aquamarine Gemstone",
   "item.gemstones.aquamarine_gemstone_rare": "Aquamarine Gemstone",
   "item.gemstones.aquamarine_gemstone_legendary": "Aquamarine Gemstone",
-
-  "tooltip.gemstones.aquamarine.melee_bonus": "%s to inflict %s",
-  "tooltip.gemstones.aquamarine.ranged_bonus": "%s to inflict %s",
-  "tooltip.gemstones.aquamarine.tools_bonus": "%s underwater block break speed",
-  "tooltip.gemstones.aquamarine.armor_bonus": "%s %s from fishing",
   
   "item.gemstones.obsidian_shard_gemstone_common": "Obsidian Shard Gemstone",
   "item.gemstones.obsidian_shard_gemstone_uncommon": "Obsidian Shard Gemstone",
   "item.gemstones.obsidian_shard_gemstone_rare": "Obsidian Shard Gemstone",
   "item.gemstones.obsidian_shard_gemstone_legendary": "Obsidian Shard Gemstone",
-
-  "tooltip.gemstones.obsidian_shard.melee_bonus": "%s to inflict %s",
-  "tooltip.gemstones.obsidian_shard.ranged_bonus": "%s to inflict %s",
-  "tooltip.gemstones.obsidian_shard.tools_bonus": "%s max item durability",
-  "tooltip.gemstones.obsidian_shard.armor_bonus": "%s max item durability",
   
   "item.gemstones.opal_gemstone_common": "Opal Gemstone",
   "item.gemstones.opal_gemstone_uncommon": "Opal Gemstone",
   "item.gemstones.opal_gemstone_rare": "Opal Gemstone",
   "item.gemstones.opal_gemstone_legendary": "Opal Gemstone",
-
-  "tooltip.gemstones.opal.melee_bonus": "%s attack damage but %s attack speed",
-  "tooltip.gemstones.opal.ranged_bonus": "%s arrow speed but %s pull speed",
-  "tooltip.gemstones.opal.tools_bonus": "%s mining speed but %s block break range",
-  "tooltip.gemstones.opal.armor_bonus": "%s attack damage but %s max health",
   
   "item.gemstones.jade_gemstone_common": "Jade Gemstone",
   "item.gemstones.jade_gemstone_uncommon": "Jade Gemstone",
   "item.gemstones.jade_gemstone_rare": "Jade Gemstone",
   "item.gemstones.jade_gemstone_legendary": "Jade Gemstone",
-
-  "tooltip.gemstones.jade.melee_bonus": "%s to inflict %s",
-  "tooltip.gemstones.jade.ranged_bonus": "%s to inflict %s",
-  "tooltip.gemstones.jade.tools_bonus": "%s player model scale",
-  "tooltip.gemstones.jade.armor_bonus": "%s %s after brewing",
   
   "item.gemstones.malachite_gemstone_common": "Malachite Gemstone",
   "item.gemstones.malachite_gemstone_uncommon": "Malachite Gemstone",
   "item.gemstones.malachite_gemstone_rare": "Malachite Gemstone",
   "item.gemstones.malachite_gemstone_legendary": "Malachite Gemstone",
-
-  "tooltip.gemstones.malachite.melee_bonus": "%s %s on first hit",
-  "tooltip.gemstones.malachite.ranged_bonus": "%s to inflict %s",
-  "tooltip.gemstones.malachite.tools_bonus": "%s %s from ores",
-  "tooltip.gemstones.malachite.armor_bonus": "always inflict %s in %s radius",
   
   "item.gemstones.spawner_core_gemstone_common": "Spawner Core",
   "item.gemstones.spawner_core_gemstone_uncommon": "Spawner Core",
   "item.gemstones.spawner_core_gemstone_rare": "Spawner Core",
-  "item.gemstones.spawner_core_gemstone_legendary": "Spawner Core",
-
-  "tooltip.gemstones.spawner_core.melee_bonus": "",
-  "tooltip.gemstones.spawner_core.ranged_bonus": "",
-  "tooltip.gemstones.spawner_core.tools_bonus": "",
-  "tooltip.gemstones.spawner_core.armor_bonus": "",
-
-  "effect.gemstones.bleeding": "Bleeding",
-  "effect.gemstones.guardian_smite": "Guardian Smite",
-  "effect.gemstones.harvest_mark": "Harvest Mark",
-  "effect.gemstones.stunned": "Stunned",
-  "effect.gemstones.detonate": "Detonate",
-  "effect.gemstones.plague": "Plague",
-  "effect.gemstones.freezing": "Freezing",
-
-  "attribute.name.generic.pull_speed": "Pull Speed",
-  "attribute.name.generic.crit_damage": "Critical Hit Damage",
-  "attribute.name.generic.evasion": "Evasion",
-  "attribute.name.generic.max_durability": "Max Durability Points",
-  "attribute.name.generic.prjectile_speed": "Projectile Speed"
+  "item.gemstones.spawner_core_gemstone_legendary": "Spawner Core"
 }

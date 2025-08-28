@@ -138,6 +138,14 @@ public class TooltipBuilder {
         itemCategory.toString().toLowerCase());
   }
 
+  public String getTranslationKeyByModifier(ModifierCategoryType category) {
+    return String.format("tooltip.gemstones.%s", category.toString());
+  }
+
+  public String getTranslationKeyByEvent(EventType event) {
+    return String.format("tooltip.gemstones.EVENT.%s", event.toString());
+  }
+
   public MutableText getArrowPrefix(boolean isPositive) {
     return Text.literal(isPositive ? InlineIcons.ARROW_UP.getSymbol() : InlineIcons.ARROW_DOWN.getSymbol())
         .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
@@ -188,7 +196,9 @@ public class TooltipBuilder {
           .append(getArrowPrefix(isPositive))
           .append(Text.literal(formattedValue).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
 
-      return Text.translatable(getTranslationKey(), attributeText).formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(getTranslationKeyByModifier(ModifierCategoryType.ATTRIBUTE), attributeText,
+          Text.translatable(m.getAttributeEntry().value().getTranslationKey().toLowerCase()))
+          .formatted(Formatting.BLUE);
     }
   }
 
@@ -210,9 +220,14 @@ public class TooltipBuilder {
             .append(Text.literal(formattedValue).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
 
         attributeParts.add(attributeText);
+        attributeParts.add(Text
+            .translatable(attr.getAttributeEntry().value().getTranslationKey().toLowerCase())
+            .formatted(Formatting.BLUE));
       }
 
-      return Text.translatable(getTranslationKey(), attributeParts.toArray()).formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(
+          getTranslationKeyByModifier(ModifierCategoryType.MULTIPLY_ATTRIBUTE),
+          attributeParts.toArray()).formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
@@ -232,7 +247,9 @@ public class TooltipBuilder {
           .append(m.getEffectEntry().value().getName())
           .formatted(m.getEffectEntry().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
 
-      return Text.translatable(getTranslationKey(), chanceText, effectText).formatted(DEFAULT_TEXT_COLOR);
+      return Text
+          .translatable(getTranslationKeyByModifier(ModifierCategoryType.ON_HIT_EFFECT_PROJ), chanceText, effectText)
+          .formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
@@ -252,7 +269,9 @@ public class TooltipBuilder {
           .append(m.getEffectEntry().value().getName())
           .formatted(m.getEffectEntry().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
 
-      return Text.translatable(getTranslationKey(), chanceText, effectText).formatted(DEFAULT_TEXT_COLOR);
+      return Text
+          .translatable(getTranslationKeyByModifier(ModifierCategoryType.ON_HIT_EFFECT), chanceText, effectText)
+          .formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
@@ -268,7 +287,7 @@ public class TooltipBuilder {
           .append(getArrowPrefix(isPositive))
           .append(Text.literal(formattedChance).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
 
-      return Text.translatable(getTranslationKey(), chanceText, getEventText(m.getEventType()))
+      return Text.translatable(getTranslationKeyByEvent(m.getEventType()), chanceText, getEventText(m.getEventType()))
           .formatted(DEFAULT_TEXT_COLOR);
     }
   }
@@ -286,7 +305,8 @@ public class TooltipBuilder {
           .append(m.getEffectEntry().value().getName())
           .formatted(m.getEffectEntry().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
 
-      return Text.translatable(getTranslationKey(), effectText, chanceText).formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(getTranslationKeyByModifier(ModifierCategoryType.AREA_EFFECT), effectText, chanceText)
+          .formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
@@ -302,7 +322,7 @@ public class TooltipBuilder {
           .append(getArrowPrefix(isPositive))
           .append(Text.literal(formattedChance).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
 
-      return Text.translatable(getTranslationKey(), chanceText, getEventText(m.getEventType()))
+      return Text.translatable(getTranslationKeyByEvent(m.getEventType()), chanceText, getEventText(m.getEventType()))
           .formatted(DEFAULT_TEXT_COLOR);
     }
   }
@@ -319,7 +339,7 @@ public class TooltipBuilder {
           .append(getArrowPrefix(isPositive))
           .append(Text.literal(formattedChance).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
 
-      return Text.translatable(getTranslationKey(), chanceText, getEventText(m.getEventType()))
+      return Text.translatable(getTranslationKeyByEvent(m.getEventType()), chanceText, getEventText(m.getEventType()))
           .formatted(DEFAULT_TEXT_COLOR);
     }
   }
@@ -332,13 +352,14 @@ public class TooltipBuilder {
       boolean isPositive = value > 0;
       String postfix = m.getEventType() == EventType.POTION_DURATION ? " seconds"
           : m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP ? "%" : "";
-      String formatted = formatValue(Math.abs(value) * (m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP ? 100 : 1), postfix);
+      String formatted = formatValue(
+          Math.abs(value) * (m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP ? 100 : 1), postfix);
 
       MutableText chanceText = Text.empty()
           .append(getArrowPrefix(isPositive))
           .append(Text.literal(formatted).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
 
-      return Text.translatable(getTranslationKey(), chanceText, getEventText(m.getEventType()))
+      return Text.translatable(getTranslationKeyByEvent(m.getEventType()), chanceText, getEventText(m.getEventType()))
           .formatted(DEFAULT_TEXT_COLOR);
     }
   }
