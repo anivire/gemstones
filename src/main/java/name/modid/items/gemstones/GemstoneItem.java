@@ -45,12 +45,15 @@ public class GemstoneItem extends Item {
         ModifierHelper.getGemstoneModifiers(gemstoneType, stack.getItem()));
 
     tooltip.add(TooltipHelper.getGemstoneRaritySprite(gemstoneItem.getRarityType()));
-    tooltip.add(Text.empty());
+
+    if (!gemstoneModifiers.isEmpty()) {
+      tooltip.add(Text.empty());
+      tooltip.add(Text.translatable("tooltip.gemstones.gemstones_bonus").formatted(Formatting.GRAY));
+    }
 
     List<ModifierItemCategory> modifierOrder = Arrays.asList(ModifierItemCategory.MELEE,
         ModifierItemCategory.RANGED, ModifierItemCategory.TOOLS, ModifierItemCategory.ARMOR);
 
-    tooltip.add(Text.translatable("tooltip.gemstones.gemstones_bonus").formatted(Formatting.GRAY));
     gemstoneModifiers.entrySet().stream()
         .sorted(Comparator.comparingInt(entry -> modifierOrder.indexOf(entry.getKey())))
         .forEachOrdered(entry -> {

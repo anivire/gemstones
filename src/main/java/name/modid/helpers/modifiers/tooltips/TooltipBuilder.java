@@ -351,9 +351,12 @@ public class TooltipBuilder {
       double value = m.getValues().get(rarityType);
       boolean isPositive = value > 0;
       String postfix = m.getEventType() == EventType.POTION_DURATION ? " seconds"
-          : m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP ? "%" : "";
+          : m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP
+              || m.getEventType() == EventType.INCREASE_MOB_SPAWNRATE ? "%" : "";
       String formatted = formatValue(
-          Math.abs(value) * (m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP ? 100 : 1), postfix);
+          Math.abs(value) * (m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP
+              || m.getEventType() == EventType.INCREASE_MOB_SPAWNRATE ? 100 : 1),
+          postfix);
 
       MutableText chanceText = Text.empty()
           .append(getArrowPrefix(isPositive))

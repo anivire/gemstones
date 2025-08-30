@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Function;
 
 import name.modid.Gemstones;
@@ -18,6 +19,7 @@ import name.modid.helpers.modifiers.category.ModifierAttribute;
 import name.modid.helpers.modifiers.category.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.category.ModifierOnDamage;
+import name.modid.helpers.modifiers.category.ModifierOnHit;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
@@ -28,14 +30,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.ElderGuardianEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
@@ -45,12 +53,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.LootContextTypes;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class GemstoneSocketingHelper {
@@ -371,7 +385,7 @@ public class GemstoneSocketingHelper {
       List<ModifierOnBlockBreak> modifiers = entry.getValue();
 
       switch (eventType) {
-        case EXTRA_HEALTH: {
+        case EXTRA_HEALTH -> {
           double combinedProcChance = 0.0;
           int maxStack = 0;
           double valuePerProc = 0.0;
@@ -395,9 +409,8 @@ public class GemstoneSocketingHelper {
           break;
         }
 
-        case INCREASE_GEODES_DROP: {
+        case INCREASE_GEODES_DROP -> {
           double combinedProcChance = 0.0;
-
           if (!(state.isIn(TagsRegistrationHelper.ALL_ORES))) {
             break;
           }
@@ -414,11 +427,107 @@ public class GemstoneSocketingHelper {
 
             Block.dropStack(world, pos, geode);
           }
-
-          break;
         }
-        default: {
-          break;
+        case REGENERATE_BLOCK -> {
+          double combinedProcChance = 0.0;
+
+          for (ModifierOnBlockBreak m : modifiers) {
+            GemstoneRarity rarity = m.getRarityType();
+            combinedProcChance += m.getLevelValues().get(rarity);
+          }
+
+          if (world.getRandom().nextDouble() < combinedProcChance) {
+            world.setBlockState(pos, state, Block.FORCE_STATE);
+
+            if (world instanceof ServerWorld serverWorld) {
+              world.playSound(
+                  null,
+                  pos,
+                  SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
+                  SoundCategory.BLOCKS,
+                  1.0f,
+                  1.0f);
+
+              serverWorld.spawnParticles(
+                  ParticleTypes.CLOUD,
+                  pos.getX() + 0.5,
+                  pos.getY() + 0.5,
+                  pos.getZ() + 0.5,
+                  20,
+                  0.3,
+                  0.3,
+                  0.3,
+                  0.2);
+            }
+          }
+
+        }
+        default -> {
+          return;
+        }
+      }
+    }
+  }
+
+  public static void applyOnHitModifiers(ArrayList<ModifierOnHit> gemstoneModifiers,
+      ItemStack itemStack, ServerWorld world, Vec3d pos, ArrowEntity arrow, LivingEntity target) {
+    Map<EventType, List<ModifierOnHit>> eventToModifiers = new HashMap<>();
+    for (ModifierOnHit mod : gemstoneModifiers) {
+      eventToModifiers.computeIfAbsent(mod.getEventType(), k -> new ArrayList<>()).add(mod);
+    }
+
+    for (Map.Entry<EventType, List<ModifierOnHit>> entry : eventToModifiers.entrySet()) {
+      EventType eventType = entry.getKey();
+      List<ModifierOnHit> modifiers = entry.getValue();
+
+      switch (eventType) {
+        case LIGHTNING_BOLT -> {
+          double combinedProcChance = modifiers.stream()
+              .mapToDouble(m -> m.getEventChances().get(m.getRarityType()))
+              .sum();
+
+          if (new Random().nextDouble() < Math.min(combinedProcChance, 1.0) && world.isRaining()) {
+            LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
+            if (lightning != null) {
+              lightning.setPosition(pos.getX(), pos.getY(), pos.getZ());
+              world.spawnEntity(lightning);
+            }
+            arrow.discard();
+          }
+        }
+        case COPY_ENTITY_DROP -> {
+          if (target instanceof WitherEntity
+              || target instanceof EnderDragonEntity
+              || target instanceof ElderGuardianEntity) {
+            break;
+
+          }
+
+          double combinedProcChance = modifiers.stream()
+              .mapToDouble(m -> m.getEventChances().get(m.getRarityType()))
+              .sum();
+
+          if (new Random().nextDouble() < Math.min(combinedProcChance, 1.0)) {
+            LootTable lootTable = world.getServer()
+                .getReloadableRegistries()
+                .getLootTable(target.getLootTable());
+
+            LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder(world)
+                .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(target.getBlockPos()))
+                .add(LootContextParameters.THIS_ENTITY, target)
+                .add(LootContextParameters.DAMAGE_SOURCE, world.getDamageSources().arrow(arrow, arrow.getOwner()))
+                .addOptional(LootContextParameters.ATTACKING_ENTITY, arrow.getOwner());
+
+            LootContextParameterSet lootContext = builder.build(LootContextTypes.ENTITY);
+            List<ItemStack> loot = lootTable.generateLoot(lootContext);
+
+            for (ItemStack stack : loot) {
+              Block.dropStack(world, target.getBlockPos(), stack);
+            }
+          }
+        }
+        default -> {
+          return;
         }
       }
     }
@@ -457,5 +566,26 @@ public class GemstoneSocketingHelper {
         }
       }
     }
+  }
+
+  private static boolean isBowOrCrossbow(ItemStack stack) {
+    return stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem;
+  }
+
+  public static ItemStack getWeaponStack(PlayerEntity player) {
+    if (player == null) {
+      return null;
+    }
+
+    ItemStack mainHand = player.getMainHandStack();
+    ItemStack offHand = player.getOffHandStack();
+
+    if (isBowOrCrossbow(mainHand)) {
+      return mainHand;
+    } else if (isBowOrCrossbow(offHand)) {
+      return offHand;
+    }
+
+    return null;
   }
 }

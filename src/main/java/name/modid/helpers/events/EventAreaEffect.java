@@ -1,20 +1,16 @@
 package name.modid.helpers.events;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.joml.Vector3f;
 
 import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.category.ModifierAreaEffect;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -24,18 +20,10 @@ import net.minecraft.world.World;
 public class EventAreaEffect {
   public static void setupEvent(ServerPlayerEntity player) {
     World world = player.getWorld();
-    List<ItemStack> equippedArmorPieces = Stream.of(
-        player.getEquippedStack(EquipmentSlot.HEAD),
-        player.getEquippedStack(EquipmentSlot.CHEST),
-        player.getEquippedStack(EquipmentSlot.LEGS),
-        player.getEquippedStack(EquipmentSlot.FEET))
-        .filter(stack -> !stack.isEmpty())
-        .toList();
 
-    List<ModifierAreaEffect> allModifiers = new ArrayList<>();
-    for (ItemStack armorPiece : equippedArmorPieces) {
-      allModifiers.addAll(ModifierHelper.getAreaEffectModifiers(armorPiece));
-    }
+    List<ModifierAreaEffect> allModifiers = ModifierHelper.collectPlayerArmorValues(
+        player,
+        armorPiece -> ModifierHelper.getAreaEffectModifiers(armorPiece));
 
     Map<RegistryEntry<StatusEffect>, List<ModifierAreaEffect>> grouped = allModifiers.stream()
         .filter(m -> m.getEffectEntry() != null)

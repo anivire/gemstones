@@ -3,7 +3,6 @@ package name.modid.mixin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -12,12 +11,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.category.ModifierCustomCondition;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.utils.BrewingStandBlockEntityAccess;
 import name.modid.utils.PotionUtil;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
@@ -58,24 +55,15 @@ public abstract class BrewingStandBlockEntityMixin implements BrewingStandBlockE
     if (player == null)
       return;
 
-    double totalIncreasedDurationValue = 0.0;
-
-    List<ItemStack> equippedArmorPieces = Stream.of(
-        player.getEquippedStack(EquipmentSlot.HEAD),
-        player.getEquippedStack(EquipmentSlot.CHEST),
-        player.getEquippedStack(EquipmentSlot.LEGS),
-        player.getEquippedStack(EquipmentSlot.FEET))
-        .filter(stack -> !stack.isEmpty())
-        .toList();
-
-    for (ItemStack armorPiece : equippedArmorPieces) {
-      ArrayList<ModifierCustomCondition> modifiers = ModifierHelper.getCustomConditionModifiers(armorPiece);
-      if (modifiers.stream().anyMatch(o -> o.getEventType() == EventType.POTION_DURATION)) {
-        for (ModifierCustomCondition m : modifiers) {
-          totalIncreasedDurationValue += m.getValues().get(m.getRarityType());
-        }
-      }
-    }
+    double totalIncreasedDurationValue = ModifierHelper.collectPlayerArmorValues(
+        player,
+        armorPiece -> ModifierHelper.getCustomConditionModifiers(armorPiece).stream()
+            .filter(m -> m.getEventType() == EventType.POTION_DURATION)
+            .map(m -> m.getValues().get(m.getRarityType()))
+            .toList())
+        .stream()
+        .mapToDouble(Double::doubleValue)
+        .sum();
 
     for (int i = 0; i < 3; i++) {
       ItemStack stack = inventory.get(i);

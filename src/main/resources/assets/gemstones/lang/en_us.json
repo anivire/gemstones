@@ -26,13 +26,16 @@
   "tooltip.gemstones.ON_HIT_EFFECT_PROJ": "%s to inflict %s",
   "tooltip.gemstones.AREA_EFFECT": "always inflict %s in %s radius",
 
-  "tooltip.gemstones.EVENT.LIGHTNING_BOLT": "%s trigger %s in rainy weather",
+  "tooltip.gemstones.EVENT.LIGHTNING_BOLT": "%s trigger to %s in rainy weather",
   "tooltip.gemstones.EVENT.EXTRA_HEALTH": "%s gain %s while mining",
-  "tooltip.gemstones.EVENT.TORRENT": "%s",
+  "tooltip.gemstones.EVENT.TORRENT": "%s trigger to %s on hit",
   "tooltip.gemstones.EVENT.ADDITIONAL_DAMAGE": "%s %s on first hit",
   "tooltip.gemstones.EVENT.INCREASE_GEODES_DROP": "%s loot %s from ores",
   "tooltip.gemstones.EVENT.INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
   "tooltip.gemstones.EVENT.POTION_DURATION": "%s %s after brewing",
+  "tooltip.gemstones.EVENT.REGENERATE_BLOCK": "%s %s after mining",
+  "tooltip.gemstones.EVENT.COPY_ENTITY_DROP": "%s drop copy %s on hit",
+  "tooltip.gemstones.EVENT.INCREASE_MOB_SPAWNRATE": "%s %s",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
@@ -41,6 +44,7 @@
   "effect.gemstones.detonate": "Detonate",
   "effect.gemstones.plague": "Plague",
   "effect.gemstones.freezing": "Freezing",
+  "effect.gemstones.loot_touch": "Loot Touch",
 
   "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",

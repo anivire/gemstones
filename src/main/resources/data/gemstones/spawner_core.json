@@ -1,4 +1,31 @@
 {
   "gemstone_type": "SPAWNER_CORE",
-  "modifiers": {}
+  "modifiers": {
+    "MELEE": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.01, 0.02, 0.03, 0.04],
+      "amplifier": 0,
+      "effect_id": "gemstones:loot_touch",
+      "duration": 11,
+      "is_stacking": false,
+      "max_stack_count": 0
+    },
+    "RANGED": {
+      "type": "ON_HIT",
+      "chance_levels": [0.01, 0.025, 0.035, 0.045],
+      "event_type": "COPY_ENTITY_DROP"
+    },
+    "TOOLS": {
+      "type": "ON_BLOCK_BREAK",
+      "chance_levels": [0.03, 0.06, 0.09, 0.12],
+      "value_levels": [0.0, 0.0, 0.0, 0.0],
+      "event_type": "REGENERATE_BLOCK"
+    },
+    "ARMOR": {
+      "type": "CUSTOM_CONDITION",
+      "value_levels": [0.04, 0.07, 0.09, 0.14],
+      "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
+      "event_type": "INCREASE_MOB_SPAWNRATE"
+    }
+  }
 }

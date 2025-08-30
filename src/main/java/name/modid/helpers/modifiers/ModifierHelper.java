@@ -1,7 +1,10 @@
 package name.modid.helpers.modifiers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import name.modid.config.datapack.ModifiersRegistry;
 import name.modid.helpers.GemstoneRarity;
@@ -33,6 +36,7 @@ import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class ModifierHelper {
   public static Map<ModifierItemCategory, Map<GemstoneRarity, GemstoneModifier>> getGemstoneModifiers(
@@ -99,6 +103,20 @@ public class ModifierHelper {
       return ModifierItemCategory.ARMOR;
     }
     return ModifierItemCategory.TOOLS;
+  }
+
+  public static <R> List<R> collectPlayerArmorValues(
+      ServerPlayerEntity player,
+      Function<ItemStack, List<R>> callback) {
+    return Stream.of(
+        player.getEquippedStack(EquipmentSlot.HEAD),
+        player.getEquippedStack(EquipmentSlot.CHEST),
+        player.getEquippedStack(EquipmentSlot.LEGS),
+        player.getEquippedStack(EquipmentSlot.FEET))
+        .filter(stack -> !stack.isEmpty())
+        .map(callback)
+        .flatMap(List::stream)
+        .toList();
   }
 
   public static ArrayList<ModifierAttribute> getAttributeModifiers(ItemStack itemStack) {

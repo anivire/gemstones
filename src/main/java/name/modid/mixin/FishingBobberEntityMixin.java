@@ -1,9 +1,5 @@
 package name.modid.mixin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,10 +8,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import name.modid.helpers.ItemRegistrationHelper;
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.category.ModifierCustomCondition;
 import name.modid.helpers.modifiers.type.EventType;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
@@ -40,24 +34,15 @@ public abstract class FishingBobberEntityMixin {
       return;
     }
 
-    double totalIncreasedChanceValue = 0.0;
-
-    List<ItemStack> equippedArmorPieces = Stream.of(
-        player.getEquippedStack(EquipmentSlot.HEAD),
-        player.getEquippedStack(EquipmentSlot.CHEST),
-        player.getEquippedStack(EquipmentSlot.LEGS),
-        player.getEquippedStack(EquipmentSlot.FEET))
-        .filter(stack2 -> !stack2.isEmpty())
-        .toList();
-
-    for (ItemStack armorPiece : equippedArmorPieces) {
-      ArrayList<ModifierCustomCondition> modifiers = ModifierHelper.getCustomConditionModifiers(armorPiece);
-      if (modifiers.stream().anyMatch(o -> o.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP)) {
-        for (ModifierCustomCondition m : modifiers) {
-          totalIncreasedChanceValue += m.getValues().get(m.getRarityType());
-        }
-      }
-    }
+    double totalIncreasedChanceValue = ModifierHelper.collectPlayerArmorValues(
+        player,
+        armorPiece -> ModifierHelper.getCustomConditionModifiers(armorPiece).stream()
+            .filter(m -> m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP)
+            .map(m -> m.getValues().get(m.getRarityType()))
+            .toList())
+        .stream()
+        .mapToDouble(Double::doubleValue)
+        .sum();
 
     if (player.getWorld().random.nextFloat() < totalIncreasedChanceValue) {
       ItemStack specialDrop = new ItemStack(ItemRegistrationHelper.MOSSY_BOX);

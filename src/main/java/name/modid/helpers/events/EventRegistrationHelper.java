@@ -19,11 +19,17 @@ public class EventRegistrationHelper {
     ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnHit::setupEvent);
     ServerLivingEntityEvents.AFTER_DEATH.register(EventHarvestMark::setupEvent);
     ServerLivingEntityEvents.AFTER_DEATH.register(EventDetonate::setupEvent);
+
     ServerTickEvents.END_SERVER_TICK.register(server -> {
       for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
         EventAreaEffect.setupEvent(player);
       }
     });
 
+    ServerTickEvents.END_WORLD_TICK.register(world -> {
+      for (ServerPlayerEntity player : world.getPlayers()) {
+        EventIncreaseSpawnrate.setupEvent(player);
+      }
+    });
   }
 }
