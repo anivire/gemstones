@@ -27,7 +27,8 @@
       "radius_levels": [1.0, 2.0, 3.0, 4.0],
       "amplifier": 0,
       "duration": 10,
-      "not_me": true
+      "not_me": true,
+      "only_players": false
     }
   }
 }

@@ -107,6 +107,15 @@
       "chars": [
         "\uE012"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/gemstone_socket_amber.png",
+      "height": 26,
+      "ascent": 13,
+      "chars": [
+        "\uE013"
+      ]
     }
   ]
 }

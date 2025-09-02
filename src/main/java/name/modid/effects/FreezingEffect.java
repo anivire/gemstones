@@ -1,5 +1,6 @@
 package name.modid.effects;
 
+import name.modid.effects.registration.EffectRegistrationHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;

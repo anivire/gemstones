@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import name.modid.config.datapack.ModifiersDataLoader;
-import name.modid.effects.EffectRegistrationHelper;
+import name.modid.effects.registration.EffectRegistrationHelper;
 import name.modid.helpers.ItemRegistrationHelper;
 import name.modid.helpers.TagsRegistrationHelper;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;

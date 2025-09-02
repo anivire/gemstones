@@ -1,6 +1,6 @@
 package name.modid.helpers.events;
 
-import name.modid.effects.EffectRegistrationHelper;
+import name.modid.effects.registration.EffectRegistrationHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.world.World;

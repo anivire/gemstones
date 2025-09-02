@@ -1,6 +1,6 @@
 package name.modid.helpers.events;
 
-import name.modid.effects.EffectRegistrationHelper;
+import name.modid.effects.registration.EffectRegistrationHelper;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -18,13 +18,11 @@ public class EventHarvestMark {
     }
 
     World world = entity.getWorld();
-    StatusEffectInstance harvestMarkInstance =
-        entity.getStatusEffect(EffectRegistrationHelper.HARVEST_MARK_EFFECT);
+    StatusEffectInstance harvestMarkInstance = entity.getStatusEffect(EffectRegistrationHelper.HARVEST_MARK_EFFECT);
 
     if (harvestMarkInstance != null) {
       int stackCount = harvestMarkInstance.getAmplifier() + 1;
-      int exp =
-          (int) (Math.random() * (MAX_ADDITIONAL_XP - MIN_ADDITIONAL_XP + 1) + MIN_ADDITIONAL_XP);
+      int exp = (int) (Math.random() * (MAX_ADDITIONAL_XP - MIN_ADDITIONAL_XP + 1) + MIN_ADDITIONAL_XP);
 
       if (world instanceof ServerWorld serverWorld) {
         for (int i = 0; i < stackCount; i++) {

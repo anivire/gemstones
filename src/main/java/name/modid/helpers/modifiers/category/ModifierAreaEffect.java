@@ -15,6 +15,7 @@ public class ModifierAreaEffect extends AbstractModifier {
   private final Integer duration;
   private final Integer amplifier;
   private final Boolean notMe;
+  private final Boolean onlyPlayers;
   private final RegistryEntry<StatusEffect> effect;
 
   public ModifierAreaEffect(
@@ -25,6 +26,7 @@ public class ModifierAreaEffect extends AbstractModifier {
       Integer amplifier,
       Integer duration,
       Boolean notMe,
+      Boolean onlyPlayers,
       RegistryEntry<StatusEffect> effect) {
     super(gemstoneType, itemCategory, rarityType);
 
@@ -32,6 +34,7 @@ public class ModifierAreaEffect extends AbstractModifier {
     this.duration = duration;
     this.amplifier = amplifier;
     this.notMe = notMe;
+    this.onlyPlayers = onlyPlayers;
     this.effect = effect;
   }
 
@@ -49,6 +52,10 @@ public class ModifierAreaEffect extends AbstractModifier {
 
   public Boolean isNotMe() {
     return notMe;
+  }
+
+  public Boolean isOnlyPlayers() {
+    return onlyPlayers;
   }
 
   public RegistryEntry<StatusEffect> getEffectEntry() {

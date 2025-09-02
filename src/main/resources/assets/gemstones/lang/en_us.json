@@ -31,6 +31,7 @@
   "tooltip.gemstones.EVENT.TORRENT": "%s trigger to %s on hit",
   "tooltip.gemstones.EVENT.ADDITIONAL_DAMAGE": "%s %s on first hit",
   "tooltip.gemstones.EVENT.INCREASE_GEODES_DROP": "%s loot %s from ores",
+  "tooltip.gemstones.EVENT.ADDITIONAL_GOLD_DROP": "%s drop additional %s from ores",
   "tooltip.gemstones.EVENT.INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
   "tooltip.gemstones.EVENT.POTION_DURATION": "%s %s after brewing",
   "tooltip.gemstones.EVENT.REGENERATE_BLOCK": "%s %s after mining",
@@ -45,6 +46,8 @@
   "effect.gemstones.plague": "Plague",
   "effect.gemstones.freezing": "Freezing",
   "effect.gemstones.loot_touch": "Loot Touch",
+  "effect.gemstones.scarab": "Scarab Curse",
+  "effect.gemstones.amber_blessing": "Amber Blessing",
 
   "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",
@@ -110,6 +113,11 @@
   "item.gemstones.malachite_gemstone_uncommon": "Malachite Gemstone",
   "item.gemstones.malachite_gemstone_rare": "Malachite Gemstone",
   "item.gemstones.malachite_gemstone_legendary": "Malachite Gemstone",
+  
+  "item.gemstones.amber_gemstone_common": "Amber Gemstone",
+  "item.gemstones.amber_gemstone_uncommon": "Amber Gemstone",
+  "item.gemstones.amber_gemstone_rare": "Amber Gemstone",
+  "item.gemstones.amber_gemstone_legendary": "Amber Gemstone",
   
   "item.gemstones.spawner_core_gemstone_common": "Spawner Core",
   "item.gemstones.spawner_core_gemstone_uncommon": "Spawner Core",

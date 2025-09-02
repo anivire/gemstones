@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 
 public enum GemstoneType {
   EMPTY, LOCKED, RUBY, CELESTINE, TOPAZ, SAPPHIRE, ZIRCON, AQUAMARINE, OBSIDIAN_SHARD, OPAL, JADE, MALACHITE,
-  SPAWNER_CORE;
+  SPAWNER_CORE, AMBER;
 
   public static final Codec<GemstoneType> CODEC = Codec.STRING.xmap(GemstoneType::valueOf, GemstoneType::name);
 
@@ -22,6 +22,7 @@ public enum GemstoneType {
       case JADE -> "\uE010";
       case MALACHITE -> "\uE011";
       case SPAWNER_CORE -> "\uE012";
+      case AMBER -> "\uE013";
       default -> "\uE000";
     };
   }

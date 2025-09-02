@@ -10,5 +10,8 @@ public class ClientParticlesRegistrationHelper {
 
     ParticleFactoryRegistry.getInstance().register(ParticlesRegistrationHelper.STUNNED_PARTICLE,
         StunnedParticleFactory::new);
+
+    ParticleFactoryRegistry.getInstance().register(
+        ParticlesRegistrationHelper.SCARAB_PARTICLE, ScarabParticleFactory::new);
   }
 }

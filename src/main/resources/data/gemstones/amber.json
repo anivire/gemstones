@@ -1,0 +1,38 @@
+{
+  "gemstone_type": "AMBER",
+  "modifiers": {
+    "MELEE": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.05, 0.08, 0.14, 0.18],
+      "amplifier": 0,
+      "effect_id": "gemstones:scarab",
+      "duration": 11,
+      "is_stacking": false,
+      "max_stack_count": 0
+    },
+    "RANGED": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.08, 0.12, 0.16, 0.2],
+      "amplifier": 0,
+      "effect_id": "gemstones:scarab",
+      "duration": 16,
+      "is_stacking": false,
+      "max_stack_count": 0
+    },
+    "TOOLS": {
+      "type": "ON_BLOCK_BREAK",
+      "chance_levels": [0.06, 0.1, 0.145, 0.185],
+      "value_levels": [0.0, 0.0, 0.0, 0.0],
+      "event_type": "ADDITIONAL_GOLD_DROP"
+    },
+    "ARMOR": {
+      "type": "AREA_EFFECT",
+      "effect_id": "gemstones:amber_blessing",
+      "radius_levels": [1.0, 1.5, 2.0, 2.5],
+      "amplifier": 0,
+      "duration": 10,
+      "not_me": false,
+      "only_players": true
+    }
+  }
+}

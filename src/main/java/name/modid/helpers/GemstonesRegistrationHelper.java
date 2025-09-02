@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import name.modid.Gemstones;
+import name.modid.items.gemstones.AmberGemstoneItem;
 import name.modid.items.gemstones.AquamarineGemstoneItem;
 import name.modid.items.gemstones.CelestineGemstoneItem;
 import name.modid.items.gemstones.JadeGemstoneItem;
@@ -43,6 +44,7 @@ public class GemstonesRegistrationHelper {
   private static final List<Item> JADE_GEMSTONES = new ArrayList<>();
   private static final List<Item> MALACHITE_GEMSTONES = new ArrayList<>();
   private static final List<Item> SPAWNER_CORE_GEMSTONES = new ArrayList<>();
+  private static final List<Item> AMBER_GEMSTONES = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -112,6 +114,11 @@ public class GemstonesRegistrationHelper {
           "spawner_core_gemstone_" + rarityName,
           settings -> new SpawnerCoreGemstoneItem(settings, rarity),
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+      AMBER_GEMSTONES.add(ItemRegistrationHelper.register(
+          "amber_gemstone_" + rarityName,
+          settings -> new AmberGemstoneItem(settings, rarity),
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
     }
   }
 
@@ -127,6 +134,7 @@ public class GemstonesRegistrationHelper {
     JADE_GEMSTONES.forEach(entries::add);
     MALACHITE_GEMSTONES.forEach(entries::add);
     SPAWNER_CORE_GEMSTONES.forEach(entries::add);
+    AMBER_GEMSTONES.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -142,6 +150,7 @@ public class GemstonesRegistrationHelper {
     all.addAll(JADE_GEMSTONES);
     all.addAll(MALACHITE_GEMSTONES);
     all.addAll(SPAWNER_CORE_GEMSTONES);
+    all.addAll(AMBER_GEMSTONES);
     return all;
   }
 
@@ -187,5 +196,9 @@ public class GemstonesRegistrationHelper {
 
   public static List<Item> getSpawnerCoreGemstones() {
     return SPAWNER_CORE_GEMSTONES;
+  }
+
+  public static List<Item> getAmberGemstones() {
+    return AMBER_GEMSTONES;
   }
 }

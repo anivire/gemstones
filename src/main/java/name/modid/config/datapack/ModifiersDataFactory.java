@@ -122,6 +122,7 @@ public class ModifiersDataFactory {
                   areaEffectConfig.amplifier,
                   areaEffectConfig.duration,
                   areaEffectConfig.notMe,
+                  areaEffectConfig.onlyPlayers,
                   effectEntry);
             }
           }

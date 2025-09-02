@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 import name.modid.Gemstones;
-import name.modid.effects.EffectRegistrationHelper;
+import name.modid.effects.registration.EffectRegistrationHelper;
 import name.modid.helpers.components.ComponentsHelper;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.components.GemstoneSlots;
@@ -50,6 +50,7 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
@@ -426,6 +427,27 @@ public class GemstoneSocketingHelper {
                 : new ItemStack(ItemRegistrationHelper.STONE_GEODE);
 
             Block.dropStack(world, pos, geode);
+          }
+        }
+        case ADDITIONAL_GOLD_DROP -> {
+          double combinedProcChance = 0.0;
+          if (!(state.isIn(TagsRegistrationHelper.ALL_ORES))) {
+            break;
+          }
+
+          for (ModifierOnBlockBreak m : modifiers) {
+            GemstoneRarity rarity = m.getRarityType();
+            combinedProcChance += m.getLevelValues().get(rarity);
+          }
+
+          if (world.getRandom().nextDouble() < combinedProcChance) {
+            ItemStack goldIngot = new ItemStack(Items.GOLD_INGOT);
+            goldIngot.setCount(1);
+
+            ItemStack goldNugget = new ItemStack(Items.GOLD_NUGGET);
+            goldNugget.setCount(world.getRandom().nextBetween(3, 6));
+
+            Block.dropStack(world, pos, world.getRandom().nextDouble() >= 0.6F ? goldIngot : goldNugget);
           }
         }
         case REGENERATE_BLOCK -> {

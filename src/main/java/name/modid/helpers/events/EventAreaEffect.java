@@ -37,6 +37,7 @@ public class EventAreaEffect {
       int maxAmplifier = 0;
       int maxDuration = 0;
       boolean notMeFlag = false;
+      boolean onlyPlayersFlag = false;
 
       for (ModifierAreaEffect modifier : modifiers) {
         totalRadius += modifier.getRadiusLevels().get(modifier.getRarityType());
@@ -44,16 +45,32 @@ public class EventAreaEffect {
         maxDuration = Math.max(maxDuration, modifier.getDuration());
         if (modifier.isNotMe())
           notMeFlag = true;
+        if (modifier.isOnlyPlayers())
+          onlyPlayersFlag = true;
       }
 
       final boolean NOT_ME = notMeFlag;
+      final boolean ONLY_PLAYERS = onlyPlayersFlag;
 
       List<LivingEntity> nearby = world.getEntitiesByClass(
           LivingEntity.class,
           player.getBoundingBox().expand(totalRadius),
-          e -> e.isAlive()
-              && !(e instanceof ServerPlayerEntity)
-              && (!NOT_ME || e != player));
+          e -> {
+            if (!e.isAlive())
+              return false;
+
+            if (ONLY_PLAYERS) {
+              if (!(e instanceof ServerPlayerEntity))
+                return false;
+              if (NOT_ME && e == player)
+                return false;
+              return true;
+            } else {
+              if (NOT_ME && e == player)
+                return false;
+              return true;
+            }
+          });
 
       for (LivingEntity entity : nearby) {
         entity.addStatusEffect(new StatusEffectInstance(

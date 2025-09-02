@@ -1,6 +1,18 @@
-package name.modid.effects;
+package name.modid.effects.registration;
 
 import name.modid.Gemstones;
+import name.modid.effects.AmberBlessingEffect;
+import name.modid.effects.BleedingEffect;
+import name.modid.effects.DetonateEffect;
+import name.modid.effects.ExperienceThirstEffect;
+import name.modid.effects.FreezingEffect;
+import name.modid.effects.GuardianSmiteEffect;
+import name.modid.effects.HarvestMarkEffect;
+import name.modid.effects.LootTouchEffect;
+import name.modid.effects.PlagueEffect;
+import name.modid.effects.QuickSandsEffect;
+import name.modid.effects.ScarabEffect;
+import name.modid.effects.StunnedEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -41,6 +53,12 @@ public class EffectRegistrationHelper {
 
   public static final RegistryEntry<StatusEffect> LOOT_TOUCH_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "loot_touch"), new LootTouchEffect());
+
+  public static final RegistryEntry<StatusEffect> SCARAB_EFFECT = Registry.registerReference(
+      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "scarab"), new ScarabEffect());
+
+  public static final RegistryEntry<StatusEffect> AMBER_BLESSING_EFFECT = Registry.registerReference(
+      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "amber_blessing"), new AmberBlessingEffect());
 
   public static void initialize() {
     Gemstones.LOGGER.info("Registering mod effects for {}", Gemstones.MOD_ID);

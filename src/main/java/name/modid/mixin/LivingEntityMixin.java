@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import name.modid.effects.EffectRegistrationHelper;
+import name.modid.effects.registration.EffectRegistrationHelper;
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
 import name.modid.helpers.modifiers.ModifierHelper;

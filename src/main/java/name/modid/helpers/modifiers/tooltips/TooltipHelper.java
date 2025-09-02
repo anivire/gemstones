@@ -81,7 +81,7 @@ public class TooltipHelper {
         .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sockets_font")));
   }
 
-  public static Text getGemstoneRaritySprite(GemstoneRarity rarityType) {
+  public static MutableText getGemstoneRaritySprite(GemstoneRarity rarityType) {
     return Text.literal(GemstoneRarity.getRarityLiteral(rarityType))
         .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "quality_font")))
         .formatted(Formatting.WHITE);

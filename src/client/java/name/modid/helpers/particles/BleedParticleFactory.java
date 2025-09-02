@@ -8,7 +8,6 @@ import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.SimpleParticleType;
 
-
 public class BleedParticleFactory implements ParticleFactory<SimpleParticleType> {
   protected final SpriteProvider spriteProvider;
 

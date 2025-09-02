@@ -62,6 +62,8 @@ public class ModifiersConfig {
     public Identifier effectId;
     @SerializedName("not_me")
     public Boolean notMe;
+    @SerializedName("only_players")
+    public Boolean onlyPlayers;
   }
 
   public static class OnBlockBreakConfig extends ModifierConfigEntry {
