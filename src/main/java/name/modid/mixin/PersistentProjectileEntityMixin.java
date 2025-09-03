@@ -43,20 +43,19 @@ public class PersistentProjectileEntityMixin {
     }
 
     ItemStack itemStack = GemstoneSocketingHelper.getWeaponStack(player);
+    if (itemStack == null)
+      return;
+
+    ServerWorld world = (ServerWorld) arrow.getWorld();
+    Vec3d pos = hitResult.getPos();
 
     LivingEntity target = hitResult instanceof EntityHitResult entityHit
         && entityHit.getEntity() instanceof LivingEntity living ? living : null;
 
-    ServerWorld world = (ServerWorld) arrow.getWorld();
-
-    if (itemStack == null || target == null) {
-      return;
-    }
-
     // ON_HIT_EFFECT_PROJ
     ArrayList<ModifierOnHitEffectProjectile> onHitEffectProjectileModifiers = ModifierHelper
         .getOnHitEffectProjectileModifiers(itemStack);
-    if (!onHitEffectProjectileModifiers.isEmpty()) {
+    if (!onHitEffectProjectileModifiers.isEmpty() && target != null) {
       GemstoneSocketingHelper.applyOnHitEffectProjectileModifiers(
           onHitEffectProjectileModifiers,
           itemStack.getItem(),
@@ -68,7 +67,6 @@ public class PersistentProjectileEntityMixin {
     // ON_HIT
     ArrayList<ModifierOnHit> onHitModifiers = ModifierHelper.getOnHitModifiers(itemStack);
     if (!onHitModifiers.isEmpty()) {
-      Vec3d pos = hitResult.getPos();
       GemstoneSocketingHelper.applyOnHitModifiers(
           onHitModifiers,
           itemStack,

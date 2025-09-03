@@ -1,7 +1,7 @@
 package name.modid.effects;
 
 import name.modid.Gemstones;
-import name.modid.helpers.particles.ScarabParticleEffect;
+import name.modid.particles.custom.ScarabParticleEffect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;

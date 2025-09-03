@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
 
+import org.jetbrains.annotations.Nullable;
+
 import name.modid.Gemstones;
 import name.modid.effects.registration.EffectRegistrationHelper;
 import name.modid.helpers.components.ComponentsHelper;
@@ -491,24 +493,33 @@ public class GemstoneSocketingHelper {
     }
   }
 
-  public static void applyOnHitModifiers(ArrayList<ModifierOnHit> gemstoneModifiers,
-      ItemStack itemStack, ServerWorld world, Vec3d pos, ArrowEntity arrow, LivingEntity target) {
+  public static void applyOnHitModifiers(
+      ArrayList<ModifierOnHit> gemstoneModifiers,
+      ItemStack itemStack,
+      ServerWorld world,
+      Vec3d pos,
+      ArrowEntity arrow,
+      @Nullable LivingEntity target) {
     Map<EventType, List<ModifierOnHit>> eventToModifiers = new HashMap<>();
     for (ModifierOnHit mod : gemstoneModifiers) {
-      eventToModifiers.computeIfAbsent(mod.getEventType(), k -> new ArrayList<>()).add(mod);
+      eventToModifiers
+          .computeIfAbsent(mod.getEventType(), k -> new ArrayList<>())
+          .add(mod);
     }
 
     for (Map.Entry<EventType, List<ModifierOnHit>> entry : eventToModifiers.entrySet()) {
       EventType eventType = entry.getKey();
       List<ModifierOnHit> modifiers = entry.getValue();
 
+      double combinedProcChance = modifiers.stream()
+          .mapToDouble(m -> m.getEventChances().get(m.getRarityType()))
+          .sum();
+
+      boolean proc = new Random().nextDouble() < Math.min(combinedProcChance, 1.0);
+
       switch (eventType) {
         case LIGHTNING_BOLT -> {
-          double combinedProcChance = modifiers.stream()
-              .mapToDouble(m -> m.getEventChances().get(m.getRarityType()))
-              .sum();
-
-          if (new Random().nextDouble() < Math.min(combinedProcChance, 1.0) && world.isRaining()) {
+          if (proc && world.isRaining()) {
             LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
             if (lightning != null) {
               lightning.setPosition(pos.getX(), pos.getY(), pos.getZ());
@@ -517,39 +528,56 @@ public class GemstoneSocketingHelper {
             arrow.discard();
           }
         }
+
         case COPY_ENTITY_DROP -> {
+          if (!proc || target == null)
+            break;
+
           if (target instanceof WitherEntity
               || target instanceof EnderDragonEntity
               || target instanceof ElderGuardianEntity) {
             break;
-
           }
 
-          double combinedProcChance = modifiers.stream()
-              .mapToDouble(m -> m.getEventChances().get(m.getRarityType()))
-              .sum();
+          LootTable lootTable = world.getServer()
+              .getReloadableRegistries()
+              .getLootTable(target.getLootTable());
 
-          if (new Random().nextDouble() < Math.min(combinedProcChance, 1.0)) {
-            LootTable lootTable = world.getServer()
-                .getReloadableRegistries()
-                .getLootTable(target.getLootTable());
+          LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder(world)
+              .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(target.getBlockPos()))
+              .add(LootContextParameters.THIS_ENTITY, target)
+              .add(LootContextParameters.DAMAGE_SOURCE, world.getDamageSources().arrow(arrow, arrow.getOwner()))
+              .addOptional(LootContextParameters.ATTACKING_ENTITY, arrow.getOwner());
 
-            LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder(world)
-                .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(target.getBlockPos()))
-                .add(LootContextParameters.THIS_ENTITY, target)
-                .add(LootContextParameters.DAMAGE_SOURCE, world.getDamageSources().arrow(arrow, arrow.getOwner()))
-                .addOptional(LootContextParameters.ATTACKING_ENTITY, arrow.getOwner());
+          LootContextParameterSet lootContext = builder.build(LootContextTypes.ENTITY);
+          List<ItemStack> loot = lootTable.generateLoot(lootContext);
 
-            LootContextParameterSet lootContext = builder.build(LootContextTypes.ENTITY);
-            List<ItemStack> loot = lootTable.generateLoot(lootContext);
-
-            for (ItemStack stack : loot) {
-              Block.dropStack(world, target.getBlockPos(), stack);
-            }
+          for (ItemStack stack : loot) {
+            Block.dropStack(world, target.getBlockPos(), stack);
           }
         }
+
+        case SMALL_FLAT_EXPLOSION -> {
+          if (proc) {
+            // safe block/entity explosion
+            double x = target != null ? target.getX() : pos.getX();
+            double y = target != null ? target.getY() : pos.getY();
+            double z = target != null ? target.getZ() : pos.getZ();
+
+            world.createExplosion(
+                target,
+                null,
+                null,
+                x, y, z,
+                3,
+                false,
+                World.ExplosionSourceType.BLOCK);
+
+            arrow.discard();
+          }
+        }
+
         default -> {
-          return;
         }
       }
     }

@@ -1,0 +1,31 @@
+{
+  "gemstone_type": "PYRITE",
+  "modifiers": {
+    "MELEE": {
+      "type": "ON_HIT_EFFECT",
+      "chance_levels": [0.1, 0.15, 0.2, 0.25],
+      "amplifier": 0,
+      "effect_id": "gemstones:soul_burn",
+      "duration": 11,
+      "is_stacking": false,
+      "max_stack_count": 0
+    },
+    "RANGED": {
+      "type": "ON_HIT",
+      "chance_levels": [0.04, 0.065, 0.1, 0.145],
+      "event_type": "SMALL_FLAT_EXPLOSION"
+    },
+    "TOOLS": {
+      "type": "ON_BLOCK_BREAK",
+      "chance_levels": [0.06, 0.1, 0.145, 0.185],
+      "value_levels": [0.0, 0.0, 0.0, 0.0],
+      "event_type": "ADDITIONAL_GOLD_DROP"
+    },
+    "ARMOR": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:evasion",
+      "value_levels": [0.01, 0.02, 0.035, 0.05],
+      "operation": "ADD_MULTIPLIED_TOTAL"
+    }
+  }
+}

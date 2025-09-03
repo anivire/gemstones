@@ -11,7 +11,8 @@ public enum EventType {
   POTION_DURATION("Potion Duration"),
   REGENERATE_BLOCK("Regenerate Block"),
   COPY_ENTITY_DROP("Mob Loot"),
-  ADDITIONAL_DAMAGE("Bonus Damage");
+  ADDITIONAL_DAMAGE("Bonus Damage"),
+  SMALL_FLAT_EXPLOSION("Small Explosion");
 
   private final String name;
 

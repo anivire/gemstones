@@ -12,6 +12,7 @@ import name.modid.effects.LootTouchEffect;
 import name.modid.effects.PlagueEffect;
 import name.modid.effects.QuickSandsEffect;
 import name.modid.effects.ScarabEffect;
+import name.modid.effects.SoulBurnEffect;
 import name.modid.effects.StunnedEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
@@ -59,6 +60,9 @@ public class EffectRegistrationHelper {
 
   public static final RegistryEntry<StatusEffect> AMBER_BLESSING_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "amber_blessing"), new AmberBlessingEffect());
+
+  public static final RegistryEntry<StatusEffect> SOUL_BURN_EFFECT = Registry.registerReference(
+      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "soul_burn"), new SoulBurnEffect());
 
   public static void initialize() {
     Gemstones.LOGGER.info("Registering mod effects for {}", Gemstones.MOD_ID);

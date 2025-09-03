@@ -1,4 +1,4 @@
-package name.modid.helpers.particles;
+package name.modid.particles.custom;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

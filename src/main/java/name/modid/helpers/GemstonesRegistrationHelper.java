@@ -12,6 +12,7 @@ import name.modid.items.gemstones.JadeGemstoneItem;
 import name.modid.items.gemstones.MalachiteGemstoneItem;
 import name.modid.items.gemstones.ObsidianShardGemstoneItem;
 import name.modid.items.gemstones.OpalGemstoneItem;
+import name.modid.items.gemstones.PyriteGemstoneItem;
 import name.modid.items.gemstones.RubyGemstoneItem;
 import name.modid.items.gemstones.SapphireGemstoneItem;
 import name.modid.items.gemstones.SpawnerCoreGemstoneItem;
@@ -45,6 +46,7 @@ public class GemstonesRegistrationHelper {
   private static final List<Item> MALACHITE_GEMSTONES = new ArrayList<>();
   private static final List<Item> SPAWNER_CORE_GEMSTONES = new ArrayList<>();
   private static final List<Item> AMBER_GEMSTONES = new ArrayList<>();
+  private static final List<Item> PYRITE_GEMSTONES = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -119,6 +121,11 @@ public class GemstonesRegistrationHelper {
           "amber_gemstone_" + rarityName,
           settings -> new AmberGemstoneItem(settings, rarity),
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+      PYRITE_GEMSTONES.add(ItemRegistrationHelper.register(
+          "pyrite_gemstone_" + rarityName,
+          settings -> new PyriteGemstoneItem(settings, rarity),
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
     }
   }
 
@@ -135,6 +142,7 @@ public class GemstonesRegistrationHelper {
     MALACHITE_GEMSTONES.forEach(entries::add);
     SPAWNER_CORE_GEMSTONES.forEach(entries::add);
     AMBER_GEMSTONES.forEach(entries::add);
+    PYRITE_GEMSTONES.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -151,6 +159,7 @@ public class GemstonesRegistrationHelper {
     all.addAll(MALACHITE_GEMSTONES);
     all.addAll(SPAWNER_CORE_GEMSTONES);
     all.addAll(AMBER_GEMSTONES);
+    all.addAll(PYRITE_GEMSTONES);
     return all;
   }
 
@@ -200,5 +209,9 @@ public class GemstonesRegistrationHelper {
 
   public static List<Item> getAmberGemstones() {
     return AMBER_GEMSTONES;
+  }
+
+  public static List<Item> getPyriteGemstones() {
+    return PYRITE_GEMSTONES;
   }
 }

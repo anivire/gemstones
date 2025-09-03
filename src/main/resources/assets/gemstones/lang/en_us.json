@@ -37,6 +37,7 @@
   "tooltip.gemstones.EVENT.REGENERATE_BLOCK": "%s %s after mining",
   "tooltip.gemstones.EVENT.COPY_ENTITY_DROP": "%s drop copy %s on hit",
   "tooltip.gemstones.EVENT.INCREASE_MOB_SPAWNRATE": "%s %s",
+  "tooltip.gemstones.EVENT.SMALL_FLAT_EXPLOSION": "%s to trigger %s on hit",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
@@ -48,6 +49,7 @@
   "effect.gemstones.loot_touch": "Loot Touch",
   "effect.gemstones.scarab": "Scarab Curse",
   "effect.gemstones.amber_blessing": "Amber Blessing",
+  "effect.gemstones.soul_burn": "Soul Burn",
 
   "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",
@@ -118,6 +120,11 @@
   "item.gemstones.amber_gemstone_uncommon": "Amber Gemstone",
   "item.gemstones.amber_gemstone_rare": "Amber Gemstone",
   "item.gemstones.amber_gemstone_legendary": "Amber Gemstone",
+  
+  "item.gemstones.pyrite_gemstone_common": "Pyrite Gemstone",
+  "item.gemstones.pyrite_gemstone_uncommon": "Pyrite Gemstone",
+  "item.gemstones.pyrite_gemstone_rare": "Pyrite Gemstone",
+  "item.gemstones.pyrite_gemstone_legendary": "Pyrite Gemstone",
   
   "item.gemstones.spawner_core_gemstone_common": "Spawner Core",
   "item.gemstones.spawner_core_gemstone_uncommon": "Spawner Core",

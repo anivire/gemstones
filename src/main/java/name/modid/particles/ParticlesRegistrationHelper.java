@@ -3,7 +3,7 @@ package name.modid.particles;
 import com.mojang.serialization.MapCodec;
 
 import name.modid.Gemstones;
-import name.modid.helpers.particles.ScarabParticleEffect;
+import name.modid.particles.custom.ScarabParticleEffect;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;

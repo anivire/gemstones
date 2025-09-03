@@ -14,7 +14,8 @@
     "BrewingStandScreenHandlerAccessor",
     "BrewingStandBlockEntityMixin",
     "BrewingStandAccessor",
-    "FishingBobberEntityMixin"
+    "FishingBobberEntityMixin",
+    "SoulBurnLivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

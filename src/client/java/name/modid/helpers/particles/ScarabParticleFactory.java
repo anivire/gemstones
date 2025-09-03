@@ -1,5 +1,6 @@
 package name.modid.helpers.particles;
 
+import name.modid.particles.custom.ScarabParticleEffect;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.particle.ParticleTextureSheet;
