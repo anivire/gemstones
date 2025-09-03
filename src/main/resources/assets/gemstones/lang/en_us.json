@@ -38,6 +38,7 @@
   "tooltip.gemstones.EVENT.COPY_ENTITY_DROP": "%s drop copy %s on hit",
   "tooltip.gemstones.EVENT.INCREASE_MOB_SPAWNRATE": "%s %s",
   "tooltip.gemstones.EVENT.SMALL_FLAT_EXPLOSION": "%s to trigger %s on hit",
+  "tooltip.gemstones.EVENT.SMELTER": "%s to %s on mine",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",

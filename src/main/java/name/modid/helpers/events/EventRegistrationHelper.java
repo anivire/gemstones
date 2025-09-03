@@ -15,6 +15,7 @@ public class EventRegistrationHelper {
     ServerTickEvents.END_SERVER_TICK.register(EventOnHit::setupEffect);
     ServerEntityEvents.ENTITY_LOAD.register(EventProjectileSpeed::setupEvent);
     PlayerBlockBreakEvents.AFTER.register(EventOnBlockBreak::setupEvent);
+    PlayerBlockBreakEvents.BEFORE.register(EventOnBeforeBlockBreak::setupEvent);
     ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnDamage::setupEvent);
     ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnHit::setupEvent);
     ServerLivingEntityEvents.AFTER_DEATH.register(EventHarvestMark::setupEvent);

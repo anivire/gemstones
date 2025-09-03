@@ -28,8 +28,10 @@ import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.items.gemstones.GemstoneItem;
 import name.modid.particles.ParticlesRegistrationHelper;
+import name.modid.utils.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EntityType;
@@ -374,6 +376,100 @@ public class GemstoneSocketingHelper {
                 selectedModifier.isStacking() ? newAmplifier : selectedModifier.getAmplifier()));
       }
     }
+  }
+
+  public static boolean applyOnBeforeBlockBreakModifiers(ArrayList<ModifierOnBlockBreak> gemstoneModifiers,
+      PlayerEntity player, World world, BlockState state, BlockPos pos) {
+    Map<EventType, List<ModifierOnBlockBreak>> eventToModifiers = new HashMap<>();
+    for (ModifierOnBlockBreak mod : gemstoneModifiers) {
+      eventToModifiers.computeIfAbsent(mod.getEventType(), k -> new ArrayList<>()).add(mod);
+    }
+
+    for (Map.Entry<EventType, List<ModifierOnBlockBreak>> entry : eventToModifiers.entrySet()) {
+      EventType eventType = entry.getKey();
+      List<ModifierOnBlockBreak> modifiers = entry.getValue();
+
+      switch (eventType) {
+        case SMELTER -> {
+          if (world instanceof ServerWorld serverWorld) {
+            double combinedProcChance = 0.0;
+
+            for (ModifierOnBlockBreak m : modifiers) {
+              GemstoneRarity rarity = m.getRarityType();
+              combinedProcChance += m.getLevelValues().get(rarity);
+            }
+
+            List<ItemStack> drops = Block.getDroppedStacks(
+                state,
+                serverWorld,
+                pos,
+                world.getBlockEntity(pos),
+                player,
+                player.getMainHandStack());
+
+            if (world.getRandom().nextDouble() < combinedProcChance) {
+              List<ItemStack> smeltableDrops = drops.stream()
+                  .map(x -> Utils.getSmeltingResult(world, x))
+                  .filter(x -> !x.isEmpty())
+                  .toList();
+
+              if (!smeltableDrops.isEmpty()) {
+                for (ItemStack smelted : smeltableDrops) {
+                  Block.dropStack(world, pos, smelted.copy());
+                }
+
+                world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+
+                ItemStack tool = player.getMainHandStack();
+                if (tool.isDamageable()) {
+                  tool.damage(1, player, EquipmentSlot.MAINHAND);
+                }
+
+                world.playSound(
+                    null,
+                    pos,
+                    SoundEvents.BLOCK_LAVA_EXTINGUISH,
+                    SoundCategory.BLOCKS,
+                    1.0f,
+                    1.0f);
+                serverWorld.spawnParticles(
+                    ParticleTypes.SMOKE,
+                    pos.getX() + 0.5,
+                    pos.getY() + 1.0,
+                    pos.getZ() + 0.5,
+                    10,
+                    0.3,
+                    0.3,
+                    0.3,
+                    0.01);
+                serverWorld.spawnParticles(
+                    ParticleTypes.FLAME,
+                    pos.getX() + 0.5,
+                    pos.getY() + 0.8,
+                    pos.getZ() + 0.5,
+                    8,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.01);
+
+                return false;
+              } else {
+                return true;
+              }
+            } else {
+              return true;
+            }
+          }
+          return true;
+        }
+        default -> {
+          return true;
+        }
+      }
+    }
+    return true;
+
   }
 
   public static void applyOnBlockBreakModifiers(ArrayList<ModifierOnBlockBreak> gemstoneModifiers,

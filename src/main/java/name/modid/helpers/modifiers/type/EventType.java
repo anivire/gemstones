@@ -12,6 +12,7 @@ public enum EventType {
   REGENERATE_BLOCK("Regenerate Block"),
   COPY_ENTITY_DROP("Mob Loot"),
   ADDITIONAL_DAMAGE("Bonus Damage"),
+  SMELTER("Smelt Block"),
   SMALL_FLAT_EXPLOSION("Small Explosion");
 
   private final String name;
