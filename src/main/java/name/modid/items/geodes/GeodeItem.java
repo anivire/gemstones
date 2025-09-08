@@ -44,12 +44,13 @@ public class GeodeItem extends Item {
 
   public ItemStack getGemstoneStack() {
     GeodesConfig config = getConfig();
-    if (config == null)
+    if (config == null || config.gemstones.isEmpty() || config.rarities.isEmpty()) {
       return ItemStack.EMPTY;
+    }
 
     Random random = new Random();
 
-    // Gemstone type
+    // Randomed gemstone type
     float totalGemChance = config.gemstones.values().stream().reduce(0f, Float::sum);
     float randGem = random.nextFloat() * totalGemChance;
 
@@ -62,10 +63,12 @@ public class GeodeItem extends Item {
         break;
       }
     }
-    if (selectedType == null)
-      return ItemStack.EMPTY;
 
-    // Gemstone rarity
+    if (selectedType == null) {
+      selectedType = config.gemstones.keySet().iterator().next();
+    }
+
+    // Randomed gemstone rarity
     float totalRarityChance = config.rarities.values().stream().reduce(0f, Float::sum);
     float randRarity = random.nextFloat() * totalRarityChance;
 
@@ -78,15 +81,28 @@ public class GeodeItem extends Item {
         break;
       }
     }
-    if (selectedRarity == null)
-      return ItemStack.EMPTY;
+
+    if (selectedRarity == null) {
+      selectedRarity = config.rarities.keySet().iterator().next();
+    }
 
     List<Item> candidates = GemstonesRegistrationHelper.getGemstonesByType(selectedType);
     int index = selectedRarity.getValue();
 
-    if (!candidates.isEmpty() && index < candidates.size()) {
+    if (!candidates.isEmpty()) {
+      if (index < 0 || index >= candidates.size()) {
+        index = 0;
+      }
       return new ItemStack(candidates.get(index));
     }
+
+    for (GemstoneType fallbackType : config.gemstones.keySet()) {
+      List<Item> fallbackList = GemstonesRegistrationHelper.getGemstonesByType(fallbackType);
+      if (!fallbackList.isEmpty()) {
+        return new ItemStack(fallbackList.get(0));
+      }
+    }
+
     return ItemStack.EMPTY;
   }
 

@@ -10,7 +10,7 @@
   },
   "rarities": {
     "COMMON": 0.7,
-    "RARE": 0.2,
-    "EPIC": 0.1
+    "UNCOMMON": 0.2,
+    "RARE": 0.1
   }
 }

@@ -32,6 +32,7 @@ public class GeodesDataLoader implements SimpleSynchronousResourceReloadListener
       return true;
     })
         .forEach((id, resource) -> {
+          // TODO: proper namespace gathering
           LOGGER.debug(resource.toString());
           if (id.getNamespace().equals(Gemstones.MOD_ID)) {
             try (InputStreamReader reader = new InputStreamReader(resource.getInputStream())) {

@@ -46,34 +46,35 @@ public class PersistentProjectileEntityMixin {
     if (itemStack == null)
       return;
 
-    ServerWorld world = (ServerWorld) arrow.getWorld();
-    Vec3d pos = hitResult.getPos();
+    if (arrow.getWorld() instanceof ServerWorld serverWorld) {
+      Vec3d pos = hitResult.getPos();
 
-    LivingEntity target = hitResult instanceof EntityHitResult entityHit
-        && entityHit.getEntity() instanceof LivingEntity living ? living : null;
+      LivingEntity target = hitResult instanceof EntityHitResult entityHit
+          && entityHit.getEntity() instanceof LivingEntity living ? living : null;
 
-    // ON_HIT_EFFECT_PROJ
-    ArrayList<ModifierOnHitEffectProjectile> onHitEffectProjectileModifiers = ModifierHelper
-        .getOnHitEffectProjectileModifiers(itemStack);
-    if (!onHitEffectProjectileModifiers.isEmpty() && target != null) {
-      GemstoneSocketingHelper.applyOnHitEffectProjectileModifiers(
-          onHitEffectProjectileModifiers,
-          itemStack.getItem(),
-          itemStack,
-          target,
-          world);
-    }
+      // ON_HIT_EFFECT_PROJ
+      ArrayList<ModifierOnHitEffectProjectile> onHitEffectProjectileModifiers = ModifierHelper
+          .getOnHitEffectProjectileModifiers(itemStack);
+      if (!onHitEffectProjectileModifiers.isEmpty() && target != null) {
+        GemstoneSocketingHelper.applyOnHitEffectProjectileModifiers(
+            onHitEffectProjectileModifiers,
+            itemStack.getItem(),
+            itemStack,
+            target,
+            serverWorld);
+      }
 
-    // ON_HIT
-    ArrayList<ModifierOnHitProjectile> onHitModifiers = ModifierHelper.getOnHitProjectileModifiers(itemStack);
-    if (!onHitModifiers.isEmpty()) {
-      GemstoneSocketingHelper.applyOnHitProjectileModifiers(
-          onHitModifiers,
-          itemStack,
-          world,
-          pos,
-          arrow,
-          target);
+      // ON_HIT
+      ArrayList<ModifierOnHitProjectile> onHitModifiers = ModifierHelper.getOnHitProjectileModifiers(itemStack);
+      if (!onHitModifiers.isEmpty()) {
+        GemstoneSocketingHelper.applyOnHitProjectileModifiers(
+            onHitModifiers,
+            itemStack,
+            serverWorld,
+            pos,
+            arrow,
+            target);
+      }
     }
   }
 }

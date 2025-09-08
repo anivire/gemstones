@@ -39,6 +39,7 @@ public class ModifiersDataLoader implements SimpleSynchronousResourceReloadListe
     manager.findResources("", path -> {
       return true;
     })
+        // TODO: proper namespace gathering
         // manager.findResources("gemstones", path -> path.getPath().endsWith(".json"))
         .forEach((id, resource) -> {
           LOGGER.debug(resource.toString());
