@@ -125,6 +125,15 @@
       "chars": [
         "\uE014"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/gemstone_socket_garnet.png",
+      "height": 26,
+      "ascent": 13,
+      "chars": [
+        "\uE015"
+      ]
     }
   ]
 }

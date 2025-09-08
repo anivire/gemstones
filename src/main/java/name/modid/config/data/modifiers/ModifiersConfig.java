@@ -1,4 +1,4 @@
-package name.modid.config.datapack;
+package name.modid.config.data.modifiers;
 
 import java.util.List;
 import java.util.Map;
@@ -18,20 +18,20 @@ public class ModifiersConfig {
   public Map<ModifierItemCategory, ModifierConfigEntry> modifiers;
 
   public enum ModifierType {
-    @SerializedName("ON_HIT_EFFECT")
-    ON_HIT_EFFECT,
     @SerializedName("AREA_EFFECT")
     AREA_EFFECT,
     @SerializedName("ON_BLOCK_BREAK")
     ON_BLOCK_BREAK,
-    @SerializedName("MULTIPLY_ATTRIBUTE")
-    MULTIPLY_ATTRIBUTE,
     @SerializedName("ATTRIBUTE")
     ATTRIBUTE,
-    @SerializedName("ON_HIT")
-    ON_HIT,
+    @SerializedName("MULTIPLY_ATTRIBUTE")
+    MULTIPLY_ATTRIBUTE,
     @SerializedName("CUSTOM_CONDITION")
     CUSTOM_CONDITION,
+    @SerializedName("ON_HIT")
+    ON_HIT,
+    @SerializedName("ON_HIT_EFFECT")
+    ON_HIT_EFFECT,
     @SerializedName("ON_FIRST_HIT")
     ON_FIRST_HIT,
   }

@@ -1,4 +1,4 @@
-package name.modid.config.datapack;
+package name.modid.config.data.core;
 
 import java.lang.reflect.Type;
 

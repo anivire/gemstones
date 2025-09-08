@@ -1,5 +1,5 @@
 {
-  "gemstone_type": "RUBY",
+  "gemstone_type": "GARNET",
   "modifiers": {
     "MELEE": {
       "type": "ON_HIT_EFFECT",
@@ -24,12 +24,6 @@
       "chance_levels": [0.1, 0.2, 0.3, 0.4],
       "value_levels": [1.0, 1.0, 2.0, 2.0],
       "event_type": "EXTRA_HEALTH"
-    },
-    "ARMOR": {
-      "type": "ATTRIBUTE",
-      "attribute_id": "minecraft:generic.max_health",
-      "value_levels": [1.0, 2.0, 3.0, 4.0],
-      "operation": "ADD_VALUE"
     }
   }
 }

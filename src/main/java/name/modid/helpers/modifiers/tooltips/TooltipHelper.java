@@ -17,7 +17,10 @@ import net.minecraft.util.Identifier;
 
 public class TooltipHelper {
   public enum Icons {
-    SOCKET("gemstone_sockets_font"), INLINE("icons_font"), RARITY("rarity_font");
+    SOCKET("gemstone_sockets_font"),
+    INLINE_GEMSTONE("gemstone_inline_font"),
+    INLINE("icons_font"),
+    RARITY("rarity_font");
 
     private final String path;
 
@@ -42,7 +45,11 @@ public class TooltipHelper {
     HARVEST_MARK("\uE009"),
     SLOWNESS("\uE010"),
     STUNNED("\uE011"),
-    ARROW_DOWN("\uE012");
+    ARROW_DOWN("\uE012"),
+    LIFESTEAL("\uE013"),
+    MOUSE_RMB("\uE014"),
+    MOUSE_LMB("\uE015"),
+    SHIFT("\uE016");
 
     private final String symbol;
 

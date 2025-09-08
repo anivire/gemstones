@@ -1,4 +1,4 @@
-package name.modid.config.datapack;
+package name.modid.config.data.modifiers;
 
 import java.io.InputStreamReader;
 import java.util.Collections;
@@ -11,7 +11,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import name.modid.Gemstones;
-import name.modid.config.datapack.ModifiersConfig.ModifierConfigEntry;
+import name.modid.config.data.core.IdentifierTypeAdapter;
+import name.modid.config.data.modifiers.ModifiersConfig.ModifierConfigEntry;
 import name.modid.helpers.GemstoneType;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
@@ -34,19 +35,6 @@ public class ModifiersDataLoader implements SimpleSynchronousResourceReloadListe
   public void reload(ResourceManager manager) {
     LOGGER.info("Reloading gemstone modifiers configs...");
     Map<GemstoneType, ModifiersConfig> newConfigs = new HashMap<>();
-
-    LOGGER.info("--- START DEBUGGING RESOURCE PATHS FOR MOD_ID: {} ---",
-        Gemstones.MOD_ID);
-    manager.findResources(new String(), path -> {
-      return true;
-    }).forEach((id, resource) -> {
-      if (id.getNamespace().equals(Gemstones.MOD_ID)) {
-        LOGGER.info("Found resource (before filtering): {}", id.toString());
-        LOGGER.info("Found resource (before filtering): {}", id.getNamespace());
-        LOGGER.info("Found resource (before filtering): {}", id.getPath());
-      }
-    });
-    LOGGER.info("--- END DEBUGGING RESOURCE PATHS ---");
 
     manager.findResources("", path -> {
       return true;

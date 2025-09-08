@@ -24,7 +24,6 @@ public class GemstoneItem extends Item {
 
   public GemstoneItem(Settings settings, GemstoneType gemstoneType, GemstoneRarity rarityType) {
     super(settings);
-
     this.gemstoneType = gemstoneType;
     this.rarityType = rarityType;
   }
@@ -51,8 +50,11 @@ public class GemstoneItem extends Item {
       tooltip.add(Text.translatable("tooltip.gemstones.gemstones_bonus").formatted(Formatting.GRAY));
     }
 
-    List<ModifierItemCategory> modifierOrder = Arrays.asList(ModifierItemCategory.MELEE,
-        ModifierItemCategory.RANGED, ModifierItemCategory.TOOLS, ModifierItemCategory.ARMOR);
+    List<ModifierItemCategory> modifierOrder = Arrays.asList(
+        ModifierItemCategory.MELEE,
+        ModifierItemCategory.RANGED,
+        ModifierItemCategory.TOOLS,
+        ModifierItemCategory.ARMOR);
 
     gemstoneModifiers.entrySet().stream()
         .sorted(Comparator.comparingInt(entry -> modifierOrder.indexOf(entry.getKey())))

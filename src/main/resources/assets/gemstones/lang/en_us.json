@@ -39,6 +39,8 @@
   "tooltip.gemstones.EVENT.INCREASE_MOB_SPAWNRATE": "%s %s",
   "tooltip.gemstones.EVENT.SMALL_FLAT_EXPLOSION": "%s to trigger %s on hit",
   "tooltip.gemstones.EVENT.SMELTER": "%s to %s on mine",
+  "tooltip.gemstones.EVENT.HEAL": "%s to %s on mine",
+  "tooltip.gemstones.EVENT.LIFE_STEAL": "%s to %s on hit",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
@@ -60,10 +62,14 @@
 
   "item.gemstones.stone_geode": "Stone Geode",
   "item.gemstones.deepslate_geode": "Deepslate Geode",
-  "tooltip.gemstones.geode.info": "Open to obtain %s, %s and %s gemstones",
+
+  "tooltip.gemstones.stone_geode.info": "Can be cracked open to reveal common gemstones.",
+  "tooltip.gemstones.deepslate_geode.info": "Can be cracked open to reveal rarer gemstones.",
+
+  "tooltip.gemstones.geode.info": "Possible Gemstones:",
   
   "item.gemstones.mossy_box": "Mossy Box",
-  "tooltip.gemstones.mossy_box.info": "Open to obtain a small gift from the depths",
+  "tooltip.gemstones.mossy_box.info": "Open to obtain a small gift from the depths.",
 
   "tooltip.gemstones.opening_item.info": "(Click RMB in hand for open)",
 
@@ -126,6 +132,11 @@
   "item.gemstones.pyrite_gemstone_uncommon": "Pyrite Gemstone",
   "item.gemstones.pyrite_gemstone_rare": "Pyrite Gemstone",
   "item.gemstones.pyrite_gemstone_legendary": "Pyrite Gemstone",
+  
+  "item.gemstones.garnet_gemstone_common": "Garnet Gemstone",
+  "item.gemstones.garnet_gemstone_uncommon": "Garnet Gemstone",
+  "item.gemstones.garnet_gemstone_rare": "Garnet Gemstone",
+  "item.gemstones.garnet_gemstone_legendary": "Garnet Gemstone",
   
   "item.gemstones.spawner_core_gemstone_common": "Spawner Core",
   "item.gemstones.spawner_core_gemstone_uncommon": "Spawner Core",

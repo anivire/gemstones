@@ -3,6 +3,8 @@ package name.modid.helpers.modifiers.type;
 public enum EventType {
   LIGHTNING_BOLT("Lighting Bolt"),
   EXTRA_HEALTH("Extra Health"),
+  HEAL("Health Heal"),
+  LIFE_STEAL("Life Steal"),
   TORRENT("Torrent"),
   INCREASE_GEODES_DROP("Geodes"),
   INCREASE_MOSSY_BOX_DROP("Mossy Box"),

@@ -63,7 +63,6 @@ public class EntityRenderDispatcherMixin {
     float f = entity.getWidth() * 1.4F;
     matrices.scale(f, f, f);
     float g = 0.5F;
-    float h = 0.0F;
     float i = entity.getHeight() / f;
     float j = 0.0F;
     matrices.multiply(rotation);

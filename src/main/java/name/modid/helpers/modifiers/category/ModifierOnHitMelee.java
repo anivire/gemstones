@@ -9,11 +9,11 @@ import name.modid.helpers.modifiers.instance.LevelValues;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
 
-public class ModifierOnHit extends AbstractModifier {
+public class ModifierOnHitMelee extends AbstractModifier {
   private final LevelValues eventChances;
   private final EventType eventType;
 
-  public ModifierOnHit(
+  public ModifierOnHitMelee(
       GemstoneType gemstoneType,
       GemstoneRarity rarityType,
       ModifierItemCategory itemCategory,

@@ -9,7 +9,7 @@ import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.GemstoneType;
 import name.modid.helpers.components.Gemstone;
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffectMelee;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,7 +43,7 @@ public class EventOnHitEffectModifiers {
         }
       }
 
-      ArrayList<ModifierOnHitEffect> gemstoneModifiers = ModifierHelper.getOnHitEffectModifiers(itemStack);
+      ArrayList<ModifierOnHitEffectMelee> gemstoneModifiers = ModifierHelper.getOnHitEffectModifiers(itemStack);
       GemstoneSocketingHelper.applyOnHitEffectModifiers(gemstoneModifiers, item, itemStack,
           target, world);
     }

@@ -13,7 +13,7 @@ import name.modid.effects.registration.EffectRegistrationHelper;
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.category.ModifierOnFirstHit;
+import name.modid.helpers.modifiers.category.ModifierOnFirstHitMelee;
 import name.modid.helpers.modifiers.type.EventType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -72,7 +72,7 @@ public class LivingEntityMixin {
   @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"), cancellable = true)
   private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     LivingEntity entity = (LivingEntity) (Object) this;
-    ArrayList<ModifierOnFirstHit> allModifiersOnFirstHit = new ArrayList<>();
+    ArrayList<ModifierOnFirstHitMelee> allModifiersOnFirstHit = new ArrayList<>();
 
     if (entity.getHealth() == entity.getMaxHealth()) {
       ItemStack itemStack = source.getWeaponStack();
@@ -80,7 +80,7 @@ public class LivingEntityMixin {
 
       if (!allModifiersOnFirstHit.isEmpty()) {
         double additionalDamagePercent = 0.0;
-        for (ModifierOnFirstHit modifier : allModifiersOnFirstHit) {
+        for (ModifierOnFirstHitMelee modifier : allModifiersOnFirstHit) {
           if (modifier.getEventType() == EventType.ADDITIONAL_DAMAGE) {
             additionalDamagePercent += modifier.getValues().get(modifier.getRarityType());
           }
@@ -155,11 +155,11 @@ public class LivingEntityMixin {
 
         if (weapon != null && !weapon.isEmpty() && GemstoneSocketingHelper.isItemValid(weapon.getItem())
             && GemstoneSocketingHelper.isGemstonesExists(weapon)) {
-          ArrayList<ModifierOnFirstHit> allModifiersOnFirstHit = ModifierHelper.getOnHitFirstModifiers(weapon);
+          ArrayList<ModifierOnFirstHitMelee> allModifiersOnFirstHit = ModifierHelper.getOnHitFirstModifiers(weapon);
 
           if (!allModifiersOnFirstHit.isEmpty()) {
             double additionalDamagePercent = 0.0;
-            for (ModifierOnFirstHit modifier : allModifiersOnFirstHit) {
+            for (ModifierOnFirstHitMelee modifier : allModifiersOnFirstHit) {
               if (modifier.getEventType() == EventType.ADDITIONAL_DAMAGE) {
                 additionalDamagePercent += modifier.getValues().get(modifier.getRarityType());
               }

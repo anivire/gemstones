@@ -1,97 +1,93 @@
 package name.modid.items.geodes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Random;
 
+import name.modid.Gemstones;
+import name.modid.config.data.geodes.GeodesConfig;
+import name.modid.config.data.geodes.GeodesRegistry;
 import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
 import name.modid.helpers.GemstonesRegistrationHelper;
+import name.modid.helpers.modifiers.tooltips.TooltipHelper.Icons;
+import name.modid.helpers.modifiers.tooltips.TooltipHelper.InlineIcons;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 public class GeodeItem extends Item {
-  protected ArrayList<GemstoneRarity> gemstoneRarities = new ArrayList<>();
-  protected ArrayList<GemstoneType> includedGemstones = new ArrayList<>();
-  protected ArrayList<Double> dropChances = new ArrayList<>(Arrays.asList(0.6, 0.3, 0.1));
+  private final String geodeId;
 
-  public GeodeItem(Settings settings, ArrayList<GemstoneRarity> gemstoneRarities,
-      ArrayList<GemstoneType> includedGemstones) {
+  public GeodeItem(Settings settings, String id) {
     super(settings);
-    this.gemstoneRarities = new ArrayList<>(gemstoneRarities);
-    this.includedGemstones = new ArrayList<>(includedGemstones);
+    this.geodeId = id;
+  }
+
+  private GeodesConfig getConfig() {
+    return GeodesRegistry.getConfig(this.geodeId);
   }
 
   public ItemStack getGemstoneStack() {
+    GeodesConfig config = getConfig();
+    if (config == null)
+      return ItemStack.EMPTY;
+
     Random random = new Random();
-    GemstoneType selectedType = includedGemstones.get(random.nextInt(includedGemstones.size()));
-    ArrayList<GemstoneRarity> validRarities = new ArrayList<>(gemstoneRarities);
-    ArrayList<Double> adjustedChances = new ArrayList<>();
 
-    for (int i = 0; i < validRarities.size(); i++) {
-      if (i < dropChances.size()) {
-        adjustedChances.add(dropChances.get(i));
-      } else {
-        adjustedChances.add(0.0);
-      }
-    }
+    // Gemstone type
+    float totalGemChance = config.gemstones.values().stream().reduce(0f, Float::sum);
+    float randGem = random.nextFloat() * totalGemChance;
 
-    if (validRarities.isEmpty()) {
-      return ItemStack.EMPTY;
-    }
-
-    double totalChance = adjustedChances.stream().mapToDouble(Double::doubleValue).sum();
-    if (totalChance <= 0) {
-      return ItemStack.EMPTY;
-    }
-    adjustedChances.replaceAll(chance -> chance / totalChance);
-
-    double roll = random.nextDouble();
-    double cumulativeChance = 0.0;
-    GemstoneRarity selectedRarity = validRarities.get(0);
-    for (int i = 0; i < validRarities.size(); i++) {
-      cumulativeChance += adjustedChances.get(i);
-      if (roll <= cumulativeChance) {
-        selectedRarity = validRarities.get(i);
+    GemstoneType selectedType = null;
+    float cumulativeGem = 0f;
+    for (var entry : config.gemstones.entrySet()) {
+      cumulativeGem += entry.getValue();
+      if (randGem <= cumulativeGem) {
+        selectedType = entry.getKey();
         break;
       }
     }
-
-    Item gemstoneItem = null;
-    if (selectedType == GemstoneType.RUBY) {
-      int index = selectedRarity.getValue();
-      List<Item> rubyList = GemstonesRegistrationHelper.getRubyGemstones();
-
-      if (rubyList != null && !rubyList.isEmpty() && index >= 0 && index < rubyList.size()) {
-        gemstoneItem = rubyList.get(index);
-      }
-    } else if (selectedType == GemstoneType.CELESTINE) {
-      int index = selectedRarity.getValue();
-      List<Item> celestineList = GemstonesRegistrationHelper.getCelestineGemstones();
-
-      if (celestineList != null && !celestineList.isEmpty() && index >= 0
-          && index < celestineList.size()) {
-        gemstoneItem = celestineList.get(index);
-      }
-    }
-
-    if (gemstoneItem == null) {
+    if (selectedType == null)
       return ItemStack.EMPTY;
-    }
 
-    return new ItemStack(gemstoneItem);
+    // Gemstone rarity
+    float totalRarityChance = config.rarities.values().stream().reduce(0f, Float::sum);
+    float randRarity = random.nextFloat() * totalRarityChance;
+
+    GemstoneRarity selectedRarity = null;
+    float cumulativeRarity = 0f;
+    for (var entry : config.rarities.entrySet()) {
+      cumulativeRarity += entry.getValue();
+      if (randRarity <= cumulativeRarity) {
+        selectedRarity = entry.getKey();
+        break;
+      }
+    }
+    if (selectedRarity == null)
+      return ItemStack.EMPTY;
+
+    List<Item> candidates = GemstonesRegistrationHelper.getGemstonesByType(selectedType);
+    int index = selectedRarity.getValue();
+
+    if (!candidates.isEmpty() && index < candidates.size()) {
+      return new ItemStack(candidates.get(index));
+    }
+    return ItemStack.EMPTY;
   }
 
   @Override
@@ -118,29 +114,88 @@ public class GeodeItem extends Item {
   }
 
   @Override
-  public void appendTooltip(ItemStack itemStack, TooltipContext context, List<Text> tooltip,
+  public void appendTooltip(ItemStack itemStack,
+      TooltipContext context,
+      List<Text> tooltip,
       TooltipType type) {
-    Text[] rarityTexts = new Text[3];
-    for (int i = 0; i < 3; i++) {
-      if (i < gemstoneRarities.size()) {
-        String rarityName = gemstoneRarities.get(i).toString().toLowerCase();
-        String transformedRarityName = Character.toUpperCase(rarityName.charAt(0)) + rarityName.substring(1);
 
-        int color = switch (gemstoneRarities.get(i)) {
-          case COMMON -> 0xa8a8a8;
-          case UNCOMMON -> 0x5454fc;
-          case RARE -> 0xfc54fc;
-          case LEGENDARY -> 0xffad00;
-          default -> 0xa8a8a8;
-        };
+    tooltip.add(Text
+        .translatable("tooltip.gemstones." + Registries.ITEM.getId(itemStack.getItem()).getPath() + ".info")
+        .formatted(Formatting.WHITE));
 
-        rarityTexts[i] = Text.translatable(transformedRarityName)
-            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color)));
+    if (Screen.hasShiftDown()) {
+      tooltip.add(Text.empty());
+      tooltip.add(Text.translatable("tooltip.gemstones.geode.info").formatted(Formatting.GRAY));
+
+      GeodesConfig config = getConfig();
+      if (config != null && !config.gemstones.isEmpty()) {
+
+        float totalWeight = config.gemstones.values().stream().reduce(0f, Float::sum);
+
+        for (var entry : config.gemstones.entrySet()) {
+          GemstoneType t = entry.getKey();
+          float rawWeight = entry.getValue();
+
+          Item gemItem = getItemFromType(t);
+          if (gemItem != null && totalWeight > 0f) {
+            ItemStack gemStack = new ItemStack(gemItem);
+
+            MutableText icon = Text.literal(GemstoneType.getGemstoneLiteral(t))
+                .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
+                .formatted(Formatting.WHITE);
+
+            MutableText name = Text.literal("")
+                .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
+                .append(gemStack.toHoverableText());
+
+            double percent = (rawWeight / totalWeight) * 100.0;
+            BigDecimal v = BigDecimal.valueOf(percent)
+                .setScale(2, RoundingMode.HALF_UP)
+                .stripTrailingZeros();
+
+            MutableText chance = Text.literal(" " + v.toPlainString() + "%")
+                .formatted(Formatting.WHITE);
+
+            tooltip.add(Text.literal("∙ ").formatted(Formatting.DARK_GRAY)
+                .append(icon).append(Text.literal(" ")).append(name).append(chance));
+          }
+        }
       }
     }
-    tooltip.add(Text.translatable("tooltip.gemstones.geode.info", rarityTexts[0], rarityTexts[1],
-        rarityTexts[2]).formatted(Formatting.WHITE));
-    tooltip.add(Text.literal(""));
-    tooltip.add(Text.translatable("tooltip.gemstones.opening_item.info").formatted(Formatting.GRAY));
+
+    MutableText iconInfo = Text.literal(InlineIcons.SHIFT.getSymbol())
+        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+        .formatted(Formatting.WHITE);
+    MutableText arrowInfo = Text.literal(" > ")
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.DARK_GRAY);
+    MutableText actionInfo = Text.literal("Hold Shift to see ")
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.YELLOW);
+    MutableText keywordInfo = Text.literal("Gemstones Drop Chances")
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.GOLD);
+
+    MutableText iconOpen = Text.literal(InlineIcons.MOUSE_RMB.getSymbol())
+        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+        .formatted(Formatting.WHITE);
+    MutableText arrowOpen = Text.literal(" > ")
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.DARK_GRAY);
+    MutableText actionOpen = Text.literal("Right-click in hand to ")
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.YELLOW);
+    MutableText keywordOpen = Text.literal("Open Geode")
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.GOLD);
+
+    tooltip.add(Text.empty());
+    tooltip.add(iconInfo.append(arrowInfo).append(actionInfo).append(keywordInfo));
+    tooltip.add(iconOpen.append(arrowOpen).append(actionOpen).append(keywordOpen));
+  }
+
+  private Item getItemFromType(GemstoneType type) {
+    List<Item> list = GemstonesRegistrationHelper.getGemstonesByType(type);
+    return list.isEmpty() ? null : list.get(0);
   }
 }

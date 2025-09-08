@@ -108,6 +108,42 @@
       "chars": [
         "\uE012"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/lifesteal_icon.png",
+      "height": 11,
+      "ascent": 9,
+      "chars": [
+        "\uE013"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/rmb_icon.png",
+      "height": 7,
+      "ascent": 7,
+      "chars": [
+        "\uE014"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/lmb_icon.png",
+      "height": 7,
+      "ascent": 7,
+      "chars": [
+        "\uE015"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/shift_icon.png",
+      "height": 7,
+      "ascent": 7,
+      "chars": [
+        "\uE016"
+      ]
     }
   ]
 }

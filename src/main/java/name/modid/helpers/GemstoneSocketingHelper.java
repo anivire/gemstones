@@ -21,9 +21,10 @@ import name.modid.helpers.modifiers.category.ModifierAttribute;
 import name.modid.helpers.modifiers.category.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.category.ModifierOnDamage;
-import name.modid.helpers.modifiers.category.ModifierOnHit;
-import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffectMelee;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.category.ModifierOnHitMelee;
+import name.modid.helpers.modifiers.category.ModifierOnHitProjectile;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.items.gemstones.GemstoneItem;
@@ -34,6 +35,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LightningEntity;
@@ -42,6 +44,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -246,23 +249,23 @@ public class GemstoneSocketingHelper {
     itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, finalComponent);
   }
 
-  public static void applyOnHitEffectModifiers(ArrayList<ModifierOnHitEffect> gemstoneModifiers,
+  public static void applyOnHitEffectModifiers(ArrayList<ModifierOnHitEffectMelee> gemstoneModifiers,
       Item item, ItemStack itemStack, LivingEntity target, World world) {
-    Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffect>> effectToModifiers = new HashMap<>();
-    for (ModifierOnHitEffect modifier : gemstoneModifiers) {
+    Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectMelee>> effectToModifiers = new HashMap<>();
+    for (ModifierOnHitEffectMelee modifier : gemstoneModifiers) {
       effectToModifiers.computeIfAbsent(modifier.getEffectEntry(), k -> new ArrayList<>()).add(modifier);
     }
 
-    for (Map.Entry<RegistryEntry<StatusEffect>, List<ModifierOnHitEffect>> statusEntry : effectToModifiers
+    for (Map.Entry<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectMelee>> statusEntry : effectToModifiers
         .entrySet()) {
       RegistryEntry<StatusEffect> statusEffect = statusEntry.getKey();
-      List<ModifierOnHitEffect> modifiers = statusEntry.getValue();
+      List<ModifierOnHitEffectMelee> modifiers = statusEntry.getValue();
 
       double combinedProcChance = 0.0;
-      ModifierOnHitEffect selectedModifier = null;
+      ModifierOnHitEffectMelee selectedModifier = null;
       int maxAmplifier = -1;
 
-      for (ModifierOnHitEffect modifier : modifiers) {
+      for (ModifierOnHitEffectMelee modifier : modifiers) {
         GemstoneRarity rarity = modifier.getRarityType();
         combinedProcChance += modifier.getInflitChanceValues().get(rarity);
 
@@ -484,6 +487,23 @@ public class GemstoneSocketingHelper {
       List<ModifierOnBlockBreak> modifiers = entry.getValue();
 
       switch (eventType) {
+        case HEAL -> {
+          double combinedProcChance = 0.0;
+          double maxHeal = 0.0;
+
+          for (ModifierOnBlockBreak m : modifiers) {
+            GemstoneRarity rarity = m.getRarityType();
+            combinedProcChance += m.getLevelValues().get(rarity);
+            maxHeal += m.getAdditionalLevelValues().get(rarity);
+          }
+
+          if (world.getRandom().nextDouble() < combinedProcChance) {
+            player.setHealth(player.getHealth() + (float) maxHeal);
+          }
+
+          break;
+        }
+
         case EXTRA_HEALTH -> {
           double combinedProcChance = 0.0;
           int maxStack = 0;
@@ -589,23 +609,26 @@ public class GemstoneSocketingHelper {
     }
   }
 
-  public static void applyOnHitModifiers(
-      ArrayList<ModifierOnHit> gemstoneModifiers,
+  public static void applyOnHitMeleeModifiers(
+      ArrayList<ModifierOnHitMelee> gemstoneModifiers,
       ItemStack itemStack,
-      ServerWorld world,
-      Vec3d pos,
-      ArrowEntity arrow,
-      @Nullable LivingEntity target) {
-    Map<EventType, List<ModifierOnHit>> eventToModifiers = new HashMap<>();
-    for (ModifierOnHit mod : gemstoneModifiers) {
+      LivingEntity entity,
+      DamageSource source,
+      float baseDamageTaken,
+      float damageTaken,
+      boolean blocked) {
+    World world = source.getAttacker().getEntityWorld();
+    Entity attacker = source.getAttacker();
+    Map<EventType, List<ModifierOnHitMelee>> eventToModifiers = new HashMap<>();
+    for (ModifierOnHitMelee mod : gemstoneModifiers) {
       eventToModifiers
           .computeIfAbsent(mod.getEventType(), k -> new ArrayList<>())
           .add(mod);
     }
 
-    for (Map.Entry<EventType, List<ModifierOnHit>> entry : eventToModifiers.entrySet()) {
+    for (Map.Entry<EventType, List<ModifierOnHitMelee>> entry : eventToModifiers.entrySet()) {
       EventType eventType = entry.getKey();
-      List<ModifierOnHit> modifiers = entry.getValue();
+      List<ModifierOnHitMelee> modifiers = entry.getValue();
 
       double combinedProcChance = modifiers.stream()
           .mapToDouble(m -> m.getEventChances().get(m.getRarityType()))
@@ -614,6 +637,87 @@ public class GemstoneSocketingHelper {
       boolean proc = new Random().nextDouble() < Math.min(combinedProcChance, 1.0);
 
       switch (eventType) {
+        case LIFE_STEAL -> {
+          if (attacker instanceof LivingEntity livingEntity && world instanceof ServerWorld serverWorld) {
+            if (proc) {
+              livingEntity.heal(damageTaken * 0.1F + 1.0F);
+
+              serverWorld.playSound(
+                  null,
+                  livingEntity.getBlockPos(),
+                  SoundEvents.ENTITY_PHANTOM_BITE,
+                  SoundCategory.BLOCKS,
+                  0.5f,
+                  0.8f);
+
+              serverWorld.spawnParticles(
+                  ParticleTypes.HEART,
+                  livingEntity.getX(),
+                  livingEntity.getBodyY(0.5),
+                  livingEntity.getZ(),
+                  6,
+                  0.6, 0.6, 0.6,
+                  0.4);
+            }
+          }
+        }
+        default -> {
+        }
+      }
+    }
+  }
+
+  public static void applyOnHitProjectileModifiers(
+      ArrayList<ModifierOnHitProjectile> gemstoneModifiers,
+      ItemStack itemStack,
+      ServerWorld world,
+      Vec3d pos,
+      ArrowEntity arrow,
+      @Nullable LivingEntity target) {
+    Entity attacker = arrow.getOwner();
+    Map<EventType, List<ModifierOnHitProjectile>> eventToModifiers = new HashMap<>();
+    for (ModifierOnHitProjectile mod : gemstoneModifiers) {
+      eventToModifiers
+          .computeIfAbsent(mod.getEventType(), k -> new ArrayList<>())
+          .add(mod);
+    }
+
+    for (Map.Entry<EventType, List<ModifierOnHitProjectile>> entry : eventToModifiers.entrySet()) {
+      EventType eventType = entry.getKey();
+      List<ModifierOnHitProjectile> modifiers = entry.getValue();
+
+      double combinedProcChance = modifiers.stream()
+          .mapToDouble(m -> m.getEventChances().get(m.getRarityType()))
+          .sum();
+
+      boolean proc = new Random().nextDouble() < Math.min(combinedProcChance, 1.0);
+
+      switch (eventType) {
+        case LIFE_STEAL -> {
+          if (attacker instanceof LivingEntity livingEntity && target != null
+              && world instanceof ServerWorld serverWorld) {
+            if (proc) {
+              livingEntity.heal((float) arrow.getDamage() * 0.1F + 1.0F);
+
+              serverWorld.playSound(
+                  null,
+                  livingEntity.getBlockPos(),
+                  SoundEvents.ENTITY_PHANTOM_BITE,
+                  SoundCategory.BLOCKS,
+                  0.5f,
+                  0.8f);
+
+              serverWorld.spawnParticles(
+                  ParticleTypes.HEART,
+                  livingEntity.getX(),
+                  livingEntity.getBodyY(0.5),
+                  livingEntity.getZ(),
+                  6,
+                  0.6, 0.6, 0.6,
+                  0.4);
+            }
+          }
+        }
         case LIGHTNING_BOLT -> {
           if (proc && world.isRaining()) {
             LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);

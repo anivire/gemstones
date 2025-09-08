@@ -1,4 +1,4 @@
-package name.modid.config.datapack;
+package name.modid.config.data.modifiers;
 
 import java.lang.reflect.Type;
 
@@ -8,16 +8,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import name.modid.config.datapack.ModifiersConfig.AreaEffectConfig;
-import name.modid.config.datapack.ModifiersConfig.AttributeConfig;
-import name.modid.config.datapack.ModifiersConfig.CustomConditionConfig;
-import name.modid.config.datapack.ModifiersConfig.ModifierConfigEntry;
-import name.modid.config.datapack.ModifiersConfig.ModifierType;
-import name.modid.config.datapack.ModifiersConfig.MultiplyAttributeConfig;
-import name.modid.config.datapack.ModifiersConfig.OnBlockBreakConfig;
-import name.modid.config.datapack.ModifiersConfig.OnFirstHitConfig;
-import name.modid.config.datapack.ModifiersConfig.OnHitConfig;
-import name.modid.config.datapack.ModifiersConfig.OnHitEffectConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.AreaEffectConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.AttributeConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.CustomConditionConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.ModifierConfigEntry;
+import name.modid.config.data.modifiers.ModifiersConfig.ModifierType;
+import name.modid.config.data.modifiers.ModifiersConfig.MultiplyAttributeConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.OnBlockBreakConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.OnFirstHitConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.OnHitConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.OnHitEffectConfig;
 
 public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierConfigEntry> {
   @Override

@@ -10,7 +10,7 @@ import name.modid.helpers.modifiers.type.ModifierItemCategory;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.entry.RegistryEntry;
 
-public class ModifierOnHitEffect extends AbstractModifier {
+public class ModifierOnHitEffectMelee extends AbstractModifier {
   public LevelValues inflitChanceValues;
   public RegistryEntry<StatusEffect> effectEntry;
   public Integer duration;
@@ -18,7 +18,7 @@ public class ModifierOnHitEffect extends AbstractModifier {
   public Integer maxStackCount;
   public Boolean isStacking;
 
-  public ModifierOnHitEffect(
+  public ModifierOnHitEffectMelee(
       GemstoneType gemstoneType,
       GemstoneRarity rarityType,
       ModifierItemCategory itemCategory,

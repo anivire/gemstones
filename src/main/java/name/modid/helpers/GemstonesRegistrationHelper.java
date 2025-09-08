@@ -8,6 +8,7 @@ import name.modid.Gemstones;
 import name.modid.items.gemstones.AmberGemstoneItem;
 import name.modid.items.gemstones.AquamarineGemstoneItem;
 import name.modid.items.gemstones.CelestineGemstoneItem;
+import name.modid.items.gemstones.GarnetGemstoneItem;
 import name.modid.items.gemstones.JadeGemstoneItem;
 import name.modid.items.gemstones.MalachiteGemstoneItem;
 import name.modid.items.gemstones.ObsidianShardGemstoneItem;
@@ -47,6 +48,7 @@ public class GemstonesRegistrationHelper {
   private static final List<Item> SPAWNER_CORE_GEMSTONES = new ArrayList<>();
   private static final List<Item> AMBER_GEMSTONES = new ArrayList<>();
   private static final List<Item> PYRITE_GEMSTONES = new ArrayList<>();
+  private static final List<Item> GARNET_GEMSTONES = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -126,6 +128,11 @@ public class GemstonesRegistrationHelper {
           "pyrite_gemstone_" + rarityName,
           settings -> new PyriteGemstoneItem(settings, rarity),
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+      GARNET_GEMSTONES.add(ItemRegistrationHelper.register(
+          "garnet_gemstone_" + rarityName,
+          settings -> new GarnetGemstoneItem(settings, rarity),
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
     }
   }
 
@@ -143,6 +150,7 @@ public class GemstonesRegistrationHelper {
     SPAWNER_CORE_GEMSTONES.forEach(entries::add);
     AMBER_GEMSTONES.forEach(entries::add);
     PYRITE_GEMSTONES.forEach(entries::add);
+    GARNET_GEMSTONES.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -160,6 +168,7 @@ public class GemstonesRegistrationHelper {
     all.addAll(SPAWNER_CORE_GEMSTONES);
     all.addAll(AMBER_GEMSTONES);
     all.addAll(PYRITE_GEMSTONES);
+    all.addAll(GARNET_GEMSTONES);
     return all;
   }
 
@@ -213,5 +222,29 @@ public class GemstonesRegistrationHelper {
 
   public static List<Item> getPyriteGemstones() {
     return PYRITE_GEMSTONES;
+  }
+
+  public static List<Item> getGarnetGemstones() {
+    return GARNET_GEMSTONES;
+  }
+
+  public static List<Item> getGemstonesByType(GemstoneType type) {
+    return switch (type) {
+      case RUBY -> RUBY_GEMSTONES;
+      case CELESTINE -> CELESTINE_GEMSTONES;
+      case TOPAZ -> TOPAZ_GEMSTONES;
+      case SAPPHIRE -> SAPPHIRE_GEMSTONES;
+      case ZIRCON -> ZIRCON_GEMSTONES;
+      case AQUAMARINE -> AQUAMARINE_GEMSTONES;
+      case OBSIDIAN_SHARD -> OBSIDIAN_SHARD_GEMSTONES;
+      case OPAL -> OPAL_GEMSTONES;
+      case JADE -> JADE_GEMSTONES;
+      case MALACHITE -> MALACHITE_GEMSTONES;
+      case SPAWNER_CORE -> SPAWNER_CORE_GEMSTONES;
+      case AMBER -> AMBER_GEMSTONES;
+      case PYRITE -> PYRITE_GEMSTONES;
+      case GARNET -> GARNET_GEMSTONES;
+      default -> List.of();
+    };
   }
 }

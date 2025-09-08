@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.modid.config.datapack.ModifiersRegistry;
+import name.modid.config.data.modifiers.ModifiersRegistry;
 import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.GemstoneType;
@@ -17,10 +17,11 @@ import name.modid.helpers.modifiers.category.ModifierCustomCondition;
 import name.modid.helpers.modifiers.category.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
 import name.modid.helpers.modifiers.category.ModifierOnDamage;
-import name.modid.helpers.modifiers.category.ModifierOnFirstHit;
-import name.modid.helpers.modifiers.category.ModifierOnHit;
-import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.category.ModifierOnFirstHitMelee;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffectMelee;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.category.ModifierOnHitMelee;
+import name.modid.helpers.modifiers.category.ModifierOnHitProjectile;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.instance.ModifierData;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
@@ -135,13 +136,13 @@ public class ModifierHelper {
     return modifiers;
   }
 
-  public static ArrayList<ModifierOnHit> getOnHitModifiers(ItemStack itemStack) {
-    ArrayList<ModifierOnHit> modifiers = new ArrayList<>();
+  public static ArrayList<ModifierOnHitProjectile> getOnHitProjectileModifiers(ItemStack itemStack) {
+    ArrayList<ModifierOnHitProjectile> modifiers = new ArrayList<>();
     for (Gemstone gem : GemstoneSocketingHelper.getGemstones(itemStack)) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
         GemstoneModifier modifier = getGemstoneModifierForItem(gem.gemstoneType(), gem.gemstoneRarityType(),
             itemStack.getItem());
-        if (modifier instanceof ModifierOnHit m) {
+        if (modifier instanceof ModifierOnHitProjectile m) {
           modifiers.add(m);
         }
       }
@@ -149,13 +150,13 @@ public class ModifierHelper {
     return modifiers;
   }
 
-  public static ArrayList<ModifierOnFirstHit> getOnHitFirstModifiers(ItemStack itemStack) {
-    ArrayList<ModifierOnFirstHit> modifiers = new ArrayList<>();
+  public static ArrayList<ModifierOnHitMelee> getOnHitMeleeModifiers(ItemStack itemStack) {
+    ArrayList<ModifierOnHitMelee> modifiers = new ArrayList<>();
     for (Gemstone gem : GemstoneSocketingHelper.getGemstones(itemStack)) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
         GemstoneModifier modifier = getGemstoneModifierForItem(gem.gemstoneType(), gem.gemstoneRarityType(),
             itemStack.getItem());
-        if (modifier instanceof ModifierOnFirstHit m) {
+        if (modifier instanceof ModifierOnHitMelee m) {
           modifiers.add(m);
         }
       }
@@ -163,13 +164,27 @@ public class ModifierHelper {
     return modifiers;
   }
 
-  public static ArrayList<ModifierOnHitEffect> getOnHitEffectModifiers(ItemStack itemStack) {
-    ArrayList<ModifierOnHitEffect> modifiers = new ArrayList<>();
+  public static ArrayList<ModifierOnFirstHitMelee> getOnHitFirstModifiers(ItemStack itemStack) {
+    ArrayList<ModifierOnFirstHitMelee> modifiers = new ArrayList<>();
     for (Gemstone gem : GemstoneSocketingHelper.getGemstones(itemStack)) {
       if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
         GemstoneModifier modifier = getGemstoneModifierForItem(gem.gemstoneType(), gem.gemstoneRarityType(),
             itemStack.getItem());
-        if (modifier instanceof ModifierOnHitEffect m) {
+        if (modifier instanceof ModifierOnFirstHitMelee m) {
+          modifiers.add(m);
+        }
+      }
+    }
+    return modifiers;
+  }
+
+  public static ArrayList<ModifierOnHitEffectMelee> getOnHitEffectModifiers(ItemStack itemStack) {
+    ArrayList<ModifierOnHitEffectMelee> modifiers = new ArrayList<>();
+    for (Gemstone gem : GemstoneSocketingHelper.getGemstones(itemStack)) {
+      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
+        GemstoneModifier modifier = getGemstoneModifierForItem(gem.gemstoneType(), gem.gemstoneRarityType(),
+            itemStack.getItem());
+        if (modifier instanceof ModifierOnHitEffectMelee m) {
           modifiers.add(m);
         }
       }

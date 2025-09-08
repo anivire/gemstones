@@ -1,4 +1,4 @@
-package name.modid.config.datapack;
+package name.modid.config.data.modifiers;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.modifiers.ModifierHelper;
-import name.modid.helpers.modifiers.category.ModifierOnHit;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.category.ModifierOnHitProjectile;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -65,9 +65,9 @@ public class PersistentProjectileEntityMixin {
     }
 
     // ON_HIT
-    ArrayList<ModifierOnHit> onHitModifiers = ModifierHelper.getOnHitModifiers(itemStack);
+    ArrayList<ModifierOnHitProjectile> onHitModifiers = ModifierHelper.getOnHitProjectileModifiers(itemStack);
     if (!onHitModifiers.isEmpty()) {
-      GemstoneSocketingHelper.applyOnHitModifiers(
+      GemstoneSocketingHelper.applyOnHitProjectileModifiers(
           onHitModifiers,
           itemStack,
           world,

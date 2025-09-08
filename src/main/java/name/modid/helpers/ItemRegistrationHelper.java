@@ -1,14 +1,12 @@
 package name.modid.helpers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
 import name.modid.Gemstones;
 import name.modid.items.MossyBox;
-import name.modid.items.geodes.GeodeDeepslateItem;
-import name.modid.items.geodes.GeodeStoneItem;
+import name.modid.items.geodes.GeodeItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
@@ -20,20 +18,15 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 public final class ItemRegistrationHelper {
-  public static final Item STONE_GEODE = register(
-      "stone_geode",
-      settings -> new GeodeStoneItem(settings,
-          new ArrayList<>(
-              Arrays.asList(GemstoneRarity.COMMON, GemstoneRarity.UNCOMMON, GemstoneRarity.RARE)),
-          new ArrayList<>(Arrays.asList(GemstoneType.RUBY, GemstoneType.CELESTINE))),
-      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 64));
+  public static final Item DEEPSLATE_GEODE = Registry.register(
+      Registries.ITEM,
+      Identifier.of(Gemstones.MOD_ID, "deepslate_geode"),
+      new GeodeItem(new Item.Settings().rarity(Rarity.EPIC).maxCount(16), "deepslate_geode"));
 
-  public static final Item DEEPSLATE_GEODE = register("deepslate_geode",
-      settings -> new GeodeDeepslateItem(settings,
-          new ArrayList<>(Arrays.asList(GemstoneRarity.UNCOMMON, GemstoneRarity.RARE,
-              GemstoneRarity.LEGENDARY)),
-          new ArrayList<>(Arrays.asList(GemstoneType.RUBY, GemstoneType.CELESTINE))),
-      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 64));
+  public static final Item STONE_GEODE = Registry.register(
+      Registries.ITEM,
+      Identifier.of(Gemstones.MOD_ID, "stone_geode"),
+      new GeodeItem(new Item.Settings().rarity(Rarity.UNCOMMON).maxCount(16), "stone_geode"));
 
   public static final Item MOSSY_BOX = register("mossy_box",
       settings -> new MossyBox(settings),

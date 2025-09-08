@@ -3,7 +3,8 @@ package name.modid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import name.modid.config.datapack.ModifiersDataLoader;
+import name.modid.config.data.geodes.GeodesDataLoader;
+import name.modid.config.data.modifiers.ModifiersDataLoader;
 import name.modid.effects.registration.EffectRegistrationHelper;
 import name.modid.helpers.ItemRegistrationHelper;
 import name.modid.helpers.TagsRegistrationHelper;
@@ -24,6 +25,7 @@ public class Gemstones implements ModInitializer {
     LOGGER.info("Initializing Gemstones");
 
     ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ModifiersDataLoader());
+    ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new GeodesDataLoader());
 
     AttributeRegistrationHelper.initialize();
     ComponentsHelper.initialize();

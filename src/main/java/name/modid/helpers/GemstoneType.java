@@ -17,6 +17,7 @@ public enum GemstoneType {
   MALACHITE,
   SPAWNER_CORE,
   AMBER,
+  GARNET,
   PYRITE;
 
   public static final Codec<GemstoneType> CODEC = Codec.STRING.xmap(GemstoneType::valueOf, GemstoneType::name);
@@ -37,6 +38,7 @@ public enum GemstoneType {
       case SPAWNER_CORE -> "\uE012";
       case AMBER -> "\uE013";
       case PYRITE -> "\uE014";
+      case GARNET -> "\uE015";
       default -> "\uE000";
     };
   }

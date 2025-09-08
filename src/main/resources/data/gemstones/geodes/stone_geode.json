@@ -1,0 +1,16 @@
+{
+  "geode_id": "stone_geode",
+  "gemstones": {
+    "CELESTINE": 0.5,
+    "JADE": 0.5,
+    "OPAL": 0.5,
+    "GARNET": 0.4,
+    "AQUAMARINE": 0.3,
+    "AMBER": 0.3
+  },
+  "rarities": {
+    "COMMON": 0.7,
+    "RARE": 0.2,
+    "EPIC": 0.1
+  }
+}

@@ -3,6 +3,8 @@ package name.modid.items;
 import java.util.List;
 
 import name.modid.Gemstones;
+import name.modid.helpers.modifiers.tooltips.TooltipHelper.Icons;
+import name.modid.helpers.modifiers.tooltips.TooltipHelper.InlineIcons;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +18,8 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -63,7 +67,21 @@ public class MossyBox extends Item {
   public void appendTooltip(ItemStack itemStack, TooltipContext context, List<Text> tooltip,
       TooltipType type) {
     tooltip.add(Text.translatable("tooltip.gemstones.mossy_box.info"));
-    tooltip.add(Text.literal(""));
-    tooltip.add(Text.translatable("tooltip.gemstones.opening_item.info").formatted(Formatting.GRAY));
+    tooltip.add(Text.empty());
+
+    MutableText iconOpen = Text.literal(InlineIcons.MOUSE_RMB.getSymbol())
+        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+        .formatted(Formatting.WHITE);
+    MutableText arrowOpen = Text.literal(" > ")
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.DARK_GRAY);
+    MutableText actionOpen = Text.literal("Right-click in hand to ")
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.YELLOW);
+    MutableText keywordOpen = Text.literal("Open Box")
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.GOLD);
+
+    tooltip.add(iconOpen.append(arrowOpen).append(actionOpen).append(keywordOpen));
   }
 }

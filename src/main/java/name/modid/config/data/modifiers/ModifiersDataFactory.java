@@ -1,4 +1,4 @@
-package name.modid.config.datapack;
+package name.modid.config.data.modifiers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,14 +7,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 
 import name.modid.Gemstones;
-import name.modid.config.datapack.ModifiersConfig.AreaEffectConfig;
-import name.modid.config.datapack.ModifiersConfig.AttributeConfig;
-import name.modid.config.datapack.ModifiersConfig.CustomConditionConfig;
-import name.modid.config.datapack.ModifiersConfig.MultiplyAttributeConfig;
-import name.modid.config.datapack.ModifiersConfig.OnBlockBreakConfig;
-import name.modid.config.datapack.ModifiersConfig.OnFirstHitConfig;
-import name.modid.config.datapack.ModifiersConfig.OnHitConfig;
-import name.modid.config.datapack.ModifiersConfig.OnHitEffectConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.AreaEffectConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.AttributeConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.CustomConditionConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.MultiplyAttributeConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.OnBlockBreakConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.OnFirstHitConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.OnHitConfig;
+import name.modid.config.data.modifiers.ModifiersConfig.OnHitEffectConfig;
 import name.modid.helpers.GemstoneRarity;
 import name.modid.helpers.GemstoneType;
 import name.modid.helpers.modifiers.category.ModifierAreaEffect;
@@ -22,10 +22,11 @@ import name.modid.helpers.modifiers.category.ModifierAttribute;
 import name.modid.helpers.modifiers.category.ModifierCustomCondition;
 import name.modid.helpers.modifiers.category.ModifierMultiplyAttribute;
 import name.modid.helpers.modifiers.category.ModifierOnBlockBreak;
-import name.modid.helpers.modifiers.category.ModifierOnFirstHit;
-import name.modid.helpers.modifiers.category.ModifierOnHit;
-import name.modid.helpers.modifiers.category.ModifierOnHitEffect;
+import name.modid.helpers.modifiers.category.ModifierOnFirstHitMelee;
+import name.modid.helpers.modifiers.category.ModifierOnHitEffectMelee;
 import name.modid.helpers.modifiers.category.ModifierOnHitEffectProjectile;
+import name.modid.helpers.modifiers.category.ModifierOnHitMelee;
+import name.modid.helpers.modifiers.category.ModifierOnHitProjectile;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import name.modid.helpers.modifiers.type.EventType;
 import name.modid.helpers.modifiers.type.ModifierItemCategory;
@@ -80,7 +81,7 @@ public class ModifiersDataFactory {
                 continue;
 
               if (category != ModifierItemCategory.RANGED) {
-                modifierInstance = new ModifierOnHitEffect(
+                modifierInstance = new ModifierOnHitEffectMelee(
                     gemstoneType,
                     rarity,
                     category,
@@ -195,12 +196,21 @@ public class ModifiersDataFactory {
               if (eventType == null)
                 continue;
 
-              modifierInstance = new ModifierOnHit(
-                  gemstoneType,
-                  rarity,
-                  category,
-                  new ArrayList<>(onHitConfig.chanceLevels),
-                  eventType);
+              if (category != ModifierItemCategory.RANGED) {
+                modifierInstance = new ModifierOnHitMelee(
+                    gemstoneType,
+                    rarity,
+                    category,
+                    new ArrayList<>(onHitConfig.chanceLevels),
+                    eventType);
+              } else {
+                modifierInstance = new ModifierOnHitProjectile(
+                    gemstoneType,
+                    rarity,
+                    category,
+                    new ArrayList<>(onHitConfig.chanceLevels),
+                    eventType);
+              }
             }
           }
           case CUSTOM_CONDITION -> {
@@ -224,7 +234,7 @@ public class ModifiersDataFactory {
               if (eventType == null)
                 continue;
 
-              modifierInstance = new ModifierOnFirstHit(
+              modifierInstance = new ModifierOnFirstHitMelee(
                   gemstoneType,
                   rarity,
                   category,

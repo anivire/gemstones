@@ -1,0 +1,12 @@
+{
+  "geode_id": "deepslate_geode",
+  "gemstones": {
+    "RUBY": 0.4,
+    "CELESTINE": 0.6
+  },
+  "rarities": {
+    "COMMON": 0.3,
+    "RARE": 0.45,
+    "EPIC": 0.25
+  }
+}
