@@ -9,6 +9,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 public class EventRegistrationHelper {
   public static void initialize() {
+    // TODO: fix spaming proc for all modifiers which related on hit events
+
     AttackEntityCallback.EVENT.register(EventStunned::setupEvent);
     AttackEntityCallback.EVENT.register(EventOnHitEffectModifiers::setupEvent);
 
