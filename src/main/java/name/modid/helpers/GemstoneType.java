@@ -24,6 +24,7 @@ public enum GemstoneType {
 
   public static String getGemstoneLiteral(GemstoneType type) {
     return switch (type) {
+      case LOCKED -> "\uE000";
       case EMPTY -> "\uE001";
       case RUBY -> "\uE002";
       case CELESTINE -> "\uE003";

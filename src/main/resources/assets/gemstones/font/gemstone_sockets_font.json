@@ -2,6 +2,14 @@
   "providers": [
     {
       "type": "bitmap",
+      "file": "gemstones:gui/gemstone_socket_locked.png",
+      "height": 26,
+      "ascent": 13,
+      "chars": [
+        "\uE000"
+      ]
+    },{
+      "type": "bitmap",
       "file": "gemstones:gui/gemstone_socket.png",
       "height": 26,
       "ascent": 13,

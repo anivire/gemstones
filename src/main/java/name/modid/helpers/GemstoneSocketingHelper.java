@@ -157,8 +157,15 @@ public class GemstoneSocketingHelper {
     if (currentSlots == null || currentSlots.gemstones().length != MAX_SLOTS) {
       Gemstone[] gemstones = new Gemstone[MAX_SLOTS];
 
+      int freeSlots = 1 + new Random().nextInt(2);
+
       for (int i = 0; i < MAX_SLOTS; i++) {
-        gemstones[i] = new Gemstone(GemstoneType.EMPTY, GemstoneRarity.NONE);
+        if (freeSlots != 0) {
+          gemstones[i] = new Gemstone(GemstoneType.EMPTY, GemstoneRarity.NONE);
+          freeSlots--;
+        } else {
+          gemstones[i] = new Gemstone(GemstoneType.LOCKED, GemstoneRarity.NONE);
+        }
       }
 
       itemStack.set(ComponentsHelper.GEMSTONES, new GemstoneSlots(gemstones));

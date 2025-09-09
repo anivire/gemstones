@@ -34,6 +34,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class TooltipBuilder {
+  private boolean ALT_STYLE = false;
+
   public enum ModifierCategoryType {
     ATTRIBUTE,
     MULTIPLY_ATTRIBUTE,
@@ -124,10 +126,20 @@ public class TooltipBuilder {
         ? String.format("tooltip.gemstones.%s_type", itemCategory.toString().toLowerCase())
         : "tooltip.gemstones.without_type";
 
-    MutableText tooltipItemPrefix = Text.translatable(tooltipItemType).formatted(Formatting.DARK_GRAY);
+    if (ALT_STYLE) {
+      MutableText icon = Text.literal(GemstoneType.getGemstoneLiteral(gemstoneType))
+          .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
+          .formatted(Formatting.WHITE);
 
-    TooltipHandler handler = handlers.getOrDefault(modifierCategory, new UndefinedHandler());
-    return tooltipItemPrefix.append(handler.buildTooltip());
+      TooltipHandler handler = handlers.getOrDefault(modifierCategory, new UndefinedHandler());
+      return icon.append(Text.literal(" > ").setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
+          .formatted(Formatting.DARK_GRAY).append(handler.buildTooltip()));
+    } else {
+      MutableText tooltipItemPrefix = Text.translatable(tooltipItemType).formatted(Formatting.DARK_GRAY);
+
+      TooltipHandler handler = handlers.getOrDefault(modifierCategory, new UndefinedHandler());
+      return tooltipItemPrefix.append(handler.buildTooltip());
+    }
   }
 
   public String formatValue(double value, String postfix) {

@@ -144,6 +144,25 @@
       "chars": [
         "\uE016"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/locked_icon.png",
+      "height": 7,
+      "ascent": 7,
+      "chars": [
+        "\uE017"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/empty_icon.png",
+      "height": 7,
+      "width": 7,
+      "ascent": 7,
+      "chars": [
+        "\uE018"
+      ]
     }
   ]
 }

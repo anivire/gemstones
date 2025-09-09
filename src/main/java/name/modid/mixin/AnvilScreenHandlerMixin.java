@@ -3,7 +3,6 @@ package name.modid.mixin;
 import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -14,6 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import name.modid.helpers.GemstoneSocketingHelper;
+import name.modid.helpers.components.ComponentsHelper;
+import name.modid.helpers.components.GemstoneSlots;
 import name.modid.items.gemstones.GemstoneItem;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,10 +30,6 @@ public abstract class AnvilScreenHandlerMixin {
   @Final
   @Mutable
   private Property levelCost;
-
-  @Shadow
-  @Final
-  private static Logger LOGGER;
 
   @Shadow
   private @Nullable String newItemName;
@@ -77,17 +74,21 @@ public abstract class AnvilScreenHandlerMixin {
     ItemStack left = handler.getSlot(0).getStack();
     ItemStack right = handler.getSlot(1).getStack();
 
-    if (!left.isEmpty() && !right.isEmpty() && GemstoneSocketingHelper.isItemValid(left.getItem())
-        &&
-        // TODO: add exp level scaling or set to flat number
-        Objects.equals(right.getItem().getClass().getSuperclass().getSimpleName(),
-            "GemstoneItem")) {
+    if (!left.isEmpty() && !right.isEmpty()
+        && GemstoneSocketingHelper.isItemValid(left.getItem())
+        && Objects.equals(right.getItem().getClass().getSuperclass().getSimpleName(), "GemstoneItem")) {
+      // TODO: add exp level scaling or set to flat number
+
+      GemstoneSlots gemstoneSlots = right.get(ComponentsHelper.GEMSTONES);
+
       cir.setReturnValue(1);
     }
   }
 
   @Inject(method = "canTakeOutput", at = @At("HEAD"), cancellable = true)
-  protected void canTakeOutputMixin(PlayerEntity player, boolean present,
+  protected void canTakeOutputMixin(
+      PlayerEntity player,
+      boolean present,
       CallbackInfoReturnable<Boolean> info) {
     AnvilScreenHandler handler = (AnvilScreenHandler) (Object) this;
     ItemStack left = handler.getSlot(0).getStack();

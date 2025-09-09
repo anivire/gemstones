@@ -11,6 +11,7 @@ import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.instance.GemstoneModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -49,7 +50,9 @@ public class TooltipHelper {
     LIFESTEAL("\uE013"),
     MOUSE_RMB("\uE014"),
     MOUSE_LMB("\uE015"),
-    SHIFT("\uE016");
+    SHIFT("\uE016"),
+    LOCKED("\uE017"),
+    EMPTY("\uE018");
 
     private final String symbol;
 
@@ -85,12 +88,12 @@ public class TooltipHelper {
 
   private static Text getGemstoneSprite(GemstoneType gemType) {
     return Text.literal(GemstoneType.getGemstoneLiteral(gemType))
-        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "gemstone_sockets_font")));
+        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.SOCKET.getPath())));
   }
 
   public static MutableText getGemstoneRaritySprite(GemstoneRarity rarityType) {
     return Text.literal(GemstoneRarity.getRarityLiteral(rarityType))
-        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, "quality_font")))
+        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.RARITY.getPath())))
         .formatted(Formatting.WHITE);
   }
 
@@ -113,18 +116,38 @@ public class TooltipHelper {
         try {
           GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gemType, gemRarity,
               itemStack.getItem());
+
           rows.add(modifier.getTooltipText(gemRarity, false));
         } catch (NullPointerException e) {
-          rows.add(Text.literal("Undefined modifier").formatted(Formatting.RED));
+
+          MutableText icon = gemType == GemstoneType.LOCKED ? Text
+              .literal(InlineIcons.LOCKED.getSymbol())
+              .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
+                  Icons.INLINE.getPath())))
+              .formatted(Formatting.DARK_GRAY)
+              : Text.translatable("tooltip.gemstones.without_type").formatted(Formatting.DARK_GRAY);
+
+          rows.add(icon.append(Text
+              .literal(gemType == GemstoneType.LOCKED ? " " : "")
+              .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
+              .append(Text.literal("Undefined modifier").formatted(Formatting.RED))));
         }
       } else {
-        MutableText symbol = Text.translatable("tooltip.gemstones.without_type").formatted(Formatting.GRAY);
+        MutableText icon = Text
+            .literal(gemType == GemstoneType.LOCKED ? InlineIcons.LOCKED.getSymbol() : InlineIcons.EMPTY.getSymbol())
+            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
+                Icons.INLINE.getPath())))
+            .formatted(Formatting.DARK_GRAY);
+
         MutableText gemstoneSlot = Text.translatable(
             String.format("tooltip.gemstones.gemstone_slots.%d", i + 1),
             TooltipHelper.getSlotText(gemstones[i].gemstoneType()))
             .formatted(TooltipHelper.getSlotColor(gemstones[i].gemstoneType()));
 
-        rows.add(symbol.append(gemstoneSlot));
+        rows.add(icon.append(Text
+            .literal(" ")
+            .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
+            .append(gemstoneSlot)));
       }
     }
 
