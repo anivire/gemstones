@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import name.modid.helpers.GemstoneSocketingHelper;
-import name.modid.helpers.components.ComponentsHelper;
-import name.modid.helpers.components.GemstoneSlots;
 import name.modid.items.gemstones.GemstoneItem;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -78,8 +76,6 @@ public abstract class AnvilScreenHandlerMixin {
         && GemstoneSocketingHelper.isItemValid(left.getItem())
         && Objects.equals(right.getItem().getClass().getSuperclass().getSimpleName(), "GemstoneItem")) {
       // TODO: add exp level scaling or set to flat number
-
-      GemstoneSlots gemstoneSlots = right.get(ComponentsHelper.GEMSTONES);
 
       cir.setReturnValue(1);
     }

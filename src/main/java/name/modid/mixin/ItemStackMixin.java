@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import name.modid.Gemstones;
 import name.modid.helpers.GemstoneSocketingHelper;
 import name.modid.helpers.attributes.AttributeRegistrationHelper;
 import name.modid.helpers.components.Gemstone;
@@ -69,6 +70,7 @@ public abstract class ItemStackMixin {
     }
   }
 
+  // TODO: move geodes and probably all other tooltips to client for SHIFT support
   @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0, shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
   private void tooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type,
       CallbackInfoReturnable<List<Text>> cir, List<Text> tooltip) {
@@ -84,9 +86,13 @@ public abstract class ItemStackMixin {
 
       // Empty rows for proper gemstones sprite visibility
       tooltip.add(Text.empty());
-      tooltip.add(TooltipHelper.getGemstoneSocketedRow(gemstones));
-      tooltip.add(Text.empty());
-      tooltip.add(Text.empty());
+
+      if (!Gemstones.ALT_STYLE) {
+        tooltip.add(TooltipHelper.getGemstoneSocketedRow(gemstones));
+        tooltip.add(Text.empty());
+        tooltip.add(Text.empty());
+      }
+
       tooltip.add(Text.translatable("tooltip.gemstones.gemstone_slots_gemstones_category")
           .formatted(Formatting.GRAY));
       tooltip.addAll(TooltipHelper.getItemGemstoneBonusesRows(gemstones, itemStack));

@@ -6,7 +6,9 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
+// TODO: add tags translation
 public class TagsRegistrationHelper {
+  // TODO: add stunned tag
   public static final TagKey<Block> ALL_ORES = TagKey.of(
       RegistryKeys.BLOCK,
       Identifier.of(Gemstones.MOD_ID, "all_ores"));

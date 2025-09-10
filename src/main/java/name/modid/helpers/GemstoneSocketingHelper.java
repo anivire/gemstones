@@ -75,6 +75,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+// TODO: refactor socketing methods
 public class GemstoneSocketingHelper {
   public static final int MAX_SLOTS = 5;
 
@@ -256,6 +257,7 @@ public class GemstoneSocketingHelper {
     itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, finalComponent);
   }
 
+  // TODO: refactor modifiers gathering, probably move all modifiers to components
   public static void applyOnHitEffectModifiers(ArrayList<ModifierOnHitEffectMelee> gemstoneModifiers,
       Item item, ItemStack itemStack, LivingEntity target, World world) {
     Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectMelee>> effectToModifiers = new HashMap<>();

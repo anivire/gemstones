@@ -19,6 +19,7 @@ import net.minecraft.resource.ResourceType;
 public class Gemstones implements ModInitializer {
   public static final String MOD_ID = "gemstones";
   public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+  public static boolean ALT_STYLE = true;
 
   @Override
   public void onInitialize() {

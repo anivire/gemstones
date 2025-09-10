@@ -6,12 +6,6 @@
   "tooltip.gemstones.gemstones_bonus": "Bonuses:",
   "tooltip.gemstones.gemstone_slots_info_rarities": "Gemstone rarities:",
   "tooltip.gemstones.gemstone_slots_info_rarities_fold": "(Hold left Shift for details)",
-
-  "tooltip.gemstones.gemstone_slots.1": "%d",
-  "tooltip.gemstones.gemstone_slots.2": "%d",
-  "tooltip.gemstones.gemstone_slots.3": "%d",
-  "tooltip.gemstones.gemstone_slots.4": "%d",
-  "tooltip.gemstones.gemstone_slots.5": "%d",
   
   "tooltip.gemstones.melee_type": "∙ Melee: ",
   "tooltip.gemstones.ranged_type": "∙ Ranged: ",
@@ -19,6 +13,7 @@
   "tooltip.gemstones.armor_type": "∙ Armor: ",
   
   "tooltip.gemstones.without_type": "∙ ",
+  "tooltip.gemstones.locked_slot": "🔒 ",
 
   "tooltip.gemstones.ATTRIBUTE": "%s %s",
   "tooltip.gemstones.MULTIPLY_ATTRIBUTE": "%s %s and %s %s",

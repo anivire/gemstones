@@ -109,45 +109,31 @@ public class TooltipHelper {
     List<Text> rows = new ArrayList<>();
 
     for (int i = 0; i < gemstones.length; i++) {
-      GemstoneType gemType = gemstones[i].gemstoneType();
+      GemstoneType gemstoneType = gemstones[i].gemstoneType();
       GemstoneRarity gemRarity = gemstones[i].gemstoneRarityType();
 
-      if (gemType != GemstoneType.LOCKED && gemType != GemstoneType.EMPTY) {
+      if (gemstoneType != GemstoneType.LOCKED && gemstoneType != GemstoneType.EMPTY) {
         try {
-          GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gemType, gemRarity,
+          GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(
+              gemstoneType,
+              gemRarity,
               itemStack.getItem());
-
           rows.add(modifier.getTooltipText(gemRarity, false));
         } catch (NullPointerException e) {
-
-          MutableText icon = gemType == GemstoneType.LOCKED ? Text
-              .literal(InlineIcons.LOCKED.getSymbol())
-              .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
-                  Icons.INLINE.getPath())))
-              .formatted(Formatting.DARK_GRAY)
-              : Text.translatable("tooltip.gemstones.without_type").formatted(Formatting.DARK_GRAY);
-
-          rows.add(icon.append(Text
-              .literal(gemType == GemstoneType.LOCKED ? " " : "")
-              .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
-              .append(Text.literal("Undefined modifier").formatted(Formatting.RED))));
+          MutableText prefix = Text.translatable("tooltip.gemstones.without_type").formatted(Formatting.DARK_GRAY);
+          rows.add(prefix.append(Text.literal("Undefined modifier").formatted(Formatting.RED)));
         }
       } else {
-        MutableText icon = Text
-            .literal(gemType == GemstoneType.LOCKED ? InlineIcons.LOCKED.getSymbol() : InlineIcons.EMPTY.getSymbol())
-            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
-                Icons.INLINE.getPath())))
-            .formatted(Formatting.DARK_GRAY);
+        MutableText prefix = Text.literal(GemstoneType.getGemstoneLiteral(gemstoneType))
+            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
+            .formatted(Formatting.DARK_GRAY).append(Text.literal(" > ").formatted(Formatting.DARK_GRAY)
+                .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
 
-        MutableText gemstoneSlot = Text.translatable(
-            String.format("tooltip.gemstones.gemstone_slots.%d", i + 1),
-            TooltipHelper.getSlotText(gemstones[i].gemstoneType()))
-            .formatted(TooltipHelper.getSlotColor(gemstones[i].gemstoneType()));
+        MutableText gemstoneSlot = Text.literal(TooltipHelper.getSlotText(gemstones[i].gemstoneType()))
+            .formatted(TooltipHelper.getSlotColor(gemstones[i].gemstoneType()))
+            .styled(style -> style.withFont(Style.DEFAULT_FONT_ID));
 
-        rows.add(icon.append(Text
-            .literal(" ")
-            .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
-            .append(gemstoneSlot)));
+        rows.add(prefix.append(gemstoneSlot));
       }
     }
 

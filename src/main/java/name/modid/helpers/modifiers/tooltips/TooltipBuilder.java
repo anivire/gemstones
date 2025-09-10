@@ -34,8 +34,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class TooltipBuilder {
-  private boolean ALT_STYLE = false;
-
   public enum ModifierCategoryType {
     ATTRIBUTE,
     MULTIPLY_ATTRIBUTE,
@@ -126,18 +124,25 @@ public class TooltipBuilder {
         ? String.format("tooltip.gemstones.%s_type", itemCategory.toString().toLowerCase())
         : "tooltip.gemstones.without_type";
 
-    if (ALT_STYLE) {
-      MutableText icon = Text.literal(GemstoneType.getGemstoneLiteral(gemstoneType))
-          .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
-          .formatted(Formatting.WHITE);
+    TooltipHandler handler = handlers.getOrDefault(modifierCategory, new UndefinedHandler());
 
-      TooltipHandler handler = handlers.getOrDefault(modifierCategory, new UndefinedHandler());
-      return icon.append(Text.literal(" > ").setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
-          .formatted(Formatting.DARK_GRAY).append(handler.buildTooltip()));
+    if (Gemstones.ALT_STYLE) {
+      MutableText prefix = Text.empty();
+
+      if (!isItemTooltip) {
+        prefix = Text.literal(GemstoneType.getGemstoneLiteral(gemstoneType))
+            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
+            .formatted(Formatting.WHITE).append(Text.literal(" > ").formatted(Formatting.DARK_GRAY)
+                .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
+      } else {
+        prefix = Text.translatable(tooltipItemType).formatted(Formatting.DARK_GRAY);
+      }
+
+      return prefix
+          .append(handler.buildTooltip().styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
     } else {
       MutableText tooltipItemPrefix = Text.translatable(tooltipItemType).formatted(Formatting.DARK_GRAY);
 
-      TooltipHandler handler = handlers.getOrDefault(modifierCategory, new UndefinedHandler());
       return tooltipItemPrefix.append(handler.buildTooltip());
     }
   }
@@ -173,23 +178,23 @@ public class TooltipBuilder {
     MutableText eventIcon = Text.empty();
     Formatting textColor = Formatting.BLUE;
 
-    // switch (eventType) {
-    // case LIGHTNING_BOLT ->
-    // eventIcon.append(Text.literal(InlineIcons.LIGHTNING_STRIKE.getSymbol()));
-    // case EXTRA_HEALTH -> {
-    // eventIcon.append(Text.literal(InlineIcons.HALF_EXTRA_HEART.getSymbol()));
-    // textColor = Formatting.YELLOW;
-    // }
-    // case HEAL -> {
-    // eventIcon.append(Text.literal(InlineIcons.HALF_HEART.getSymbol()));
-    // textColor = Formatting.RED;
-    // }
-    // case LIFE_STEAL -> {
-    // eventIcon.append(Text.literal(InlineIcons.LIFESTEAL.getSymbol()));
-    // textColor = Formatting.RED;
-    // }
-    // default -> eventIcon.append(Text.empty());
-    // }
+    switch (eventType) {
+      // case LIGHTNING_BOLT ->
+      // eventIcon.append(Text.literal(InlineIcons.LIGHTNING_STRIKE.getSymbol()));
+      case EXTRA_HEALTH -> {
+        eventIcon.append(Text.literal(InlineIcons.HALF_EXTRA_HEART.getSymbol()));
+        textColor = Formatting.YELLOW;
+      }
+      case HEAL -> {
+        eventIcon.append(Text.literal(InlineIcons.HALF_HEART.getSymbol()));
+        textColor = Formatting.RED;
+      }
+      // case LIFE_STEAL -> {
+      // eventIcon.append(Text.literal(InlineIcons.LIFESTEAL.getSymbol()));
+      // textColor = Formatting.RED;
+      // }
+      default -> eventIcon.append(Text.empty());
+    }
 
     eventIcon.styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
         .formatted(Formatting.WHITE);
