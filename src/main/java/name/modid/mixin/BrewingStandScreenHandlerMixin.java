@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import name.modid.utils.BrewingStandBlockEntityAccess;
+import name.modid.utils.accessors.BrewingStandBlockEntityAccess;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;

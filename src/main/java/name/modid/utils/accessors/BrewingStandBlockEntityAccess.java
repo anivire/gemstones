@@ -1,4 +1,4 @@
-package name.modid.utils;
+package name.modid.utils.accessors;
 
 import java.util.UUID;
 

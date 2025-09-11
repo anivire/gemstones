@@ -1,4 +1,4 @@
-package name.modid.utils;
+package name.modid.utils.accessors;
 
 public interface SoulBurnEntityAccessor {
   boolean hasSoulBurnEffect();

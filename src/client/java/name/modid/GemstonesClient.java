@@ -1,7 +1,7 @@
 package name.modid;
 
-import name.modid.helpers.models.ModelsRegistrationHelper;
-import name.modid.helpers.particles.ClientParticlesRegistrationHelper;
+import name.modid.helpers.models.registration.ModelsRegistrationHelper;
+import name.modid.helpers.particles.registration.ClientParticlesRegistrationHelper;
 import net.fabricmc.api.ClientModInitializer;
 
 public class GemstonesClient implements ClientModInitializer {

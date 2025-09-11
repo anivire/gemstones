@@ -1,5 +1,8 @@
-package name.modid.helpers.particles;
+package name.modid.helpers.particles.registration;
 
+import name.modid.helpers.particles.BleedParticleFactory;
+import name.modid.helpers.particles.ScarabParticleFactory;
+import name.modid.helpers.particles.StunnedParticleFactory;
 import name.modid.particles.ParticlesRegistrationHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 

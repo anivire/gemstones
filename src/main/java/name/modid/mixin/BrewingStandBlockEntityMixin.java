@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.helpers.modifiers.ModifierHelper;
 import name.modid.helpers.modifiers.type.EventType;
-import name.modid.utils.BrewingStandBlockEntityAccess;
 import name.modid.utils.PotionUtil;
+import name.modid.utils.accessors.BrewingStandBlockEntityAccess;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
