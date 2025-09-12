@@ -8,9 +8,9 @@
     "AQUAMARINE": 0.3,
     "AMBER": 0.3
   },
-  "rarities": {
-    "COMMON": 0.7,
-    "UNCOMMON": 0.2,
-    "RARE": 0.1
+  "qualities": {
+    "CRUDE": 0.7,
+    "POLISHED": 0.2,
+    "FLAWLESS": 0.1
   }
 }

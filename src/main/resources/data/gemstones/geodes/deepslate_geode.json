@@ -4,9 +4,9 @@
     "CELESTINE": 0.6,
     "RUBY": 0.4
   },
-  "rarities": {
-    "UNCOMMON": 0.3,
-    "RARE": 0.45,
-    "EPIC": 0.25
+  "qualities": {
+    "POLISHED": 0.3,
+    "FLAWLESS": 0.45,
+    "RADIANT": 0.25
   }
 }

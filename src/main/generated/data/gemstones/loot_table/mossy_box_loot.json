@@ -214,27 +214,27 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "gemstones:celestine_gemstone_common"
+          "name": "gemstones:celestine_gemstone_crude"
         },
         {
           "type": "minecraft:item",
-          "name": "gemstones:celestine_gemstone_uncommon"
+          "name": "gemstones:celestine_gemstone_polished"
         },
         {
           "type": "minecraft:item",
-          "name": "gemstones:aquamarine_gemstone_common"
+          "name": "gemstones:aquamarine_gemstone_crude"
         },
         {
           "type": "minecraft:item",
-          "name": "gemstones:aquamarine_gemstone_uncommon"
+          "name": "gemstones:aquamarine_gemstone_polished"
         },
         {
           "type": "minecraft:item",
-          "name": "gemstones:zircon_gemstone_common"
+          "name": "gemstones:zircon_gemstone_crude"
         },
         {
           "type": "minecraft:item",
-          "name": "gemstones:zircon_gemstone_uncommon"
+          "name": "gemstones:zircon_gemstone_polished"
         },
         {
           "type": "minecraft:item",

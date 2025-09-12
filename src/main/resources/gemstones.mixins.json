@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "name.modid.mixin",
+  "package": "name.modid.core.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AnvilScreenHandlerMixin",
@@ -11,9 +11,7 @@
     "LivingEntityMixin",
     "CrossbowItemMixin",
     "BrewingStandScreenHandlerMixin",
-    "BrewingStandScreenHandlerAccessor",
     "BrewingStandBlockEntityMixin",
-    "BrewingStandAccessor",
     "FishingBobberEntityMixin",
     "SoulBurnLivingEntityMixin"
   ],

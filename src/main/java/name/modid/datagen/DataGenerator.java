@@ -1,5 +1,8 @@
 package name.modid.datagen;
 
+import name.modid.datagen.providers.BlockTagProvider;
+import name.modid.datagen.providers.ModelProvider;
+import name.modid.datagen.providers.MossyBoxLootTableProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
