@@ -1,4 +1,4 @@
-package name.modid.core.api.modifiers.impl;
+package name.modid.core.api.modifiers;
 
 public enum EventCategory {
   ON_HIT,

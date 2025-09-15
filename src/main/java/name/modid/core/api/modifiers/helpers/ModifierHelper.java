@@ -4,8 +4,8 @@ import java.util.Map;
 
 import name.modid.core.api.modifiers.GemstoneQuality;
 import name.modid.core.api.modifiers.GemstoneType;
-import name.modid.core.api.modifiers.impl.GemstoneModifier;
-import name.modid.core.api.modifiers.impl.ModifierItemCategory;
+import name.modid.core.api.modifiers.ModifierItemCategory;
+import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.datapack.modifiers.ModifiersData;
 import name.modid.datapack.modifiers.ModifiersRegistry;
 import net.minecraft.component.type.AttributeModifierSlot;

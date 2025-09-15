@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import name.modid.core.api.modifiers.EventType;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.impl.EventType;
 import name.modid.core.content.items.registries.ItemsRegistry;
 import name.modid.core.utils.Utils;
 import net.minecraft.entity.Entity;

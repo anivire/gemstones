@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.impl.GemstoneModifier;
-import name.modid.core.api.modifiers.impl.ModifierItemCategory;
+import name.modid.core.api.modifiers.ModifierItemCategory;
+import name.modid.core.api.modifiers.config.GemstoneModifier;
 
 public interface ModifiersData {
   Map<ModifierItemCategory, GemstoneModifier> MODIFIERS = new HashMap<>();

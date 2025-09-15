@@ -17,7 +17,7 @@ import name.modid.core.api.modifiers.GemstoneQuality;
 import name.modid.core.api.modifiers.GemstoneType;
 import name.modid.core.api.modifiers.categories.ModifierAttribute;
 import name.modid.core.api.modifiers.categories.ModifierMultiplyAttribute;
-import name.modid.core.api.modifiers.impl.GemstoneModifier;
+import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.content.items.gemstones.GemstoneItem;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;

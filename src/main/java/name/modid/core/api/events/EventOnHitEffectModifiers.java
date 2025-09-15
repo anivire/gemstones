@@ -7,10 +7,10 @@ import java.util.Map;
 import name.modid.core.api.components.Gemstone;
 import name.modid.core.api.modifiers.GemstoneQuality;
 import name.modid.core.api.modifiers.GemstoneType;
+import name.modid.core.api.modifiers.ModifierManagerLegacy;
 import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.impl.ModifierManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,7 +46,7 @@ public class EventOnHitEffectModifiers {
 
       ArrayList<ModifierOnHitEffectMelee> gemstoneModifiers = ModifierGatheringHelper
           .getOnHitEffectModifiers(itemStack);
-      ModifierManager.applyOnHitEffectMeleeModifiers(gemstoneModifiers, item, itemStack,
+      ModifierManagerLegacy.applyOnHitEffectMeleeModifiers(gemstoneModifiers, item, itemStack,
           target, world);
     }
     return ActionResult.PASS;

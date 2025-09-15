@@ -1,4 +1,4 @@
-package name.modid.core.api.modifiers.impl;
+package name.modid.core.api.modifiers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,13 +8,6 @@ import java.util.Random;
 
 import org.jetbrains.annotations.Nullable;
 
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.categories.ModifierOnBlockBreak;
-import name.modid.core.api.modifiers.categories.ModifierOnDamage;
-import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitEffectProjectile;
-import name.modid.core.api.modifiers.categories.ModifierOnHitMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
 import name.modid.core.content.items.registries.ItemsRegistry;
 import name.modid.core.content.registries.EffectsRegistry;
 import name.modid.core.content.registries.ParticlesRegistry;
@@ -55,7 +48,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ModifierManager {
+public class ModifierManagerLegacy {
   public static void applyOnHitEffectMeleeModifiers(ArrayList<ModifierOnHitEffectMelee> gemstoneModifiers,
       Item item, ItemStack itemStack, LivingEntity target, World world) {
     Map<RegistryEntry<StatusEffect>, List<ModifierOnHitEffectMelee>> effectToModifiers = new HashMap<>();

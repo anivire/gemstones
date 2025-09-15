@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import name.modid.core.api.modifiers.EventType;
 import name.modid.core.api.modifiers.categories.ModifierOnFirstHitMelee;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.impl.EventType;
 import name.modid.core.content.registries.AttributesRegistry;
 import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.component.DataComponentTypes;

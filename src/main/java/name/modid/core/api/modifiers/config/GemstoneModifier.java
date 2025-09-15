@@ -1,7 +1,8 @@
-package name.modid.core.api.modifiers.impl;
+package name.modid.core.api.modifiers.config;
 
 import name.modid.core.api.modifiers.GemstoneQuality;
 import name.modid.core.api.modifiers.GemstoneType;
+import name.modid.core.api.modifiers.ModifierItemCategory;
 import net.minecraft.text.MutableText;
 
 public interface GemstoneModifier {

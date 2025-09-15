@@ -15,7 +15,7 @@ import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
 import name.modid.core.api.modifiers.categories.ModifierOnHitEffectProjectile;
 import name.modid.core.api.modifiers.categories.ModifierOnHitMelee;
 import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
-import name.modid.core.api.modifiers.impl.GemstoneModifier;
+import name.modid.core.api.modifiers.config.GemstoneModifier;
 import net.minecraft.item.ItemStack;
 
 public class ModifierGatheringHelper {

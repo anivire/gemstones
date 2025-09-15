@@ -2,10 +2,10 @@ package name.modid.core.api.events;
 
 import java.util.ArrayList;
 
+import name.modid.core.api.modifiers.ModifierManagerLegacy;
 import name.modid.core.api.modifiers.categories.ModifierOnDamage;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.impl.ModifierManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
@@ -24,7 +24,7 @@ public class EventOnDamage {
     }
 
     if (!allModifiersOnDamage.isEmpty()) {
-      ModifierManager.applyOnDamageModifiers(allModifiersOnDamage, entity, world);
+      ModifierManagerLegacy.applyOnDamageModifiers(allModifiersOnDamage, entity, world);
     }
   }
 }
