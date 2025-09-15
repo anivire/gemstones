@@ -3,8 +3,8 @@ package name.modid.core.api.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.GemstoneType;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
 
 public record Gemstone(GemstoneType gemstoneType, GemstoneQuality GemstoneQualityType) {
   public static final Codec<Gemstone> GEMSTONE_CODEC = RecordCodecBuilder.create(builder -> {

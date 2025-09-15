@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import name.modid.core.api.components.Gemstone;
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.GemstoneType;
 import name.modid.core.api.modifiers.ModifierManagerLegacy;
 import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

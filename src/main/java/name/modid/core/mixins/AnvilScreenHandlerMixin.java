@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
-import name.modid.core.content.items.gemstones.GemstoneItem;
+import name.modid.core.content.items.GemstoneItem;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Random;
 
 import name.modid.Gemstones;
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.GemstoneType;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.datapack.geodes.GeodesConfig;
 import name.modid.datapack.geodes.GeodesRegistry;

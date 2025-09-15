@@ -1,14 +1,14 @@
 package name.modid.core.api.modifiers.config;
 
-import name.modid.core.api.modifiers.EventType;
-import name.modid.core.api.modifiers.LevelValues;
+import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.api.modifiers.types.LevelValues;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.entry.RegistryEntry;
 
-public sealed interface ModifierConfig
-    permits ModifierConfig.AttributeConfig,
+public sealed interface ModifierConfig permits
+    ModifierConfig.AttributeConfig,
     ModifierConfig.HitMeleeConfig,
     ModifierConfig.HitProjectileConfig,
     ModifierConfig.HitEffectMeleeConfig,

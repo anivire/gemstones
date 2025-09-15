@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.GemstoneType;
-import name.modid.core.api.modifiers.ModifierItemCategory;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 
 public class ModifiersRegistry {
   private static final Map<GemstoneType, Map<ModifierItemCategory, Map<GemstoneQuality, GemstoneModifier>>> CACHED_MODIFIERS = new ConcurrentHashMap<>();

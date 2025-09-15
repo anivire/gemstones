@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import name.modid.Gemstones;
-import name.modid.core.api.modifiers.GemstoneType;
+import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.datapack.core.IdentifierTypeAdapter;
 import name.modid.datapack.modifiers.ModifiersConfig.ModifierConfigEntry;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;

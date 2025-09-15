@@ -8,6 +8,8 @@ import java.util.Random;
 
 import org.jetbrains.annotations.Nullable;
 
+import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.content.items.registries.ItemsRegistry;
 import name.modid.core.content.registries.EffectsRegistry;
 import name.modid.core.content.registries.ParticlesRegistry;

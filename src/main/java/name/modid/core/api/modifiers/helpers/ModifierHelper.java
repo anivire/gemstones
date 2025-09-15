@@ -2,10 +2,10 @@ package name.modid.core.api.modifiers.helpers;
 
 import java.util.Map;
 
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.GemstoneType;
-import name.modid.core.api.modifiers.ModifierItemCategory;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.datapack.modifiers.ModifiersData;
 import name.modid.datapack.modifiers.ModifiersRegistry;
 import net.minecraft.component.type.AttributeModifierSlot;

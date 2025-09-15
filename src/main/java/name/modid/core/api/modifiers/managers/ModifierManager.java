@@ -1,10 +1,10 @@
-package name.modid.core.api.modifiers.context;
+package name.modid.core.api.modifiers.managers;
 
 import java.util.List;
 
-import name.modid.core.api.modifiers.GemstoneQuality;
 import name.modid.core.api.modifiers.config.Modifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
 import net.minecraft.world.World;
 
 public class ModifierManager {

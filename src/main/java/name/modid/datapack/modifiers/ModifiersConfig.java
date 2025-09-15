@@ -5,9 +5,9 @@ import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
-import name.modid.core.api.modifiers.EventType;
-import name.modid.core.api.modifiers.GemstoneType;
-import name.modid.core.api.modifiers.ModifierItemCategory;
+import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.util.Identifier;
 

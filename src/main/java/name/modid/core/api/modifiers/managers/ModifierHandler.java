@@ -1,11 +1,11 @@
-package name.modid.core.api.modifiers.context;
+package name.modid.core.api.modifiers.managers;
 
-import name.modid.core.api.modifiers.EventType;
 import name.modid.core.api.modifiers.config.ModifierConfig.AreaEffectConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.CustomConditionConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.DamageConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.HitEffectMeleeConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.HitEffectProjectileConfig;
+import name.modid.core.api.modifiers.types.EventType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
 

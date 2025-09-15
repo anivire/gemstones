@@ -1,4 +1,4 @@
-package name.modid.core.content.items.gemstones;
+package name.modid.core.content.items;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -6,12 +6,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.GemstoneType;
-import name.modid.core.api.modifiers.ModifierItemCategory;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;

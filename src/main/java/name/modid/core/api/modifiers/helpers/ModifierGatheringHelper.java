@@ -3,7 +3,6 @@ package name.modid.core.api.modifiers.helpers;
 import java.util.ArrayList;
 
 import name.modid.core.api.components.Gemstone;
-import name.modid.core.api.modifiers.GemstoneType;
 import name.modid.core.api.modifiers.categories.ModifierAreaEffect;
 import name.modid.core.api.modifiers.categories.ModifierAttribute;
 import name.modid.core.api.modifiers.categories.ModifierCustomCondition;
@@ -16,6 +15,7 @@ import name.modid.core.api.modifiers.categories.ModifierOnHitEffectProjectile;
 import name.modid.core.api.modifiers.categories.ModifierOnHitMelee;
 import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.types.GemstoneType;
 import net.minecraft.item.ItemStack;
 
 public class ModifierGatheringHelper {

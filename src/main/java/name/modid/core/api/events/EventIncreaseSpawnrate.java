@@ -1,7 +1,7 @@
 package name.modid.core.api.events;
 
-import name.modid.core.api.modifiers.EventType;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
+import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.utils.Utils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
