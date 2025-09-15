@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
+import name.modid.core.api.modifiers.categories.ModifierOnHitEffectProjectile;
+import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitEffectProjectile;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitProjectile;
+import name.modid.core.api.modifiers.impl.ModifierManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -42,7 +42,7 @@ public class PersistentProjectileEntityMixin {
       return;
     }
 
-    ItemStack itemStack = GemstoneSlotHelper.getWeaponStack(player);
+    ItemStack itemStack = ModifierManager.getWeaponStack(player);
     if (itemStack == null)
       return;
 
@@ -56,7 +56,7 @@ public class PersistentProjectileEntityMixin {
       ArrayList<ModifierOnHitEffectProjectile> onHitEffectProjectileModifiers = ModifierGatheringHelper
           .getOnHitEffectProjectileModifiers(itemStack);
       if (!onHitEffectProjectileModifiers.isEmpty() && target != null) {
-        GemstoneSlotHelper.applyOnHitEffectProjectileModifiers(
+        ModifierManager.applyOnHitEffectProjectileModifiers(
             onHitEffectProjectileModifiers,
             itemStack.getItem(),
             itemStack,
@@ -68,7 +68,7 @@ public class PersistentProjectileEntityMixin {
       ArrayList<ModifierOnHitProjectile> onHitModifiers = ModifierGatheringHelper
           .getOnHitProjectileModifiers(itemStack);
       if (!onHitModifiers.isEmpty()) {
-        GemstoneSlotHelper.applyOnHitProjectileModifiers(
+        ModifierManager.applyOnHitProjectileModifiers(
             onHitModifiers,
             itemStack,
             serverWorld,

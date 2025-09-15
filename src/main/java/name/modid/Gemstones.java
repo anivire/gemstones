@@ -3,13 +3,13 @@ package name.modid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import name.modid.core.api.attributes.AttributesRegistry;
 import name.modid.core.api.components.ComponentsRegistry;
-import name.modid.core.api.effects.EffectsRegistry;
-import name.modid.core.api.events.EventsRegistry;
-import name.modid.core.api.particles.ParticlesRegistry;
-import name.modid.core.api.tags.TagsRegistry;
 import name.modid.core.content.items.registries.ItemsRegistry;
+import name.modid.core.content.registries.AttributesRegistry;
+import name.modid.core.content.registries.EffectsRegistry;
+import name.modid.core.content.registries.EventsRegistry;
+import name.modid.core.content.registries.ParticlesRegistry;
+import name.modid.core.content.registries.TagsRegistry;
 import name.modid.datapack.geodes.GeodesDataLoader;
 import name.modid.datapack.modifiers.ModifiersDataLoader;
 import net.fabricmc.api.ModInitializer;

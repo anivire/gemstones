@@ -2,7 +2,7 @@ package name.modid.core.api.models;
 
 import java.util.List;
 
-import name.modid.core.api.attributes.AttributesRegistry;
+import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;

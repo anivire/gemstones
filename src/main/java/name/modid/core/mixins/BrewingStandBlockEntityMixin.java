@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import name.modid.core.api.modifiers.EventType;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
+import name.modid.core.api.modifiers.impl.EventType;
 import name.modid.core.utils.PotionUtil;
 import name.modid.core.utils.Utils;
 import name.modid.core.utils.accessors.BrewingStandBlockEntityAccess;

@@ -1,6 +1,6 @@
 package name.modid.core.api.events;
 
-import name.modid.core.api.effects.EffectsRegistry;
+import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;

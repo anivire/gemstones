@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import org.joml.Vector3f;
 
+import name.modid.core.api.modifiers.categories.ModifierAreaEffect;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.impl.categories.ModifierAreaEffect;
 import name.modid.core.utils.Utils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;

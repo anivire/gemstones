@@ -1,6 +1,6 @@
 package name.modid.core.api.events;
 
-import name.modid.core.api.attributes.AttributesRegistry;
+import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.AttributeModifiersComponent.Entry;

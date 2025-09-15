@@ -2,9 +2,9 @@ package name.modid.core.api.events;
 
 import java.util.ArrayList;
 
-import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
+import name.modid.core.api.modifiers.categories.ModifierOnBlockBreak;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnBlockBreak;
+import name.modid.core.api.modifiers.impl.ModifierManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,6 +22,6 @@ public class EventOnBlockBreak {
       return;
     }
 
-    GemstoneSlotHelper.applyOnBlockBreakModifiers(modifiers, player, world, state, pos);
+    ModifierManager.applyOnBlockBreakModifiers(modifiers, player, world, state, pos);
   }
 }

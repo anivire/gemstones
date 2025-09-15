@@ -2,7 +2,7 @@ package name.modid.core.api.events;
 
 import org.jetbrains.annotations.Nullable;
 
-import name.modid.core.api.effects.EffectsRegistry;
+import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;

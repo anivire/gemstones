@@ -1,5 +1,6 @@
 package name.modid.core.api.particles;
 
+import name.modid.core.content.particles.ScarabParticleInstance;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.particle.ParticleTextureSheet;

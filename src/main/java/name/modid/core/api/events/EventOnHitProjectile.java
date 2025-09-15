@@ -2,9 +2,9 @@ package name.modid.core.api.events;
 
 import java.util.ArrayList;
 
-import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
+import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitProjectile;
+import name.modid.core.api.modifiers.impl.ModifierManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -23,7 +23,7 @@ public class EventOnHitProjectile {
 
     if (entity instanceof LivingEntity target && source.getSource() instanceof ArrowEntity arrow) {
       if (entity.getWorld() instanceof ServerWorld serverWorld) {
-        GemstoneSlotHelper.applyOnHitProjectileModifiers(modifiers, itemStack, serverWorld, target.getPos(), arrow,
+        ModifierManager.applyOnHitProjectileModifiers(modifiers, itemStack, serverWorld, target.getPos(), arrow,
             target);
       }
     }

@@ -11,10 +11,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import name.modid.Gemstones;
-import name.modid.core.api.attributes.AttributesRegistry;
 import name.modid.core.api.components.Gemstone;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper;
+import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;

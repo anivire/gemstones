@@ -2,7 +2,7 @@ package name.modid.datagen.providers;
 
 import java.util.concurrent.CompletableFuture;
 
-import name.modid.core.api.tags.TagsRegistry;
+import name.modid.core.content.registries.TagsRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.block.Blocks;

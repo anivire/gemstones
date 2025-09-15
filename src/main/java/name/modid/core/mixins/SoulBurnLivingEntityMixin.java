@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import name.modid.core.api.effects.EffectsRegistry;
+import name.modid.core.content.registries.EffectsRegistry;
 import name.modid.core.utils.accessors.SoulBurnEntityAccessor;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;

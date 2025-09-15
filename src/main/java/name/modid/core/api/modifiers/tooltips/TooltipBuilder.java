@@ -8,22 +8,22 @@ import java.util.List;
 import java.util.Map;
 
 import name.modid.Gemstones;
-import name.modid.core.api.modifiers.EventType;
 import name.modid.core.api.modifiers.GemstoneQuality;
 import name.modid.core.api.modifiers.GemstoneType;
-import name.modid.core.api.modifiers.ModifierItemCategory;
+import name.modid.core.api.modifiers.categories.ModifierAreaEffect;
+import name.modid.core.api.modifiers.categories.ModifierAttribute;
+import name.modid.core.api.modifiers.categories.ModifierCustomCondition;
+import name.modid.core.api.modifiers.categories.ModifierMultiplyAttribute;
+import name.modid.core.api.modifiers.categories.ModifierOnBlockBreak;
+import name.modid.core.api.modifiers.categories.ModifierOnDamage;
+import name.modid.core.api.modifiers.categories.ModifierOnFirstHitMelee;
+import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
+import name.modid.core.api.modifiers.categories.ModifierOnHitEffectProjectile;
+import name.modid.core.api.modifiers.categories.ModifierOnHitMelee;
+import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
+import name.modid.core.api.modifiers.impl.EventType;
 import name.modid.core.api.modifiers.impl.GemstoneModifier;
-import name.modid.core.api.modifiers.impl.categories.ModifierAreaEffect;
-import name.modid.core.api.modifiers.impl.categories.ModifierAttribute;
-import name.modid.core.api.modifiers.impl.categories.ModifierCustomCondition;
-import name.modid.core.api.modifiers.impl.categories.ModifierMultiplyAttribute;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnBlockBreak;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnDamage;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnFirstHitMelee;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitEffectMelee;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitEffectProjectile;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitMelee;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitProjectile;
+import name.modid.core.api.modifiers.impl.ModifierItemCategory;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper.InlineIcons;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
@@ -206,7 +206,7 @@ public class TooltipBuilder {
     return Text
         .empty()
         .append(eventIcon)
-        .append(Text.translatable(eventType.getTranslatioString()).formatted(textColor));
+        .append(Text.translatable(eventType.getTranslationKey()).formatted(textColor));
   }
 
   private interface TooltipHandler {

@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 import name.modid.core.api.components.Gemstone;
 import name.modid.core.api.modifiers.GemstoneType;
+import name.modid.core.api.modifiers.categories.ModifierAreaEffect;
+import name.modid.core.api.modifiers.categories.ModifierAttribute;
+import name.modid.core.api.modifiers.categories.ModifierCustomCondition;
+import name.modid.core.api.modifiers.categories.ModifierMultiplyAttribute;
+import name.modid.core.api.modifiers.categories.ModifierOnBlockBreak;
+import name.modid.core.api.modifiers.categories.ModifierOnDamage;
+import name.modid.core.api.modifiers.categories.ModifierOnFirstHitMelee;
+import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
+import name.modid.core.api.modifiers.categories.ModifierOnHitEffectProjectile;
+import name.modid.core.api.modifiers.categories.ModifierOnHitMelee;
+import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
 import name.modid.core.api.modifiers.impl.GemstoneModifier;
-import name.modid.core.api.modifiers.impl.categories.ModifierAreaEffect;
-import name.modid.core.api.modifiers.impl.categories.ModifierAttribute;
-import name.modid.core.api.modifiers.impl.categories.ModifierCustomCondition;
-import name.modid.core.api.modifiers.impl.categories.ModifierMultiplyAttribute;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnBlockBreak;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnDamage;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnFirstHitMelee;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitEffectMelee;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitEffectProjectile;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitMelee;
-import name.modid.core.api.modifiers.impl.categories.ModifierOnHitProjectile;
 import net.minecraft.item.ItemStack;
 
 public class ModifierGatheringHelper {
