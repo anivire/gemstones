@@ -7,29 +7,13 @@ import java.util.Map;
 import org.slf4j.Logger;
 
 import name.modid.Gemstones;
-import name.modid.core.api.modifiers.categories.ModifierAreaEffect;
-import name.modid.core.api.modifiers.categories.ModifierAttribute;
-import name.modid.core.api.modifiers.categories.ModifierCustomCondition;
-import name.modid.core.api.modifiers.categories.ModifierMultiplyAttribute;
-import name.modid.core.api.modifiers.categories.ModifierOnBlockBreak;
-import name.modid.core.api.modifiers.categories.ModifierOnFirstHitMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitEffectProjectile;
-import name.modid.core.api.modifiers.categories.ModifierOnHitMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.api.modifiers.types.LevelValues;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
-import name.modid.datapack.modifiers.ModifiersConfig.AreaEffectConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.AttributeConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.CustomConditionConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.MultiplyAttributeConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.OnBlockBreakConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.OnFirstHitConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.OnHitConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.OnHitEffectConfig;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
@@ -40,11 +24,14 @@ public class ModifiersDataFactory {
 
   public static Map<ModifierItemCategory, Map<GemstoneQuality, GemstoneModifier>> createModifiers(
       GemstoneType gemstoneType) {
-    LOGGER.info("[ModifiersConfig] Attempting to create modifiers for gemstone type: {}", gemstoneType);
-    Map<ModifierItemCategory, Map<GemstoneQuality, GemstoneModifier>> modifiers = new HashMap<>();
-    ModifiersConfig config = ModifiersDataLoader.getLoadedConfigs().get(gemstoneType);
 
-    if (config == null || config.modifiers == null || config.modifiers.isEmpty()) {
+    LOGGER.info("[ModifiersConfig] Creating modifiers for gemstone type: {}", gemstoneType);
+    Map<ModifierItemCategory, Map<GemstoneQuality, GemstoneModifier>> modifiers = new HashMap<>();
+    ModifiersRawConfig config = ModifiersDataLoader.getLoadedConfigs().get(gemstoneType);
+
+    if (config == null
+        || config.modifiers == null
+        || config.modifiers.isEmpty()) {
       LOGGER.warn(
           "[ModifiersConfig] No datapack config found or empty for gemstone type: {}. Returning empty modifiers.",
           gemstoneType);
@@ -53,7 +40,8 @@ public class ModifiersDataFactory {
 
     config.modifiers.forEach((category, entry) -> {
       if (entry == null) {
-        LOGGER.warn("[ModifiersConfig] Null modifier entry for category {} in gemstone {}. Skipping.", category,
+        LOGGER.warn(
+            "[ModifiersConfig] Null modifier entry for category {} in gemstone {}. Skipping.", category,
             gemstoneType);
         return;
       }
@@ -61,187 +49,145 @@ public class ModifiersDataFactory {
       Map<GemstoneQuality, GemstoneModifier> rarityMap = new HashMap<>();
 
       for (GemstoneQuality rarity : GemstoneQuality.values()) {
-        if (rarity == GemstoneQuality.NONE || rarity == GemstoneQuality.UNUSUAL) {
+        if (rarity == GemstoneQuality.NONE
+            || rarity == GemstoneQuality.UNUSUAL) {
           continue;
         }
 
         GemstoneModifier modifierInstance = null;
 
         switch (entry.type) {
-          case ON_HIT_EFFECT -> {
-            if (entry instanceof OnHitEffectConfig onHitConfig) {
-              StatusEffect statusEffect = Registries.STATUS_EFFECT.get(onHitConfig.effectId);
-              if (statusEffect == null) {
-                LOGGER.warn("Invalid StatusEffect '{}' for gemstone {}. Skipping.", onHitConfig.effectId, gemstoneType);
-                continue;
-              }
-              RegistryEntry<StatusEffect> effectEntry = Registries.STATUS_EFFECT.getEntry(onHitConfig.effectId)
-                  .orElse(null);
-              if (effectEntry == null)
-                continue;
-
-              if (category != ModifierItemCategory.RANGED) {
-                modifierInstance = new ModifierOnHitEffectMelee(
-                    gemstoneType,
-                    rarity,
-                    category,
-                    new ArrayList<>(onHitConfig.chanceLevels),
-                    effectEntry,
-                    onHitConfig.duration,
-                    onHitConfig.amplifier,
-                    onHitConfig.maxStackCount,
-                    onHitConfig.isStacking);
-              } else {
-                modifierInstance = new ModifierOnHitEffectProjectile(
-                    gemstoneType,
-                    rarity,
-                    category,
-                    new ArrayList<>(onHitConfig.chanceLevels),
-                    effectEntry,
-                    onHitConfig.duration,
-                    onHitConfig.amplifier,
-                    onHitConfig.maxStackCount,
-                    onHitConfig.isStacking);
-              }
-            }
-          }
-          case AREA_EFFECT -> {
-            if (entry instanceof AreaEffectConfig areaEffectConfig) {
-              StatusEffect statusEffect = Registries.STATUS_EFFECT.get(areaEffectConfig.effectId);
-              if (statusEffect == null)
-                continue;
-              RegistryEntry<StatusEffect> effectEntry = Registries.STATUS_EFFECT.getEntry(areaEffectConfig.effectId)
-                  .orElse(null);
-              if (effectEntry == null)
-                continue;
-
-              modifierInstance = new ModifierAreaEffect(
-                  gemstoneType,
-                  rarity,
-                  category,
-                  new ArrayList<>(areaEffectConfig.radiusLevels),
-                  areaEffectConfig.amplifier,
-                  areaEffectConfig.duration,
-                  areaEffectConfig.notMe,
-                  areaEffectConfig.onlyPlayers,
-                  effectEntry);
-            }
-          }
-          case ON_BLOCK_BREAK -> {
-            if (entry instanceof OnBlockBreakConfig onBlockBreakConfig) {
-              EventType eventType = onBlockBreakConfig.eventType;
-              if (eventType == null)
-                continue;
-
-              modifierInstance = new ModifierOnBlockBreak(
-                  gemstoneType,
-                  rarity,
-                  category,
-                  new ArrayList<>(onBlockBreakConfig.chanceLevels),
-                  new ArrayList<>(onBlockBreakConfig.valueLevels),
-                  eventType);
-            }
-          }
-          case MULTIPLY_ATTRIBUTE -> {
-            if (entry instanceof MultiplyAttributeConfig multiplyAttributeConfig) {
-              ArrayList<ModifierAttribute> instances = new ArrayList<>();
-              for (AttributeConfig attributeInstance : multiplyAttributeConfig.attributes) {
-                EntityAttribute attribute = Registries.ATTRIBUTE.get(attributeInstance.attributeId);
-                if (attribute == null)
-                  continue;
-                RegistryEntry<EntityAttribute> attributeEntry = Registries.ATTRIBUTE
-                    .getEntry(attributeInstance.attributeId).orElse(null);
-                if (attributeEntry == null)
-                  continue;
-
-                instances.add(new ModifierAttribute(
-                    gemstoneType,
-                    rarity,
-                    category,
-                    new ArrayList<>(attributeInstance.valueLevels),
-                    attributeInstance.operation,
-                    attributeEntry));
-              }
-              if (!instances.isEmpty()) {
-                modifierInstance = new ModifierMultiplyAttribute(
-                    gemstoneType,
-                    rarity,
-                    category,
-                    instances);
-              }
-            }
-          }
           case ATTRIBUTE -> {
-            if (entry instanceof AttributeConfig attributeModifierConfig) {
-              EntityAttribute attribute = Registries.ATTRIBUTE.get(attributeModifierConfig.attributeId);
-              if (attribute == null)
+            if (entry instanceof ModifiersRawConfig.AttributeConfig raw) {
+              EntityAttribute attr = Registries.ATTRIBUTE.get(raw.attributeId);
+              if (attr == null)
                 continue;
-              RegistryEntry<EntityAttribute> attributeEntry = Registries.ATTRIBUTE
-                  .getEntry(attributeModifierConfig.attributeId).orElse(null);
-              if (attributeEntry == null)
+              RegistryEntry<EntityAttribute> attrEntry = Registries.ATTRIBUTE.getEntry(raw.attributeId).orElse(null);
+              if (attrEntry == null)
                 continue;
 
-              modifierInstance = new ModifierAttribute(
-                  gemstoneType,
-                  rarity,
-                  category,
-                  new ArrayList<>(attributeModifierConfig.valueLevels),
-                  attributeModifierConfig.operation,
-                  attributeEntry);
+              ModifierConfig.AttributeConfig cfg = new ModifierConfig.AttributeConfig(
+                  new LevelValues(new ArrayList<>(raw.valueLevels)),
+                  raw.operation,
+                  attrEntry);
+              modifierInstance = new GemstoneModifier(gemstoneType, rarity, category, cfg);
             }
           }
-          case ON_HIT -> {
-            if (entry instanceof OnHitConfig onHitConfig) {
-              EventType eventType = onHitConfig.eventType;
-              if (eventType == null)
-                continue;
 
-              if (category != ModifierItemCategory.RANGED) {
-                modifierInstance = new ModifierOnHitMelee(
-                    gemstoneType,
-                    rarity,
-                    category,
-                    new ArrayList<>(onHitConfig.chanceLevels),
-                    eventType);
-              } else {
-                modifierInstance = new ModifierOnHitProjectile(
-                    gemstoneType,
-                    rarity,
-                    category,
-                    new ArrayList<>(onHitConfig.chanceLevels),
-                    eventType);
+          case MULTIPLY_ATTRIBUTE -> {
+            if (entry instanceof ModifiersRawConfig.MultiplyAttributeConfig rawMulti) {
+              var list = new ArrayList<ModifierConfig.AttributeConfig>();
+              for (var sub : rawMulti.attributes) {
+                EntityAttribute attr = Registries.ATTRIBUTE.get(sub.attributeId);
+                if (attr == null)
+                  continue;
+                RegistryEntry<EntityAttribute> attrEntry = Registries.ATTRIBUTE.getEntry(sub.attributeId).orElse(null);
+                if (attrEntry == null)
+                  continue;
+
+                list.add(new ModifierConfig.AttributeConfig(
+                    new LevelValues(new ArrayList<>(sub.valueLevels)),
+                    sub.operation,
+                    attrEntry));
+              }
+              if (!list.isEmpty()) {
+                ModifierConfig.MultiplyAttributeConfig cfg = new ModifierConfig.MultiplyAttributeConfig(list);
+                modifierInstance = new GemstoneModifier(gemstoneType, rarity, category, cfg);
               }
             }
           }
-          case CUSTOM_CONDITION -> {
-            if (entry instanceof CustomConditionConfig customConditionConfig) {
-              EventType eventType = customConditionConfig.eventType;
-              if (eventType == null)
+
+          case ON_HIT -> {
+            if (entry instanceof ModifiersRawConfig.OnHitConfig raw) {
+              EventType ev = raw.eventType;
+              if (ev == null)
                 continue;
 
-              modifierInstance = new ModifierCustomCondition(
-                  gemstoneType,
-                  rarity,
-                  category,
-                  new ArrayList<>(customConditionConfig.valueLevels),
-                  new ArrayList<>(customConditionConfig.additionalValueLevels),
-                  eventType);
+              ModifierConfig.HitMeleeConfig cfg = new ModifierConfig.HitMeleeConfig(
+                  new LevelValues(new ArrayList<>(raw.chanceLevels)),
+                  ev);
+              modifierInstance = new GemstoneModifier(gemstoneType, rarity, category, cfg);
             }
           }
+
+          case ON_HIT_EFFECT -> {
+            if (entry instanceof ModifiersRawConfig.OnHitEffectConfig raw) {
+              StatusEffect se = Registries.STATUS_EFFECT.get(raw.effectId);
+              if (se == null)
+                continue;
+              RegistryEntry<StatusEffect> seEntry = Registries.STATUS_EFFECT.getEntry(raw.effectId).orElse(null);
+              if (seEntry == null)
+                continue;
+
+              ModifierConfig.HitEffectMeleeConfig cfg = new ModifierConfig.HitEffectMeleeConfig(
+                  new LevelValues(new ArrayList<>(raw.chanceLevels)),
+                  seEntry,
+                  raw.duration,
+                  raw.amplifier,
+                  raw.maxStackCount != null ? raw.maxStackCount : 0,
+                  raw.isStacking != null && raw.isStacking);
+              modifierInstance = new GemstoneModifier(gemstoneType, rarity, category, cfg);
+            }
+          }
+
+          case AREA_EFFECT -> {
+            if (entry instanceof ModifiersRawConfig.AreaEffectConfig raw) {
+              StatusEffect se = Registries.STATUS_EFFECT.get(raw.effectId);
+              if (se == null)
+                continue;
+              RegistryEntry<StatusEffect> seEntry = Registries.STATUS_EFFECT.getEntry(raw.effectId).orElse(null);
+              if (seEntry == null)
+                continue;
+
+              ModifierConfig.AreaEffectConfig cfg = new ModifierConfig.AreaEffectConfig(
+                  new LevelValues(new ArrayList<>(raw.radiusLevels)),
+                  raw.amplifier,
+                  raw.duration,
+                  raw.notMe,
+                  raw.onlyPlayers,
+                  seEntry);
+              modifierInstance = new GemstoneModifier(gemstoneType, rarity, category, cfg);
+            }
+          }
+
+          case ON_BLOCK_BREAK -> {
+            if (entry instanceof ModifiersRawConfig.OnBlockBreakConfig raw) {
+              if (raw.eventType == null)
+                continue;
+
+              ModifierConfig.BlockBreakConfig cfg = new ModifierConfig.BlockBreakConfig(
+                  new LevelValues(new ArrayList<>(raw.chanceLevels)),
+                  new LevelValues(new ArrayList<>(raw.valueLevels)),
+                  raw.eventType);
+              modifierInstance = new GemstoneModifier(gemstoneType, rarity, category, cfg);
+            }
+          }
+
           case ON_FIRST_HIT -> {
-            if (entry instanceof OnFirstHitConfig onFirstHitConfig) {
-              EventType eventType = onFirstHitConfig.eventType;
-              if (eventType == null)
+            if (entry instanceof ModifiersRawConfig.OnFirstHitConfig raw) {
+              if (raw.eventType == null)
                 continue;
 
-              modifierInstance = new ModifierOnFirstHitMelee(
-                  gemstoneType,
-                  rarity,
-                  category,
-                  new ArrayList<>(onFirstHitConfig.valueLevels),
-                  eventType);
+              ModifierConfig.OnFirstHitConfig cfg = new ModifierConfig.OnFirstHitConfig(
+                  new LevelValues(new ArrayList<>(raw.valueLevels)),
+                  raw.eventType);
+              modifierInstance = new GemstoneModifier(gemstoneType, rarity, category, cfg);
             }
           }
+
+          case CUSTOM_CONDITION -> {
+            if (entry instanceof ModifiersRawConfig.CustomConditionConfig raw) {
+              if (raw.eventType == null)
+                continue;
+
+              ModifierConfig.CustomConditionConfig cfg = new ModifierConfig.CustomConditionConfig(
+                  new LevelValues(new ArrayList<>(raw.valueLevels)),
+                  new LevelValues(new ArrayList<>(raw.additionalValueLevels)),
+                  raw.eventType);
+              modifierInstance = new GemstoneModifier(gemstoneType, rarity, category, cfg);
+            }
+          }
+
           default -> {
             LOGGER.warn("[ModifiersConfig] Unhandled modifier type {} for gemstone {}.", entry.type, gemstoneType);
           }
@@ -257,8 +203,8 @@ public class ModifiersDataFactory {
       }
     });
 
-    LOGGER.info("[ModifiersConfig] Finished creating {} modifier categories for gemstone type: {}.", modifiers.size(),
-        gemstoneType);
+    LOGGER.info("[ModifiersConfig] Finished creating {} modifier categories for gemstone type: {}.",
+        modifiers.size(), gemstoneType);
     return modifiers;
   }
 }

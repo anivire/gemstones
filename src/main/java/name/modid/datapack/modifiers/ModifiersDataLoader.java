@@ -13,7 +13,7 @@ import com.google.gson.GsonBuilder;
 import name.modid.Gemstones;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.datapack.core.IdentifierTypeAdapter;
-import name.modid.datapack.modifiers.ModifiersConfig.ModifierConfigEntry;
+import name.modid.datapack.modifiers.ModifiersRawConfig.ModifierRawConfigEntry;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -21,7 +21,7 @@ import net.minecraft.util.Identifier;
 public class ModifiersDataLoader implements SimpleSynchronousResourceReloadListener {
   private static final Logger LOGGER = Gemstones.LOGGER;
   private static final Gson GSON = new GsonBuilder()
-      .registerTypeAdapter(ModifierConfigEntry.class, new ModifiersConfigDeserializer())
+      .registerTypeAdapter(ModifierRawConfigEntry.class, new ModifiersConfigDeserializer())
       .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
       .setPrettyPrinting()
       .disableHtmlEscaping()
@@ -29,12 +29,12 @@ public class ModifiersDataLoader implements SimpleSynchronousResourceReloadListe
 
   public static final Identifier ID = Identifier.of(Gemstones.MOD_ID,
       "gemstones_data_config");
-  private static Map<GemstoneType, ModifiersConfig> loadedGemstoneConfigs = Collections.emptyMap();
+  private static Map<GemstoneType, ModifiersRawConfig> loadedGemstoneConfigs = Collections.emptyMap();
 
   @Override
   public void reload(ResourceManager manager) {
     LOGGER.info("Reloading gemstone modifiers configs...");
-    Map<GemstoneType, ModifiersConfig> newConfigs = new HashMap<>();
+    Map<GemstoneType, ModifiersRawConfig> newConfigs = new HashMap<>();
 
     manager.findResources("", path -> {
       return true;
@@ -46,7 +46,7 @@ public class ModifiersDataLoader implements SimpleSynchronousResourceReloadListe
           if (id.getNamespace().equals(Gemstones.MOD_ID)) {
             LOGGER.debug(resource.toString());
             try (InputStreamReader reader = new InputStreamReader(resource.getInputStream())) {
-              ModifiersConfig config = GSON.fromJson(reader, ModifiersConfig.class);
+              ModifiersRawConfig config = GSON.fromJson(reader, ModifiersRawConfig.class);
 
               if (config != null) {
                 if (config.gemstoneType != null) {
@@ -72,7 +72,7 @@ public class ModifiersDataLoader implements SimpleSynchronousResourceReloadListe
     ModifiersRegistry.clearCache();
   }
 
-  public static Map<GemstoneType, ModifiersConfig> getLoadedConfigs() {
+  public static Map<GemstoneType, ModifiersRawConfig> getLoadedConfigs() {
     return loadedGemstoneConfigs;
   }
 

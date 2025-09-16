@@ -2,24 +2,12 @@ package name.modid.core.api.modifiers.tooltips;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 import name.modid.Gemstones;
-import name.modid.core.api.modifiers.categories.ModifierAreaEffect;
-import name.modid.core.api.modifiers.categories.ModifierAttribute;
-import name.modid.core.api.modifiers.categories.ModifierCustomCondition;
-import name.modid.core.api.modifiers.categories.ModifierMultiplyAttribute;
-import name.modid.core.api.modifiers.categories.ModifierOnBlockBreak;
-import name.modid.core.api.modifiers.categories.ModifierOnDamage;
-import name.modid.core.api.modifiers.categories.ModifierOnFirstHitMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitEffectProjectile;
-import name.modid.core.api.modifiers.categories.ModifierOnHitMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper.InlineIcons;
 import name.modid.core.api.modifiers.types.EventType;
@@ -54,6 +42,7 @@ public class TooltipBuilder {
   private final GemstoneType gemstoneType;
   private final ModifierItemCategory itemCategory;
   private final GemstoneQuality rarityType;
+  private final ModifierConfig config;
   private final ModifierCategoryType modifierCategory;
   private final GemstoneModifier modifier;
   private boolean isItemTooltip = false;
@@ -69,7 +58,8 @@ public class TooltipBuilder {
     this.itemCategory = itemCategory;
     this.rarityType = rarityType;
     this.modifier = modifier;
-    this.modifierCategory = resolveType(modifier);
+    this.config = modifier.getConfig();
+    this.modifierCategory = resolveType(config);
 
     registerHandlers();
   }
@@ -88,29 +78,30 @@ public class TooltipBuilder {
     handlers.put(ModifierCategoryType.UNDEFINED, new UndefinedHandler());
   }
 
-  private ModifierCategoryType resolveType(GemstoneModifier modifier) {
-    if (modifier instanceof ModifierAttribute)
+  private ModifierCategoryType resolveType(ModifierConfig config) {
+    if (config instanceof ModifierConfig.AttributeConfig)
       return ModifierCategoryType.ATTRIBUTE;
-    if (modifier instanceof ModifierMultiplyAttribute)
+    if (config instanceof ModifierConfig.MultiplyAttributeConfig)
       return ModifierCategoryType.MULTIPLY_ATTRIBUTE;
-    if (modifier instanceof ModifierOnFirstHitMelee)
-      return ModifierCategoryType.ON_FIRST_HIT;
-    if (modifier instanceof ModifierOnDamage)
-      return ModifierCategoryType.ON_DAMAGE;
-    if (modifier instanceof ModifierOnBlockBreak)
-      return ModifierCategoryType.ON_BLOCK_BREAK;
-    if (modifier instanceof ModifierOnHitProjectile)
-      return ModifierCategoryType.ON_HIT_PROJECTILE;
-    if (modifier instanceof ModifierOnHitMelee)
+    if (config instanceof ModifierConfig.HitMeleeConfig)
       return ModifierCategoryType.ON_HIT_MELEE;
-    if (modifier instanceof ModifierOnHitEffectMelee)
+    if (config instanceof ModifierConfig.HitProjectileConfig)
+      return ModifierCategoryType.ON_HIT_PROJECTILE;
+    if (config instanceof ModifierConfig.HitEffectMeleeConfig)
       return ModifierCategoryType.ON_HIT_EFFECT;
-    if (modifier instanceof ModifierOnHitEffectProjectile)
+    if (config instanceof ModifierConfig.HitEffectProjectileConfig)
       return ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE;
-    if (modifier instanceof ModifierAreaEffect)
+    if (config instanceof ModifierConfig.AreaEffectConfig)
       return ModifierCategoryType.AREA_EFFECT;
-    if (modifier instanceof ModifierCustomCondition)
+    if (config instanceof ModifierConfig.DamageConfig)
+      return ModifierCategoryType.ON_DAMAGE;
+    if (config instanceof ModifierConfig.OnFirstHitConfig)
+      return ModifierCategoryType.ON_FIRST_HIT;
+    if (config instanceof ModifierConfig.BlockBreakConfig)
+      return ModifierCategoryType.ON_BLOCK_BREAK;
+    if (config instanceof ModifierConfig.CustomConditionConfig)
       return ModifierCategoryType.CUSTOM_CONDITION;
+
     return ModifierCategoryType.UNDEFINED;
   }
 
@@ -127,7 +118,7 @@ public class TooltipBuilder {
     TooltipHandler handler = handlers.getOrDefault(modifierCategory, new UndefinedHandler());
 
     if (Gemstones.ALT_STYLE) {
-      MutableText prefix = Text.empty();
+      MutableText prefix;
 
       if (!isItemTooltip) {
         prefix = Text.literal(gemstoneType.getGemstoneLiteral())
@@ -138,11 +129,9 @@ public class TooltipBuilder {
         prefix = Text.translatable(tooltipItemType).formatted(Formatting.DARK_GRAY);
       }
 
-      return prefix
-          .append(handler.buildTooltip().styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
+      return prefix.append(handler.buildTooltip().styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
     } else {
       MutableText tooltipItemPrefix = Text.translatable(tooltipItemType).formatted(Formatting.DARK_GRAY);
-
       return tooltipItemPrefix.append(handler.buildTooltip());
     }
   }
@@ -152,12 +141,6 @@ public class TooltipBuilder {
         .setScale(2, RoundingMode.HALF_UP)
         .stripTrailingZeros();
     return postfix.isBlank() ? v.toPlainString() : v.toPlainString() + postfix;
-  }
-
-  public String getTranslationKey() {
-    return String.format("tooltip.gemstones.%s.%s_bonus",
-        gemstoneType.toString().toLowerCase(),
-        itemCategory.toString().toLowerCase());
   }
 
   public String getTranslationKeyByModifier(ModifierCategoryType category) {
@@ -179,8 +162,6 @@ public class TooltipBuilder {
     Formatting textColor = Formatting.BLUE;
 
     switch (eventType) {
-      // case LIGHTNING_BOLT ->
-      // eventIcon.append(Text.literal(InlineIcons.LIGHTNING_STRIKE.getSymbol()));
       case EXTRA_HEALTH -> {
         eventIcon.append(Text.literal(InlineIcons.HALF_EXTRA_HEART.getSymbol()));
         textColor = Formatting.YELLOW;
@@ -189,10 +170,6 @@ public class TooltipBuilder {
         eventIcon.append(Text.literal(InlineIcons.HALF_HEART.getSymbol()));
         textColor = Formatting.RED;
       }
-      // case LIFE_STEAL -> {
-      // eventIcon.append(Text.literal(InlineIcons.LIFESTEAL.getSymbol()));
-      // textColor = Formatting.RED;
-      // }
       default -> eventIcon.append(Text.empty());
     }
 
@@ -203,9 +180,7 @@ public class TooltipBuilder {
       eventIcon.append(Text.literal(" ").styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
     }
 
-    return Text
-        .empty()
-        .append(eventIcon)
+    return Text.empty().append(eventIcon)
         .append(Text.translatable(eventType.getTranslationKey()).formatted(textColor));
   }
 
@@ -216,19 +191,20 @@ public class TooltipBuilder {
   private class AttributeHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierAttribute m = (ModifierAttribute) modifier;
-      double value = m.getLevelValues().get(rarityType);
+      ModifierConfig.AttributeConfig cfg = (ModifierConfig.AttributeConfig) config;
+      double value = cfg.values().get(rarityType);
       boolean isPositive = value > 0;
-      double adjustedValue = m.getOperation().equals(Operation.ADD_VALUE) ? value : value * 100;
-      String percentString = m.getOperation().equals(Operation.ADD_VALUE) ? "" : "%";
+      double adjustedValue = cfg.operation().equals(Operation.ADD_VALUE) ? value : value * 100;
+      String percentString = cfg.operation().equals(Operation.ADD_VALUE) ? "" : "%";
       String formattedValue = formatValue(Math.abs(adjustedValue), percentString);
 
-      MutableText attributeText = Text.empty()
+      MutableText attrText = Text.empty()
           .append(getArrowPrefix(isPositive))
           .append(Text.literal(formattedValue).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
 
-      return Text.translatable(getTranslationKeyByModifier(ModifierCategoryType.ATTRIBUTE), attributeText,
-          Text.translatable(m.getAttributeEntry().value().getTranslationKey().toLowerCase()))
+      return Text.translatable(getTranslationKeyByModifier(ModifierCategoryType.ATTRIBUTE),
+          attrText,
+          Text.translatable(cfg.attribute().value().getTranslationKey().toLowerCase()))
           .formatted(Formatting.BLUE);
     }
   }
@@ -236,90 +212,76 @@ public class TooltipBuilder {
   private class MultiplyAttributeHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierMultiplyAttribute multiplyAttribute = (ModifierMultiplyAttribute) modifier;
-      List<MutableText> attributeParts = new ArrayList<>();
+      ModifierConfig.MultiplyAttributeConfig cfg = (ModifierConfig.MultiplyAttributeConfig) config;
 
-      for (ModifierAttribute attr : multiplyAttribute.getInstances()) {
-        double value = attr.getLevelValues().get(rarityType);
+      MutableText combined = Text.empty();
+      for (ModifierConfig.AttributeConfig sub : cfg.instances()) {
+        double value = sub.values().get(rarityType);
         boolean isPositive = value > 0;
-        double adjustedValue = attr.getOperation().equals(Operation.ADD_VALUE) ? value : value * 100;
-        String percentString = attr.getOperation().equals(Operation.ADD_VALUE) ? "" : "%";
+        double adjustedValue = sub.operation().equals(Operation.ADD_VALUE) ? value : value * 100;
+        String percentString = sub.operation().equals(Operation.ADD_VALUE) ? "" : "%";
         String formattedValue = formatValue(Math.abs(adjustedValue), percentString);
 
-        MutableText attributeText = Text.empty()
-            .append(getArrowPrefix(isPositive))
-            .append(Text.literal(formattedValue).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
-
-        attributeParts.add(attributeText);
-        attributeParts.add(Text
-            .translatable(attr.getAttributeEntry().value().getTranslationKey().toLowerCase())
-            .formatted(Formatting.BLUE));
+        combined.append(getArrowPrefix(isPositive))
+            .append(Text.literal(formattedValue).formatted(isPositive ? Formatting.GREEN : Formatting.RED))
+            .append(" ")
+            .append(Text.translatable(sub.attribute().value().getTranslationKey().toLowerCase()))
+            .append(" ");
       }
 
-      return Text.translatable(
-          getTranslationKeyByModifier(ModifierCategoryType.MULTIPLY_ATTRIBUTE),
-          attributeParts.toArray()).formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(getTranslationKeyByModifier(ModifierCategoryType.MULTIPLY_ATTRIBUTE), combined)
+          .formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
   private class OnHitEffectProjHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierOnHitEffectProjectile m = (ModifierOnHitEffectProjectile) modifier;
-      double chance = m.getInflitChanceValues().get(rarityType);
+      ModifierConfig.HitEffectProjectileConfig cfg = (ModifierConfig.HitEffectProjectileConfig) config;
+      double chance = cfg.chance().get(rarityType);
       boolean isPositive = chance > 0;
       String formattedChance = formatValue(Math.abs(chance * 100), "%");
 
-      MutableText chanceText = Text.empty()
-          .append(getArrowPrefix(isPositive))
-          .append(Text.literal(formattedChance).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
+      MutableText effectText = Text.empty().append(cfg.effect().value().getName())
+          .formatted(cfg.effect().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
 
-      MutableText effectText = Text.empty()
-          .append(m.getEffectEntry().value().getName())
-          .formatted(m.getEffectEntry().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
-
-      return Text
-          .translatable(getTranslationKeyByModifier(ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE), chanceText,
-              effectText)
-          .formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(getTranslationKeyByModifier(ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE),
+          getArrowPrefix(isPositive).append(Text.literal(formattedChance)
+              .formatted(isPositive ? Formatting.GREEN : Formatting.RED)),
+          effectText).formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
   private class OnHitEffectHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierOnHitEffectMelee m = (ModifierOnHitEffectMelee) modifier;
-      double chance = m.getInflitChanceValues().get(rarityType);
+      ModifierConfig.HitEffectMeleeConfig cfg = (ModifierConfig.HitEffectMeleeConfig) config;
+      double chance = cfg.chance().get(rarityType);
       boolean isPositive = chance > 0;
       String formattedChance = formatValue(Math.abs(chance * 100), "%");
 
-      MutableText chanceText = Text.empty()
-          .append(getArrowPrefix(isPositive))
-          .append(Text.literal(formattedChance).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
+      MutableText effectText = Text.empty().append(cfg.effect().value().getName())
+          .formatted(cfg.effect().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
 
-      MutableText effectText = Text.empty()
-          .append(m.getEffectEntry().value().getName())
-          .formatted(m.getEffectEntry().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
-
-      return Text
-          .translatable(getTranslationKeyByModifier(ModifierCategoryType.ON_HIT_EFFECT), chanceText, effectText)
-          .formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(getTranslationKeyByModifier(ModifierCategoryType.ON_HIT_EFFECT),
+          getArrowPrefix(isPositive).append(Text.literal(formattedChance)
+              .formatted(isPositive ? Formatting.GREEN : Formatting.RED)),
+          effectText).formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
   private class OnBlockBreakHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierOnBlockBreak m = (ModifierOnBlockBreak) modifier;
-      double chance = m.getLevelValues().get(rarityType);
+      ModifierConfig.BlockBreakConfig cfg = (ModifierConfig.BlockBreakConfig) config;
+      double chance = cfg.values().get(rarityType);
       boolean isPositive = chance > 0;
       String formattedChance = formatValue(Math.abs(chance * 100), "%");
 
-      MutableText chanceText = Text.empty()
-          .append(getArrowPrefix(isPositive))
-          .append(Text.literal(formattedChance).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
-
-      return Text.translatable(getTranslationKeyByEvent(m.getEventType()), chanceText, getEventText(m.getEventType()))
+      return Text.translatable(getTranslationKeyByEvent(cfg.eventType()),
+          getArrowPrefix(isPositive).append(Text.literal(formattedChance)
+              .formatted(isPositive ? Formatting.GREEN : Formatting.RED)),
+          getEventText(cfg.eventType()))
           .formatted(DEFAULT_TEXT_COLOR);
     }
   }
@@ -327,15 +289,15 @@ public class TooltipBuilder {
   private class AreaEffectHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierAreaEffect m = (ModifierAreaEffect) modifier;
-      double radius = m.getRadiusLevels().get(rarityType);
+      ModifierConfig.AreaEffectConfig cfg = (ModifierConfig.AreaEffectConfig) config;
+      double radius = cfg.radiusLevels().get(rarityType);
       boolean isPositive = radius > 0;
       String formatted = formatValue(Math.abs(radius), "") + " blocks";
 
       MutableText chanceText = Text.literal(formatted).formatted(isPositive ? Formatting.GREEN : Formatting.RED);
       MutableText effectText = Text.empty()
-          .append(m.getEffectEntry().value().getName())
-          .formatted(m.getEffectEntry().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
+          .append(cfg.effect().value().getName())
+          .formatted(cfg.effect().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
 
       return Text.translatable(getTranslationKeyByModifier(ModifierCategoryType.AREA_EFFECT), effectText, chanceText)
           .formatted(DEFAULT_TEXT_COLOR);
@@ -345,74 +307,67 @@ public class TooltipBuilder {
   private class OnHitProjectileHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierOnHitProjectile m = (ModifierOnHitProjectile) modifier;
-      double chance = m.getEventChances().get(rarityType);
+      ModifierConfig.HitProjectileConfig cfg = (ModifierConfig.HitProjectileConfig) config;
+      double chance = cfg.chance().get(rarityType);
       boolean isPositive = chance > 0;
       String formattedChance = formatValue(Math.abs(chance * 100), "%");
 
-      MutableText chanceText = Text.empty()
-          .append(getArrowPrefix(isPositive))
-          .append(Text.literal(formattedChance).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
-
-      return Text.translatable(getTranslationKeyByEvent(m.getEventType()), chanceText, getEventText(m.getEventType()))
-          .formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(getTranslationKeyByEvent(cfg.eventType()),
+          getArrowPrefix(isPositive).append(Text.literal(formattedChance)
+              .formatted(isPositive ? Formatting.GREEN : Formatting.RED)),
+          getEventText(cfg.eventType())).formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
   private class OnHitMeleeHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierOnHitMelee m = (ModifierOnHitMelee) modifier;
-      double chance = m.getEventChances().get(rarityType);
+      ModifierConfig.HitMeleeConfig cfg = (ModifierConfig.HitMeleeConfig) config;
+      double chance = cfg.chance().get(rarityType);
       boolean isPositive = chance > 0;
       String formattedChance = formatValue(Math.abs(chance * 100), "%");
 
-      MutableText chanceText = Text.empty()
-          .append(getArrowPrefix(isPositive))
-          .append(Text.literal(formattedChance).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
-
-      return Text.translatable(getTranslationKeyByEvent(m.getEventType()), chanceText, getEventText(m.getEventType()))
-          .formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(getTranslationKeyByEvent(cfg.eventType()),
+          getArrowPrefix(isPositive).append(Text.literal(formattedChance)
+              .formatted(isPositive ? Formatting.GREEN : Formatting.RED)),
+          getEventText(cfg.eventType())).formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
   private class OnFirstHitHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierOnFirstHitMelee m = (ModifierOnFirstHitMelee) modifier;
-      double value = m.getValues().get(rarityType);
+      ModifierConfig.OnFirstHitConfig cfg = (ModifierConfig.OnFirstHitConfig) config;
+      double value = cfg.values().get(rarityType);
       boolean isPositive = value > 0;
-      String formattedChance = formatValue(Math.abs(value * 100), "%");
+      String formatted = formatValue(Math.abs(value * 100), "%");
 
-      MutableText chanceText = Text.empty()
-          .append(getArrowPrefix(isPositive))
-          .append(Text.literal(formattedChance).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
-
-      return Text.translatable(getTranslationKeyByEvent(m.getEventType()), chanceText, getEventText(m.getEventType()))
-          .formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(getTranslationKeyByEvent(cfg.eventType()),
+          getArrowPrefix(isPositive).append(Text.literal(formatted)
+              .formatted(isPositive ? Formatting.GREEN : Formatting.RED)),
+          getEventText(cfg.eventType())).formatted(DEFAULT_TEXT_COLOR);
     }
   }
 
   private class CustomConditionHandler implements TooltipHandler {
     @Override
     public MutableText buildTooltip() {
-      ModifierCustomCondition m = (ModifierCustomCondition) modifier;
-      double value = m.getValues().get(rarityType);
+      ModifierConfig.CustomConditionConfig cfg = (ModifierConfig.CustomConditionConfig) config;
+      double value = cfg.value().get(rarityType);
       boolean isPositive = value > 0;
-      String postfix = m.getEventType() == EventType.POTION_DURATION ? " seconds"
-          : m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP
-              || m.getEventType() == EventType.INCREASE_MOB_SPAWNRATE ? "%" : "";
+      String postfix = cfg.eventType() == EventType.POTION_DURATION ? " seconds"
+          : (cfg.eventType() == EventType.INCREASE_MOSSY_BOX_DROP || cfg.eventType() == EventType.INCREASE_MOB_SPAWNRATE
+              ? "%"
+              : "");
       String formatted = formatValue(
-          Math.abs(value) * (m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP
-              || m.getEventType() == EventType.INCREASE_MOB_SPAWNRATE ? 100 : 1),
+          Math.abs(value) * (cfg.eventType() == EventType.INCREASE_MOSSY_BOX_DROP
+              || cfg.eventType() == EventType.INCREASE_MOB_SPAWNRATE ? 100 : 1),
           postfix);
 
-      MutableText chanceText = Text.empty()
-          .append(getArrowPrefix(isPositive))
-          .append(Text.literal(formatted).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
-
-      return Text.translatable(getTranslationKeyByEvent(m.getEventType()), chanceText, getEventText(m.getEventType()))
-          .formatted(DEFAULT_TEXT_COLOR);
+      return Text.translatable(getTranslationKeyByEvent(cfg.eventType()),
+          getArrowPrefix(isPositive).append(Text.literal(formatted)
+              .formatted(isPositive ? Formatting.GREEN : Formatting.RED)),
+          getEventText(cfg.eventType())).formatted(DEFAULT_TEXT_COLOR);
     }
   }
 

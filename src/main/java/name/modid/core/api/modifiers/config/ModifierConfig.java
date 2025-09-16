@@ -1,5 +1,7 @@
 package name.modid.core.api.modifiers.config;
 
+import java.util.ArrayList;
+
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.LevelValues;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -9,6 +11,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 
 public sealed interface ModifierConfig permits
     ModifierConfig.AttributeConfig,
+    ModifierConfig.MultiplyAttributeConfig,
     ModifierConfig.HitMeleeConfig,
     ModifierConfig.HitProjectileConfig,
     ModifierConfig.HitEffectMeleeConfig,
@@ -16,12 +19,17 @@ public sealed interface ModifierConfig permits
     ModifierConfig.AreaEffectConfig,
     ModifierConfig.DamageConfig,
     ModifierConfig.BlockBreakConfig,
+    ModifierConfig.OnFirstHitConfig,
     ModifierConfig.CustomConditionConfig {
 
   public record AttributeConfig(
       LevelValues values,
       Operation operation,
       RegistryEntry<EntityAttribute> attribute) implements ModifierConfig {
+  }
+
+  public record MultiplyAttributeConfig(
+      ArrayList<AttributeConfig> instances) implements ModifierConfig {
   }
 
   public record HitMeleeConfig(
@@ -76,6 +84,11 @@ public sealed interface ModifierConfig permits
   public record CustomConditionConfig(
       LevelValues value,
       LevelValues additionalValue,
+      EventType eventType) implements ModifierConfig {
+  }
+
+  public record OnFirstHitConfig(
+      LevelValues values,
       EventType eventType) implements ModifierConfig {
   }
 }

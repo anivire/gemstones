@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import name.modid.Gemstones;
-import name.modid.core.api.components.Gemstone;
+import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
@@ -97,20 +97,20 @@ public class TooltipHelper {
         .formatted(Formatting.WHITE);
   }
 
-  public static Text getGemstoneSocketedRow(Gemstone[] gemstones) {
+  public static Text getGemstoneSocketedRow(GemstoneComponent[] gemstones) {
     MutableText row = Text.empty();
-    for (Gemstone gemstoneSlot : gemstones) {
+    for (GemstoneComponent gemstoneSlot : gemstones) {
       row.append(getGemstoneSprite(gemstoneSlot.gemstoneType()));
     }
     return row;
   }
 
-  public static List<Text> getItemGemstoneBonusesRows(Gemstone[] gemstones, ItemStack itemStack) {
+  public static List<Text> getItemGemstoneBonusesRows(GemstoneComponent[] gemstones, ItemStack itemStack) {
     List<Text> rows = new ArrayList<>();
 
     for (int i = 0; i < gemstones.length; i++) {
       GemstoneType gemstoneType = gemstones[i].gemstoneType();
-      GemstoneQuality gemRarity = gemstones[i].GemstoneQualityType();
+      GemstoneQuality gemRarity = gemstones[i].gemstoneQualityType();
 
       if (gemstoneType != GemstoneType.LOCKED && gemstoneType != GemstoneType.EMPTY) {
         try {

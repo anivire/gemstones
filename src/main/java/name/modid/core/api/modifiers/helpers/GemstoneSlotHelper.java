@@ -11,11 +11,11 @@ import java.util.function.Function;
 
 import name.modid.Gemstones;
 import name.modid.core.api.components.ComponentsRegistry;
-import name.modid.core.api.components.Gemstone;
-import name.modid.core.api.components.GemstoneSlots;
-import name.modid.core.api.modifiers.categories.ModifierAttribute;
-import name.modid.core.api.modifiers.categories.ModifierMultiplyAttribute;
+import name.modid.core.api.components.GemstoneComponent;
+import name.modid.core.api.components.GemstoneSlotsComponent;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.ModifierConfig.AttributeConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.MultiplyAttributeConfig;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.GemstoneItem;
@@ -39,8 +39,8 @@ import net.minecraft.util.Identifier;
 public class GemstoneSlotHelper {
   public static final int MAX_SLOTS = 5;
 
-  public static ArrayList<Gemstone> contains(ItemStack itemStack, GemstoneType gemstoneType) {
-    ArrayList<Gemstone> gemstones = itemStack.get(ComponentsRegistry.GEMSTONES) != null
+  public static ArrayList<GemstoneComponent> contains(ItemStack itemStack, GemstoneType gemstoneType) {
+    ArrayList<GemstoneComponent> gemstones = itemStack.get(ComponentsRegistry.GEMSTONES) != null
         ? new ArrayList<>(Arrays.asList(itemStack.get(ComponentsRegistry.GEMSTONES).gemstones()))
         : new ArrayList<>();
 
@@ -58,32 +58,32 @@ public class GemstoneSlotHelper {
     return itemStack.get(ComponentsRegistry.GEMSTONES) != null;
   }
 
-  public static GemstoneSlots getGemstonesSlot(ItemStack itemStack) {
+  public static GemstoneSlotsComponent getGemstonesSlot(ItemStack itemStack) {
     return itemStack.get(ComponentsRegistry.GEMSTONES);
   }
 
-  public static Gemstone[] getGemstones(ItemStack itemStack) {
+  public static GemstoneComponent[] getGemstones(ItemStack itemStack) {
     if (itemStack == null || itemStack.isEmpty()) {
-      return new Gemstone[0];
+      return new GemstoneComponent[0];
     }
 
-    GemstoneSlots slots = itemStack.get(ComponentsRegistry.GEMSTONES);
-    return slots != null ? slots.gemstones() : new Gemstone[0];
+    GemstoneSlotsComponent slots = itemStack.get(ComponentsRegistry.GEMSTONES);
+    return slots != null ? slots.gemstones() : new GemstoneComponent[0];
   }
 
   public static Integer getFirstEmptySlotIndex(ItemStack itemStack) {
-    GemstoneSlots gemstoneSlots = getGemstonesSlot(itemStack);
+    GemstoneSlotsComponent gemstoneSlots = getGemstonesSlot(itemStack);
     if (gemstoneSlots == null) {
       return null;
     }
 
-    Gemstone[] gemstones = gemstoneSlots.gemstones();
+    GemstoneComponent[] gemstones = gemstoneSlots.gemstones();
     if (gemstones == null) {
       return null;
     }
 
     for (int i = 0; i < gemstones.length; i++) {
-      Gemstone gemstone = gemstones[i];
+      GemstoneComponent gemstone = gemstones[i];
       if (gemstone != null && gemstone.gemstoneType() == GemstoneType.EMPTY) {
         return i;
       }
@@ -93,61 +93,61 @@ public class GemstoneSlotHelper {
   }
 
   public static ItemStack setGemstoneByIndex(ItemStack itemStack, int index, GemstoneItem gemstone) {
-    GemstoneSlots sourceGemstoneSlots = getGemstonesSlot(itemStack);
+    GemstoneSlotsComponent sourceGemstoneSlots = getGemstonesSlot(itemStack);
     if (sourceGemstoneSlots == null || index < 0 || index >= MAX_SLOTS) {
       return null;
     }
 
-    Gemstone[] gemstones = Arrays.copyOf(sourceGemstoneSlots.gemstones(), sourceGemstoneSlots.gemstones().length);
+    GemstoneComponent[] gemstones = Arrays.copyOf(sourceGemstoneSlots.gemstones(),
+        sourceGemstoneSlots.gemstones().length);
 
-    gemstones[index] = new Gemstone(
+    gemstones[index] = new GemstoneComponent(
         gemstone.getType(),
         gemstone.getRarityType());
 
-    itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlots(gemstones));
-    updateItemSlotBonuses(itemStack, itemStack.getItem());
+    itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlotsComponent(gemstones));
+    updateSocketsAttributes(itemStack, itemStack.getItem());
 
     return itemStack;
   }
 
-  public static void initItemSlots(ItemStack itemStack, Item item) {
-    if (!isItemValid(item))
+  public static void initializeSockets(ItemStack itemStack, Item item) {
+    if (!isItemValid(item)) {
       return;
+    }
 
-    GemstoneSlots currentSlots = itemStack.get(ComponentsRegistry.GEMSTONES);
+    GemstoneSlotsComponent currentSlots = itemStack.get(ComponentsRegistry.GEMSTONES);
     if (currentSlots == null || currentSlots.gemstones().length != MAX_SLOTS) {
-      Gemstone[] gemstones = new Gemstone[MAX_SLOTS];
+      GemstoneComponent[] gemstones = new GemstoneComponent[MAX_SLOTS];
 
       int freeSlots = 1 + new Random().nextInt(2);
 
       for (int i = 0; i < MAX_SLOTS; i++) {
         if (freeSlots != 0) {
-          gemstones[i] = new Gemstone(GemstoneType.EMPTY, GemstoneQuality.NONE);
+          gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE);
           freeSlots--;
         } else {
-          gemstones[i] = new Gemstone(GemstoneType.LOCKED, GemstoneQuality.NONE);
+          gemstones[i] = new GemstoneComponent(GemstoneType.LOCKED, GemstoneQuality.NONE);
         }
       }
 
-      itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlots(gemstones));
-      updateItemSlotBonuses(itemStack, item);
+      itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlotsComponent(gemstones));
+      updateSocketsAttributes(itemStack, item);
     }
   }
 
-  public static void updateItemSlotBonuses(ItemStack itemStack, Item item) {
-    if (!isItemValid(item) && !isGemstonesExists(itemStack))
+  public static void updateSocketsAttributes(ItemStack itemStack, Item item) {
+    GemstoneComponent[] gemstones = getGemstones(itemStack);
+    if (gemstones == null) {
       return;
+    }
 
-    Gemstone[] gemstones = getGemstones(itemStack);
-    if (gemstones == null)
-      return;
-
-    ArrayList<ModifierAttribute> modifiers = ModifierGatheringHelper.getAttributeModifiers(itemStack);
+    ArrayList<GemstoneModifier> modifiers = ModifierGatheringHelper.getAttributeModifiers(itemStack);
 
     applyAttributeModifiers(modifiers, item, itemStack);
   }
 
-  public static void applyAttributeModifiers(ArrayList<ModifierAttribute> gemstoneModifiers,
+  public static void applyAttributeModifiers(ArrayList<GemstoneModifier> gemstoneModifiers,
       Item item, ItemStack itemStack) {
     @SuppressWarnings("deprecation")
     AttributeModifiersComponent baseModifiers = itemStack.getItem().getAttributeModifiers();
@@ -156,9 +156,8 @@ public class GemstoneSlotHelper {
 
     // Using LinkedHashMap for attributes order and eliminate possible duplicates
     Map<String, AttributeModifiersComponent.Entry> combinedModifiersMap = new LinkedHashMap<>();
-    Function<AttributeModifiersComponent.Entry, String> entryKey = entry -> entry.modifier().id().toString() + "."
-        + entry.slot() + "."
-        + entry.attribute().value();
+    Function<AttributeModifiersComponent.Entry, String> entryKey = entry -> String.format("%s.%s.%s",
+        entry.modifier().id().toString(), entry.slot(), entry.attribute().value());
 
     // Filter modifiers
     baseModifiers.modifiers().forEach(e -> {
@@ -173,28 +172,30 @@ public class GemstoneSlotHelper {
     });
 
     // Gather modifiers
-    Map<RegistryEntry<EntityAttribute>, List<ModifierAttribute>> attributeToModifiers = new HashMap<>();
+    Map<RegistryEntry<EntityAttribute>, List<GemstoneModifier>> attributeToModifiers = new HashMap<>();
     for (GemstoneModifier modifier : gemstoneModifiers) {
-      if (modifier instanceof ModifierAttribute singleModifier) {
-        attributeToModifiers.computeIfAbsent(singleModifier.getAttributeEntry(), k -> new ArrayList<>())
-            .add(singleModifier);
-      } else if (modifier instanceof ModifierMultiplyAttribute multiModifier) {
-        for (ModifierAttribute attr : multiModifier.getInstances()) {
-          attributeToModifiers.computeIfAbsent(attr.getAttributeEntry(), k -> new ArrayList<>()).add(attr);
+      if (modifier.getConfig() instanceof AttributeConfig singleModifier) {
+        attributeToModifiers.computeIfAbsent(singleModifier.attribute(), k -> new ArrayList<>())
+            .add(modifier);
+      } else if (modifier.getConfig() instanceof MultiplyAttributeConfig multiModifier) {
+        for (AttributeConfig c : multiModifier.instances()) {
+          attributeToModifiers.computeIfAbsent(c.attribute(), k -> new ArrayList<>()).add(modifier);
         }
       }
     }
 
-    for (Map.Entry<RegistryEntry<EntityAttribute>, List<ModifierAttribute>> modifierEntry : attributeToModifiers
+    for (Map.Entry<RegistryEntry<EntityAttribute>, List<GemstoneModifier>> modifierEntry : attributeToModifiers
         .entrySet()) {
       RegistryEntry<EntityAttribute> attribute = modifierEntry.getKey();
-      List<ModifierAttribute> modifiers = modifierEntry.getValue();
-      ModifierAttribute mod = modifiers.get(0);
+      List<GemstoneModifier> modifiers = modifierEntry.getValue();
+      GemstoneModifier mod = modifiers.get(0);
 
       float totalValue = 0f;
-      for (ModifierAttribute m : modifiers) {
+      for (GemstoneModifier m : modifiers) {
         GemstoneQuality rarity = m.getRarityType();
-        totalValue += m.getLevelValues().get(rarity);
+        if (m.getConfig() instanceof AttributeConfig c) {
+          totalValue += c.values().get(rarity);
+        }
       }
 
       EquipmentSlot slot = ModifierHelper.getEquipmentSlot(item);
@@ -203,8 +204,11 @@ public class GemstoneSlotHelper {
           String.format("%s.%s.%s", mod.getGemstoneType().toString().toLowerCase(),
               mod.getItemCategory().toString().toLowerCase(), slot.name().toLowerCase()));
 
-      EntityAttributeModifier scaledGemstoneModifier = new EntityAttributeModifier(modifierId, totalValue,
-          mod.getOperation());
+      EntityAttributeModifier scaledGemstoneModifier = new EntityAttributeModifier(modifierId, totalValue, null);
+      if (mod.getConfig() instanceof AttributeConfig c) {
+        scaledGemstoneModifier = new EntityAttributeModifier(modifierId, totalValue,
+            c.operation());
+      }
 
       AttributeModifiersComponent.Entry newEntry = new AttributeModifiersComponent.Entry(attribute,
           scaledGemstoneModifier, ModifierHelper.getAttributeModifierSlot(item));

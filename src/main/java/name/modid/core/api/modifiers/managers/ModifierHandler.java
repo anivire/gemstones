@@ -15,39 +15,24 @@ public class ModifierHandler {
     throw new UnsupportedOperationException("Unimplemented method 'handleCustom'");
   }
 
-  public static void handleAreaEffect(AreaEffectConfig area, ModifierContext ctx, double radius) {
+  public static void handleAreaEffect(AreaEffectConfig config, ModifierContext ctx, double radius) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'handleAreaEffect'");
   }
 
-  public static void handleDamage(DamageConfig dmg, ModifierContext ctx) {
+  public static void handleDamage(DamageConfig config, ModifierContext ctx) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'handleDamage'");
   }
 
-  public static void handleBlockBreak(EventType eventType, ModifierContext ctx) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'handleBlockBreak'");
-  }
-
-  public static void applyStatusEffect(HitEffectProjectileConfig effectProj, LivingEntity target,
+  public static void applyStatusEffect(HitEffectProjectileConfig config, LivingEntity target,
       World world) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'applyStatusEffect'");
   }
 
-  public static void applyStatusEffect(HitEffectMeleeConfig effect, LivingEntity target, World world) {
+  public static void applyStatusEffect(HitEffectMeleeConfig config, LivingEntity target, World world) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'applyStatusEffect'");
-  }
-
-  public static void handleProjectileEvent(EventType eventType, ModifierContext ctx) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'handleProjectileEvent'");
-  }
-
-  public static void handleMeleeEvent(EventType eventType, ModifierContext ctx) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'handleMeleeEvent'");
   }
 }

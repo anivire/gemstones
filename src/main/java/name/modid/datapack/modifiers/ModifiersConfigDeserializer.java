@@ -8,20 +8,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import name.modid.datapack.modifiers.ModifiersConfig.AreaEffectConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.AttributeConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.CustomConditionConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.ModifierConfigEntry;
-import name.modid.datapack.modifiers.ModifiersConfig.ModifierType;
-import name.modid.datapack.modifiers.ModifiersConfig.MultiplyAttributeConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.OnBlockBreakConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.OnFirstHitConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.OnHitConfig;
-import name.modid.datapack.modifiers.ModifiersConfig.OnHitEffectConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.AreaEffectConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.AttributeConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.CustomConditionConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.MultiplyAttributeConfig;
+import name.modid.datapack.modifiers.ModifiersRawConfig.ModifierRawConfigEntry;
+import name.modid.datapack.modifiers.ModifiersRawConfig.ModifierType;
+import name.modid.datapack.modifiers.ModifiersRawConfig.OnBlockBreakConfig;
+import name.modid.datapack.modifiers.ModifiersRawConfig.OnFirstHitConfig;
+import name.modid.datapack.modifiers.ModifiersRawConfig.OnHitConfig;
+import name.modid.datapack.modifiers.ModifiersRawConfig.OnHitEffectConfig;
 
-public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierConfigEntry> {
+public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierRawConfigEntry> {
   @Override
-  public ModifierConfigEntry deserialize(
+  public ModifierRawConfigEntry deserialize(
       JsonElement json,
       Type typeOfT,
       JsonDeserializationContext context) throws JsonParseException {

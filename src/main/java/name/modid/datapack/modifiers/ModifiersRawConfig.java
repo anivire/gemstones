@@ -11,11 +11,11 @@ import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.util.Identifier;
 
-public class ModifiersConfig {
+public class ModifiersRawConfig {
   @SerializedName("gemstone_type")
   public GemstoneType gemstoneType;
 
-  public Map<ModifierItemCategory, ModifierConfigEntry> modifiers;
+  public Map<ModifierItemCategory, ModifierRawConfigEntry> modifiers;
 
   public enum ModifierType {
     @SerializedName("AREA_EFFECT")
@@ -36,11 +36,11 @@ public class ModifiersConfig {
     ON_FIRST_HIT,
   }
 
-  public static class ModifierConfigEntry {
+  public static class ModifierRawConfigEntry {
     public ModifierType type;
   }
 
-  public static class OnHitEffectConfig extends ModifierConfigEntry {
+  public static class OnHitEffectConfig extends ModifierRawConfigEntry {
     @SerializedName("chance_levels")
     public List<Double> chanceLevels;
     public int duration;
@@ -53,7 +53,7 @@ public class ModifiersConfig {
     public Integer maxStackCount;
   }
 
-  public static class AreaEffectConfig extends ModifierConfigEntry {
+  public static class AreaEffectConfig extends ModifierRawConfigEntry {
     @SerializedName("radius_levels")
     public List<Double> radiusLevels;
     public int duration;
@@ -66,7 +66,7 @@ public class ModifiersConfig {
     public Boolean onlyPlayers;
   }
 
-  public static class OnBlockBreakConfig extends ModifierConfigEntry {
+  public static class OnBlockBreakConfig extends ModifierRawConfigEntry {
     @SerializedName("chance_levels")
     public List<Double> chanceLevels;
     @SerializedName("value_levels")
@@ -75,12 +75,12 @@ public class ModifiersConfig {
     public EventType eventType;
   }
 
-  public static class MultiplyAttributeConfig extends ModifierConfigEntry {
+  public static class MultiplyAttributeConfig extends ModifierRawConfigEntry {
     @SerializedName("instances")
     public List<AttributeConfig> attributes;
   }
 
-  public static class AttributeConfig extends ModifierConfigEntry {
+  public static class AttributeConfig extends ModifierRawConfigEntry {
     @SerializedName("attribute_id")
     public Identifier attributeId;
     @SerializedName("value_levels")
@@ -88,21 +88,21 @@ public class ModifiersConfig {
     public Operation operation;
   }
 
-  public static class OnHitConfig extends ModifierConfigEntry {
+  public static class OnHitConfig extends ModifierRawConfigEntry {
     @SerializedName("chance_levels")
     public List<Double> chanceLevels;
     @SerializedName("event_type")
     public EventType eventType;
   }
 
-  public static class OnFirstHitConfig extends ModifierConfigEntry {
+  public static class OnFirstHitConfig extends ModifierRawConfigEntry {
     @SerializedName("value_levels")
     public List<Double> valueLevels;
     @SerializedName("event_type")
     public EventType eventType;
   }
 
-  public static class CustomConditionConfig extends ModifierConfigEntry {
+  public static class CustomConditionConfig extends ModifierRawConfigEntry {
     @SerializedName("value_levels")
     public List<Double> valueLevels;
     @SerializedName("additional_value_levels")

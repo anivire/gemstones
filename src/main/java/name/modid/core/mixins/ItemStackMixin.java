@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import name.modid.Gemstones;
-import name.modid.core.api.components.Gemstone;
+import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper;
 import name.modid.core.content.registries.AttributesRegistry;
@@ -32,19 +32,19 @@ public abstract class ItemStackMixin {
   private void onConstructWithChanges(RegistryEntry<Item> item, int count, ComponentChanges changes,
       CallbackInfo ci) {
     ItemStack itemStack = (ItemStack) (Object) this;
-    GemstoneSlotHelper.initItemSlots(itemStack, item.value());
+    GemstoneSlotHelper.initializeSockets(itemStack, item.value());
   }
 
   @Inject(method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V", at = @At("TAIL"))
   private void onConstruct(RegistryEntry<Item> item, int count, CallbackInfo ci) {
     ItemStack itemStack = (ItemStack) (Object) this;
-    GemstoneSlotHelper.initItemSlots(itemStack, item.value());
+    GemstoneSlotHelper.initializeSockets(itemStack, item.value());
   }
 
   @Inject(method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V", at = @At("TAIL"))
   private void onConstructSimple(RegistryEntry<Item> item, CallbackInfo ci) {
     ItemStack itemStack = (ItemStack) (Object) this;
-    GemstoneSlotHelper.initItemSlots(itemStack, item.value());
+    GemstoneSlotHelper.initializeSockets(itemStack, item.value());
   }
 
   @Inject(method = "getMaxDamage", at = @At("RETURN"), cancellable = true)
@@ -78,7 +78,7 @@ public abstract class ItemStackMixin {
 
     if (GemstoneSlotHelper.isItemValid(itemStack.getItem())
         && GemstoneSlotHelper.isGemstonesExists(itemStack)) {
-      Gemstone[] gemstones = GemstoneSlotHelper.getGemstones(itemStack);
+      GemstoneComponent[] gemstones = GemstoneSlotHelper.getGemstones(itemStack);
 
       if (gemstones == null || gemstones.length == 0) {
         return;

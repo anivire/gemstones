@@ -5,11 +5,12 @@ import java.util.Arrays;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public record GemstoneSlots(Gemstone[] gemstones) {
-  public static final Codec<GemstoneSlots> GEMSTONE_SLOTS_CODEC = RecordCodecBuilder.create(builder -> {
+public record GemstoneSlotsComponent(GemstoneComponent[] gemstones) {
+  public static final Codec<GemstoneSlotsComponent> GEMSTONE_SLOTS_CODEC = RecordCodecBuilder.create(builder -> {
     return builder
-        .group(Gemstone.GEMSTONE_CODEC.listOf().fieldOf("slots").forGetter(item -> Arrays.asList(item.gemstones)))
-        .apply(builder, list -> new GemstoneSlots(list.toArray(new Gemstone[0])));
+        .group(
+            GemstoneComponent.GEMSTONE_CODEC.listOf().fieldOf("slots").forGetter(item -> Arrays.asList(item.gemstones)))
+        .apply(builder, list -> new GemstoneSlotsComponent(list.toArray(new GemstoneComponent[0])));
   });
 
   // Proper equals and hashCode implementations.
@@ -20,7 +21,7 @@ public record GemstoneSlots(Gemstone[] gemstones) {
       return true;
     if (o == null || getClass() != o.getClass())
       return false;
-    GemstoneSlots that = (GemstoneSlots) o;
+    GemstoneSlotsComponent that = (GemstoneSlotsComponent) o;
     return Arrays.equals(gemstones, that.gemstones);
   }
 

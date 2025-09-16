@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import name.modid.core.api.components.Gemstone;
+import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.modifiers.ModifierManagerLegacy;
 import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
@@ -32,11 +32,11 @@ public class EventOnHitEffectModifiers {
         return ActionResult.PASS;
       }
 
-      Gemstone[] gemstones = GemstoneSlotHelper.getGemstones(itemStack);
+      GemstoneComponent[] gemstones = GemstoneSlotHelper.getGemstones(itemStack);
       Map<Integer, Map<GemstoneType, GemstoneQuality>> itemGemstones = new HashMap<>();
 
       for (int i = 0; i < gemstones.length; i++) {
-        Gemstone gem = gemstones[i];
+        GemstoneComponent gem = gemstones[i];
         if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
           Map<GemstoneType, GemstoneQuality> m = new HashMap<>();
           m.put(gem.gemstoneType(), gem.GemstoneQualityType());

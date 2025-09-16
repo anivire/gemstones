@@ -2,68 +2,69 @@ package name.modid.core.api.modifiers.managers;
 
 import java.util.List;
 
-import name.modid.core.api.modifiers.config.Modifier;
+import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import net.minecraft.world.World;
 
 public class ModifierManager {
 
-  public static void applyModifiers(List<Modifier> modifiers, ModifierContext ctx) {
-    for (Modifier modifier : modifiers) {
-      ModifierConfig cfg = modifier.getConfig();
+  public static void applyModifiers(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+    for (GemstoneModifier modifier : modifiers) {
+      ModifierConfig c = modifier.getConfig();
       GemstoneQuality rarity = modifier.getRarityType();
 
-      switch (cfg) {
-        case ModifierConfig.AttributeConfig attr -> {
+      switch (c) {
+        case ModifierConfig.AttributeConfig config -> {
           // TODO: в будущем добавить применение атрибутов
         }
-        case ModifierConfig.HitMeleeConfig hit -> {
-          double chance = hit.chance().get(rarity);
+        case ModifierConfig.HitMeleeConfig config -> {
+          double chance = config.chance().get(rarity);
           if (proc(ctx.world(), chance)) {
-            ModifierHandler.handleMeleeEvent(hit.eventType(), ctx);
+            // ModifierHandler.handleMeleeEvent(config.eventType(), ctx);
           }
         }
-        case ModifierConfig.HitProjectileConfig hitProj -> {
-          double chance = hitProj.chance().get(rarity);
+        case ModifierConfig.HitProjectileConfig config -> {
+          double chance = config.chance().get(rarity);
           if (proc(ctx.world(), chance)) {
-            ModifierHandler.handleProjectileEvent(hitProj.eventType(), ctx);
+            // ModifierHandler.handleProjectileEvent(config.eventType(), ctx);
           }
         }
-        case ModifierConfig.HitEffectMeleeConfig effect -> {
-          double chance = effect.chance().get(rarity);
+        case ModifierConfig.HitEffectMeleeConfig config -> {
+          double chance = config.chance().get(rarity);
           if (proc(ctx.world(), chance)) {
-            ModifierHandler.applyStatusEffect(effect, ctx.target(), ctx.world());
+            ModifierHandler.applyStatusEffect(config, ctx.target(), ctx.world());
           }
         }
-        case ModifierConfig.HitEffectProjectileConfig effectProj -> {
-          double chance = effectProj.chance().get(rarity);
+        case ModifierConfig.HitEffectProjectileConfig config -> {
+          double chance = config.chance().get(rarity);
           if (proc(ctx.world(), chance)) {
-            ModifierHandler.applyStatusEffect(effectProj, ctx.target(), ctx.world());
+            ModifierHandler.applyStatusEffect(config, ctx.target(), ctx.world());
           }
         }
-        case ModifierConfig.BlockBreakConfig blockCfg -> {
-          double chance = blockCfg.values().get(rarity);
+        case ModifierConfig.BlockBreakConfig config -> {
+          double chance = config.values().get(rarity);
           if (proc(ctx.world(), chance)) {
-            ModifierHandler.handleBlockBreak(blockCfg.eventType(), ctx);
+            // ModifierHandler.handleBlockBreak(config.eventType(), ctx);
           }
         }
-        case ModifierConfig.DamageConfig dmg -> {
-          double chance = dmg.values().get(rarity);
+        case ModifierConfig.DamageConfig config -> {
+          double chance = config.values().get(rarity);
           if (proc(ctx.world(), chance)) {
-            ModifierHandler.handleDamage(dmg, ctx);
+            ModifierHandler.handleDamage(config, ctx);
           }
         }
-        case ModifierConfig.AreaEffectConfig area -> {
-          double radius = area.radiusLevels().get(rarity);
-          ModifierHandler.handleAreaEffect(area, ctx, radius);
+        case ModifierConfig.AreaEffectConfig config -> {
+          double radius = config.radiusLevels().get(rarity);
+          ModifierHandler.handleAreaEffect(config, ctx, radius);
         }
-        case ModifierConfig.CustomConditionConfig cond -> {
-          double chance = cond.value().get(rarity);
+        case ModifierConfig.CustomConditionConfig config -> {
+          double chance = config.value().get(rarity);
           if (proc(ctx.world(), chance)) {
-            ModifierHandler.handleCustom(cond.eventType(), cond, ctx);
+            ModifierHandler.handleCustom(config.eventType(), config, ctx);
           }
         }
+        default -> throw new IllegalStateException("Unexpected modifier type: " + c);
       }
     }
   }
