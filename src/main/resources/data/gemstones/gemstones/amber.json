@@ -23,7 +23,7 @@
       "type": "ON_BLOCK_BREAK",
       "chance_levels": [0.15, 0.2, 0.25, 0.3],
       "value_levels": [0.0, 0.0, 0.0, 0.0],
-      "event_type": "SMELTER"
+      "event_type": "ON_BLOCK_BREAK_SMELTER"
     },
     "ARMOR": {
       "type": "AREA_EFFECT",

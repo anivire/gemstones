@@ -13,13 +13,13 @@
     "RANGED": {
       "type": "ON_HIT",
       "chance_levels": [0.04, 0.065, 0.1, 0.145],
-      "event_type": "SMALL_FLAT_EXPLOSION"
+      "event_type": "ON_HIT_SMALL_FLAT_EXPLOSION"
     },
     "TOOLS": {
       "type": "ON_BLOCK_BREAK",
       "chance_levels": [0.06, 0.1, 0.145, 0.185],
       "value_levels": [0.0, 0.0, 0.0, 0.0],
-      "event_type": "ADDITIONAL_GOLD_DROP"
+      "event_type": "ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP"
     },
     "ARMOR": {
       "type": "ATTRIBUTE",

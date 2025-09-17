@@ -23,7 +23,7 @@
       "type": "ON_BLOCK_BREAK",
       "chance_levels": [0.08, 0.12, 0.16, 0.2],
       "value_levels": [1.0, 1.0, 2.0, 2.0],
-      "event_type": "EXTRA_HEALTH"
+      "event_type": "PLAYER_EVENT_EXTRA_HEALTH"
     }
   }
 }
