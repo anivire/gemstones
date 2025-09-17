@@ -4,18 +4,18 @@
     "MELEE": {
       "type": "ON_HIT",
       "chance_levels": [0.04, 0.065, 0.1, 0.145],
-      "event_type": "LIFE_STEAL"
+      "event_type": "ON_HIT_LIFE_STEAL"
     },
     "RANGED": {
       "type": "ON_HIT",
       "chance_levels": [0.075, 0.125, 0.15, 0.2],
-      "event_type": "LIFE_STEAL"
+      "event_type": "ON_HIT_LIFE_STEAL"
     },
     "TOOLS": {
       "type": "ON_BLOCK_BREAK",
       "chance_levels": [0.1, 0.2, 0.3, 0.4],
       "value_levels": [1.0, 1.0, 2.0, 2.0],
-      "event_type": "HEAL"
+      "event_type": "PLAYER_EVENT_HEAL"
     },
     "ARMOR": {
       "type": "ATTRIBUTE",
