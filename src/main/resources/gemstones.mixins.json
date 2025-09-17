@@ -3,17 +3,7 @@
   "package": "name.modid.core.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AnvilScreenHandlerMixin",
-    "ItemStackMixin",
-    "BowItemMixin",
-    "PlayerEntityMixin",
-    "PersistentProjectileEntityMixin",
-    "LivingEntityMixin",
-    "CrossbowItemMixin",
-    "BrewingStandScreenHandlerMixin",
-    "BrewingStandBlockEntityMixin",
-    "FishingBobberEntityMixin",
-    "SoulBurnLivingEntityMixin"
+
   ],
   "injectors": {
     "defaultRequire": 1

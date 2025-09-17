@@ -1,4 +1,4 @@
-package name.modid.core.api.events;
+package name.modid.core.content.events;
 
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;

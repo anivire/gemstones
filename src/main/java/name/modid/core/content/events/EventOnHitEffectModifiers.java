@@ -1,4 +1,4 @@
-package name.modid.core.api.events;
+package name.modid.core.content.events;
 
 import java.util.ArrayList;
 import java.util.HashMap;

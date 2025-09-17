@@ -10,7 +10,8 @@
   "tooltip.gemstones.without_type": "∙ ",
 
   "tooltip.gemstones.ATTRIBUTE": "%s %s",
-  "tooltip.gemstones.MULTIPLY_ATTRIBUTE": "%s %s and %s %s",
+  "tooltip.gemstones.MULTIPLY_ATTRIBUTE": "%s",
+  "tooltip.gemstones.MULTIPLY_ATTRIBUTE.split": " and ",
   "tooltip.gemstones.ON_HIT_EFFECT": "%s to inflict %s",
   "tooltip.gemstones.ON_HIT_EFFECT_PROJECTILE": "%s to inflict %s",
   "tooltip.gemstones.AREA_EFFECT": "always inflict %s in %s radius",
@@ -36,20 +37,24 @@
   "tooltip.gemstones.event_name.small_flat_explode": "Small Explosion",
 
   "tooltip.gemstones.EVENT.LIGHTNING_BOLT": "%s to trigger %s in rainy weather",
-  "tooltip.gemstones.EVENT.EXTRA_HEALTH": "%s gain %s while mining",
+  "tooltip.gemstones.EVENT.LIFE_STEAL": "%s to %s on hit",
   "tooltip.gemstones.EVENT.TORRENT": "%s to trigger %s on hit",
+  "tooltip.gemstones.EVENT.SMALL_FLAT_EXPLOSION": "%s to trigger %s on hit",
   "tooltip.gemstones.EVENT.ADDITIONAL_DAMAGE": "%s %s on first hit",
+  
   "tooltip.gemstones.EVENT.INCREASE_GEODES_DROP": "%s loot %s from ores",
   "tooltip.gemstones.EVENT.ADDITIONAL_GOLD_DROP": "%s drop additional %s from ores",
-  "tooltip.gemstones.EVENT.INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
-  "tooltip.gemstones.EVENT.POTION_DURATION": "%s %s after brewing",
   "tooltip.gemstones.EVENT.REGENERATE_BLOCK": "%s %s after mining",
-  "tooltip.gemstones.EVENT.COPY_ENTITY_DROP": "%s drop copy %s on hit",
-  "tooltip.gemstones.EVENT.INCREASE_MOB_SPAWNRATE": "%s %s",
-  "tooltip.gemstones.EVENT.SMALL_FLAT_EXPLOSION": "%s to trigger %s on hit",
   "tooltip.gemstones.EVENT.SMELTER": "%s to %s on mine",
+
+  "tooltip.gemstones.EVENT.INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
+  "tooltip.gemstones.EVENT.COPY_ENTITY_DROP": "%s drop copy %s on hit",
+
+  "tooltip.gemstones.EVENT.EXTRA_HEALTH": "%s gain %s while mining",
   "tooltip.gemstones.EVENT.HEAL": "%s to %s on mine",
-  "tooltip.gemstones.EVENT.LIFE_STEAL": "%s to %s on hit",
+  "tooltip.gemstones.EVENT.POTION_DURATION": "%s %s after brewing",
+
+  "tooltip.gemstones.EVENT.INCREASE_MOB_SPAWNRATE": "%s %s",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",

@@ -1,4 +1,4 @@
-package name.modid.core.api.events;
+package name.modid.core.content.events;
 
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.component.DataComponentTypes;

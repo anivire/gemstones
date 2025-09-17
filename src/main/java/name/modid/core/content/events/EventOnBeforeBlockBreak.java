@@ -1,4 +1,4 @@
-package name.modid.core.api.events;
+package name.modid.core.content.events;
 
 import java.util.ArrayList;
 
@@ -12,16 +12,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EventOnBlockBreak {
-  public static void setupEvent(World world, PlayerEntity player, BlockPos pos, BlockState state,
+public class EventOnBeforeBlockBreak {
+  public static boolean setupEvent(World world, PlayerEntity player, BlockPos pos, BlockState state,
       BlockEntity blockEntity) {
     ItemStack itemStack = player.getMainHandStack();
     ArrayList<ModifierOnBlockBreak> modifiers = ModifierGatheringHelper.getOnBlockBreakModifiers(itemStack);
 
     if (modifiers.isEmpty()) {
-      return;
+      return true;
     }
 
-    ModifierManagerLegacy.applyOnBlockBreakModifiers(modifiers, player, world, state, pos);
+    return ModifierManagerLegacy.applyOnBeforeBlockBreakModifiers(modifiers, player, world, state, pos);
   }
 }

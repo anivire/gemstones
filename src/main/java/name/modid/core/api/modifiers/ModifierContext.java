@@ -1,4 +1,4 @@
-package name.modid.core.api.modifiers.managers;
+package name.modid.core.api.modifiers;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +22,5 @@ public record ModifierContext(
     @Nullable DamageSource source,
     @Nullable Vec3d position,
     @Nullable ItemStack stack,
-    float damage,
     GemstoneQuality rarity) {
 }

@@ -45,6 +45,7 @@ public class ModifierHelper {
 
     if (rarityMap == null)
       return null;
+
     return rarityMap.get(GemstoneQualityType);
   }
 

@@ -9,14 +9,14 @@ public enum EventType {
   ADDITIONAL_DAMAGE("tooltip.gemstones.event_name.additional_damage"),
 
   // ON_BLOCK_BREAK
-  INCREASE_GEODES_DROP("tooltip.gemstones.event_name.increase_geodes_ON_DROP"),
-  ADDITIONAL_GOLD_DROP("tooltip.gemstones.event_name.additional_gold_ON_DROP"),
+  INCREASE_GEODES_DROP("tooltip.gemstones.event_name.increase_geodes_drop"),
+  ADDITIONAL_GOLD_DROP("tooltip.gemstones.event_name.additional_gold_drop"),
   REGENERATE_BLOCK("tooltip.gemstones.event_name.regenerate_block"),
   SMELTER("tooltip.gemstones.event_name.smelter"),
 
   // ON_DROP
-  INCREASE_MOSSY_BOX_DROP("tooltip.gemstones.event_name.increase_mossy_box_ON_DROP"),
-  COPY_ENTITY_DROP("tooltip.gemstones.event_name.copy_entity_ON_DROP"),
+  INCREASE_MOSSY_BOX_DROP("tooltip.gemstones.event_name.increase_mossy_box_drop"),
+  COPY_ENTITY_DROP("tooltip.gemstones.event_name.copy_entity_drop"),
 
   // PLAYER_EVENT
   EXTRA_HEALTH("tooltip.gemstones.event_name.extra_health"),
