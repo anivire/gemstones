@@ -1,5 +1,6 @@
 package name.modid.core.api.modifiers.tooltips.handlers;
 
+import name.modid.core.api.modifiers.config.ModifierCategoryType;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
@@ -32,7 +33,7 @@ public class AttributeHandler extends BaseTooltipHandler<ModifierConfig.Attribut
   @Override
   protected MutableText buildText(ModifierConfig.AttributeConfig cfg, MutableText valueText, boolean isPositive) {
     return Text.translatable(
-        builder.getTranslationKeyByModifier(TooltipBuilder.ModifierCategoryType.ATTRIBUTE),
+        builder.getTranslationKeyByModifier(ModifierCategoryType.ATTRIBUTE),
         valueText,
         Text.translatable(cfg.attribute().value().getTranslationKey().toLowerCase())).formatted(Formatting.BLUE);
   }

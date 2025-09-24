@@ -1,4 +1,4 @@
-package name.modid.core.mixins;
+package name.modid.core.mixins.trackers;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,7 +13,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 
 @Mixin(LivingEntity.class)
-public class SoulBurnLivingEntityMixin implements SoulBurnEntityAccessor {
+public class SoulBurnTracker implements SoulBurnEntityAccessor {
   private static final TrackedData<Boolean> HAS_SOUL_BURN = DataTracker.registerData(LivingEntity.class,
       TrackedDataHandlerRegistry.BOOLEAN);
 

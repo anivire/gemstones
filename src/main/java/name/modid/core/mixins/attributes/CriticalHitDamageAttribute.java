@@ -1,4 +1,4 @@
-package name.modid.core.mixins;
+package name.modid.core.mixins.attributes;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -11,15 +11,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin {
-  /**
-   * Replace default critical damage {@code 1.5F} with value based on
-   * {@code CRIT_DAMAGE_ATTRIBUTE}.
-   */
+public class CriticalHitDamageAttribute {
   @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5F))
   private float modifyCriticalDamage(float f, Entity target) {
     PlayerEntity player = (PlayerEntity) (Object) this;
-    float bonusCritDamagePercent = 1.5f;
+    float bonusCritDamagePercent = 1.5f; // 1.5F default value
     AttributeModifiersComponent itemAttributeModifiers = player.getMainHandStack()
         .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
 

@@ -1,4 +1,4 @@
-package name.modid.core.mixins;
+package name.modid.core.mixins.gemstones;
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
 
 @Mixin(AnvilScreenHandler.class)
-public abstract class AnvilScreenHandlerMixin {
+public abstract class Socketing {
   @Shadow
   @Final
   @Mutable

@@ -120,13 +120,13 @@ public class TooltipHelper {
               itemStack.getItem());
           rows.add(modifier.getTooltipText(gemRarity, false));
         } catch (NullPointerException e) {
-          MutableText prefix = Text.translatable("tooltip.gemstones.without_type").formatted(Formatting.DARK_GRAY);
+          MutableText prefix = Text.translatable("tooltip.gemstones.category_dot").formatted(Formatting.DARK_GRAY);
           rows.add(prefix.append(Text.literal("Undefined modifier").formatted(Formatting.RED)));
         }
       } else {
         MutableText prefix = Text.literal(gemstoneType.getGemstoneLiteral())
             .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
-            .formatted(Formatting.DARK_GRAY).append(Text.literal(" > ").formatted(Formatting.DARK_GRAY)
+            .formatted(Formatting.DARK_GRAY).append(Text.literal(" ").formatted(Formatting.DARK_GRAY)
                 .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
 
         MutableText gemstoneSlot = Text.literal(TooltipHelper.getSlotText(gemstones[i].gemstoneType()))

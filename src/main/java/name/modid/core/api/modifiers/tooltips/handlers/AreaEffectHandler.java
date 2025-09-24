@@ -1,5 +1,6 @@
 package name.modid.core.api.modifiers.tooltips.handlers;
 
+import name.modid.core.api.modifiers.config.ModifierCategoryType;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
@@ -29,7 +30,7 @@ public class AreaEffectHandler extends BaseTooltipHandler<ModifierConfig.AreaEff
         .formatted(cfg.effect().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
 
     return Text.translatable(
-        builder.getTranslationKeyByModifier(TooltipBuilder.ModifierCategoryType.AREA_EFFECT),
+        builder.getTranslationKeyByModifier(ModifierCategoryType.AREA_EFFECT),
         effectText,
         valueText).formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
   }

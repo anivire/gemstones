@@ -6,20 +6,23 @@ public enum EventType {
   ON_HIT_TORRENT("tooltip.gemstones.event_name.torrent"),
   ON_HIT_SMALL_FLAT_EXPLOSION("tooltip.gemstones.event_name.small_flat_explode"),
   ON_HIT_ADDITIONAL_DAMAGE("tooltip.gemstones.event_name.additional_damage"),
+  ON_HIT_COPY_ENTITY_DROP("tooltip.gemstones.event_name.copy_entity_drop"),
 
   ON_BLOCK_BREAK_INCREASE_GEODES_DROP("tooltip.gemstones.event_name.increase_geodes_drop"),
   ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP("tooltip.gemstones.event_name.additional_gold_drop"),
   ON_BLOCK_BREAK_REGENERATE_BLOCK("tooltip.gemstones.event_name.regenerate_block"),
   ON_BLOCK_BREAK_SMELTER("tooltip.gemstones.event_name.smelter"),
+  ON_BLOCK_BREAK_EXTRA_HEALTH("tooltip.gemstones.event_name.extra_health"),
+  ON_BLOCK_BREAK_HEAL("tooltip.gemstones.event_name.heal"),
 
   ON_DROP_INCREASE_MOSSY_BOX_DROP("tooltip.gemstones.event_name.increase_mossy_box_drop"),
-  ON_DROP_COPY_ENTITY_DROP("tooltip.gemstones.event_name.copy_entity_drop"),
 
-  PLAYER_EVENT_EXTRA_HEALTH("tooltip.gemstones.event_name.extra_health"),
-  PLAYER_EVENT_HEAL("tooltip.gemstones.event_name.heal"),
   PLAYER_EVENT_POTION_DURATION("tooltip.gemstones.event_name.potion_duration"),
 
-  WORLD_EVENT_INCREASE_MOB_SPAWNRATE("tooltip.gemstones.event_name.increase_mob_spawnrate");
+  WORLD_EVENT_INCREASE_MOB_SPAWNRATE("tooltip.gemstones.event_name.increase_mob_spawnrate"),
+
+  AFTER_DEATH_DETONATE("tooltip.gemstones.event_name.detonate"),
+  AFTER_DEATH_HARVEST_MARK("tooltip.gemstones.event_name.harvest_mark");
 
   private final String getTranslationKey;
 

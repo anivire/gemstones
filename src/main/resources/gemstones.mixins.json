@@ -3,7 +3,17 @@
   "package": "name.modid.core.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-
+    "attributes.BowPullSpeedAttribute",
+    "attributes.CrossbowPullSpeedAttrbute",
+    "attributes.CriticalHitDamageAttribute",
+    "attributes.EvasionAttribute",
+    "attributes.ItemMaxDurabilityAttribute",
+    "effects.GuardianSmiteEffect",
+    "effects.StunnedEffect",
+    "gemstones.SlotsInitialization",
+    "gemstones.SocketedItemsTooltip",
+    "gemstones.Socketing",
+    "trackers.SoulBurnTracker"
   ],
   "injectors": {
     "defaultRequire": 1

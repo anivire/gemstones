@@ -2,7 +2,7 @@
   "gemstone_type": "SAPPHIRE",
   "modifiers": {
     "MELEE": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_MELEE",
       "chance_levels": [0.08, 0.16, 0.24, 0.36],
       "amplifier": 0,
       "effect_id": "gemstones:guardian_smite",
@@ -11,7 +11,7 @@
       "max_stack_count": 1
     },
     "RANGED": {
-      "type": "ON_HIT",
+      "type": "ON_HIT_PROJECTILE",
       "chance_levels": [0.05, 0.10, 0.15, 0.25],
       "event_type": "ON_HIT_LIGHTNING_BOLT"
     },

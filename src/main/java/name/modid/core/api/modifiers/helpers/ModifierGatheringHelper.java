@@ -2,6 +2,7 @@ package name.modid.core.api.modifiers.helpers;
 
 import java.util.ArrayList;
 
+import name.modid.Gemstones;
 import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.AttributeConfig;
@@ -14,7 +15,9 @@ public class ModifierGatheringHelper {
     ArrayList<GemstoneModifier> modifiers = new ArrayList<>();
 
     for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() == null || gem.gemstoneType() == GemstoneType.LOCKED) {
+      if (gem.gemstoneType() == null
+          || gem.gemstoneType() == GemstoneType.LOCKED
+          || gem.gemstoneType() == GemstoneType.EMPTY) {
         continue;
       }
 
@@ -22,6 +25,13 @@ public class ModifierGatheringHelper {
           gem.gemstoneType(),
           gem.gemstoneQualityType(),
           itemStack.getItem());
+
+      if (modifier == null) {
+        Gemstones.LOGGER.error("[WARN] No modifier found for gem=" + gem.gemstoneType()
+            + " quality=" + gem.gemstoneQualityType()
+            + " item=" + itemStack.getItem());
+        continue;
+      }
 
       if (modifier.getConfig() instanceof AttributeConfig
           || modifier.getConfig() instanceof MultiplyAttributeConfig) {
@@ -33,16 +43,27 @@ public class ModifierGatheringHelper {
   }
 
   @SuppressWarnings("unchecked")
-  private static <T extends GemstoneModifier> ArrayList<T> getModifiers(ItemStack stack, Class<T> wantedClass) {
+  public static <T extends GemstoneModifier> ArrayList<T> getModifiers(ItemStack itemStack,
+      Class<?> wantedClass) {
     ArrayList<T> result = new ArrayList<>();
-    for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(stack)) {
-      if (gem.gemstoneType() == null || gem.gemstoneType() == GemstoneType.LOCKED)
+    for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
+      if (gem.gemstoneType() == null
+          || gem.gemstoneType() == GemstoneType.LOCKED
+          || gem.gemstoneType() == GemstoneType.EMPTY) {
         continue;
+      }
 
       GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(
           gem.gemstoneType(),
           gem.gemstoneQualityType(),
-          stack.getItem());
+          itemStack.getItem());
+
+      if (modifier == null) {
+        Gemstones.LOGGER.error("[WARN] No modifier found for gem=" + gem.gemstoneType()
+            + " quality=" + gem.gemstoneQualityType()
+            + " item=" + itemStack.getItem());
+        continue;
+      }
 
       if (wantedClass.isInstance(modifier.getConfig())) {
         result.add((T) modifier);

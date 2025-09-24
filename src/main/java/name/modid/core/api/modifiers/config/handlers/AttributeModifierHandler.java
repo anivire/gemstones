@@ -1,4 +1,4 @@
-package name.modid.core.api.modifiers.handlers;
+package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.HashMap;

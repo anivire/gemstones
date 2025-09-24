@@ -28,7 +28,7 @@ public class AttributesRegistry {
       .setTracked(true);
 
   public static final EntityAttribute EVASION = new ClampedEntityAttribute(
-      "attribute.name.generic.evasion", 1.0, 1.0, 99.0)
+      "attribute.name.generic.evasion", 1.0, 0.0, 99.0)
       .setTracked(true);
 
   public static final EntityAttribute PROJECTILE_SPEED = new ClampedEntityAttribute(

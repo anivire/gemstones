@@ -1,6 +1,7 @@
 package name.modid.core.api.modifiers.types;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class LevelValues {
   private final ArrayList<Double> values;
@@ -11,5 +12,9 @@ public class LevelValues {
 
   public Double get(GemstoneQuality rarity) {
     return values.get(rarity.getValue());
+  }
+
+  public Stream<Double> stream() {
+    return values.stream();
   }
 }

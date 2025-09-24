@@ -1,5 +1,6 @@
 package name.modid.core.api.modifiers.tooltips.handlers;
 
+import name.modid.core.api.modifiers.config.ModifierCategoryType;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
@@ -49,8 +50,8 @@ public class OnHitEffectHandler<T extends ModifierConfig> extends BaseTooltipHan
 
     return Text.translatable(
         builder.getTranslationKeyByModifier(projectile
-            ? TooltipBuilder.ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE
-            : TooltipBuilder.ModifierCategoryType.ON_HIT_EFFECT),
+            ? ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE
+            : ModifierCategoryType.ON_HIT_EFFECT_MELEE),
         valueText,
         effectText).formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
   }

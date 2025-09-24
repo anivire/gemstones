@@ -1,4 +1,4 @@
-package name.modid.core.mixins;
+package name.modid.core.mixins.attributes;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
 @Mixin(CrossbowItem.class)
-public class CrossbowItemMixin {
+public class CrossbowPullSpeedAttrbute {
   private static final float BASE_PULL_TIME = 1.25F;
 
   @Inject(method = "getPullProgress", at = @At("RETURN"), cancellable = true)

@@ -8,7 +8,7 @@
       "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "RANGED": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_PROJECTILE",
       "chance_levels": [0.1, 0.2, 0.35, 0.45],
       "amplifier": 0,
       "effect_id": "minecraft:slowness",
@@ -17,7 +17,7 @@
       "max_stack_count": 3
     },
     "TOOLS": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_MELEE",
       "chance_levels": [0.1, 0.2, 0.3, 0.4],
       "amplifier": 0,
       "effect_id": "gemstones:harvest_mark",

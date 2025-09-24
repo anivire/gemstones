@@ -1,4 +1,4 @@
-package name.modid.core.content.events;
+package name.modid.core.content.attributes;
 
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.component.DataComponentTypes;
@@ -10,8 +10,8 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 
-public class EventProjectileSpeed {
-  public static void setupEvent(Entity entity, ServerWorld world) {
+public class ProjectileSpeed {
+  public static void setup(Entity entity, ServerWorld world) {
     if (entity instanceof ProjectileEntity projectile) {
       if (projectile.getOwner() instanceof LivingEntity owner) {
         ItemStack itemStack = owner.getWeaponStack();

@@ -1,4 +1,4 @@
-package name.modid.core.mixins;
+package name.modid.core.mixins.attributes;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +16,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 @Mixin(BowItem.class)
-public class BowItemMixin {
+public class BowPullSpeedAttribute {
   private static final float BASE_PULL_TIME = 20.0f;
   private static float drawSpeedPercent = 0.0f;
 

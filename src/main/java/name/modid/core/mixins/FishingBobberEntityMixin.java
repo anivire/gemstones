@@ -1,11 +1,15 @@
 package name.modid.core.mixins;
 
+import java.util.ArrayList;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.items.registries.ItemsRegistry;
@@ -35,10 +39,13 @@ public abstract class FishingBobberEntityMixin {
       return;
     }
 
-    double totalIncreasedChanceValue = Utils.collectPlayerArmorValues(
+    ArrayList<GemstoneModifier> modifiers = ModifierGatheringHelper.getModifiers(null, ModifierConfig.PlayerConfig);
+
+    double totalIncreasedChanceValue = Utils.<Double>collectPlayerArmorValues(
         player,
-        armorPiece -> ModifierGatheringHelper.getCustomConditionModifiers(armorPiece).stream()
-            .filter(m -> m.getEventType() == EventType.INCREASE_MOSSY_BOX_DROP)
+        armorPiece -> ModifierGatheringHelper
+            .getModifiers(armorPiece, ModifierConfig.PlayerConfig).stream()
+            .filter(m -> m.getEventType() == EventType.ON_DROP_INCREASE_MOSSY_BOX_DROP)
             .map(m -> m.getValues().get(m.getRarityType()))
             .toList())
         .stream()

@@ -1,9 +1,12 @@
 package name.modid.datapack.modifiers;
 
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
@@ -11,9 +14,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import name.modid.Gemstones;
+import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.api.modifiers.types.LevelValues;
 import name.modid.datapack.core.IdentifierTypeAdapter;
-import name.modid.datapack.modifiers.ModifiersRawConfig.ModifierRawConfigEntry;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -21,10 +25,11 @@ import net.minecraft.util.Identifier;
 public class ModifiersDataLoader implements SimpleSynchronousResourceReloadListener {
   private static final Logger LOGGER = Gemstones.LOGGER;
   private static final Gson GSON = new GsonBuilder()
-      .registerTypeAdapter(ModifierRawConfigEntry.class, new ModifiersConfigDeserializer())
+      .registerTypeAdapter(ModifiersRawConfig.class, new ModifiersRawConfigDeserializer())
+      .registerTypeAdapter(ModifierConfig.class, new ModifiersConfigDeserializer())
+      .registerTypeAdapter(LevelValues.class, new LevelValuesDeserializer())
       .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
       .setPrettyPrinting()
-      .disableHtmlEscaping()
       .create();
 
   public static final Identifier ID = Identifier.of(Gemstones.MOD_ID,
@@ -36,32 +41,34 @@ public class ModifiersDataLoader implements SimpleSynchronousResourceReloadListe
     LOGGER.info("Reloading gemstone modifiers configs...");
     Map<GemstoneType, ModifiersRawConfig> newConfigs = new HashMap<>();
 
-    manager.findResources("", path -> {
-      return true;
-    })
-        // TODO: proper namespace gathering
-        // manager.findResources("gemstones", path -> path.getPath().endsWith(".json"))
+    manager.findResources(Gemstones.MOD_ID, id -> id.getPath().endsWith(".json"))
         .forEach((id, resource) -> {
-          LOGGER.debug(resource.toString());
-          if (id.getNamespace().equals(Gemstones.MOD_ID)) {
-            LOGGER.debug(resource.toString());
-            try (InputStreamReader reader = new InputStreamReader(resource.getInputStream())) {
-              ModifiersRawConfig config = GSON.fromJson(reader, ModifiersRawConfig.class);
+          if (!id.getNamespace().equals(Gemstones.MOD_ID)) {
+            return;
+          }
 
-              if (config != null) {
-                if (config.gemstoneType != null) {
-                  newConfigs.put(config.gemstoneType, config);
-                  LOGGER.debug("Loaded config for gemstone: {}", config.gemstoneType);
-                } else {
-                  LOGGER.warn(
-                      "Gemstone config file {} is missing 'gemstone_type' field, skipping.", id);
-                }
-              } else {
-                LOGGER.warn("Gemstone config file {} could not be parsed, skipping.", id);
-              }
-            } catch (Exception e) {
-              LOGGER.error("Error loading gemstone config {}: {}", id, e.getMessage());
+          try {
+            String fileContent;
+            try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+              fileContent = reader.lines().collect(Collectors.joining(System.lineSeparator()));
             }
+
+            ModifiersRawConfig config = GSON.fromJson(fileContent, ModifiersRawConfig.class);
+
+            if (config != null) {
+              if (config.gemstone_type != null) {
+                newConfigs.put(config.gemstone_type, config);
+                LOGGER.debug("Loaded config for gemstone: {}", config.gemstone_type);
+              } else {
+                LOGGER.warn(
+                    "Gemstone config file {} is missing 'gemstone_type' field, skipping.", id);
+              }
+            } else {
+              LOGGER.warn("Gemstone config file {} could not be parsed, skipping.", id);
+            }
+          } catch (Exception e) {
+            LOGGER.error("Failed to load gemstone config {}: {}", id, e.getMessage());
           }
         });
 

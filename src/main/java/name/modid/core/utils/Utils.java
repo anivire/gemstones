@@ -24,9 +24,9 @@ public class Utils {
         .orElse(ItemStack.EMPTY);
   }
 
-  public static <R> List<R> collectPlayerArmorValues(
+  public static <T> List<T> collectPlayerArmorValues(
       ServerPlayerEntity player,
-      Function<ItemStack, List<R>> callback) {
+      Function<ItemStack, List<T>> callback) {
     return Stream.of(
         player.getEquippedStack(EquipmentSlot.HEAD),
         player.getEquippedStack(EquipmentSlot.CHEST),

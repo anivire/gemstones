@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.utils.PotionUtil;
@@ -58,7 +59,7 @@ public abstract class BrewingStandBlockEntityMixin implements BrewingStandBlockE
 
     double totalIncreasedDurationValue = Utils.collectPlayerArmorValues(
         player,
-        armorPiece -> ModifierGatheringHelper.getCustomConditionModifiers(armorPiece).stream()
+        armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, ModifierConfig.PlayerConfig).stream()
             .filter(m -> m.getEventType() == EventType.POTION_DURATION)
             .map(m -> m.getValues().get(m.getRarityType()))
             .toList())

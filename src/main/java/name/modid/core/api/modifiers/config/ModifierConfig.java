@@ -17,10 +17,12 @@ public sealed interface ModifierConfig permits
     ModifierConfig.HitEffectMeleeConfig,
     ModifierConfig.HitEffectProjectileConfig,
     ModifierConfig.AreaEffectConfig,
-    ModifierConfig.DamageConfig,
+    ModifierConfig.OnDamageConfig,
     ModifierConfig.BlockBreakConfig,
-    ModifierConfig.OnFirstHitConfig,
-    ModifierConfig.CustomConditionConfig {
+    ModifierConfig.BeforeBlockBreakConfig,
+    ModifierConfig.PlayerConfig,
+    ModifierConfig.AfterDeathConfig,
+    ModifierConfig.OnFirstHitConfig {
 
   public record AttributeConfig(
       LevelValues values,
@@ -69,7 +71,7 @@ public sealed interface ModifierConfig permits
       RegistryEntry<StatusEffect> effect) implements ModifierConfig {
   }
 
-  public record DamageConfig(
+  public record OnDamageConfig(
       LevelValues values,
       LevelValues additionalValues,
       EventType eventType) implements ModifierConfig {
@@ -81,9 +83,21 @@ public sealed interface ModifierConfig permits
       EventType eventType) implements ModifierConfig {
   }
 
-  public record CustomConditionConfig(
-      LevelValues value,
-      LevelValues additionalValue,
+  public record BeforeBlockBreakConfig(
+      LevelValues values,
+      LevelValues additionValues,
+      EventType eventType) implements ModifierConfig {
+  }
+
+  public record PlayerConfig(
+      LevelValues values,
+      LevelValues additionValues,
+      EventType eventType) implements ModifierConfig {
+  }
+
+  public record AfterDeathConfig(
+      LevelValues values,
+      LevelValues additionValues,
       EventType eventType) implements ModifierConfig {
   }
 

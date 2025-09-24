@@ -7,8 +7,8 @@ import java.util.Random;
 import name.modid.core.api.components.ComponentsRegistry;
 import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.components.GemstoneSlotsComponent;
-import name.modid.core.api.modifiers.ModifierManager;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.ModifierManager;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.GemstoneItem;
@@ -121,10 +121,12 @@ public class GemstoneSlotHelper {
   }
 
   public static void updateSocketsAttributes(ItemStack itemStack, Item item) {
-    GemstoneComponent[] gemstones = getGemstones(itemStack);
-    if (gemstones != null) {
-      ArrayList<GemstoneModifier> modifiers = ModifierGatheringHelper.getAttributeModifiers(itemStack);
-      ModifierManager.applyAttributeModifiers(modifiers, itemStack);
+    if (isItemValid(item)) {
+      GemstoneComponent[] gemstones = getGemstones(itemStack);
+      if (gemstones != null) {
+        ArrayList<GemstoneModifier> modifiers = ModifierGatheringHelper.getAttributeModifiers(itemStack);
+        ModifierManager.applyAttributeModifiers(modifiers, itemStack);
+      }
     }
   }
 }

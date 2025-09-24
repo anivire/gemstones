@@ -1,11 +1,9 @@
-package name.modid.core.content.events;
+package name.modid.core.content.attributes;
 
 import org.jetbrains.annotations.Nullable;
 
 import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -20,12 +18,4 @@ public class EventStunned {
     }
     return ActionResult.PASS;
   }
-
-  public static boolean preventMobAttack(LivingEntity entity, DamageSource source, float amount) {
-    if (entity.hasStatusEffect(EffectsRegistry.STUNNED_EFFECT)) {
-      return false;
-    }
-    return true;
-  }
-
 }

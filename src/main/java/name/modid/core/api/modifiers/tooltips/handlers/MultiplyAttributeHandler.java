@@ -3,6 +3,7 @@ package name.modid.core.api.modifiers.tooltips.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
+import name.modid.core.api.modifiers.config.ModifierCategoryType;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
@@ -53,7 +54,7 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
     }
 
     return Text.translatable(
-        builder.getTranslationKeyByModifier(TooltipBuilder.ModifierCategoryType.MULTIPLY_ATTRIBUTE),
+        builder.getTranslationKeyByModifier(ModifierCategoryType.MULTIPLY_ATTRIBUTE),
         combined).formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
   }
 
