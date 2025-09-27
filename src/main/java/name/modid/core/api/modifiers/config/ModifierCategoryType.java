@@ -1,0 +1,20 @@
+package name.modid.core.api.modifiers.config;
+
+public enum ModifierCategoryType {
+  ATTRIBUTE,
+  MULTIPLY_ATTRIBUTE,
+  ON_FIRST_HIT,
+  ON_HIT_MELEE,
+  ON_HIT_EFFECT_MELEE,
+  ON_HIT_PROJECTILE,
+  ON_HIT_EFFECT_PROJECTILE,
+  ON_POTION_BREW,
+  ON_DAMAGE,
+  ON_DEATH,
+  ON_BLOCK_BREAK,
+  ON_BEFORE_BLOCK_BREAK,
+  AREA_EFFECT,
+  ON_FISHING,
+  PLAYER,
+  UNDEFINED,
+}

@@ -7,10 +7,9 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ComponentsRegistry {
-  // TODO: create gemstone type and quality for GemstoneItem
-  public static final ComponentType<GemstoneSlots> GEMSTONES = Registry.register(
+  public static final ComponentType<GemstoneSlotsComponent> GEMSTONES = Registry.register(
       Registries.DATA_COMPONENT_TYPE, Identifier.of(Gemstones.MOD_ID, "gemstones"),
-      ComponentType.<GemstoneSlots>builder().codec(GemstoneSlots.GEMSTONE_SLOTS_CODEC).build());
+      ComponentType.<GemstoneSlotsComponent>builder().codec(GemstoneSlotsComponent.GEMSTONE_SLOTS_CODEC).build());
 
   public static void initialize() {
     Gemstones.LOGGER.info("Registering {} components", Gemstones.MOD_ID);

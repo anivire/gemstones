@@ -2,7 +2,7 @@
   "gemstone_type": "JADE",
   "modifiers": {
     "MELEE": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_MELEE",
       "chance_levels": [0.08, 0.15, 0.25, 0.3],
       "amplifier": 0,
       "effect_id": "minecraft:poison",
@@ -11,7 +11,7 @@
       "max_stack_count": 0
     },
     "RANGED": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_PROJECTILE",
       "chance_levels": [0.16, 0.25, 0.35, 0.45],
       "amplifier": 0,
       "effect_id": "minecraft:poison",
@@ -26,10 +26,10 @@
       "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "ARMOR": {
-      "type": "CUSTOM_CONDITION",
+      "type": "ON_POTION_BREW",
       "value_levels": [15.0, 30.0, 45.0, 60.0],
       "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
-      "event_type": "POTION_DURATION"
+      "event_type": "ON_POTION_BREW_INCREASE_DURATION"
     }
   }
 }

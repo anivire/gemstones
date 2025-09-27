@@ -156,7 +156,7 @@
     },
     {
       "type": "bitmap",
-      "file": "gemstones:gui/icons/empty_icon.png",
+      "file": "gemstones:gui/icons/empty_gemstone_slot_icon.png",
       "height": 7,
       "width": 7,
       "ascent": 7,

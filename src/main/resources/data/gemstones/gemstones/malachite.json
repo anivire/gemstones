@@ -4,10 +4,10 @@
     "MELEE": {
       "type": "ON_FIRST_HIT",
       "value_levels": [0.1, 0.15, 0.25, 0.3],
-      "event_type": "ADDITIONAL_DAMAGE"
+      "event_type": "ON_FIRST_HIT_ADDITIONAL_DAMAGE"
     },
     "RANGED": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_PROJECTILE",
       "chance_levels": [0.06, 0.12, 0.18, 0.24],
       "amplifier": 0,
       "effect_id": "gemstones:detonate",
@@ -19,7 +19,7 @@
       "type": "ON_BLOCK_BREAK",
       "chance_levels": [0.03, 0.055, 0.1, 0.155],
       "value_levels": [0.0, 0.0, 0.0, 0.0],
-      "event_type": "INCREASE_GEODES_DROP"
+      "event_type": "ON_BLOCK_BREAK_INCREASE_GEODES_DROP"
     },
     "ARMOR": {
       "type": "AREA_EFFECT",

@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Random;
 
 import name.modid.Gemstones;
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.GemstoneType;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.datapack.geodes.GeodesConfig;
 import name.modid.datapack.geodes.GeodesRegistry;
@@ -137,8 +137,6 @@ public class GeodeItem extends Item {
     tooltip.add(Text
         .translatable("tooltip.gemstones." + Registries.ITEM.getId(itemStack.getItem()).getPath() + ".info")
         .formatted(Formatting.WHITE));
-
-    // if (Screen.hasShiftDown()) {
     tooltip.add(Text.empty());
     tooltip.add(Text.translatable("tooltip.gemstones.geode.info").formatted(Formatting.GRAY));
 
@@ -176,20 +174,20 @@ public class GeodeItem extends Item {
         }
       }
     }
-    // }
 
-    MutableText iconInfo = Text.literal(InlineIcons.SHIFT.getSymbol())
-        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-        .formatted(Formatting.WHITE);
-    MutableText arrowInfo = Text.literal(" > ")
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.DARK_GRAY);
-    MutableText actionInfo = Text.literal("Hold Shift to see ")
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.YELLOW);
-    MutableText keywordInfo = Text.literal("Gemstones Drop Chances")
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.GOLD);
+    // MutableText iconInfo = Text.literal(InlineIcons.SHIFT.getSymbol())
+    // .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
+    // Icons.INLINE.getPath())))
+    // .formatted(Formatting.WHITE);
+    // MutableText arrowInfo = Text.literal(" > ")
+    // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+    // .formatted(Formatting.DARK_GRAY);
+    // MutableText actionInfo = Text.literal("Hold Shift to see ")
+    // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+    // .formatted(Formatting.YELLOW);
+    // MutableText keywordInfo = Text.literal("Gemstones Drop Chances")
+    // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+    // .formatted(Formatting.GOLD);
 
     MutableText iconOpen = Text.literal(InlineIcons.MOUSE_RMB.getSymbol())
         .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
@@ -205,7 +203,7 @@ public class GeodeItem extends Item {
         .formatted(Formatting.GOLD);
 
     tooltip.add(Text.empty());
-    tooltip.add(iconInfo.append(arrowInfo).append(actionInfo).append(keywordInfo));
+    // tooltip.add(iconInfo.append(arrowInfo).append(actionInfo).append(keywordInfo));
     tooltip.add(iconOpen.append(arrowOpen).append(actionOpen).append(keywordOpen));
   }
 

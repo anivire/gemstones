@@ -2,8 +2,8 @@
   "gemstone_type": "AQUAMARINE",
   "modifiers": {
     "MELEE": {
-      "type": "ON_HIT_EFFECT",
-      "chance_levels": [0.08, 0.15, 0.25, 0.3],
+      "type": "ON_HIT_EFFECT_MELEE",
+      "chance_levels": [0.08, 0.15, 0.25, 1.3],
       "amplifier": 0,
       "effect_id": "gemstones:freezing",
       "duration": 11,
@@ -11,7 +11,7 @@
       "max_stack_count": 0
     },
     "RANGED": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_PROJECTILE",
       "chance_levels": [0.16, 0.25, 0.3, 0.4],
       "amplifier": 0,
       "effect_id": "gemstones:freezing",

@@ -4,8 +4,8 @@ import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.GemstoneType;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
 
 public class GeodesConfig {
   @SerializedName("geode_id")

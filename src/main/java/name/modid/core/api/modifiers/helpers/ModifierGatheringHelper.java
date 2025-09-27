@@ -2,173 +2,73 @@ package name.modid.core.api.modifiers.helpers;
 
 import java.util.ArrayList;
 
-import name.modid.core.api.components.Gemstone;
-import name.modid.core.api.modifiers.GemstoneType;
-import name.modid.core.api.modifiers.categories.ModifierAreaEffect;
-import name.modid.core.api.modifiers.categories.ModifierAttribute;
-import name.modid.core.api.modifiers.categories.ModifierCustomCondition;
-import name.modid.core.api.modifiers.categories.ModifierMultiplyAttribute;
-import name.modid.core.api.modifiers.categories.ModifierOnBlockBreak;
-import name.modid.core.api.modifiers.categories.ModifierOnDamage;
-import name.modid.core.api.modifiers.categories.ModifierOnFirstHitMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitEffectMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitEffectProjectile;
-import name.modid.core.api.modifiers.categories.ModifierOnHitMelee;
-import name.modid.core.api.modifiers.categories.ModifierOnHitProjectile;
-import name.modid.core.api.modifiers.impl.GemstoneModifier;
+import name.modid.Gemstones;
+import name.modid.core.api.components.GemstoneComponent;
+import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.ModifierConfig.AttributeConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.MultiplyAttributeConfig;
+import name.modid.core.api.modifiers.types.GemstoneType;
 import net.minecraft.item.ItemStack;
 
 public class ModifierGatheringHelper {
-  public static ArrayList<ModifierAttribute> getAttributeModifiers(ItemStack itemStack) {
-    ArrayList<ModifierAttribute> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierAttribute m) {
-          modifiers.add(m);
-        } else if (modifier instanceof ModifierMultiplyAttribute multi) {
-          modifiers.addAll(multi.getInstances());
-        }
+  public static ArrayList<GemstoneModifier> getAttributeModifiers(ItemStack itemStack) {
+    ArrayList<GemstoneModifier> modifiers = new ArrayList<>();
+
+    for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
+      if (gem.gemstoneType() == null
+          || gem.gemstoneType() == GemstoneType.LOCKED
+          || gem.gemstoneType() == GemstoneType.EMPTY) {
+        continue;
+      }
+
+      GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(
+          gem.gemstoneType(),
+          gem.gemstoneQualityType(),
+          itemStack.getItem());
+
+      if (modifier == null) {
+        Gemstones.LOGGER.error("[WARN] No modifier found for gem=" + gem.gemstoneType()
+            + " quality=" + gem.gemstoneQualityType()
+            + " item=" + itemStack.getItem());
+        continue;
+      }
+
+      if (modifier.getConfig() instanceof AttributeConfig
+          || modifier.getConfig() instanceof MultiplyAttributeConfig) {
+        modifiers.add(modifier);
       }
     }
+
     return modifiers;
   }
 
-  public static ArrayList<ModifierOnHitProjectile> getOnHitProjectileModifiers(ItemStack itemStack) {
-    ArrayList<ModifierOnHitProjectile> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierOnHitProjectile m) {
-          modifiers.add(m);
-        }
+  @SuppressWarnings("unchecked")
+  public static <T extends GemstoneModifier> ArrayList<T> getModifiers(ItemStack itemStack,
+      Class<?> wantedClass) {
+    ArrayList<T> result = new ArrayList<>();
+    for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
+      if (gem.gemstoneType() == null
+          || gem.gemstoneType() == GemstoneType.LOCKED
+          || gem.gemstoneType() == GemstoneType.EMPTY) {
+        continue;
       }
-    }
-    return modifiers;
-  }
 
-  public static ArrayList<ModifierOnHitMelee> getOnHitMeleeModifiers(ItemStack itemStack) {
-    ArrayList<ModifierOnHitMelee> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierOnHitMelee m) {
-          modifiers.add(m);
-        }
-      }
-    }
-    return modifiers;
-  }
+      GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(
+          gem.gemstoneType(),
+          gem.gemstoneQualityType(),
+          itemStack.getItem());
 
-  public static ArrayList<ModifierOnFirstHitMelee> getOnHitFirstModifiers(ItemStack itemStack) {
-    ArrayList<ModifierOnFirstHitMelee> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierOnFirstHitMelee m) {
-          modifiers.add(m);
-        }
+      if (modifier == null) {
+        Gemstones.LOGGER.error("[WARN] No modifier found for gem=" + gem.gemstoneType()
+            + " quality=" + gem.gemstoneQualityType()
+            + " item=" + itemStack.getItem());
+        continue;
       }
-    }
-    return modifiers;
-  }
 
-  public static ArrayList<ModifierOnHitEffectMelee> getOnHitEffectModifiers(ItemStack itemStack) {
-    ArrayList<ModifierOnHitEffectMelee> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierOnHitEffectMelee m) {
-          modifiers.add(m);
-        }
+      if (wantedClass.isInstance(modifier.getConfig())) {
+        result.add((T) modifier);
       }
     }
-    return modifiers;
-  }
-
-  public static ArrayList<ModifierAreaEffect> getAreaEffectModifiers(ItemStack itemStack) {
-    ArrayList<ModifierAreaEffect> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierAreaEffect m) {
-          modifiers.add(m);
-        }
-      }
-    }
-    return modifiers;
-  }
-
-  public static ArrayList<ModifierOnHitEffectProjectile> getOnHitEffectProjectileModifiers(
-      ItemStack itemStack) {
-    ArrayList<ModifierOnHitEffectProjectile> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierOnHitEffectProjectile m) {
-          modifiers.add(m);
-        }
-      }
-    }
-    return modifiers;
-  }
-
-  public static ArrayList<ModifierOnBlockBreak> getOnBlockBreakModifiers(ItemStack itemStack) {
-    ArrayList<ModifierOnBlockBreak> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierOnBlockBreak m) {
-          modifiers.add(m);
-        }
-      }
-    }
-    return modifiers;
-  }
-
-  public static ArrayList<ModifierOnDamage> getOnDamageModifiers(ItemStack itemStack) {
-    ArrayList<ModifierOnDamage> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierOnDamage m) {
-          modifiers.add(m);
-        }
-      }
-    }
-    return modifiers;
-  }
-
-  public static ArrayList<ModifierCustomCondition> getCustomConditionModifiers(ItemStack itemStack) {
-    ArrayList<ModifierCustomCondition> modifiers = new ArrayList<>();
-    for (Gemstone gem : GemstoneSlotHelper.getGemstones(itemStack)) {
-      if (gem.gemstoneType() != null && gem.gemstoneType() != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(gem.gemstoneType(),
-            gem.GemstoneQualityType(),
-            itemStack.getItem());
-        if (modifier instanceof ModifierCustomCondition m) {
-          modifiers.add(m);
-        }
-      }
-    }
-    return modifiers;
+    return result;
   }
 }

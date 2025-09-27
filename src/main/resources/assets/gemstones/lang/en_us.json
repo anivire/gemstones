@@ -1,17 +1,22 @@
 {
   "item_group.gemstones": "Gemstones",
-  "tooltip.gemstones.category_name": "With gemstones:",
+  "tooltip.gemstones.category_name": "With Gemstones:",
   "tooltip.gemstones.gemstone_bonus": "Bonuses:",
 
-  "tooltip.gemstones.melee_type": "∙ Melee: ",
-  "tooltip.gemstones.ranged_type": "∙ Ranged: ",
-  "tooltip.gemstones.tools_type": "∙ Tools: ",
-  "tooltip.gemstones.armor_type": "∙ Armor: ",
-  "tooltip.gemstones.without_type": "∙ ",
+  "tooltip.gemstones.melee_type": "Melee: ",
+  "tooltip.gemstones.ranged_type": "Ranged: ",
+  "tooltip.gemstones.tools_type": "Tools: ",
+  "tooltip.gemstones.armor_type": "Armor: ",
+  "tooltip.gemstones.category_dot": "∙ ",
+
+  "tooltip.gemstones.gemstone_type.empty": "Empty socket",
+  "tooltip.gemstones.gemstone_type.locked": "Locked socket",
+  "tooltip.gemstones.gemstone_type.undefined": "Undefined socket",
 
   "tooltip.gemstones.ATTRIBUTE": "%s %s",
-  "tooltip.gemstones.MULTIPLY_ATTRIBUTE": "%s %s and %s %s",
-  "tooltip.gemstones.ON_HIT_EFFECT": "%s to inflict %s",
+  "tooltip.gemstones.MULTIPLY_ATTRIBUTE": "%s",
+  "tooltip.gemstones.MULTIPLY_ATTRIBUTE.split": " and ",
+  "tooltip.gemstones.ON_HIT_EFFECT_MELEE": "%s to inflict %s",
   "tooltip.gemstones.ON_HIT_EFFECT_PROJECTILE": "%s to inflict %s",
   "tooltip.gemstones.AREA_EFFECT": "always inflict %s in %s radius",
 
@@ -34,22 +39,29 @@
   "tooltip.gemstones.event_name.additional_damage": "Bonus Damage",
   "tooltip.gemstones.event_name.smelter": "Smelt Block",
   "tooltip.gemstones.event_name.small_flat_explode": "Small Explosion",
+  
+  "tooltip.gemstones.CATEGORY.UNKNOWN": "Undefined modifier",
+  "tooltip.gemstones.EVENT.UNKNOWN": "Undefined event",
+  "tooltip.gemstones.EVENT.ON_HIT_LIFE_STEAL": "%s to %s on hit",
+  "tooltip.gemstones.EVENT.ON_HIT_LIGHTNING_BOLT": "%s to trigger %s in rainy weather",
+  "tooltip.gemstones.EVENT.ON_HIT_TORRENT": "%s to trigger %s on hit",
+  "tooltip.gemstones.EVENT.ON_HIT_SMALL_FLAT_EXPLOSION": "%s to trigger %s on hit",
+  "tooltip.gemstones.EVENT.ON_HIT_COPY_ENTITY_DROP": "%s drop copy %s on hit",
+  
+  "tooltip.gemstones.EVENT.ON_FIRST_HIT_ADDITIONAL_DAMAGE": "%s %s on first hit",
+  
+  "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_INCREASE_GEODES_DROP": "%s loot %s from ores",
+  "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP": "%s drop additional %s from ores",
+  "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_REGENERATE_BLOCK": "%s %s after mining",
+  "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_SMELTER": "%s to %s on mine",
+  "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_EXTRA_HEALTH": "%s gain %s while mining",
+  "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_HEAL": "%s to %s on mine",
 
-  "tooltip.gemstones.EVENT.LIGHTNING_BOLT": "%s to trigger %s in rainy weather",
-  "tooltip.gemstones.EVENT.EXTRA_HEALTH": "%s gain %s while mining",
-  "tooltip.gemstones.EVENT.TORRENT": "%s to trigger %s on hit",
-  "tooltip.gemstones.EVENT.ADDITIONAL_DAMAGE": "%s %s on first hit",
-  "tooltip.gemstones.EVENT.INCREASE_GEODES_DROP": "%s loot %s from ores",
-  "tooltip.gemstones.EVENT.ADDITIONAL_GOLD_DROP": "%s drop additional %s from ores",
-  "tooltip.gemstones.EVENT.INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
-  "tooltip.gemstones.EVENT.POTION_DURATION": "%s %s after brewing",
-  "tooltip.gemstones.EVENT.REGENERATE_BLOCK": "%s %s after mining",
-  "tooltip.gemstones.EVENT.COPY_ENTITY_DROP": "%s drop copy %s on hit",
-  "tooltip.gemstones.EVENT.INCREASE_MOB_SPAWNRATE": "%s %s",
-  "tooltip.gemstones.EVENT.SMALL_FLAT_EXPLOSION": "%s to trigger %s on hit",
-  "tooltip.gemstones.EVENT.SMELTER": "%s to %s on mine",
-  "tooltip.gemstones.EVENT.HEAL": "%s to %s on mine",
-  "tooltip.gemstones.EVENT.LIFE_STEAL": "%s to %s on hit",
+  "tooltip.gemstones.EVENT.ON_FISHING_INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
+
+  "tooltip.gemstones.EVENT.ON_POTION_BREW_INCREASE_DURATION": "%s %s after brewing",
+
+  "tooltip.gemstones.EVENT.WORLD_EVENT_INCREASE_MOB_SPAWNRATE": "%s %s",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
@@ -82,8 +94,8 @@
 
   "tooltip.gemstones.opening_item.info": "(Click RMB in hand for open)",
 
-  "item.gemstones.empty_slot": "Empty slot",
-  "item.gemstones.locked_slot": "Locked slot",
+  "item.gemstones.empty_slot": "Empty socket",
+  "item.gemstones.locked_slot": "Locked socket",
 
   "item.gemstones.quality.none": "None",
   "item.gemstones.quality.crude": "Crude",

@@ -2,7 +2,7 @@
   "gemstone_type": "AMBER",
   "modifiers": {
     "MELEE": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_MELEE",
       "chance_levels": [0.05, 0.08, 0.14, 0.18],
       "amplifier": 0,
       "effect_id": "gemstones:scarab",
@@ -11,7 +11,7 @@
       "max_stack_count": 0
     },
     "RANGED": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_PROJECTILE",
       "chance_levels": [0.08, 0.12, 0.16, 0.2],
       "amplifier": 0,
       "effect_id": "gemstones:scarab",
@@ -20,10 +20,13 @@
       "max_stack_count": 0
     },
     "TOOLS": {
-      "type": "ON_BLOCK_BREAK",
-      "chance_levels": [0.15, 0.2, 0.25, 0.3],
-      "value_levels": [0.0, 0.0, 0.0, 0.0],
-      "event_type": "SMELTER"
+      "type": "ON_HIT_EFFECT_MELEE",
+      "chance_levels": [0.1, 0.2, 0.3, 0.4],
+      "amplifier": 0,
+      "effect_id": "gemstones:harvest_mark",
+      "duration": 6,
+      "is_stacking": true,
+      "max_stack_count": 10
     },
     "ARMOR": {
       "type": "AREA_EFFECT",

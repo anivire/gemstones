@@ -5,22 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import name.modid.Gemstones;
-import name.modid.core.api.modifiers.GemstoneQuality;
-import name.modid.core.api.modifiers.GemstoneType;
-import name.modid.core.content.items.gemstones.AmberGemstoneItem;
-import name.modid.core.content.items.gemstones.AquamarineGemstoneItem;
-import name.modid.core.content.items.gemstones.CelestineGemstoneItem;
-import name.modid.core.content.items.gemstones.GarnetGemstoneItem;
-import name.modid.core.content.items.gemstones.JadeGemstoneItem;
-import name.modid.core.content.items.gemstones.MalachiteGemstoneItem;
-import name.modid.core.content.items.gemstones.ObsidianShardGemstoneItem;
-import name.modid.core.content.items.gemstones.OpalGemstoneItem;
-import name.modid.core.content.items.gemstones.PyriteGemstoneItem;
-import name.modid.core.content.items.gemstones.RubyGemstoneItem;
-import name.modid.core.content.items.gemstones.SapphireGemstoneItem;
-import name.modid.core.content.items.gemstones.SpawnerCoreGemstoneItem;
-import name.modid.core.content.items.gemstones.TopazGemstoneItem;
-import name.modid.core.content.items.gemstones.ZirconGemstoneItem;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.content.items.GemstoneItem;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -73,67 +60,67 @@ public class GemstonesRegistry {
       String rarityName = rarity.toString().toLowerCase();
 
       RUBY_GEMSTONES.add(ItemsRegistry.register("ruby_gemstone_" + rarityName,
-          settings -> new RubyGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.RUBY, rarity),
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       CELESTINE_GEMSTONES.add(ItemsRegistry.register("celestine_gemstone_" + rarityName,
-          settings -> new CelestineGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.CELESTINE, rarity),
           new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       TOPAZ_GEMSTONES.add(ItemsRegistry.register("topaz_gemstone_" + rarityName,
-          settings -> new TopazGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.TOPAZ, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       SAPPHIRE_GEMSTONES.add(ItemsRegistry.register("sapphire_gemstone_" + rarityName,
-          settings -> new SapphireGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.SAPPHIRE, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       ZIRCON_GEMSTONES.add(ItemsRegistry.register("zircon_gemstone_" + rarityName,
-          settings -> new ZirconGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.ZIRCON, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       AQUAMARINE_GEMSTONES.add(ItemsRegistry.register("aquamarine_gemstone_" + rarityName,
-          settings -> new AquamarineGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.AQUAMARINE, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       OBSIDIAN_SHARD_GEMSTONES.add(ItemsRegistry.register(
           "obsidian_shard_gemstone_" + rarityName,
-          settings -> new ObsidianShardGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.OBSIDIAN_SHARD, rarity),
           new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       OPAL_GEMSTONES.add(ItemsRegistry.register(
           "opal_gemstone_" + rarityName,
-          settings -> new OpalGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.OPAL, rarity),
           new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       JADE_GEMSTONES.add(ItemsRegistry.register(
           "jade_gemstone_" + rarityName,
-          settings -> new JadeGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.JADE, rarity),
           new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       MALACHITE_GEMSTONES.add(ItemsRegistry.register(
           "malachite_gemstone_" + rarityName,
-          settings -> new MalachiteGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.MALACHITE, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       SPAWNER_CORE_GEMSTONES.add(ItemsRegistry.register(
           "spawner_core_gemstone_" + rarityName,
-          settings -> new SpawnerCoreGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.SPAWNER_CORE, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       AMBER_GEMSTONES.add(ItemsRegistry.register(
           "amber_gemstone_" + rarityName,
-          settings -> new AmberGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.AMBER, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       PYRITE_GEMSTONES.add(ItemsRegistry.register(
           "pyrite_gemstone_" + rarityName,
-          settings -> new PyriteGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.PYRITE, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       GARNET_GEMSTONES.add(ItemsRegistry.register(
           "garnet_gemstone_" + rarityName,
-          settings -> new GarnetGemstoneItem(settings, rarity),
+          settings -> new GemstoneItem(settings, GemstoneType.GARNET, rarity),
           new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
     }
   }
