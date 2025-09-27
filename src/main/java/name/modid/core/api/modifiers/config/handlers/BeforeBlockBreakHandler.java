@@ -11,10 +11,10 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
-import name.modid.core.utils.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
@@ -47,17 +47,18 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
       combinedChance += config.chance().get(modifier.getRarityType());
     }
 
-    if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+    if (ctx.getOwner() instanceof LivingEntity owner
+        && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       List<ItemStack> drops = Block.getDroppedStacks(
           ctx.getBlockState(),
           ctx.getWorld(),
           ctx.getBlockPos(),
           ctx.getWorld().getBlockEntity(ctx.getBlockPos()),
-          ctx.getOwner(),
-          ctx.getOwner().getMainHandStack());
+          owner,
+          owner.getMainHandStack());
 
       List<ItemStack> smeltableDrops = drops.stream()
-          .map(x -> Utils.getSmeltingResult(ctx.getWorld(), x))
+          .map(x -> ModifierUtils.getSmeltingResult(ctx.getWorld(), x))
           .filter(x -> !x.isEmpty())
           .toList();
 
@@ -68,9 +69,9 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
 
         ctx.getWorld().setBlockState(ctx.getBlockPos(), Blocks.AIR.getDefaultState(), 3);
 
-        ItemStack tool = ctx.getOwner().getMainHandStack();
+        ItemStack tool = owner.getMainHandStack();
         if (tool.isDamageable()) {
-          tool.damage(1, ctx.getOwner(), EquipmentSlot.MAINHAND);
+          tool.damage(1, owner, EquipmentSlot.MAINHAND);
         }
 
         BlockPos pos = ctx.getBlockPos();

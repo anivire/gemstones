@@ -18,10 +18,12 @@ public sealed interface ModifierConfig permits
     ModifierConfig.HitEffectProjectileConfig,
     ModifierConfig.AreaEffectConfig,
     ModifierConfig.OnDamageConfig,
+    ModifierConfig.OnPotionBrewConfig,
     ModifierConfig.BlockBreakConfig,
     ModifierConfig.BeforeBlockBreakConfig,
     ModifierConfig.PlayerConfig,
     ModifierConfig.AfterDeathConfig,
+    ModifierConfig.OnFishingConfig,
     ModifierConfig.OnFirstHitConfig {
 
   public record AttributeConfig(
@@ -103,6 +105,18 @@ public sealed interface ModifierConfig permits
 
   public record OnFirstHitConfig(
       LevelValues values,
+      EventType eventType) implements ModifierConfig {
+  }
+
+  public record OnPotionBrewConfig(
+      LevelValues values,
+      LevelValues additionValues,
+      EventType eventType) implements ModifierConfig {
+  }
+
+  public record OnFishingConfig(
+      LevelValues values,
+      LevelValues additionValues,
       EventType eventType) implements ModifierConfig {
   }
 }

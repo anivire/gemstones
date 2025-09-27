@@ -17,13 +17,10 @@
       "max_stack_count": 3
     },
     "TOOLS": {
-      "type": "ON_HIT_EFFECT_MELEE",
-      "chance_levels": [0.1, 0.2, 0.3, 0.4],
-      "amplifier": 0,
-      "effect_id": "gemstones:harvest_mark",
-      "duration": 6,
-      "is_stacking": true,
-      "max_stack_count": 10
+      "type": "ON_BLOCK_BREAK",
+      "chance_levels": [0.15, 0.2, 0.25, 0.3],
+      "value_levels": [0.0, 0.0, 0.0, 0.0],
+      "event_type": "ON_BLOCK_BREAK_SMELTER"
     },
     "ARMOR": {
       "type": "MULTIPLY_ATTRIBUTE",

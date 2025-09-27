@@ -7,8 +7,8 @@ import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.AreaEffectConfig;
 import name.modid.core.api.modifiers.config.ModifierContext.ContextBuilder;
 import name.modid.core.api.modifiers.config.ModifierManager;
+import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.utils.Utils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
@@ -18,7 +18,7 @@ public class EventAreaEffect {
     World world = player.getWorld();
 
     if (world instanceof ServerWorld serverWorld) {
-      List<GemstoneModifier> modifiers = Utils.collectPlayerArmorValues(
+      List<GemstoneModifier> modifiers = ModifierUtils.collectValuesFromArmor(
           player,
           armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, AreaEffectConfig.class));
 

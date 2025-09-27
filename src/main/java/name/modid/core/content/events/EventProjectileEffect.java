@@ -33,7 +33,7 @@ public class EventProjectileEffect {
 
       ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
           .withOwner(owner)
-          .withBlockPos(target.getBlockPos())
+          .withProjectile(arrow)
           .withTarget(target);
       ModifierContext ctx = ctxBuilder.build();
       ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctx);

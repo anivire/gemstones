@@ -73,16 +73,16 @@ public class TooltipHelper {
   private static Formatting getSlotColor(GemstoneType gemType) {
     return switch (gemType) {
       case EMPTY -> Formatting.DARK_GRAY;
-      case LOCKED -> Formatting.DARK_GRAY;
+      case LOCKED -> Formatting.RED;
       default -> Formatting.WHITE;
     };
   }
 
   private static String getSlotText(GemstoneType gemType) {
     return switch (gemType) {
-      case LOCKED -> "Locked slot";
-      case EMPTY -> "Empty slot";
-      default -> "unknown";
+      case LOCKED -> "tooltip.gemstones.gemstone_type.locked";
+      case EMPTY -> "tooltip.gemstones.gemstone_type.empty";
+      default -> "tooltip.gemstones.gemstone_type.undefined";
     };
   }
 
@@ -124,12 +124,22 @@ public class TooltipHelper {
           rows.add(prefix.append(Text.literal("Undefined modifier").formatted(Formatting.RED)));
         }
       } else {
-        MutableText prefix = Text.literal(gemstoneType.getGemstoneLiteral())
-            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
-            .formatted(Formatting.DARK_GRAY).append(Text.literal(" ").formatted(Formatting.DARK_GRAY)
+        String l = gemstoneType == GemstoneType.EMPTY
+            ? InlineIcons.EMPTY.getSymbol()
+            : gemstoneType == GemstoneType.LOCKED
+                ? InlineIcons.LOCKED.getSymbol()
+                : gemstoneType.getGemstoneLiteral();
+
+        String p = gemstoneType != GemstoneType.EMPTY && gemstoneType != GemstoneType.LOCKED
+            ? Icons.INLINE_GEMSTONE.getPath()
+            : Icons.INLINE.getPath();
+
+        MutableText prefix = Text.literal(l)
+            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, p)))
+            .formatted(Formatting.DARK_GRAY).append(Text.literal(" > ").formatted(Formatting.DARK_GRAY)
                 .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
 
-        MutableText gemstoneSlot = Text.literal(TooltipHelper.getSlotText(gemstones[i].gemstoneType()))
+        MutableText gemstoneSlot = Text.translatable(TooltipHelper.getSlotText(gemstones[i].gemstoneType()))
             .formatted(TooltipHelper.getSlotColor(gemstones[i].gemstoneType()))
             .styled(style -> style.withFont(Style.DEFAULT_FONT_ID));
 

@@ -1,5 +1,10 @@
 package name.modid.core.api.modifiers.config;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.AttributeModifiersComponent.Entry;
@@ -9,8 +14,14 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.SmeltingRecipe;
+import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 
 public class ModifierUtils {
 
@@ -26,18 +37,22 @@ public class ModifierUtils {
 
   public static void applyStatusEffectToTarget(ModifierContext ctx, RegistryEntry<StatusEffect> effect, int duration,
       int amplifier) {
-    ctx.getTarget().addStatusEffect(new StatusEffectInstance(
-        effect,
-        duration * 20,
-        amplifier));
+    if (ctx.getTarget() instanceof LivingEntity target) {
+      target.addStatusEffect(new StatusEffectInstance(
+          effect,
+          duration * 20,
+          amplifier));
+    }
   }
 
   public static double collectAttributeValuesFromArmor(LivingEntity entity, RegistryEntry<EntityAttribute> attribute) {
     double v = 0;
 
     for (EquipmentSlot slot : EquipmentSlot.values()) {
-      if (slot == EquipmentSlot.CHEST || slot == EquipmentSlot.FEET
-          || slot == EquipmentSlot.HEAD || slot == EquipmentSlot.LEGS) {
+      if (slot == EquipmentSlot.CHEST
+          || slot == EquipmentSlot.FEET
+          || slot == EquipmentSlot.HEAD
+          || slot == EquipmentSlot.LEGS) {
         ItemStack itemStack = entity.getEquippedStack(slot);
         AttributeModifiersComponent modifiersComponent = itemStack
             .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
@@ -83,5 +98,28 @@ public class ModifierUtils {
     }
 
     return v;
+  }
+
+  public static <T> List<T> collectValuesFromArmor(
+      ServerPlayerEntity player,
+      Function<ItemStack, List<T>> callback) {
+    return Stream.of(
+        player.getEquippedStack(EquipmentSlot.HEAD),
+        player.getEquippedStack(EquipmentSlot.CHEST),
+        player.getEquippedStack(EquipmentSlot.LEGS),
+        player.getEquippedStack(EquipmentSlot.FEET))
+        .filter(stack -> !stack.isEmpty())
+        .map(callback)
+        .flatMap(List::stream)
+        .toList();
+  }
+
+  public static ItemStack getSmeltingResult(World world, ItemStack input) {
+    Optional<RecipeEntry<SmeltingRecipe>> recipeEntry = world.getRecipeManager()
+        .getFirstMatch(RecipeType.SMELTING, new SingleStackRecipeInput(input), world);
+
+    return recipeEntry
+        .map(entry -> entry.value().getResult(world.getRegistryManager()))
+        .orElse(ItemStack.EMPTY);
   }
 }

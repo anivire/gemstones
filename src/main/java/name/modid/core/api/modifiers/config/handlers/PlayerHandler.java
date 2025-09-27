@@ -19,8 +19,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
 
     // TODO: implementation
     switch (type) {
-      case PLAYER_EVENT_POTION_DURATION -> ctx.cancel();
-      case ON_DROP_INCREASE_MOSSY_BOX_DROP, WORLD_EVENT_INCREASE_MOB_SPAWNRATE -> ctx.cancel();
+      case WORLD_EVENT_INCREASE_MOB_SPAWNRATE -> ctx.cancel();
       default -> {
       }
     }

@@ -3,20 +3,23 @@ package name.modid.core.api.modifiers.config;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 
 public class ModifierContext {
   private final ServerWorld world;
-  private final @Nullable LivingEntity owner;
-  private final @Nullable LivingEntity target;
+  private final @Nullable Entity owner;
+  private final @Nullable Entity target;
   private final @Nullable BlockPos blockPos;
   private final @Nullable PersistentProjectileEntity projectile;
   private final @Nullable BlockState blockState;
   private final @Nullable float baseDamageTaken;
+  private final @Nullable DefaultedList<ItemStack> inventory;
 
   private boolean cancelledResult = false;
   private float damageResult = 0.0F;
@@ -30,6 +33,7 @@ public class ModifierContext {
     this.projectile = builder.projectile;
     this.blockState = builder.blockState;
     this.baseDamageTaken = builder.baseDamageTaken;
+    this.inventory = builder.inventory;
   }
 
   public boolean isCancelled() {
@@ -63,12 +67,12 @@ public class ModifierContext {
   }
 
   @Nullable
-  public LivingEntity getOwner() {
+  public Entity getOwner() {
     return this.owner;
   }
 
   @Nullable
-  public LivingEntity getTarget() {
+  public Entity getTarget() {
     return this.target;
   }
 
@@ -92,25 +96,31 @@ public class ModifierContext {
     return this.baseDamageTaken;
   }
 
+  @Nullable
+  public DefaultedList<ItemStack> getInventory() {
+    return this.inventory;
+  }
+
   public static class ContextBuilder {
     private final ServerWorld world;
-    private @Nullable LivingEntity owner;
-    private @Nullable LivingEntity target;
+    private @Nullable Entity owner;
+    private @Nullable Entity target;
     private @Nullable BlockPos blockPos;
     private @Nullable PersistentProjectileEntity projectile;
     private @Nullable BlockState blockState;
     private @Nullable float baseDamageTaken;
+    private @Nullable DefaultedList<ItemStack> inventory;
 
     public ContextBuilder(ServerWorld world) {
       this.world = world;
     }
 
-    public ContextBuilder withOwner(LivingEntity owner) {
+    public ContextBuilder withOwner(Entity owner) {
       this.owner = owner;
       return this;
     }
 
-    public ContextBuilder withTarget(LivingEntity target) {
+    public ContextBuilder withTarget(Entity target) {
       this.target = target;
       return this;
     }
@@ -132,6 +142,11 @@ public class ModifierContext {
 
     public ContextBuilder withBaseDamageTaken(float baseDamageTaken) {
       this.baseDamageTaken = baseDamageTaken;
+      return this;
+    }
+
+    public ContextBuilder withInventory(DefaultedList<ItemStack> inventory) {
+      this.inventory = inventory;
       return this;
     }
 

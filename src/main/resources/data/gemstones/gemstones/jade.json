@@ -26,10 +26,10 @@
       "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "ARMOR": {
-      "type": "CUSTOM_CONDITION",
+      "type": "ON_POTION_BREW",
       "value_levels": [15.0, 30.0, 45.0, 60.0],
       "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
-      "event_type": "PLAYER_EVENT_POTION_DURATION"
+      "event_type": "ON_POTION_BREW_INCREASE_DURATION"
     }
   }
 }

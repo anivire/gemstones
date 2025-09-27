@@ -9,6 +9,10 @@
   "tooltip.gemstones.armor_type": "Armor: ",
   "tooltip.gemstones.category_dot": "∙ ",
 
+  "tooltip.gemstones.gemstone_type.empty": "Empty socket",
+  "tooltip.gemstones.gemstone_type.locked": "Locked socket",
+  "tooltip.gemstones.gemstone_type.undefined": "Undefined socket",
+
   "tooltip.gemstones.ATTRIBUTE": "%s %s",
   "tooltip.gemstones.MULTIPLY_ATTRIBUTE": "%s",
   "tooltip.gemstones.MULTIPLY_ATTRIBUTE.split": " and ",
@@ -31,7 +35,7 @@
   "tooltip.gemstones.event_name.additional_gold_drop": "Gold",
   "tooltip.gemstones.event_name.potion_duration": "Potion Duration",
   "tooltip.gemstones.event_name.regenerate_block": "Regenerate Block",
-  "tooltip.gemstones.evenet_name.copy_entity_drop": "Mob Loot",
+  "tooltip.gemstones.event_name.copy_entity_drop": "Mob Loot",
   "tooltip.gemstones.event_name.additional_damage": "Bonus Damage",
   "tooltip.gemstones.event_name.smelter": "Smelt Block",
   "tooltip.gemstones.event_name.small_flat_explode": "Small Explosion",
@@ -42,7 +46,9 @@
   "tooltip.gemstones.EVENT.ON_HIT_LIGHTNING_BOLT": "%s to trigger %s in rainy weather",
   "tooltip.gemstones.EVENT.ON_HIT_TORRENT": "%s to trigger %s on hit",
   "tooltip.gemstones.EVENT.ON_HIT_SMALL_FLAT_EXPLOSION": "%s to trigger %s on hit",
-  "tooltip.gemstones.EVENT.ON_HIT_ADDITIONAL_DAMAGE": "%s %s on first hit",
+  "tooltip.gemstones.EVENT.ON_HIT_COPY_ENTITY_DROP": "%s drop copy %s on hit",
+  
+  "tooltip.gemstones.EVENT.ON_FIRST_HIT_ADDITIONAL_DAMAGE": "%s %s on first hit",
   
   "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_INCREASE_GEODES_DROP": "%s loot %s from ores",
   "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP": "%s drop additional %s from ores",
@@ -51,10 +57,9 @@
   "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_EXTRA_HEALTH": "%s gain %s while mining",
   "tooltip.gemstones.EVENT.ON_BLOCK_BREAK_HEAL": "%s to %s on mine",
 
-  "tooltip.gemstones.EVENT.ON_DROP_INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
-  "tooltip.gemstones.EVENT.ON_DROP_COPY_ENTITY_DROP": "%s drop copy %s on hit",
+  "tooltip.gemstones.EVENT.ON_FISHING_INCREASE_MOSSY_BOX_DROP": "%s loot %s from fishing",
 
-  "tooltip.gemstones.EVENT.PLAYER_EVENT_POTION_DURATION": "%s %s after brewing",
+  "tooltip.gemstones.EVENT.ON_POTION_BREW_INCREASE_DURATION": "%s %s after brewing",
 
   "tooltip.gemstones.EVENT.WORLD_EVENT_INCREASE_MOB_SPAWNRATE": "%s %s",
 
@@ -89,8 +94,8 @@
 
   "tooltip.gemstones.opening_item.info": "(Click RMB in hand for open)",
 
-  "item.gemstones.empty_slot": "Empty slot",
-  "item.gemstones.locked_slot": "Locked slot",
+  "item.gemstones.empty_slot": "Empty socket",
+  "item.gemstones.locked_slot": "Locked socket",
 
   "item.gemstones.quality.none": "None",
   "item.gemstones.quality.crude": "Crude",

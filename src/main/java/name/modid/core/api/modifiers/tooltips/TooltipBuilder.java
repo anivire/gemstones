@@ -19,7 +19,7 @@ import name.modid.core.api.modifiers.tooltips.handlers.OnBlockBreakHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.OnFirstHitHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.OnHitEffectHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.OnHitHandler;
-import name.modid.core.api.modifiers.tooltips.handlers.PlayerHandler;
+import name.modid.core.api.modifiers.tooltips.handlers.OnPotionBrewHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.TooltipHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.UndefinedHandler;
 import name.modid.core.api.modifiers.types.EventType;
@@ -68,8 +68,10 @@ public class TooltipBuilder {
     handlers.put(ModifierCategoryType.ON_BLOCK_BREAK, new OnBlockBreakHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.AREA_EFFECT, new AreaEffectHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.ON_FIRST_HIT, new OnFirstHitHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.PLAYER, new PlayerHandler(this, config, rarityType));
+    // handlers.put(ModifierCategoryType.PLAYER, new PlayerHandler(this, config,
+    // rarityType));
     handlers.put(ModifierCategoryType.ON_DEATH, new AfterDeathHandler(this, config, rarityType));
+    handlers.put(ModifierCategoryType.ON_POTION_BREW, new OnPotionBrewHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.UNDEFINED, new UndefinedHandler());
   }
 
@@ -96,6 +98,8 @@ public class TooltipBuilder {
       return ModifierCategoryType.ON_BLOCK_BREAK;
     if (config instanceof ModifierConfig.PlayerConfig)
       return ModifierCategoryType.PLAYER;
+    if (config instanceof ModifierConfig.OnPotionBrewConfig)
+      return ModifierCategoryType.ON_POTION_BREW;
     return ModifierCategoryType.UNDEFINED;
   }
 
@@ -115,11 +119,22 @@ public class TooltipBuilder {
       MutableText prefix;
 
       if (!isItemTooltip) {
-        prefix = Text.literal(gemstoneType.getGemstoneLiteral())
-            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
+        String l = gemstoneType == GemstoneType.EMPTY
+            ? InlineIcons.EMPTY.getSymbol()
+            : gemstoneType == GemstoneType.LOCKED
+                ? InlineIcons.LOCKED.getSymbol()
+                : gemstoneType.getGemstoneLiteral();
+
+        String p = gemstoneType != GemstoneType.EMPTY && gemstoneType != GemstoneType.LOCKED
+            ? Icons.INLINE_GEMSTONE.getPath()
+            : Icons.INLINE.getPath();
+
+        prefix = Text.literal(l)
+            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, p)))
             .formatted(Formatting.WHITE)
             .append(Text.literal(" > ").formatted(Formatting.DARK_GRAY)
                 .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
+
       } else {
         prefix = Text.translatable("tooltip.gemstones.category_dot").formatted(Formatting.DARK_GRAY)
             .append(Text.translatable(tooltipItemType).formatted(Formatting.GRAY));

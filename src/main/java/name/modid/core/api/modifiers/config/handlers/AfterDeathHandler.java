@@ -11,6 +11,7 @@ import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
 
 public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDeathConfig> {
@@ -33,15 +34,16 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
       ModifierContext ctx) {
     final float EXPLOSION_POWER = 0.5F;
 
-    if (ctx.getOwner().hasStatusEffect(EffectsRegistry.DETONATE_EFFECT)) {
+    if (ctx.getOwner() instanceof LivingEntity owner
+        && owner.hasStatusEffect(EffectsRegistry.DETONATE_EFFECT)) {
       ctx.getOwner().getWorld().createExplosion(
-          ctx.getOwner(),
+          owner,
           null,
           null,
-          ctx.getOwner().getX(),
-          ctx.getOwner().getY(),
-          ctx.getOwner().getZ(),
-          EXPLOSION_POWER + ctx.getOwner().getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(),
+          owner.getX(),
+          owner.getY(),
+          owner.getZ(),
+          EXPLOSION_POWER + owner.getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(),
           false,
           World.ExplosionSourceType.MOB);
     }
@@ -52,16 +54,17 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
     final int MIN_ADDITIONAL_XP = 3;
     final int MAX_ADDITIONAL_XP = 5;
 
-    if (ctx.getOwner().hasStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT)) {
-      int stackCount = ctx.getOwner().getStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT).getAmplifier() + 1;
+    if (ctx.getOwner() instanceof LivingEntity owner
+        && owner.hasStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT)) {
+      int stackCount = owner.getStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT).getAmplifier() + 1;
       int exp = (int) (Math.random() * (MAX_ADDITIONAL_XP - MIN_ADDITIONAL_XP + 1) + MIN_ADDITIONAL_XP);
 
       for (int i = 0; i < stackCount; i++) {
         ctx.getWorld().spawnEntity(new ExperienceOrbEntity(
             ctx.getWorld(),
-            ctx.getOwner().getX(),
-            ctx.getOwner().getY(),
-            ctx.getOwner().getZ(),
+            owner.getX(),
+            owner.getY(),
+            owner.getZ(),
             exp));
       }
     }

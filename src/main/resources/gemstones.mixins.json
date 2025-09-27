@@ -13,6 +13,10 @@
     "gemstones.SlotsInitialization",
     "gemstones.SocketedItemsTooltip",
     "gemstones.Socketing",
+    "modifiers.OnFirstHit",
+    "modifiers.OnPotionBrew",
+    "modifiers.OnFishing",
+    "modifiers.OnHitProjectile",
     "trackers.SoulBurnTracker"
   ],
   "injectors": {

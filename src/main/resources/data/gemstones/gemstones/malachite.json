@@ -4,10 +4,10 @@
     "MELEE": {
       "type": "ON_FIRST_HIT",
       "value_levels": [0.1, 0.15, 0.25, 0.3],
-      "event_type": "ON_HIT_ADDITIONAL_DAMAGE"
+      "event_type": "ON_FIRST_HIT_ADDITIONAL_DAMAGE"
     },
     "RANGED": {
-      "type": "ON_HIT_EFFECT",
+      "type": "ON_HIT_EFFECT_PROJECTILE",
       "chance_levels": [0.06, 0.12, 0.18, 0.24],
       "amplifier": 0,
       "effect_id": "gemstones:detonate",

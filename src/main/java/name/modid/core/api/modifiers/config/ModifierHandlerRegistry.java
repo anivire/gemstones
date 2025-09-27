@@ -8,6 +8,9 @@ import name.modid.core.api.modifiers.config.handlers.BlockBreakHandler;
 import name.modid.core.api.modifiers.config.handlers.EffectHandler;
 import name.modid.core.api.modifiers.config.handlers.HitMeleeHandler;
 import name.modid.core.api.modifiers.config.handlers.HitProjectileHandler;
+import name.modid.core.api.modifiers.config.handlers.OnFirstHitHandler;
+import name.modid.core.api.modifiers.config.handlers.OnFishingHandler;
+import name.modid.core.api.modifiers.config.handlers.OnPotionBrewHandler;
 import name.modid.core.api.modifiers.config.handlers.PlayerHandler;
 
 public class ModifierHandlerRegistry {
@@ -17,11 +20,14 @@ public class ModifierHandlerRegistry {
     register(ModifierConfig.HitMeleeConfig.class, new HitMeleeHandler());
     register(ModifierConfig.HitProjectileConfig.class, new HitProjectileHandler());
     register(ModifierConfig.HitEffectMeleeConfig.class, new EffectHandler.Melee());
-    register(ModifierConfig.AreaEffectConfig.class, new EffectHandler.Area());
     register(ModifierConfig.HitEffectProjectileConfig.class, new EffectHandler.Projectile());
+    register(ModifierConfig.OnFirstHitConfig.class, new OnFirstHitHandler());
+    register(ModifierConfig.AreaEffectConfig.class, new EffectHandler.Area());
     register(ModifierConfig.BlockBreakConfig.class, new BlockBreakHandler());
     register(ModifierConfig.AfterDeathConfig.class, new AfterDeathHandler());
     register(ModifierConfig.PlayerConfig.class, new PlayerHandler());
+    register(ModifierConfig.OnPotionBrewConfig.class, new OnPotionBrewHandler());
+    register(ModifierConfig.OnFishingConfig.class, new OnFishingHandler());
   }
 
   private static <T extends ModifierConfig> void register(Class<T> configClass, ModifierHandler<T> handler) {

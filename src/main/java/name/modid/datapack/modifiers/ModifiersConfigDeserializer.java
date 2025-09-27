@@ -124,6 +124,13 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
         yield new ModifierConfig.OnFirstHitConfig(values, event);
       }
 
+      case ON_POTION_BREW -> {
+        LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
+        LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
+        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        yield new ModifierConfig.OnPotionBrewConfig(values, additional_values, event);
+      }
+
       case UNDEFINED -> throw new JsonParseException("Unknown/unsupported modifier type: " + obj.get("type"));
       default -> throw new JsonParseException("Unknown/unsupported modifier type: " + obj.get("type"));
     };

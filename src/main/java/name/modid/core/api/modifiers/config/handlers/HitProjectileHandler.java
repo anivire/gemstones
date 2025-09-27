@@ -2,7 +2,6 @@ package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
@@ -14,6 +13,7 @@ import name.modid.core.api.modifiers.types.EventType;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContextParameterSet;
@@ -56,18 +56,19 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       combinedChance += config.chance().get(modifier.getRarityType());
     }
 
-    if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-      ctx.getOwner().heal((float) (ctx.getProjectile().getDamage() * 0.1 + 1.0));
+    if (ctx.getOwner() instanceof LivingEntity owner
+        && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+      owner.heal((float) (ctx.getProjectile().getDamage() * 0.1 + 1.0));
 
-      ctx.getWorld().playSound(null, ctx.getOwner().getBlockPos(),
+      ctx.getWorld().playSound(null, owner.getBlockPos(),
           SoundEvents.ENTITY_PHANTOM_BITE,
           SoundCategory.PLAYERS,
           0.5f, 0.8f);
 
       ctx.getWorld().spawnParticles(ParticleTypes.HEART,
-          ctx.getOwner().getX(),
-          ctx.getOwner().getBodyY(0.5),
-          ctx.getOwner().getZ(),
+          owner.getX(),
+          owner.getBodyY(0.5),
+          owner.getZ(),
           6,
           0.6, 0.6, 0.6,
           0.4);
@@ -76,7 +77,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
   private void handleLightingBolt(List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (ctx.getTarget() == null || !ctx.getWorld().isRaining()) {
+    if (!ctx.getWorld().isRaining()) {
       return;
     }
 
@@ -87,7 +88,9 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
     }
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-      BlockPos pos = Optional.ofNullable(ctx.getProjectile().getBlockPos()).orElse(ctx.getBlockPos());
+      BlockPos pos = ctx.getTarget() != null
+          ? ctx.getTarget().getBlockPos()
+          : ctx.getBlockPos();
 
       if (pos != null) {
         LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, ctx.getWorld());
@@ -110,11 +113,12 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       combinedChance += config.chance().get(modifier.getRarityType());
     }
 
-    if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+    if (ctx.getTarget() instanceof LivingEntity target
+        && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       LootTable lootTable = ctx.getWorld()
           .getServer()
           .getReloadableRegistries()
-          .getLootTable(ctx.getTarget().getLootTable());
+          .getLootTable(target.getLootTable());
 
       LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder(ctx.getWorld())
           .add(LootContextParameters.THIS_ENTITY, ctx.getTarget())
@@ -123,17 +127,13 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       List<ItemStack> loot = lootTable.generateLoot(builder.build(LootContextTypes.ENTITY));
 
       for (ItemStack stack : loot) {
-        Block.dropStack(ctx.getWorld(), ctx.getTarget().getBlockPos(), stack);
+        Block.dropStack(ctx.getWorld(), target.getBlockPos(), stack);
       }
     }
   }
 
   private void handleSmallExplostion(List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (ctx.getTarget() == null) {
-      return;
-    }
-
     double combinedChance = 0.0;
     for (GemstoneModifier modifier : modifiers) {
       HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
@@ -141,10 +141,23 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
     }
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-      BlockPos pos = Optional.ofNullable(ctx.getTarget().getBlockPos()).orElse(ctx.getBlockPos());
+      BlockPos pos = null;
 
-      ctx.getWorld().createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 3.0F,
-          ServerWorld.ExplosionSourceType.BLOCK);
+      if (ctx.getTarget() instanceof LivingEntity target) {
+        pos = target.getBlockPos();
+      } else if (ctx.getBlockPos() != null) {
+        pos = ctx.getBlockPos();
+      }
+
+      if (pos != null) {
+        ctx.getWorld().createExplosion(
+            null,
+            pos.getX(),
+            pos.getY(),
+            pos.getZ(),
+            3.0F,
+            ServerWorld.ExplosionSourceType.BLOCK);
+      }
     }
   }
 }
