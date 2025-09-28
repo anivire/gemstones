@@ -34,12 +34,12 @@ public class SparkProjectileRenderer extends EntityRenderer<SparkProjectileEntit
       VertexConsumerProvider vertexConsumers,
       int light) {
     matrices.push();
-    matrices.scale(2.0f, 2.0f, 2.0f);
+    matrices.scale(1.0f, 1.0f, 1.0f);
 
     float spin = (entity.age + tickDelta);
-    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(spin * 40.0f));
-    matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(spin * 18.8f));
-    matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(spin * 33.2f));
+    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(spin * 20.0f));
+    matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(spin * 9.4f));
+    matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(spin * 16.0f));
 
     VertexConsumer vc = vertexConsumers.getBuffer(
         RenderLayer.getEntityCutoutNoCull(getTexture(entity)));

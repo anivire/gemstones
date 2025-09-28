@@ -57,20 +57,26 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
     super.tick();
 
     if (this.getWorld().isClient) {
+      Vec3d vel = this.getVelocity();
+      double px = this.getX() - vel.x * 1.2;
+      double py = this.getY() - vel.y * 1.2;
+      double pz = this.getZ() - vel.z * 1.2;
+
       for (int i = 0; i < 3; i++) {
-        double dx = (this.random.nextDouble() - 0.5) * 0.3;
-        double dy = (this.random.nextDouble() - 0.5) * 0.3;
-        double dz = (this.random.nextDouble() - 0.5) * 0.3;
+        double dx = (this.random.nextDouble() - 0.5) * 0.1;
+        double dy = (this.random.nextDouble() - 0.5) * 0.1;
+        double dz = (this.random.nextDouble() - 0.5) * 0.1;
 
         this.getWorld().addParticle(
             ParticlesRegistry.SPARK_PARTICLE,
-            this.getX(), this.getY(), this.getZ(),
+            px, py, pz,
             dx, dy, dz);
       }
 
+      // жёлтая «свеча» тоже из смещённой точки
       this.getWorld().addParticle(
           new DustParticleEffect(new Vector3f(1.0F, 1.0F, 0.0F), 1.0F),
-          this.getX(), this.getY(), this.getZ(),
+          px, py, pz,
           0, 0, 0);
     }
 

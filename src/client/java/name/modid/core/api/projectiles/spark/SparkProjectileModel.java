@@ -2,6 +2,7 @@ package name.modid.core.api.projectiles.spark;
 
 import name.modid.Gemstones;
 import name.modid.core.content.entities.SparkProjectileEntity;
+import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.ModelData;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.ModelPartBuilder;
@@ -25,13 +26,12 @@ public class SparkProjectileModel extends EntityModel<SparkProjectileEntity> {
   public static TexturedModelData getTexturedModelData() {
     ModelData modelData = new ModelData();
     ModelPartData modelPartData = modelData.getRoot();
-    ModelPartData root = modelPartData.addChild(
-        "root",
+    ModelPartData root = modelPartData.addChild("root",
         ModelPartBuilder.create()
             .uv(0, 0)
-            .cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F),
+            .cuboid(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F, new Dilation(0.0F)),
         ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-    return TexturedModelData.of(modelData, 8, 4);
+    return TexturedModelData.of(modelData, 24, 12);
   }
 
   @Override
