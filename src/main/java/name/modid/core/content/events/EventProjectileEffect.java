@@ -16,7 +16,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
 public class EventProjectileEffect {
-  public static void setupEvent(LivingEntity entity, DamageSource source, float baseDamageTaken, float damageTaken,
+  public static void setup(LivingEntity entity, DamageSource source, float baseDamageTaken, float damageTaken,
       boolean blocked) {
     World world = entity.getWorld();
 

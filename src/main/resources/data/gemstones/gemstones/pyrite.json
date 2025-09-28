@@ -11,9 +11,10 @@
       "max_stack_count": 0
     },
     "RANGED": {
-      "type": "ON_HIT_PROJECTILE",
-      "chance_levels": [0.04, 0.065, 0.1, 0.145],
-      "event_type": "ON_HIT_SMALL_FLAT_EXPLOSION"
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:arrow_damage",
+      "value_levels": [0.5, 1.0, 1.75, 2.15],
+      "operation": "ADD_VALUE"
     },
     "TOOLS": {
       "type": "ON_BLOCK_BREAK",

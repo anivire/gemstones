@@ -8,6 +8,7 @@
     "attributes.CriticalHitDamageAttribute",
     "attributes.EvasionAttribute",
     "attributes.ItemMaxDurabilityAttribute",
+    "attributes.ArrowDamageAttribute",
     "effects.GuardianSmiteEffect",
     "effects.StunnedEffect",
     "gemstones.SlotsInitialization",

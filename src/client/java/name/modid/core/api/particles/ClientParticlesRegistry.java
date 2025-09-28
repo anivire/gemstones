@@ -11,6 +11,9 @@ public class ClientParticlesRegistry {
     ParticleFactoryRegistry.getInstance().register(ParticlesRegistry.STUNNED_PARTICLE,
         StunnedParticleFactory::new);
 
+    ParticleFactoryRegistry.getInstance().register(ParticlesRegistry.SPARK_PARTICLE,
+        SparkParticleFactory::new);
+
     ParticleFactoryRegistry.getInstance().register(
         ParticlesRegistry.SCARAB_PARTICLE, ScarabParticleFactory::new);
   }

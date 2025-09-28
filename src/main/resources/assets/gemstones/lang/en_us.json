@@ -74,12 +74,16 @@
   "effect.gemstones.scarab": "Scarab Curse",
   "effect.gemstones.amber_blessing": "Amber Blessing",
   "effect.gemstones.soul_burn": "Soul Burn",
+  "effect.gemstones.sparkling": "Sparkling",
 
   "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",
   "attribute.name.generic.evasion": "Evasion",
   "attribute.name.generic.max_durability": "Max Durability",
   "attribute.name.generic.projectile_speed": "Projectile Speed",
+  "attribute.name.generic.arrow_damage": "Arrow Damage",
+
+  "entity.gemstones.spark": "Spark",
 
   "item.gemstones.stone_geode": "Stone Geode",
   "item.gemstones.deepslate_geode": "Deepslate Geode",

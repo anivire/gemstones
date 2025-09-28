@@ -13,6 +13,7 @@ import name.modid.core.content.effects.PlagueEffect;
 import name.modid.core.content.effects.QuickSandsEffect;
 import name.modid.core.content.effects.ScarabEffect;
 import name.modid.core.content.effects.SoulBurnEffect;
+import name.modid.core.content.effects.SparklingEffect;
 import name.modid.core.content.effects.StunnedEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
@@ -63,6 +64,9 @@ public class EffectsRegistry {
 
   public static final RegistryEntry<StatusEffect> SOUL_BURN_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "soul_burn"), new SoulBurnEffect());
+
+  public static final RegistryEntry<StatusEffect> SPARKLING_EFFECT = Registry.registerReference(
+      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "sparkling"), new SparklingEffect());
 
   public static void initialize() {
     Gemstones.LOGGER.info("Registering mod effects for {}", Gemstones.MOD_ID);

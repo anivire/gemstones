@@ -9,12 +9,12 @@
     },
     "RANGED": {
       "type": "ON_HIT_EFFECT_PROJECTILE",
-      "chance_levels": [0.1, 0.2, 0.35, 0.45],
+      "chance_levels": [0.06, 0.12, 0.18, 1.24],
       "amplifier": 0,
-      "effect_id": "minecraft:slowness",
-      "duration": 11,
-      "is_stacking": true,
-      "max_stack_count": 3
+      "effect_id": "gemstones:sparkling",
+      "duration": 10,
+      "is_stacking": false,
+      "max_stack_count": 0
     },
     "TOOLS": {
       "type": "ON_BLOCK_BREAK",

@@ -2,6 +2,7 @@ package name.modid.core.content.registries;
 
 import name.modid.core.content.attributes.EventStunned;
 import name.modid.core.content.attributes.ProjectileSpeed;
+import name.modid.core.content.entities.SparkSpawner;
 import name.modid.core.content.events.EventAfterDeath;
 import name.modid.core.content.events.EventAreaEffect;
 import name.modid.core.content.events.EventLastBrewer;
@@ -27,7 +28,7 @@ public class EventsRegistry {
       }
     });
     AttackEntityCallback.EVENT.register(EventMeleeEffect::setupEvent);
-    ServerLivingEntityEvents.AFTER_DAMAGE.register(EventProjectileEffect::setupEvent);
+    ServerLivingEntityEvents.AFTER_DAMAGE.register(EventProjectileEffect::setup);
 
     // Block break
     PlayerBlockBreakEvents.AFTER.register(EventOnBlockBreak::setupEvent);
@@ -43,5 +44,6 @@ public class EventsRegistry {
     AttackEntityCallback.EVENT.register(EventStunned::setupEvent);
     ServerEntityEvents.ENTITY_LOAD.register(ProjectileSpeed::setup);
     UseBlockCallback.EVENT.register(EventLastBrewer::setup);
+    ServerLivingEntityEvents.AFTER_DEATH.register(SparkSpawner::setup);
   }
 }

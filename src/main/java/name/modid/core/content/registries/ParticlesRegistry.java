@@ -16,6 +16,7 @@ import net.minecraft.util.Identifier;
 public class ParticlesRegistry {
   public static final SimpleParticleType BLEED_PARTICLE = FabricParticleTypes.simple();
   public static final SimpleParticleType STUNNED_PARTICLE = FabricParticleTypes.simple();
+  public static final SimpleParticleType SPARK_PARTICLE = FabricParticleTypes.simple();
 
   public static final ParticleType<ScarabParticleInstance> SCARAB_PARTICLE = new ParticleType<ScarabParticleInstance>(
       false) {
@@ -39,5 +40,8 @@ public class ParticlesRegistry {
 
     Registry.register(Registries.PARTICLE_TYPE,
         Identifier.of(Gemstones.MOD_ID, "scarab_particle"), SCARAB_PARTICLE);
+
+    Registry.register(Registries.PARTICLE_TYPE,
+        Identifier.of(Gemstones.MOD_ID, "spark_particle"), SPARK_PARTICLE);
   }
 }
