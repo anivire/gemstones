@@ -62,10 +62,13 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
       double py = this.getY() - vel.y * 1.2;
       double pz = this.getZ() - vel.z * 1.2;
 
+      double lifeFrac = Math.min(1.0, (double) this.age / 100.0);
+      double spreadScale = 1.0 + 2.0 * lifeFrac;
+
       for (int i = 0; i < 3; i++) {
-        double dx = (this.random.nextDouble() - 0.5) * 0.1;
-        double dy = (this.random.nextDouble() - 0.5) * 0.1;
-        double dz = (this.random.nextDouble() - 0.5) * 0.1;
+        double dx = (this.random.nextDouble() - 0.5) * 0.1 * spreadScale;
+        double dy = (this.random.nextDouble() - 0.5) * 0.1 * spreadScale;
+        double dz = (this.random.nextDouble() - 0.5) * 0.1 * spreadScale;
 
         this.getWorld().addParticle(
             ParticlesRegistry.SPARK_PARTICLE,
@@ -73,7 +76,6 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
             dx, dy, dz);
       }
 
-      // жёлтая «свеча» тоже из смещённой точки
       this.getWorld().addParticle(
           new DustParticleEffect(new Vector3f(1.0F, 1.0F, 0.0F), 1.0F),
           px, py, pz,
@@ -111,7 +113,13 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
   protected void onEntityHit(EntityHitResult hit) {
     super.onEntityHit(hit);
     Entity entity = hit.getEntity();
-    if (entity instanceof LivingEntity living && entity != this.getOwner()) {
+    if (entity instanceof LivingEntity living
+        && entity != this.getOwner()
+        && this.getWorld() instanceof ServerWorld serverWorld) {
+      serverWorld.spawnParticles(
+          ParticleTypes.EXPLOSION,
+          this.getX(), this.getY(), this.getZ(),
+          1, 0, 0, 0, 0);
       living.timeUntilRegen = 0;
       living.damage(this.getDamageSources().magic(), SPARK_DAMAGE);
       this.discard();

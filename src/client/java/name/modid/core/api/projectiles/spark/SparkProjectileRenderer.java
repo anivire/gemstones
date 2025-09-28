@@ -34,7 +34,7 @@ public class SparkProjectileRenderer extends EntityRenderer<SparkProjectileEntit
       VertexConsumerProvider vertexConsumers,
       int light) {
     matrices.push();
-    matrices.scale(1.0f, 1.0f, 1.0f);
+    matrices.scale(0.75f, 0.75f, 0.75f);
 
     float spin = (entity.age + tickDelta);
     matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(spin * 20.0f));
