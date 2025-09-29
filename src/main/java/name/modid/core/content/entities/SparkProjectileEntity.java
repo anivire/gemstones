@@ -1,7 +1,5 @@
 package name.modid.core.content.entities;
 
-import org.joml.Vector3f;
-
 import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.content.registries.ParticlesRegistry;
 import net.minecraft.entity.Entity;
@@ -13,7 +11,6 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -63,7 +60,7 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
       double pz = this.getZ() - vel.z * 1.2;
 
       double lifeFrac = Math.min(1.0, (double) this.age / 100.0);
-      double spreadScale = 1.0 + 2.0 * lifeFrac;
+      double spreadScale = 1.0 + 20.0 * lifeFrac;
 
       for (int i = 0; i < 3; i++) {
         double dx = (this.random.nextDouble() - 0.5) * 0.1 * spreadScale;
@@ -75,11 +72,6 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
             px, py, pz,
             dx, dy, dz);
       }
-
-      this.getWorld().addParticle(
-          new DustParticleEffect(new Vector3f(1.0F, 1.0F, 0.0F), 1.0F),
-          px, py, pz,
-          0, 0, 0);
     }
 
     if (this.age >= HOMING_DELAY) {
@@ -117,9 +109,11 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
         && entity != this.getOwner()
         && this.getWorld() instanceof ServerWorld serverWorld) {
       serverWorld.spawnParticles(
-          ParticleTypes.EXPLOSION,
+          ParticleTypes.FLAME,
           this.getX(), this.getY(), this.getZ(),
-          1, 0, 0, 0, 0);
+          10,
+          0.3, 0.3, 0.3,
+          0.05);
       living.timeUntilRegen = 0;
       living.damage(this.getDamageSources().magic(), SPARK_DAMAGE);
       this.discard();
@@ -131,16 +125,18 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
     super.onBlockHit(hit);
     if (this.getWorld() instanceof ServerWorld serverWorld) {
       serverWorld.spawnParticles(
-          ParticleTypes.EXPLOSION,
+          ParticleTypes.FLAME,
           this.getX(), this.getY(), this.getZ(),
-          1, 0, 0, 0, 0);
+          10,
+          0.3, 0.3, 0.3,
+          0.05);
       this.discard();
     }
   }
 
   @Override
   protected SoundEvent getHitSound() {
-    return SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST;
+    return SoundEvents.ENTITY_BLAZE_SHOOT;
   }
 
   @Override

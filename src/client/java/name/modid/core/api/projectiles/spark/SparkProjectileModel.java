@@ -26,7 +26,7 @@ public class SparkProjectileModel extends EntityModel<SparkProjectileEntity> {
   public static TexturedModelData getTexturedModelData() {
     ModelData modelData = new ModelData();
     ModelPartData modelPartData = modelData.getRoot();
-    ModelPartData root = modelPartData.addChild("root",
+    modelPartData.addChild("root",
         ModelPartBuilder.create()
             .uv(0, 0)
             .cuboid(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F, new Dilation(0.0F)),

@@ -1,6 +1,7 @@
 package name.modid.core.api.entities;
 
 import org.joml.Matrix4f;
+
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -75,4 +76,5 @@ public class RenderUtils {
 
     matrices.pop();
   }
+
 }
