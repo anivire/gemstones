@@ -2,6 +2,7 @@ package name.modid.core.api.modifiers.tooltips;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import name.modid.Gemstones;
 import name.modid.core.api.components.GemstoneComponent;
@@ -17,6 +18,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class TooltipHelper {
+
   public enum Icons {
     SOCKET("gemstone_sockets_font"),
     INLINE_GEMSTONE("gemstone_inline_font"),
@@ -66,7 +68,7 @@ public class TooltipHelper {
 
     public MutableText asText() {
       return Text.literal(symbol)
-          .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())));
+          .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())));
     }
   }
 
@@ -88,65 +90,85 @@ public class TooltipHelper {
 
   private static Text getGemstoneSprite(GemstoneType gemstoneType) {
     return Text.literal(gemstoneType.getGemstoneLiteral())
-        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.SOCKET.getPath())));
+        .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.SOCKET.getPath())));
   }
 
   public static MutableText getGemstoneQualitySprite(GemstoneQuality rarityType) {
     return Text.literal(rarityType.getRarityLiteral())
-        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.QUALITY.getPath())))
+        .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.QUALITY.getPath())))
         .formatted(Formatting.WHITE);
   }
 
   public static Text getGemstoneSocketedRow(GemstoneComponent[] gemstones) {
     MutableText row = Text.empty();
-    for (GemstoneComponent gemstoneSlot : gemstones) {
-      row.append(getGemstoneSprite(gemstoneSlot.gemstoneType()));
+    for (GemstoneComponent slot : gemstones) {
+      row.append(getGemstoneSprite(slot.gemstoneType()));
     }
     return row;
   }
 
-  public static List<Text> getItemGemstoneBonusesRows(GemstoneComponent[] gemstones, ItemStack itemStack) {
+  public static List<Text> getItemGemstoneBonusesRows(GemstoneComponent[] gemstones, ItemStack item) {
     List<Text> rows = new ArrayList<>();
 
-    for (int i = 0; i < gemstones.length; i++) {
-      GemstoneType gemstoneType = gemstones[i].gemstoneType();
-      GemstoneQuality gemRarity = gemstones[i].gemstoneQualityType();
+    for (GemstoneComponent slot : gemstones) {
+      GemstoneType type = slot.gemstoneType();
+      GemstoneQuality rarity = slot.gemstoneQualityType();
 
-      if (gemstoneType != GemstoneType.LOCKED && gemstoneType != GemstoneType.EMPTY) {
-        try {
-          GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(
-              gemstoneType,
-              gemRarity,
-              itemStack.getItem());
-          rows.add(modifier.getTooltipText(gemRarity, false));
-        } catch (NullPointerException e) {
-          MutableText prefix = Text.translatable("tooltip.gemstones.category_dot").formatted(Formatting.DARK_GRAY);
-          rows.add(prefix.append(Text.literal("Undefined modifier").formatted(Formatting.RED)));
+      if (type != GemstoneType.EMPTY && type != GemstoneType.LOCKED) {
+        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(type, rarity, item.getItem());
+
+        if (modifier != null) {
+          rows.add(modifier.getTooltipText(rarity, false));
+        } else {
+          String l = type == GemstoneType.EMPTY
+              ? InlineIcons.EMPTY.getSymbol()
+              : type == GemstoneType.LOCKED
+                  ? InlineIcons.LOCKED.getSymbol()
+                  : type.getGemstoneLiteral();
+
+          Icons p = type != GemstoneType.EMPTY && type != GemstoneType.LOCKED
+              ? Icons.INLINE_GEMSTONE
+              : Icons.INLINE;
+
+          rows.add(makeRow(l, p,
+              Text.literal("Undefined modifier")
+                  .formatted(Formatting.RED)
+                  .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)),
+              Optional.of(true)));
         }
       } else {
-        String l = gemstoneType == GemstoneType.EMPTY
+        String iconSymbol = (type == GemstoneType.EMPTY)
             ? InlineIcons.EMPTY.getSymbol()
-            : gemstoneType == GemstoneType.LOCKED
-                ? InlineIcons.LOCKED.getSymbol()
-                : gemstoneType.getGemstoneLiteral();
+            : InlineIcons.LOCKED.getSymbol();
 
-        String p = gemstoneType != GemstoneType.EMPTY && gemstoneType != GemstoneType.LOCKED
-            ? Icons.INLINE_GEMSTONE.getPath()
-            : Icons.INLINE.getPath();
+        String fontPath = (type == GemstoneType.EMPTY || type == GemstoneType.LOCKED)
+            ? Icons.INLINE.getPath()
+            : Icons.INLINE_GEMSTONE.getPath();
 
-        MutableText prefix = Text.literal(l)
-            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, p)))
-            .formatted(Formatting.DARK_GRAY).append(Text.literal(" > ").formatted(Formatting.DARK_GRAY)
-                .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
+        Text slotText = Text.translatable(getSlotText(type))
+            .formatted(getSlotColor(type))
+            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID));
 
-        MutableText gemstoneSlot = Text.translatable(TooltipHelper.getSlotText(gemstones[i].gemstoneType()))
-            .formatted(TooltipHelper.getSlotColor(gemstones[i].gemstoneType()))
-            .styled(style -> style.withFont(Style.DEFAULT_FONT_ID));
-
-        rows.add(prefix.append(gemstoneSlot));
+        rows.add(makeRow(iconSymbol, fontPath, slotText, Optional.empty()));
       }
     }
-
     return rows;
+  }
+
+  private static MutableText makeRow(String icon, Icons fontIcon, Text content, Optional<Boolean> isGemstoneIcon) {
+    return makeRow(icon, fontIcon.getPath(), content, isGemstoneIcon);
+  }
+
+  private static MutableText makeRow(String icon, String fontPath, Text content, Optional<Boolean> isGemstoneIcon) {
+    Formatting iconColor = isGemstoneIcon.orElse(false) ? Formatting.WHITE : Formatting.DARK_GRAY;
+
+    MutableText prefix = Text.literal(icon)
+        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, fontPath)))
+        .formatted(iconColor)
+        .append(Text.literal(" > ")
+            .formatted(Formatting.DARK_GRAY)
+            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)));
+
+    return prefix.append(content);
   }
 }

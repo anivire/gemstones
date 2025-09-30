@@ -17,11 +17,14 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
 
     EventType type = ((PlayerConfig) modifiers.get(0).getConfig()).eventType();
 
-    // TODO: implementation
     switch (type) {
-      case WORLD_EVENT_INCREASE_MOB_SPAWNRATE -> ctx.cancel();
+      case PLAYER_MULTIPLY_DAMAGE_ARMORLESS -> multiplyDamageArmorless(modifiers, ctx);
       default -> {
       }
     }
+  }
+
+  private void multiplyDamageArmorless(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
+
   }
 }

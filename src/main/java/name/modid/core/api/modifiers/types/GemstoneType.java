@@ -17,8 +17,9 @@ public enum GemstoneType {
   MALACHITE("\uE011", "item.gemstones.gemstone_name.malachite"),
   SPAWNER_CORE("\uE012", "item.gemstones.gemstone_name.spawner_core"),
   AMBER("\uE013", "item.gemstones.gemstone_name.amber"),
+  PYRITE("\uE014", "item.gemstones.gemstone_name.pyrite"),
   GARNET("\uE015", "item.gemstones.gemstone_name.garnet"),
-  PYRITE("\uE014", "item.gemstones.gemstone_name.pyrite");
+  WITHER_BONE("\uE016", "item.gemstones.gemstone_name.wither_bone");
 
   private final String translationString;
   private final String fontLiteral;

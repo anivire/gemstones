@@ -33,6 +33,7 @@ public class SparkProjectileRenderer extends EntityRenderer<SparkProjectileEntit
       MatrixStack matrices,
       VertexConsumerProvider vertexConsumers,
       int light) {
+
     matrices.push();
     matrices.scale(0.75f, 0.75f, 0.75f);
 
@@ -41,11 +42,13 @@ public class SparkProjectileRenderer extends EntityRenderer<SparkProjectileEntit
     matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(spin * 9.4f));
     matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(spin * 16.0f));
 
-    VertexConsumer vc = vertexConsumers.getBuffer(
+    VertexConsumer mainVc = vertexConsumers.getBuffer(
         RenderLayer.getEntityCutoutNoCull(getTexture(entity)));
+    model.bb_main.render(matrices, mainVc, light, OverlayTexture.DEFAULT_UV, 0xFFFFFF);
 
-    this.model.setAngles(entity, 0, 0, 0, 0, 0);
-    this.model.render(matrices, vc, light, OverlayTexture.DEFAULT_UV, 0xFFFFFF);
+    VertexConsumer outlineVc = vertexConsumers.getBuffer(
+        RenderLayer.getEyes(getTexture(entity)));
+    model.bb_outline.render(matrices, outlineVc, 0xF000F0, OverlayTexture.DEFAULT_UV, 0xEF791F);
 
     matrices.pop();
 

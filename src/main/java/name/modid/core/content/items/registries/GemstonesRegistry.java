@@ -38,6 +38,7 @@ public class GemstonesRegistry {
   private static final List<Item> AMBER_GEMSTONES = new ArrayList<>();
   private static final List<Item> PYRITE_GEMSTONES = new ArrayList<>();
   private static final List<Item> GARNET_GEMSTONES = new ArrayList<>();
+  private static final List<Item> WITHER_BONE = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -122,6 +123,11 @@ public class GemstonesRegistry {
           "garnet_gemstone_" + rarityName,
           settings -> new GemstoneItem(settings, GemstoneType.GARNET, rarity),
           new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+      WITHER_BONE.add(ItemsRegistry.register(
+          "wither_bone_" + rarityName,
+          settings -> new GemstoneItem(settings, GemstoneType.WITHER_BONE, rarity),
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
     }
   }
 
@@ -140,6 +146,7 @@ public class GemstonesRegistry {
     AMBER_GEMSTONES.forEach(entries::add);
     PYRITE_GEMSTONES.forEach(entries::add);
     GARNET_GEMSTONES.forEach(entries::add);
+    WITHER_BONE.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -158,6 +165,7 @@ public class GemstonesRegistry {
     all.addAll(AMBER_GEMSTONES);
     all.addAll(PYRITE_GEMSTONES);
     all.addAll(GARNET_GEMSTONES);
+    all.addAll(WITHER_BONE);
     return all;
   }
 
@@ -217,6 +225,10 @@ public class GemstonesRegistry {
     return GARNET_GEMSTONES;
   }
 
+  public static List<Item> getWitherBoneGemstones() {
+    return WITHER_BONE;
+  }
+
   public static List<Item> getGemstonesByType(GemstoneType type) {
     return switch (type) {
       case RUBY -> RUBY_GEMSTONES;
@@ -233,6 +245,7 @@ public class GemstonesRegistry {
       case AMBER -> AMBER_GEMSTONES;
       case PYRITE -> PYRITE_GEMSTONES;
       case GARNET -> GARNET_GEMSTONES;
+      case WITHER_BONE -> WITHER_BONE;
       default -> List.of();
     };
   }

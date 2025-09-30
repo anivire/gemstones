@@ -18,6 +18,8 @@ public enum EventType {
 
   WORLD_EVENT_INCREASE_MOB_SPAWNRATE("tooltip.gemstones.event_name.increase_mob_spawnrate"),
 
+  PLAYER_MULTIPLY_DAMAGE_ARMORLESS("tooltip.gemstones.event_name.multiply_damage_armorless"),
+
   ON_POTION_BREW_INCREASE_DURATION("tooltip.gemstones.event_name.potion_duration"),
 
   ON_FISHING_INCREASE_MOSSY_BOX_DROP("tooltip.gemstones.event_name.increase_mossy_box_drop"),
