@@ -43,7 +43,7 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
       parts.add(part);
     }
 
-    String joiner = Text.translatable("tooltip.gemstones.MULTIPLY_ATTRIBUTE.split").getString();
+    String joiner = Text.translatable("tooltip.gemstones.multiply_attribute.split").getString();
 
     MutableText combined = Text.empty();
     for (int i = 0; i < parts.size(); i++) {

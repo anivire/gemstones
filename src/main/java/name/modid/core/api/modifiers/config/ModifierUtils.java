@@ -122,4 +122,15 @@ public class ModifierUtils {
         .map(entry -> entry.value().getResult(world.getRegistryManager()))
         .orElse(ItemStack.EMPTY);
   }
+
+  public static boolean isArmorEquiped(LivingEntity livingEntity) {
+    if (livingEntity.getEquippedStack(EquipmentSlot.HEAD).isEmpty()
+        && livingEntity.getEquippedStack(EquipmentSlot.CHEST).isEmpty()
+        && livingEntity.getEquippedStack(EquipmentSlot.LEGS).isEmpty()
+        && livingEntity.getEquippedStack(EquipmentSlot.FEET).isEmpty()) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

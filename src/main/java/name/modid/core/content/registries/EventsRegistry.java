@@ -9,7 +9,6 @@ import name.modid.core.content.events.EventLastBrewer;
 import name.modid.core.content.events.EventMeleeEffect;
 import name.modid.core.content.events.EventOnBeforeBlockBreak;
 import name.modid.core.content.events.EventOnBlockBreak;
-import name.modid.core.content.events.EventOnHitMelee;
 import name.modid.core.content.events.EventProjectileEffect;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -20,6 +19,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class EventsRegistry {
+
   public static void initialize() {
     // Effect related
     ServerTickEvents.END_SERVER_TICK.register(server -> {
@@ -33,9 +33,6 @@ public class EventsRegistry {
     // Block break
     PlayerBlockBreakEvents.AFTER.register(EventOnBlockBreak::setupEvent);
     PlayerBlockBreakEvents.BEFORE.register(EventOnBeforeBlockBreak::setupEvent);
-
-    // On hit melee
-    ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnHitMelee::setupEvent);
 
     // After death
     ServerLivingEntityEvents.AFTER_DEATH.register(EventAfterDeath::setupEvent);

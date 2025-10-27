@@ -15,6 +15,7 @@ public class AttributesRegistry {
   public static RegistryEntry<EntityAttribute> EVASION_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> PROJECTILE_SPEED_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> ARROW_DAMAGE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> PROJECTILE_COUNT_ATTRIBUTE;
 
   public static final EntityAttribute PULL_SPEED = new ClampedEntityAttribute("attribute.name.generic.pull_speed", 1.0,
       0.1, 1024.0)
@@ -40,6 +41,10 @@ public class AttributesRegistry {
       "attribute.name.generic.arrow_damage", 1.0, 0.0, 1024.0)
       .setTracked(true);
 
+  public static final EntityAttribute PROJECTILE_COUNT = new ClampedEntityAttribute(
+      "attribute.name.generic.projectile_count", 1.0, 0.0, 10.0)
+      .setTracked(true);
+
   public static void initialize() {
     PULL_SPEED_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
         Identifier.of(Gemstones.MOD_ID, "pull_speed"), PULL_SPEED);
@@ -58,5 +63,8 @@ public class AttributesRegistry {
 
     ARROW_DAMAGE_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
         Identifier.of(Gemstones.MOD_ID, "arrow_damage"), ARROW_DAMAGE);
+
+    PROJECTILE_COUNT_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "projectile_count"), PROJECTILE_COUNT);
   }
 }

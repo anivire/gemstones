@@ -14,7 +14,11 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.world.ServerWorld;
 
 public class EventOnHitMelee {
-  public static void setupEvent(LivingEntity entity, DamageSource source, float baseDamageTaken, float damageTaken,
+  public static void setupEvent(
+      LivingEntity entity,
+      DamageSource source,
+      float baseDamageTaken,
+      float damageTaken,
       boolean blocked) {
     if (entity.getWorld() instanceof ServerWorld serverWorld
         && source.getAttacker() instanceof LivingEntity owner) {

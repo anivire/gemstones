@@ -154,11 +154,13 @@ public class TooltipBuilder {
   }
 
   public String getTranslationKeyByModifier(ModifierCategoryType category) {
-    return category == null ? "tooltip.gemstones.CATEGORY.UNKNOWN" : "tooltip.gemstones." + category.toString();
+    return category == null ? "tooltip.gemstones.category.unknown"
+        : "tooltip.gemstones." + category.toString().toLowerCase();
   }
 
   public String getTranslationKeyByEvent(EventType event) {
-    return event == null ? "tooltip.gemstones.EVENT.UNKNOWN" : "tooltip.gemstones.EVENT." + event.toString();
+    return event == null ? "tooltip.gemstones.event.unknown"
+        : "tooltip.gemstones.event." + event.toString().toLowerCase();
   }
 
   public MutableText getArrowPrefix(boolean isPositive) {
@@ -172,7 +174,7 @@ public class TooltipBuilder {
     Formatting textColor = Formatting.BLUE;
 
     if (eventType == null) {
-      return Text.translatable("tooltip.gemstones.EVENT.UNKNOWN").formatted(Formatting.RED);
+      return Text.translatable("tooltip.gemstones.event.unknown").formatted(Formatting.RED);
     }
 
     switch (eventType) {

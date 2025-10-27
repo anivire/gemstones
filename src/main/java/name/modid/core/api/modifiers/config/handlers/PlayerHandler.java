@@ -18,13 +18,8 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     EventType type = ((PlayerConfig) modifiers.get(0).getConfig()).eventType();
 
     switch (type) {
-      case PLAYER_MULTIPLY_DAMAGE_ARMORLESS -> multiplyDamageArmorless(modifiers, ctx);
       default -> {
       }
     }
-  }
-
-  private void multiplyDamageArmorless(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
-
   }
 }

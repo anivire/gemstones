@@ -38,11 +38,13 @@ public sealed interface ModifierConfig permits
 
   public record HitMeleeConfig(
       LevelValues chance,
+      LevelValues additionValues,
       EventType eventType) implements ModifierConfig {
   }
 
   public record HitProjectileConfig(
       LevelValues chance,
+      LevelValues additionValues,
       EventType eventType) implements ModifierConfig {
   }
 

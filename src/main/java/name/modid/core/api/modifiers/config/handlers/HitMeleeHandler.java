@@ -26,6 +26,7 @@ public class HitMeleeHandler
 
     switch (type) {
       case ON_HIT_LIFE_STEAL -> handleLifesteal(modifiers, ctx);
+      case ON_HIT_MULTIPLY_DAMAGE_ARMORLESS -> multiplyDamageArmorless(modifiers, ctx);
       default -> {
       }
     }
@@ -59,6 +60,27 @@ public class HitMeleeHandler
           attacker.getBodyY(0.5),
           attacker.getZ(),
           6, 0.6, 0.6, 0.6, 0.4);
+    }
+
+    ctx.setDamageResult(ctx.getBaseDamageTaken());
+  }
+
+  private void multiplyDamageArmorless(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
+    if (ctx.getOwner() == null) {
+      return;
+    }
+
+    float additionalDamagePercent = 0.0F;
+    for (GemstoneModifier modifier : modifiers) {
+      HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
+      additionalDamagePercent += config.chance().get(modifier.getRarityType());
+    }
+
+    if (ctx.getOwner() instanceof LivingEntity livingEntity
+        && !ModifierUtils.isArmorEquiped(livingEntity)) {
+      ctx.setDamageResult(ctx.getBaseDamageTaken() + ctx.getBaseDamageTaken() * additionalDamagePercent);
+    } else {
+      ctx.setDamageResult(ctx.getBaseDamageTaken());
     }
   }
 }

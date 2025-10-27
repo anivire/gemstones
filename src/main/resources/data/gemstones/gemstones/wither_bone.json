@@ -1,0 +1,31 @@
+{
+  "gemstone_type": "WITHER_BONE",
+  "modifiers": {
+    "MELEE":{
+      "type": "ON_HIT_MELEE",
+      "chance_levels": [0.85, 1.35, 1.85, 2.35],
+      "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
+      "event_type": "ON_HIT_MULTIPLY_DAMAGE_ARMORLESS"
+    },
+    "RANGED":{
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:projectile_count",
+      "value_levels": [1.0, 1.0, 2.0, 3.0],
+      "operation": "ADD_VALUE"
+    },
+    "ARMOR": {
+      "type": "MULTIPLY_ATTRIBUTE",
+      "instances": [
+        {
+          "attribute_id": "minecraft:generic.fall_damage_multiplier",
+          "value_levels": [0.3, 0.5, 0.85, 1.0],
+          "operation": "ADD_MULTIPLIED_TOTAL"
+        },{
+          "attribute_id": "minecraft:generic.knockback_resistance",
+          "value_levels": [0.15, 0.25, 0.5, 0.75],
+          "operation": "ADD_MULTIPLIED_TOTAL"
+        }
+      ]
+    }
+  }
+}

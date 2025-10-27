@@ -11,6 +11,12 @@ public class ComponentsRegistry {
       Registries.DATA_COMPONENT_TYPE, Identifier.of(Gemstones.MOD_ID, "gemstones"),
       ComponentType.<GemstoneSlotsComponent>builder().codec(GemstoneSlotsComponent.GEMSTONE_SLOTS_CODEC).build());
 
+  // public static final ComponentType<Boolean> PIERCE_INVULNERABILITY =
+  // Registry.register(
+  // Registries.DATA_COMPONENT_TYPE, Identifier.of(Gemstones.MOD_ID,
+  // "pierce_invulnerability"),
+  // ComponentType.<Boolean>builder().codec(Codec.BOOL).build());
+
   public static void initialize() {
     Gemstones.LOGGER.info("Registering {} components", Gemstones.MOD_ID);
   }

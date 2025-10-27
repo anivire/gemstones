@@ -6,6 +6,7 @@ public enum EventType {
   ON_HIT_TORRENT("tooltip.gemstones.event_name.torrent"),
   ON_HIT_SMALL_FLAT_EXPLOSION("tooltip.gemstones.event_name.small_flat_explode"),
   ON_HIT_COPY_ENTITY_DROP("tooltip.gemstones.event_name.copy_entity_drop"),
+  ON_HIT_MULTIPLY_DAMAGE_ARMORLESS("tooltip.gemstones.event_name.multiply_damage_armorless"),
 
   ON_FIRST_HIT_ADDITIONAL_DAMAGE("tooltip.gemstones.event_name.additional_damage"),
 
@@ -17,8 +18,6 @@ public enum EventType {
   ON_BLOCK_BREAK_HEAL("tooltip.gemstones.event_name.heal"),
 
   WORLD_EVENT_INCREASE_MOB_SPAWNRATE("tooltip.gemstones.event_name.increase_mob_spawnrate"),
-
-  PLAYER_MULTIPLY_DAMAGE_ARMORLESS("tooltip.gemstones.event_name.multiply_damage_armorless"),
 
   ON_POTION_BREW_INCREASE_DURATION("tooltip.gemstones.event_name.potion_duration"),
 

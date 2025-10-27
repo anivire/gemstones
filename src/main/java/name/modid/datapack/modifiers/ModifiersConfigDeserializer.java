@@ -60,14 +60,16 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
 
       case ON_HIT_MELEE -> {
         LevelValues chance = context.deserialize(obj.get("chance_levels"), LevelValues.class);
+        LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
         EventType event = context.deserialize(obj.get("event_type"), EventType.class);
-        yield new ModifierConfig.HitMeleeConfig(chance, event);
+        yield new ModifierConfig.HitMeleeConfig(chance, additional_values, event);
       }
 
       case ON_HIT_PROJECTILE -> {
         LevelValues chance = context.deserialize(obj.get("chance_levels"), LevelValues.class);
+        LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
         EventType event = context.deserialize(obj.get("event_type"), EventType.class);
-        yield new ModifierConfig.HitProjectileConfig(chance, event);
+        yield new ModifierConfig.HitProjectileConfig(chance, additional_values, event);
       }
 
       case ON_HIT_EFFECT_MELEE -> {
@@ -129,6 +131,13 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
         EventType event = context.deserialize(obj.get("event_type"), EventType.class);
         yield new ModifierConfig.OnPotionBrewConfig(values, additional_values, event);
+      }
+
+      case PLAYER -> {
+        LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
+        LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
+        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        yield new ModifierConfig.PlayerConfig(values, additional_values, event);
       }
 
       case UNDEFINED -> throw new JsonParseException("Unknown/unsupported modifier type: " + obj.get("type"));

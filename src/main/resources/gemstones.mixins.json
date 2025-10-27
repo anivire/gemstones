@@ -9,6 +9,8 @@
     "attributes.EvasionAttribute",
     "attributes.ItemMaxDurabilityAttribute",
     "attributes.ArrowDamageAttribute",
+    "attributes.ProjectileCountAttributeBow",
+    "attributes.ProjectileCountAttributeCrossbow",
     "effects.GuardianSmiteEffect",
     "effects.StunnedEffect",
     "gemstones.SlotsInitialization",
@@ -18,6 +20,7 @@
     "modifiers.OnPotionBrew",
     "modifiers.OnFishing",
     "modifiers.OnHitProjectile",
+    "modifiers.OnHitMelee",
     "trackers.SoulBurnTracker"
   ],
   "injectors": {

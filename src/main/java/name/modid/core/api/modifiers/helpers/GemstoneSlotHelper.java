@@ -106,12 +106,15 @@ public class GemstoneSlotHelper {
         int freeSlots = 1 + new Random().nextInt(2);
 
         for (int i = 0; i < MAX_SLOTS; i++) {
-          if (freeSlots != 0) {
-            gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE);
-            freeSlots--;
-          } else {
-            gemstones[i] = new GemstoneComponent(GemstoneType.LOCKED, GemstoneQuality.NONE);
-          }
+          gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE);
+          // if (freeSlots != 0) {
+          // gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY,
+          // GemstoneQuality.NONE);
+          // freeSlots--;
+          // } else {
+          // gemstones[i] = new GemstoneComponent(GemstoneType.LOCKED,
+          // GemstoneQuality.NONE);
+          // }
         }
 
         itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlotsComponent(gemstones));
