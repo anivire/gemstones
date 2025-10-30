@@ -23,6 +23,9 @@ public enum EventType {
 
   ON_FISHING_INCREASE_MOSSY_BOX_DROP("tooltip.gemstones.event_name.increase_mossy_box_drop"),
 
+  PLAYER_WITHER_GUARD("tooltip.gemstones.event_name.wither_guard"),
+  PLAYER_PROJECTILE_IMMUNE("tooltip.gemstones.event_name.projectile_immune"),
+
   AFTER_DEATH_DETONATE("tooltip.gemstones.event_name.detonate"),
   AFTER_DEATH_HARVEST_MARK("tooltip.gemstones.event_name.harvest_mark");
 

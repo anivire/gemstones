@@ -18,6 +18,19 @@ public class EntitiesRegistry {
           .trackingTickInterval(10)
           .build());
 
+  // // ИСПРАВЛЕНО: Используем ванильный EntityType.Builder
+  // public static final EntityType<HomingSkullProjectileEntity>
+  // HOMING_SKULL_PROJECTILE = Registry.register(
+  // Registries.ENTITY_TYPE,
+  // Identifier.of(Gemstones.MOD_ID, "homing_skull_projectile"), // <--
+  // ИСПРАВЛЕНО: Правильная ссылка на MOD_ID
+  // EntityType.Builder.<HomingSkullProjectileEntity>create(HomingSkullProjectileEntity::new,
+  // SpawnGroup.MISC)
+  // .dimensions(0.5f, 0.5f)
+  // .maxTrackingRange(4) // <-- Современный способ
+  // .trackingTickInterval(10) // <-- Современный способ
+  // .build());
+
   public static void init() {
     Gemstones.LOGGER.info("Registering mod entities for {}", Gemstones.MOD_ID);
   }

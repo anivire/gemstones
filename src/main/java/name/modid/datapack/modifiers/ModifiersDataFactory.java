@@ -21,10 +21,12 @@ public class ModifiersDataFactory {
     config.modifiers.forEach((category, cfg) -> {
       Map<GemstoneQuality, GemstoneModifier> rarityMap = new HashMap<>();
       for (GemstoneQuality quality : GemstoneQuality.values()) {
-        if (quality == GemstoneQuality.NONE || quality == GemstoneQuality.UNUSUAL)
+        if (quality == GemstoneQuality.NONE)
           continue;
+
         rarityMap.put(quality, new GemstoneModifier(gemstoneType, quality, category, cfg));
       }
+
       if (!rarityMap.isEmpty()) {
         modifiers.put(category, rarityMap);
       }

@@ -24,6 +24,7 @@ public class ModifierContext {
   private boolean cancelledResult = false;
   private float damageResult = 0.0F;
   private ActionResult actionResult = ActionResult.PASS;
+  private @Nullable boolean isHurtable;
 
   private ModifierContext(ContextBuilder builder) {
     this.world = builder.world;
@@ -34,6 +35,7 @@ public class ModifierContext {
     this.blockState = builder.blockState;
     this.baseDamageTaken = builder.baseDamageTaken;
     this.inventory = builder.inventory;
+    this.isHurtable = false;
   }
 
   public boolean isCancelled() {
@@ -99,6 +101,16 @@ public class ModifierContext {
   @Nullable
   public DefaultedList<ItemStack> getInventory() {
     return this.inventory;
+  }
+
+  @Nullable
+  public void setIsHurtable(boolean value) {
+    this.isHurtable = value;
+  }
+
+  @Nullable
+  public boolean getIsHurtable() {
+    return this.isHurtable;
   }
 
   public static class ContextBuilder {

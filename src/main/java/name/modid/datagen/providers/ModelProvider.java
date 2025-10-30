@@ -26,7 +26,7 @@ public class ModelProvider extends FabricModelProvider {
   public void generateItemModels(ItemModelGenerator itemModelGenerator) {
     for (Item item : ItemsRegistry.getAllItems()) {
       String path = Registries.ITEM.getId(item).getPath();
-      String baseName = path.replaceAll("_(crude|polished|flawless|radiant)$", "");
+      String baseName = path.replaceAll("_(crude|polished|flawless|radiant|unusual)$", "");
 
       Models.GENERATED.upload(
           ModelIds.getItemModelId(item),

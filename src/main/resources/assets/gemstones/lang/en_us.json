@@ -40,6 +40,8 @@
   "tooltip.gemstones.event_name.smelter": "Smelt Block",
   "tooltip.gemstones.event_name.small_flat_explode": "Small Explosion",
   "tooltip.gemstones.event_name.multiply_damage_armorless": "Bonus Total Damage",
+  "tooltip.gemstones.event_name.wither_guard": "Wither Guard",
+  "tooltip.gemstones.event_name.projectile_immune": "Projectile Immune",
   
   "tooltip.gemstones.category.unknown": "undefined modifier",
   "tooltip.gemstones.event.unknown": "undefined event",
@@ -59,6 +61,8 @@
   "tooltip.gemstones.event.on_fishing_increase_mossy_box_drop": "%s loot %s from fishing",
   "tooltip.gemstones.event.on_potion_brew_increase_duration": "%s %s after brewing",
   "tooltip.gemstones.event.world_event_increase_mob_spawnrate": "%s %s",
+  "tooltip.gemstones.event.player_wither_guard": "while holding provide %s",
+  "tooltip.gemstones.event.player_projectile_immune": "while %s provide %s",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
@@ -184,10 +188,7 @@
   "item.gemstones.garnet_gemstone_radiant": "Garnet Gemstone",
   "item.gemstones.gemstone_name.garnet": "Garnet",
   
-  "item.gemstones.wither_bone_crude": "Wither Bone",
-  "item.gemstones.wither_bone_polished": "Wither Bone",
-  "item.gemstones.wither_bone_flawless": "Wither Bone",
-  "item.gemstones.wither_bone_radiant": "Wither Bone",
+  "item.gemstones.wither_bone_unusual": "Wither Bone",
   "item.gemstones.gemstone_name.wither_bone": "Wither Bone",
   
   "item.gemstones.spawner_core_gemstone_crude": "Spawner Core",

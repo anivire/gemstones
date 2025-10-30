@@ -20,6 +20,7 @@ import name.modid.core.api.modifiers.tooltips.handlers.OnFirstHitHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.OnHitEffectHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.OnHitHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.OnPotionBrewHandler;
+import name.modid.core.api.modifiers.tooltips.handlers.PlayerHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.TooltipHandler;
 import name.modid.core.api.modifiers.tooltips.handlers.UndefinedHandler;
 import name.modid.core.api.modifiers.types.EventType;
@@ -68,8 +69,7 @@ public class TooltipBuilder {
     handlers.put(ModifierCategoryType.ON_BLOCK_BREAK, new OnBlockBreakHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.AREA_EFFECT, new AreaEffectHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.ON_FIRST_HIT, new OnFirstHitHandler(this, config, rarityType));
-    // handlers.put(ModifierCategoryType.PLAYER, new PlayerHandler(this, config,
-    // rarityType));
+    handlers.put(ModifierCategoryType.PLAYER, new PlayerHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.ON_DEATH, new AfterDeathHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.ON_POTION_BREW, new OnPotionBrewHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.UNDEFINED, new UndefinedHandler());
@@ -184,7 +184,7 @@ public class TooltipBuilder {
       }
       case ON_BLOCK_BREAK_HEAL -> {
         eventIcon.append(Text.literal(InlineIcons.HALF_HEART.getSymbol()));
-        textColor = Formatting.RED;
+        textColor = Formatting.GREEN;
       }
       default -> {
       }

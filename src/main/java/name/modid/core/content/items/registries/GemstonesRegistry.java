@@ -57,6 +57,8 @@ public class GemstonesRegistry {
   public static void register() {
     List<GemstoneQuality> rarities = Arrays.asList(GemstoneQuality.CRUDE, GemstoneQuality.POLISHED,
         GemstoneQuality.FLAWLESS, GemstoneQuality.RADIANT);
+
+    // Default rarities
     for (GemstoneQuality rarity : rarities) {
       String rarityName = rarity.toString().toLowerCase();
 
@@ -124,11 +126,12 @@ public class GemstonesRegistry {
           settings -> new GemstoneItem(settings, GemstoneType.GARNET, rarity),
           new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      WITHER_BONE.add(ItemsRegistry.register(
-          "wither_bone_" + rarityName,
-          settings -> new GemstoneItem(settings, GemstoneType.WITHER_BONE, rarity),
-          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
     }
+
+    WITHER_BONE.add(ItemsRegistry.register(
+        "wither_bone_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
+        settings -> new GemstoneItem(settings, GemstoneType.WITHER_BONE, GemstoneQuality.UNUSUAL),
+        new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
   }
 
   public static void addGemstonesToItemGroup(FabricItemGroupEntries entries) {

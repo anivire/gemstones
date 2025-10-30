@@ -9,6 +9,7 @@ import name.modid.core.content.events.EventLastBrewer;
 import name.modid.core.content.events.EventMeleeEffect;
 import name.modid.core.content.events.EventOnBeforeBlockBreak;
 import name.modid.core.content.events.EventOnBlockBreak;
+import name.modid.core.content.events.EventPlayer;
 import name.modid.core.content.events.EventProjectileEffect;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -42,5 +43,6 @@ public class EventsRegistry {
     ServerEntityEvents.ENTITY_LOAD.register(ProjectileSpeed::setup);
     UseBlockCallback.EVENT.register(EventLastBrewer::setup);
     ServerLivingEntityEvents.AFTER_DEATH.register(SparkSpawner::setup);
+    ServerLivingEntityEvents.ALLOW_DAMAGE.register(EventPlayer::setupEvent);
   }
 }

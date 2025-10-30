@@ -35,6 +35,15 @@
       "chars": [
         "\uE004"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/quality/unusual.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "\uE005"
+      ]
     }
   ]
 }
