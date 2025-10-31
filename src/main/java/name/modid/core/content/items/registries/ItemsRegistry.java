@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import name.modid.Gemstones;
+import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.items.GeodeItem;
 import name.modid.core.content.items.MossyBox;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -44,6 +45,7 @@ public final class ItemsRegistry {
     all.add(STONE_GEODE);
     all.add(DEEPSLATE_GEODE);
     all.add(MOSSY_BOX);
+    all.add(BlocksRegistry.JEWELRY_TABLE.asItem());
     return all;
   }
 
