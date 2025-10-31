@@ -60,6 +60,7 @@ public final class ItemsRegistry {
           entries.add(STONE_GEODE);
           entries.add(DEEPSLATE_GEODE);
           entries.add(MOSSY_BOX);
+          entries.add(BlocksRegistry.JEWELRY_TABLE.asItem());
         });
   }
 }

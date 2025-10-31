@@ -18,7 +18,6 @@
     "effects.witherGuard.WitherSkullEntityTeleport",
     "gemstones.SlotsInitialization",
     "gemstones.SocketedItemsTooltip",
-    "gemstones.Socketing",
     "modifiers.OnFirstHit",
     "modifiers.OnPotionBrew",
     "modifiers.OnFishing",

@@ -195,6 +195,7 @@
   "item.gemstones.spawner_core_gemstone_polished": "Spawner Core",
   "item.gemstones.spawner_core_gemstone_flawless": "Spawner Core",
   "item.gemstones.spawner_core_gemstone_radiant": "Spawner Core",
-  "item.gemstones.gemstone_name.spawner_core": "Spawner Core"
+  "item.gemstones.gemstone_name.spawner_core": "Spawner Core",
 
+  "block.gemstones.jewelry_table": "Jewelry Table"
 }
