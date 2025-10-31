@@ -35,6 +35,19 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       return;
     }
 
+    var isHaveWitherGuard = false;
+    for (GemstoneModifier modifier : modifiers) {
+      PlayerConfig config = (PlayerConfig) modifier.getConfig();
+      if (config.eventType() == EventType.PLAYER_WITHER_GUARD) {
+        isHaveWitherGuard = true;
+      }
+    }
+
+    if (!isHaveWitherGuard) {
+      ctx.setActionResult(ActionResult.FAIL);
+      return;
+    }
+
     ctx.setActionResult(ActionResult.SUCCESS);
   }
 
