@@ -1,8 +1,9 @@
-package name.modid.core.content.screen;
+package name.modid.core.api.entities;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import name.modid.Gemstones;
+import name.modid.core.content.screen.JewelryTableScreenHandler;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;

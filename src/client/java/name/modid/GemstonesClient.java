@@ -1,13 +1,13 @@
 package name.modid;
 
+import name.modid.core.api.entities.JewelryTableBlockEntityRenderer;
+import name.modid.core.api.entities.JewelryTableScreen;
 import name.modid.core.api.models.ModelsRegistry;
 import name.modid.core.api.particles.ClientParticlesRegistry;
 import name.modid.core.api.projectiles.spark.SparkProjectileModel;
 import name.modid.core.api.projectiles.spark.SparkProjectileRenderer;
-import name.modid.core.content.blocks.JewelryTableBlockEntityRenderer;
 import name.modid.core.content.blocks.entity.core.BlockEntitiesRegistry;
 import name.modid.core.content.registries.EntitiesRegistry;
-import name.modid.core.content.screen.JewelryTableScreen;
 import name.modid.core.content.screen.ScreenRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
