@@ -16,9 +16,7 @@ public class ModifierManager {
         .filter(x -> x.getConfig() instanceof ModifierConfig.AttributeConfig)
         .toList());
 
-    // if (!attributeModifiers.isEmpty()) {
     AttributeModifierHandler.apply(new ArrayList<>(attributeModifiers), stack);
-    // }
   }
 
   public static void applyModifiers(ArrayList<GemstoneModifier> allModifiers, ModifierContext ctx) {
