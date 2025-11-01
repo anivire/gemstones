@@ -28,7 +28,8 @@ public class JewelryPliersItem extends Item implements ConsumableTool {
   @Override
   public void appendTooltip(ItemStack itemStack, TooltipContext context, List<Text> tooltip,
       TooltipType type) {
-    tooltip.add(Text.translatable("item.gemstones.jewelry_pliers.info_1"));
+    tooltip.add(Text.translatable("item.gemstones.jewelry_pliers.info_1",
+        Text.translatable("item.gemstones.jewelry_pliers.info_1_1").formatted(Formatting.GOLD)));
     tooltip
         .add(Text.translatable("item.gemstones.jewelry_pliers.info_2", Text.literal("80%").formatted(Formatting.RED))
             .formatted(Formatting.GRAY));

@@ -92,7 +92,8 @@
   "item.gemstones.chisel.info": "Allows to insert gemstones into equipment, weapons and tools.",
   
   "item.gemstones.jewelry_pliers": "Jewelry Pliers",
-  "item.gemstones.jewelry_pliers.info_1": "Allows to extract gemstones from equipment, weapons and tools.",
+  "item.gemstones.jewelry_pliers.info_1": "Allows to extract %s gemstone from equipment, weapons and tools.",
+  "item.gemstones.jewelry_pliers.info_1_1": "last",
   "item.gemstones.jewelry_pliers.info_2": "Gemstones have a %s chance to break when extracted.",
 
   "item.gemstones.stone_geode": "Stone Geode",
