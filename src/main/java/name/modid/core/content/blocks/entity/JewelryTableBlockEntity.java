@@ -25,7 +25,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class JewelryTableBlockEntity extends BlockEntity
     implements ImplementedInventory, ExtendedScreenHandlerFactory<BlockPos> {
-  private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
+  private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
 
   public JewelryTableBlockEntity(BlockPos pos, BlockState state) {
     super(BlockEntitiesRegistry.JEWELRY_TABLE_BLOCK_ENTITY, pos, state);

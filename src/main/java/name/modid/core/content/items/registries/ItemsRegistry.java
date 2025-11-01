@@ -8,6 +8,8 @@ import name.modid.Gemstones;
 import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.items.GeodeItem;
 import name.modid.core.content.items.MossyBox;
+import name.modid.core.content.items.tools.ChiselItem;
+import name.modid.core.content.items.tools.JewelryPliersItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
@@ -33,6 +35,18 @@ public final class ItemsRegistry {
       settings -> new MossyBox(settings),
       new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 64));
 
+  public static final Item DIAMOND_TIPPED_CHISEL = register("diamond_tipped_chisel",
+      settings -> new ChiselItem(settings),
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1).maxDamage(15));
+
+  public static final Item NETHERITE_TIPPED_CHISEL = register("netherite_tipped_chisel",
+      settings -> new ChiselItem(settings),
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1).maxDamage(55));
+
+  public static final Item JEWELRY_PLIERS = register("jewelry_pliers",
+      settings -> new JewelryPliersItem(settings),
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1).maxDamage(100));
+
   public static Item register(String path, Function<Item.Settings, Item> factory,
       Item.Settings settings) {
     final RegistryKey<Item> registryKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(Gemstones.MOD_ID, path));
@@ -45,6 +59,9 @@ public final class ItemsRegistry {
     all.add(STONE_GEODE);
     all.add(DEEPSLATE_GEODE);
     all.add(MOSSY_BOX);
+    all.add(DIAMOND_TIPPED_CHISEL);
+    all.add(NETHERITE_TIPPED_CHISEL);
+    all.add(JEWELRY_PLIERS);
     all.add(BlocksRegistry.JEWELRY_TABLE.asItem());
     return all;
   }
@@ -60,6 +77,9 @@ public final class ItemsRegistry {
           entries.add(STONE_GEODE);
           entries.add(DEEPSLATE_GEODE);
           entries.add(MOSSY_BOX);
+          entries.add(DIAMOND_TIPPED_CHISEL);
+          entries.add(NETHERITE_TIPPED_CHISEL);
+          entries.add(JEWELRY_PLIERS);
           entries.add(BlocksRegistry.JEWELRY_TABLE.asItem());
         });
   }

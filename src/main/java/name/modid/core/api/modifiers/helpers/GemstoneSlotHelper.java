@@ -132,4 +132,77 @@ public class GemstoneSlotHelper {
       }
     }
   }
+
+  public static int getFirstFilledSlotIndex(ItemStack stack) {
+    var gems = getGemstones(stack);
+    if (gems == null)
+      return -1;
+    for (int i = 0; i < gems.length; i++) {
+      var g = gems[i];
+      if (g != null && g.gemstoneType() != GemstoneType.EMPTY)
+        return i;
+    }
+    return -1;
+  }
+
+  public static void clearGemstoneAtIndex(ItemStack stack, int index) {
+    var slots = getGemstonesSlot(stack);
+    if (slots == null)
+      return;
+    var arr = Arrays.copyOf(slots.gemstones(), slots.gemstones().length);
+    if (index < 0 || index >= arr.length)
+      return;
+    arr[index] = new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE);
+    stack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlotsComponent(arr));
+    updateSocketsAttributes(stack, stack.getItem());
+  }
+
+  public static ItemStack makeGemItemFromSocket(ItemStack base, int index) {
+    GemstoneSlotsComponent slots = getGemstonesSlot(base);
+    if (slots == null)
+      return ItemStack.EMPTY;
+
+    GemstoneComponent[] arr = slots.gemstones();
+    if (arr == null || index < 0 || index >= arr.length)
+      return ItemStack.EMPTY;
+
+    GemstoneComponent comp = arr[index];
+    if (comp == null)
+      return ItemStack.EMPTY;
+
+    GemstoneType type = comp.gemstoneType();
+    GemstoneQuality quality = comp.gemstoneQualityType();
+    if (type == null || type == GemstoneType.EMPTY)
+      return ItemStack.EMPTY;
+
+    return getGemItemByTypeAndQuality(type, quality);
+  }
+
+  public static ItemStack getGemItemByTypeAndQuality(GemstoneType type, GemstoneQuality quality) {
+    if (type == null || type == GemstoneType.EMPTY || quality == null)
+      return ItemStack.EMPTY;
+
+    for (net.minecraft.item.Item item : name.modid.core.content.items.registries.GemstonesRegistry
+        .getGemstonesByType(type)) {
+      if (item instanceof name.modid.core.content.items.GemstoneItem gi) {
+        if (gi.getRarityType() == quality) {
+          return new net.minecraft.item.ItemStack(item);
+        }
+      }
+    }
+    return net.minecraft.item.ItemStack.EMPTY;
+  }
+
+  public static int getLastFilledSlotIndex(ItemStack stack) {
+    GemstoneComponent[] gems = getGemstones(stack);
+    if (gems == null)
+      return -1;
+    for (int i = gems.length - 1; i >= 0; i--) {
+      GemstoneComponent g = gems[i];
+      if (g != null && g.gemstoneType() != GemstoneType.EMPTY) {
+        return i;
+      }
+    }
+    return -1;
+  }
 }

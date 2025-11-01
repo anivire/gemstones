@@ -2,8 +2,11 @@ package name.modid.core.content.screen;
 
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.content.items.GemstoneItem;
+import name.modid.core.content.items.tools.ChiselItem;
+import name.modid.core.content.items.tools.JewelryPliersItem;
 import name.modid.core.content.screen.slots.GemstoneSlot;
 import name.modid.core.content.screen.slots.ResultSlot;
+import name.modid.core.content.screen.slots.ToolActionSlot;
 import name.modid.core.content.screen.slots.ToolSlot;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,10 +16,19 @@ import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 
 public class JewelryTableScreenHandler extends ScreenHandler implements InventoryChangedListener {
+  private static final float GEM_DELETE_EXTRACT_CHANCE = 0.8f;
+  public static final int SLOT_ACTION = 0;
+  public static final int SLOT_BASE = 1;
+  public static final int SLOT_GEM = 2;
+  public static final int SLOT_RESULT = 3;
+
   private final Inventory inventory;
+  private boolean lastGemBroken = false;
 
   public JewelryTableScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
     this(syncId, playerInventory, playerInventory.player.getWorld().getBlockEntity(pos));
@@ -26,16 +38,17 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     super(ScreenRegistry.JEWELRY_TABLE_SCREEN_HANDLER, syncId);
     this.inventory = (Inventory) blockEntity;
 
-    checkSize(this.inventory, 3);
+    checkSize(this.inventory, 4);
 
-    addMonitoredSlot(new ToolSlot(this.inventory, 0, 53, 35)); // вход 1
-    addMonitoredSlot(new GemstoneSlot(this.inventory, 1, 71, 35)); // вход 2
-    this.addSlot(new ResultSlot(this, this.inventory, 2, 125, 35)); // выход
+    addMonitoredSlot(new ToolActionSlot(this.inventory, SLOT_ACTION, 35, 35));
+    addMonitoredSlot(new ToolSlot(this.inventory, SLOT_BASE, 53, 35));
+    addMonitoredSlot(new GemstoneSlot(this.inventory, SLOT_GEM, 71, 35));
+    this.addSlot(new ResultSlot(this, this.inventory, SLOT_RESULT, 125, 35));
 
     addPlayerInventory(playerInventory);
     addPlayerHotbar(playerInventory);
 
-    updateResult();
+    updateOutputs();
     sendContentUpdates();
   }
 
@@ -49,7 +62,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       @Override
       public void markDirty() {
         super.markDirty();
-        updateResult();
+        updateOutputs();
         sendContentUpdates();
       }
     });
@@ -57,46 +70,153 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
 
   @Override
   public void onInventoryChanged(Inventory inv) {
-    updateResult();
+    updateOutputs();
     sendContentUpdates();
   }
 
-  public void updateResult() {
-    ItemStack base = this.inventory.getStack(0);
-    ItemStack gem = this.inventory.getStack(1);
+  public enum ActionMode {
+    INSERT, EXTRACT, NONE
+  }
+
+  private ActionMode getMode() {
+    ItemStack tool = inventory.getStack(SLOT_ACTION);
+    if (tool.isEmpty())
+      return ActionMode.NONE;
+    if (tool.getItem() instanceof ChiselItem)
+      return ActionMode.INSERT;
+    if (tool.getItem() instanceof JewelryPliersItem)
+      return ActionMode.EXTRACT;
+    return ActionMode.NONE;
+  }
+
+  public ActionMode getCurrentMode() {
+    return getMode();
+  }
+
+  public void updateOutputs() {
+    ActionMode mode = getMode();
+    switch (mode) {
+      case INSERT -> buildInsertResult();
+      case EXTRACT -> buildExtractResult();
+      default -> inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+    }
+  }
+
+  private void buildInsertResult() {
+    ItemStack base = inventory.getStack(SLOT_BASE);
+    ItemStack gem = inventory.getStack(SLOT_GEM);
 
     if (base.isEmpty()
         || gem.isEmpty()
         || !(gem.getItem() instanceof GemstoneItem)
         || !GemstoneSlotHelper.isItemValid(base.getItem())) {
-      this.inventory.setStack(2, ItemStack.EMPTY);
+      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
       return;
     }
-
     Integer emptySlot = GemstoneSlotHelper.getFirstEmptySlotIndex(base);
     if (emptySlot == null) {
-      this.inventory.setStack(2, ItemStack.EMPTY);
+      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
       return;
     }
-
-    ItemStack resultCopy = base.copy();
-    ItemStack modified = GemstoneSlotHelper.setGemstoneByIndex(resultCopy, emptySlot, (GemstoneItem) gem.getItem());
-
-    this.inventory.setStack(2, modified != null ? modified : ItemStack.EMPTY);
+    ItemStack copy = base.copy();
+    ItemStack modified = GemstoneSlotHelper.setGemstoneByIndex(copy, emptySlot, (GemstoneItem) gem.getItem());
+    inventory.setStack(SLOT_RESULT, modified != null ? modified : ItemStack.EMPTY);
   }
 
-  public void consumeInputs() {
-    ItemStack gem = this.inventory.getStack(1);
-    if (!gem.isEmpty()) {
-      gem.decrement(1);
-      this.inventory.setStack(1, gem);
+  private void buildExtractResult() {
+    ItemStack base = inventory.getStack(SLOT_BASE);
+    if (base.isEmpty() || !GemstoneSlotHelper.isItemValid(base.getItem())) {
+      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      return;
+    }
+    int idx = GemstoneSlotHelper.getLastFilledSlotIndex(base);
+    if (idx == -1) {
+      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      return;
+    }
+    ItemStack previewGem = GemstoneSlotHelper.makeGemItemFromSocket(base, idx);
+    inventory.setStack(SLOT_RESULT, previewGem);
+  }
+
+  public void finalizeTakeResult(PlayerEntity player) {
+    ActionMode mode = getMode();
+    ItemStack actionTool = inventory.getStack(SLOT_ACTION);
+    lastGemBroken = false;
+
+    if (mode == ActionMode.INSERT) {
+      ItemStack gem = inventory.getStack(SLOT_GEM);
+      if (!gem.isEmpty()) {
+        gem.decrement(1);
+        inventory.setStack(SLOT_GEM, gem);
+      }
+      ItemStack base = inventory.getStack(SLOT_BASE);
+      if (!base.isEmpty()) {
+        base.decrement(1);
+        inventory.setStack(SLOT_BASE, base.isEmpty() ? ItemStack.EMPTY : base);
+      }
+      damageActionTool(player, 1);
+      playInsertSound(player);
+
+    } else if (mode == ActionMode.EXTRACT) {
+      ItemStack base = inventory.getStack(SLOT_BASE);
+      int idx = GemstoneSlotHelper.getLastFilledSlotIndex(base);
+      if (idx != -1) {
+        boolean broken = (player.getWorld().random.nextFloat() < GEM_DELETE_EXTRACT_CHANCE);
+        lastGemBroken = broken;
+
+        GemstoneSlotHelper.clearGemstoneAtIndex(base, idx);
+        inventory.setStack(SLOT_BASE, base);
+        sendContentUpdates();
+      }
+      damageActionTool(player, 1);
+      playExtractSound(player);
+    }
+  }
+
+  public boolean wasLastGemBroken() {
+    return lastGemBroken;
+  }
+
+  private void damageActionTool(PlayerEntity player, int amount) {
+    ItemStack tool = inventory.getStack(SLOT_ACTION);
+    if (tool.isEmpty())
+      return;
+
+    tool.damage(amount, player, net.minecraft.entity.EquipmentSlot.MAINHAND);
+
+    if (tool.isEmpty()) {
+      inventory.setStack(SLOT_ACTION, ItemStack.EMPTY);
+    } else {
+      inventory.setStack(SLOT_ACTION, tool);
     }
 
-    ItemStack base = this.inventory.getStack(0);
-    if (!base.isEmpty()) {
-      base.decrement(1);
-      this.inventory.setStack(0, base.isEmpty() ? ItemStack.EMPTY : base);
+    try {
+      inventory.markDirty();
+    } catch (Throwable ignored) {
     }
+
+    if (SLOT_ACTION >= 0 && SLOT_ACTION < this.slots.size()) {
+      this.slots.get(SLOT_ACTION).markDirty();
+    }
+
+    sendContentUpdates();
+  }
+
+  private void playInsertSound(PlayerEntity player) {
+    if (player.getWorld().isClient)
+      return;
+    var w = player.getWorld();
+    var pos = player.getBlockPos();
+    w.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1f, 1f);
+    w.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.6f, 1.2f);
+  }
+
+  private void playExtractSound(PlayerEntity player) {
+    if (player.getWorld().isClient)
+      return;
+    var w = player.getWorld();
+    var pos = player.getBlockPos();
+    w.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 0.8f, 1f);
   }
 
   @Override
@@ -128,12 +248,27 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     ItemStack original = slot.getStack();
     newStack = original.copy();
 
-    if (invSlot == 2) {
+    if (invSlot == SLOT_RESULT) {
+      if (getMode() == ActionMode.EXTRACT && wasLastGemBroken()) {
+        slot.setStack(ItemStack.EMPTY);
+
+        playGemBrokenSound(player);
+
+        finalizeTakeResult(player);
+        this.updateOutputs();
+        this.sendContentUpdates();
+        slot.markDirty();
+
+        return ItemStack.EMPTY;
+      }
+
       if (!this.insertItem(original, this.inventory.size(), this.slots.size(), true)) {
         return ItemStack.EMPTY;
       }
-      this.consumeInputs();
-      this.updateResult();
+
+      finalizeTakeResult(player);
+
+      this.updateOutputs();
       this.sendContentUpdates();
       slot.markDirty();
       return newStack;
@@ -153,6 +288,17 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       slot.markDirty();
 
     return newStack;
+  }
+
+  private void playGemBrokenSound(PlayerEntity player) {
+    if (player.getWorld().isClient)
+      return;
+
+    var world = player.getWorld();
+    var pos = player.getBlockPos();
+
+    world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1f, 0.7f);
+    world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.7f, 0.6f);
   }
 
   public Inventory getInventory() {
