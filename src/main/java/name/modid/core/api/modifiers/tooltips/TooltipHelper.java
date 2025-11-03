@@ -10,12 +10,16 @@ import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.content.items.registries.GemstonesRegistry;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Language;
 
 public class TooltipHelper {
 
@@ -107,51 +111,81 @@ public class TooltipHelper {
     return row;
   }
 
+  public static MutableText safeTranslatable(String key, Object... args) {
+    try {
+      MutableText text = Text.translatable(key, args);
+      if (Language.getInstance() != null
+          && !Language.getInstance().hasTranslation(key)) {
+        Gemstones.LOGGER.warn("Missing lang key: {}", key);
+        return Text.literal("?" + key + "?").formatted(Formatting.RED);
+      }
+      return text;
+    } catch (Throwable t) {
+      Gemstones.LOGGER.error("Error while translating key {}", key, t);
+      return Text.literal("?" + key + "?").formatted(Formatting.RED);
+    }
+  }
+
   public static List<Text> getItemGemstoneBonusesRows(GemstoneComponent[] gemstones, ItemStack item) {
     List<Text> rows = new ArrayList<>();
+    boolean showGemName = Screen.hasShiftDown();
 
     for (GemstoneComponent slot : gemstones) {
       GemstoneType type = slot.gemstoneType();
-      GemstoneQuality rarity = slot.gemstoneQualityType();
+      GemstoneQuality quality = slot.gemstoneQualityType();
 
-      if (type != GemstoneType.EMPTY && type != GemstoneType.LOCKED) {
-        GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(type, rarity, item.getItem());
+      // Empty and locked sockets
+      if (type == GemstoneType.EMPTY || type == GemstoneType.LOCKED) {
+        String iconSymbol = (type == GemstoneType.EMPTY)
+            ? InlineIcons.EMPTY.getSymbol()
+            : InlineIcons.LOCKED.getSymbol();
 
+        Text slotText = TooltipHelper.safeTranslatable(getSlotText(type))
+            .formatted(getSlotColor(type))
+            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID));
+
+        rows.add(makeRow(iconSymbol, Icons.INLINE.getPath(), slotText, Optional.empty()));
+        continue;
+      }
+
+      GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(
+          type, quality, item.getItem());
+
+      if (showGemName) {
+        List<Item> b = GemstonesRegistry.getGemstonesByType(type);
+        Optional<Item> c = b.stream().filter(x -> x.getName().toString().contains(quality.name().toLowerCase()))
+            .findFirst();
+
+        MutableText icon = Text.literal(type.getGemstoneLiteral())
+            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
+            .formatted(Formatting.WHITE);
+
+        MutableText name = Text.literal("")
+            .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
+            .append(c.map(itemFound -> itemFound.getDefaultStack().toHoverableText())
+                .orElse(Text.literal("Undefined").formatted(Formatting.RED)));
+
+        MutableText q = Text.translatable(quality.getTranslationString())
+            .formatted(quality.getQualityTextcolor() == null ? Formatting.WHITE : quality.getQualityTextcolor());
+
+        rows.add(Text.empty().append(icon).append(" > ").formatted(Formatting.DARK_GRAY)
+            .append(name)
+            .append(" ").append(q));
+      } else {
         if (modifier != null) {
-          rows.add(modifier.getTooltipText(rarity, false));
+          rows.add(modifier.getTooltipText(quality, false));
         } else {
-          String l = type == GemstoneType.EMPTY
-              ? InlineIcons.EMPTY.getSymbol()
-              : type == GemstoneType.LOCKED
-                  ? InlineIcons.LOCKED.getSymbol()
-                  : type.getGemstoneLiteral();
-
-          Icons p = type != GemstoneType.EMPTY && type != GemstoneType.LOCKED
-              ? Icons.INLINE_GEMSTONE
-              : Icons.INLINE;
-
-          rows.add(makeRow(l, p,
+          rows.add(makeRow(
+              type.getGemstoneLiteral(),
+              Icons.INLINE_GEMSTONE,
               Text.literal("Undefined modifier")
                   .formatted(Formatting.RED)
                   .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)),
               Optional.of(true)));
         }
-      } else {
-        String iconSymbol = (type == GemstoneType.EMPTY)
-            ? InlineIcons.EMPTY.getSymbol()
-            : InlineIcons.LOCKED.getSymbol();
-
-        String fontPath = (type == GemstoneType.EMPTY || type == GemstoneType.LOCKED)
-            ? Icons.INLINE.getPath()
-            : Icons.INLINE_GEMSTONE.getPath();
-
-        Text slotText = Text.translatable(getSlotText(type))
-            .formatted(getSlotColor(type))
-            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID));
-
-        rows.add(makeRow(iconSymbol, fontPath, slotText, Optional.empty()));
       }
     }
+
     return rows;
   }
 

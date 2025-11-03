@@ -136,14 +136,14 @@ public class TooltipBuilder {
                 .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
 
       } else {
-        prefix = Text.translatable("tooltip.gemstones.category_dot").formatted(Formatting.DARK_GRAY)
-            .append(Text.translatable(tooltipItemType).formatted(Formatting.GRAY));
+        prefix = TooltipHelper.safeTranslatable("tooltip.gemstones.category_dot").formatted(Formatting.DARK_GRAY)
+            .append(TooltipHelper.safeTranslatable(tooltipItemType).formatted(Formatting.GRAY));
       }
 
       return prefix.append(handler.buildTooltip()
           .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
     } else {
-      MutableText prefix = Text.translatable(tooltipItemType).formatted(Formatting.DARK_GRAY);
+      MutableText prefix = TooltipHelper.safeTranslatable(tooltipItemType).formatted(Formatting.DARK_GRAY);
       return prefix.append(handler.buildTooltip());
     }
   }
@@ -174,7 +174,7 @@ public class TooltipBuilder {
     Formatting textColor = Formatting.BLUE;
 
     if (eventType == null) {
-      return Text.translatable("tooltip.gemstones.event.unknown").formatted(Formatting.RED);
+      return TooltipHelper.safeTranslatable("tooltip.gemstones.event.unknown").formatted(Formatting.RED);
     }
 
     switch (eventType) {
@@ -198,6 +198,6 @@ public class TooltipBuilder {
     }
 
     return Text.empty().append(eventIcon)
-        .append(Text.translatable(eventType.getTranslationKey()).formatted(textColor));
+        .append(TooltipHelper.safeTranslatable(eventType.getTranslationKey()).formatted(textColor));
   }
 }
