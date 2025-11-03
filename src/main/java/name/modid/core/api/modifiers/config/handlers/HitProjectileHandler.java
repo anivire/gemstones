@@ -10,10 +10,12 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.utils.GetRandomBuff;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContextParameterSet;
@@ -25,6 +27,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 
 public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitProjectileConfig> {
   @Override
@@ -39,6 +42,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       case ON_HIT_LIGHTNING_BOLT -> handleLightingBolt(modifiers, ctx);
       case ON_HIT_COPY_ENTITY_DROP -> handleCopyEntityLoot(modifiers, ctx);
       case ON_HIT_SMALL_FLAT_EXPLOSION -> handleSmallExplostion(modifiers, ctx);
+      case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(modifiers, ctx);
       default -> {
       }
     }
@@ -158,6 +162,28 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
             3.0F,
             ServerWorld.ExplosionSourceType.BLOCK);
       }
+    }
+  }
+
+  private void handleRandomEffect(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+    if (ctx.getTarget() == null) {
+      return;
+    }
+
+    double combinedChance = 0.0;
+    for (GemstoneModifier modifier : modifiers) {
+      HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
+      combinedChance += config.chance().get(modifier.getRarityType());
+    }
+
+    Random random = ctx.getWorld().getRandom();
+    int duration = 15 * 20;
+    int amplifier = random.nextInt(2);
+
+    if (ctx.getTarget() instanceof LivingEntity target
+        && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+      StatusEffectInstance buff = GetRandomBuff.negative(duration, amplifier);
+      target.addStatusEffect(buff);
     }
   }
 }

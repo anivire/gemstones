@@ -27,7 +27,11 @@ public enum EventType {
   PLAYER_PROJECTILE_IMMUNE("tooltip.gemstones.event_name.projectile_immune"),
 
   AFTER_DEATH_DETONATE("tooltip.gemstones.event_name.detonate"),
-  AFTER_DEATH_HARVEST_MARK("tooltip.gemstones.event_name.harvest_mark");
+  AFTER_DEATH_HARVEST_MARK("tooltip.gemstones.event_name.harvest_mark"),
+
+  ON_HIT_RANDOM_EFFECT("tooltip.gemstones.event_name.target_random_effect"),
+  ON_BLOCK_BREAK_RANDOM_ITEM_DROP("tooltip.gemstones.event_name.random_item_drop"),
+  PLAYER_RANDOM_EFFECT("tooltip.gemstones.event_name.player_random_effect");
 
   private final String getTranslationKey;
 

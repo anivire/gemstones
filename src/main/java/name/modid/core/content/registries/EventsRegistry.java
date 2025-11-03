@@ -11,6 +11,7 @@ import name.modid.core.content.events.EventOnBeforeBlockBreak;
 import name.modid.core.content.events.EventOnBlockBreak;
 import name.modid.core.content.events.EventPlayer;
 import name.modid.core.content.events.EventProjectileEffect;
+import name.modid.core.content.events.PlayerRandomBuff;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -37,6 +38,7 @@ public class EventsRegistry {
 
     // After death
     ServerLivingEntityEvents.AFTER_DEATH.register(EventAfterDeath::setupEvent);
+    ServerLivingEntityEvents.AFTER_DEATH.register(PlayerRandomBuff::setupEvent);
 
     // Other
     AttackEntityCallback.EVENT.register(EventStunned::setupEvent);

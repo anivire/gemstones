@@ -2,10 +2,10 @@ package name.modid.core.api.modifiers.tooltips.handlers;
 
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
+import name.modid.core.api.modifiers.tooltips.TooltipHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 
 public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T> {
   private final boolean projectile;
@@ -39,7 +39,7 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
     EventType ev = (cfg instanceof ModifierConfig.HitMeleeConfig melee) ? melee.eventType()
         : (cfg instanceof ModifierConfig.HitProjectileConfig proj) ? proj.eventType() : null;
 
-    return Text.translatable(builder.getTranslationKeyByEvent(ev), valueText, builder.getEventText(ev))
+    return TooltipHelper.safeTranslatable(builder.getTranslationKeyByEvent(ev), valueText, builder.getEventText(ev))
         .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
   }
 }

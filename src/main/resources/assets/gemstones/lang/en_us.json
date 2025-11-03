@@ -42,6 +42,9 @@
   "tooltip.gemstones.event_name.multiply_damage_armorless": "Bonus Total Damage",
   "tooltip.gemstones.event_name.wither_guard": "Wither Guard",
   "tooltip.gemstones.event_name.projectile_immune": "Projectile Immune",
+  "tooltip.gemstones.event_name.target_random_effect": "Random Negative Effect",
+  "tooltip.gemstones.event_name.random_item_drop": "Random Item Drop",
+  "tooltip.gemstones.event_name.player_random_effect": "Random Positive Effect",
   
   "tooltip.gemstones.category.unknown": "undefined modifier",
   "tooltip.gemstones.event.unknown": "undefined event",
@@ -63,6 +66,10 @@
   "tooltip.gemstones.event.world_event_increase_mob_spawnrate": "%s %s",
   "tooltip.gemstones.event.player_wither_guard": "while holding provide %s",
   "tooltip.gemstones.event.player_projectile_immune": "while %s provide %s",
+
+  "tooltip.gemstones.event.on_hit_random_effect": "%s to inflict %s",
+  "tooltip.gemstones.event.on_block_break_random_item_drop": "%s to receive %s after mining",
+  "tooltip.gemstones.event.player_random_effect": "every %s with %s chance apply %s on player",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",
@@ -205,6 +212,12 @@
   "item.gemstones.spawner_core_gemstone_flawless": "Spawner Core",
   "item.gemstones.spawner_core_gemstone_radiant": "Spawner Core",
   "item.gemstones.gemstone_name.spawner_core": "Spawner Core",
+  
+  "item.gemstones.polychrome_crystal_gemstone_crude": "Polychrome Crystal",
+  "item.gemstones.polychrome_crystal_gemstone_polished": "Polychrome Crystal",
+  "item.gemstones.polychrome_crystal_gemstone_flawless": "Polychrome Crystal",
+  "item.gemstones.polychrome_crystal_gemstone_radiant": "Polychrome Crystal",
+  "item.gemstones.gemstone_name.polychrome_crystal": "Polychrome Crystal",
 
   "block.gemstones.jewelry_table": "Jewelry Table"
 }

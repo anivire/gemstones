@@ -39,6 +39,7 @@ public class GemstonesRegistry {
   private static final List<Item> PYRITE_GEMSTONES = new ArrayList<>();
   private static final List<Item> GARNET_GEMSTONES = new ArrayList<>();
   private static final List<Item> WITHER_BONE = new ArrayList<>();
+  private static final List<Item> POLYCHROME_CRYSTAL = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -126,6 +127,10 @@ public class GemstonesRegistry {
           settings -> new GemstoneItem(settings, GemstoneType.GARNET, rarity),
           new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
+      POLYCHROME_CRYSTAL.add(ItemsRegistry.register(
+          "polychrome_crystal_gemstone_" + rarityName,
+          settings -> new GemstoneItem(settings, GemstoneType.POLYCHROME_CRYSTAL, rarity),
+          new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
     }
 
     WITHER_BONE.add(ItemsRegistry.register(
@@ -150,6 +155,7 @@ public class GemstonesRegistry {
     PYRITE_GEMSTONES.forEach(entries::add);
     GARNET_GEMSTONES.forEach(entries::add);
     WITHER_BONE.forEach(entries::add);
+    POLYCHROME_CRYSTAL.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -169,6 +175,7 @@ public class GemstonesRegistry {
     all.addAll(PYRITE_GEMSTONES);
     all.addAll(GARNET_GEMSTONES);
     all.addAll(WITHER_BONE);
+    all.addAll(POLYCHROME_CRYSTAL);
     return all;
   }
 
@@ -232,6 +239,10 @@ public class GemstonesRegistry {
     return WITHER_BONE;
   }
 
+  public static List<Item> getPolychromeCrystalGemstones() {
+    return POLYCHROME_CRYSTAL;
+  }
+
   public static List<Item> getGemstonesByType(GemstoneType type) {
     return switch (type) {
       case RUBY -> RUBY_GEMSTONES;
@@ -249,6 +260,7 @@ public class GemstonesRegistry {
       case PYRITE -> PYRITE_GEMSTONES;
       case GARNET -> GARNET_GEMSTONES;
       case WITHER_BONE -> WITHER_BONE;
+      case POLYCHROME_CRYSTAL -> POLYCHROME_CRYSTAL;
       default -> List.of();
     };
   }

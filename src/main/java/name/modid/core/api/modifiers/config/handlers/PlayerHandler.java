@@ -8,9 +8,13 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.PlayerConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
+import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.utils.GetRandomBuff;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.random.Random;
 
 public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfig> {
   @Override
@@ -23,6 +27,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     switch (type) {
       case PLAYER_WITHER_GUARD -> handleWitherGuard(modifiers, ctx);
       case PLAYER_PROJECTILE_IMMUNE -> handleProjectileImmune(modifiers, ctx);
+      case PLAYER_RANDOM_EFFECT -> handleRandomEffect(modifiers, ctx);
       default -> {
       }
     }
@@ -73,6 +78,27 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       ctx.setIsHurtable(false);
     } else {
       ctx.setIsHurtable(true);
+    }
+  }
+
+  private void handleRandomEffect(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+    if (!(ctx.getOwner() instanceof LivingEntity owner))
+      return;
+
+    Random random = ctx.getWorld().getRandom();
+    int amplifier = random.nextInt(2);
+    int combinedDuration = 0;
+    double combinedChance = 0.0;
+
+    for (GemstoneModifier modifier : modifiers) {
+      PlayerConfig config = (PlayerConfig) modifier.getConfig();
+      combinedDuration += config.values().get(modifier.getRarityType());
+      combinedChance += config.additionValues().get(modifier.getRarityType());
+    }
+
+    if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+      StatusEffectInstance buff = GetRandomBuff.positive(combinedDuration, amplifier);
+      owner.addStatusEffect(buff);
     }
   }
 }

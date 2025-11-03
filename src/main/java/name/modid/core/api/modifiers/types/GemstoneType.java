@@ -19,7 +19,8 @@ public enum GemstoneType {
   AMBER("\uE013", "item.gemstones.gemstone_name.amber"),
   PYRITE("\uE014", "item.gemstones.gemstone_name.pyrite"),
   GARNET("\uE015", "item.gemstones.gemstone_name.garnet"),
-  WITHER_BONE("\uE016", "item.gemstones.gemstone_name.wither_bone");
+  WITHER_BONE("\uE016", "item.gemstones.gemstone_name.wither_bone"),
+  POLYCHROME_CRYSTAL("\uE017", "item.gemstones.gemstone_name.polychrome_crystal");
 
   private final String translationString;
   private final String fontLiteral;

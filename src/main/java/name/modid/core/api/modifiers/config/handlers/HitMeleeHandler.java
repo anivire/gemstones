@@ -10,10 +10,13 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.utils.GetRandomBuff;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.random.Random;
 
 public class HitMeleeHandler
     implements ModifierHandler<ModifierConfig.HitMeleeConfig> {
@@ -27,6 +30,7 @@ public class HitMeleeHandler
     switch (type) {
       case ON_HIT_LIFE_STEAL -> handleLifesteal(modifiers, ctx);
       case ON_HIT_MULTIPLY_DAMAGE_ARMORLESS -> multiplyDamageArmorless(modifiers, ctx);
+      case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(modifiers, ctx);
       default -> {
       }
     }
@@ -82,5 +86,29 @@ public class HitMeleeHandler
     } else {
       ctx.setDamageResult(ctx.getBaseDamageTaken());
     }
+  }
+
+  private void handleRandomEffect(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+    if (ctx.getTarget() == null) {
+      return;
+    }
+
+    double combinedChance = 0.0;
+    for (GemstoneModifier modifier : modifiers) {
+      HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
+      combinedChance += config.chance().get(modifier.getRarityType());
+    }
+
+    Random random = ctx.getWorld().getRandom();
+    int duration = 15 * 20;
+    int amplifier = random.nextInt(2);
+
+    if (ctx.getTarget() instanceof LivingEntity target
+        && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+      StatusEffectInstance buff = GetRandomBuff.negative(duration, amplifier);
+      target.addStatusEffect(buff);
+    }
+
+    ctx.setDamageResult(ctx.getBaseDamageTaken());
   }
 }
