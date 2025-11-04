@@ -57,6 +57,66 @@ public class GemstoneSlotHelper {
     return slots != null ? slots.gemstones() : new GemstoneComponent[0];
   }
 
+  public static boolean canAddNewSlot(ItemStack stack) {
+    if (!isItemValid(stack.getItem())) {
+      return false;
+    }
+
+    GemstoneSlotsComponent slots = getGemstonesSlot(stack);
+
+    if (slots == null) {
+      initializeSockets(stack, stack.getItem());
+      slots = getGemstonesSlot(stack);
+      if (slots == null)
+        return false;
+    }
+
+    GemstoneComponent[] arr = slots.gemstones();
+    if (arr == null || arr.length == 0) {
+      return true;
+    }
+
+    for (GemstoneComponent g : arr) {
+      if (g != null && g.gemstoneType() == GemstoneType.LOCKED) {
+        return true;
+      }
+    }
+
+    if (arr.length < MAX_SLOTS) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public static ItemStack addNewGemSlot(ItemStack itemStack) {
+    if (!isItemValid(itemStack.getItem())) {
+      return itemStack;
+    }
+
+    GemstoneSlotsComponent slots = getGemstonesSlot(itemStack);
+    if (slots == null) {
+      initializeSockets(itemStack, itemStack.getItem());
+      slots = getGemstonesSlot(itemStack);
+    }
+    if (slots == null)
+      return itemStack;
+
+    GemstoneComponent[] arr = Arrays.copyOf(slots.gemstones(), slots.gemstones().length);
+
+    for (int i = 0; i < arr.length; i++) {
+      GemstoneComponent g = arr[i];
+      if (g != null && g.gemstoneType() == GemstoneType.LOCKED) {
+        arr[i] = new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE);
+        itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlotsComponent(arr));
+        updateSocketsAttributes(itemStack, itemStack.getItem());
+        return itemStack;
+      }
+    }
+
+    return itemStack;
+  }
+
   public static Integer getFirstEmptySlotIndex(ItemStack itemStack) {
     GemstoneSlotsComponent gemstoneSlots = getGemstonesSlot(itemStack);
     if (gemstoneSlots == null) {
@@ -106,15 +166,14 @@ public class GemstoneSlotHelper {
         int freeSlots = 1 + new Random().nextInt(2);
 
         for (int i = 0; i < MAX_SLOTS; i++) {
-          gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE);
-          // if (freeSlots != 0) {
-          // gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY,
-          // GemstoneQuality.NONE);
-          // freeSlots--;
-          // } else {
-          // gemstones[i] = new GemstoneComponent(GemstoneType.LOCKED,
-          // GemstoneQuality.NONE);
-          // }
+          if (freeSlots != 0) {
+            gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY,
+                GemstoneQuality.NONE);
+            freeSlots--;
+          } else {
+            gemstones[i] = new GemstoneComponent(GemstoneType.LOCKED,
+                GemstoneQuality.NONE);
+          }
         }
 
         itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlotsComponent(gemstones));
@@ -195,14 +254,20 @@ public class GemstoneSlotHelper {
 
   public static int getLastFilledSlotIndex(ItemStack stack) {
     GemstoneComponent[] gems = getGemstones(stack);
-    if (gems == null)
+    if (gems == null || gems.length == 0)
       return -1;
+
     for (int i = gems.length - 1; i >= 0; i--) {
       GemstoneComponent g = gems[i];
-      if (g != null && g.gemstoneType() != GemstoneType.EMPTY) {
+      if (g == null)
+        continue;
+
+      GemstoneType type = g.gemstoneType();
+      if (type != null && type != GemstoneType.EMPTY && type != GemstoneType.LOCKED) {
         return i;
       }
     }
+
     return -1;
   }
 }

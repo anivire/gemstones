@@ -94,9 +94,15 @@
 
   "entity.gemstones.spark": "Spark",
 
+  "item.gemstones.expansion_crystal": "Expansion Crystal",
+  
   "item.gemstones.diamond_tipped_chisel": "Diamond Tipped Chisel",
   "item.gemstones.netherite_tipped_chisel": "Netherite Tipped Chisel",
-  "item.gemstones.chisel.info": "Allows to insert gemstones into equipment, weapons and tools.",
+  "item.gemstones.chisel.info_1": "Allows to add new gemstone sockets gemstones into equipment, weapons and tools.",
+  "item.gemstones.chisel.info_2": "Required %s to process.",
+  
+  "item.gemstones.jewelry_hammer": "Jewelry Hammer",
+  "item.gemstones.jewelry_hammer.info": "Allows to insert gemstones into equipment, weapons and tools.",
   
   "item.gemstones.jewelry_pliers": "Jewelry Pliers",
   "item.gemstones.jewelry_pliers.info_1": "Allows to extract %s gemstone from equipment, weapons and tools.",

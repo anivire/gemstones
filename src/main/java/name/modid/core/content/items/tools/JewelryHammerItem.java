@@ -1,16 +1,22 @@
 package name.modid.core.content.items.tools;
 
 import java.util.List;
+import java.util.random.RandomGenerator;
 
-import name.modid.core.content.items.registries.ItemsRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 
-public class ChiselItem extends Item implements ConsumableTool {
-  public ChiselItem(Settings settings) {
+public class JewelryHammerItem extends Item implements ConsumableTool {
+  private static final RandomGenerator RNG = RandomGenerator.getDefault();
+
+  public JewelryHammerItem(Settings settings) {
     super(settings);
+  }
+
+  public boolean rollBreakGem() {
+    return RNG.nextFloat() < 0.8f;
   }
 
   @Override
@@ -21,9 +27,6 @@ public class ChiselItem extends Item implements ConsumableTool {
   @Override
   public void appendTooltip(ItemStack itemStack, TooltipContext context, List<Text> tooltip,
       TooltipType type) {
-    ItemStack crystal = ItemsRegistry.EXPANSION_CRYSTAL.getDefaultStack();
-
-    tooltip.add(Text.translatable("item.gemstones.chisel.info_1"));
-    tooltip.add(Text.translatable("item.gemstones.chisel.info_2", Text.empty().append(crystal.toHoverableText())));
+    tooltip.add(Text.translatable("item.gemstones.jewelry_hammer.info"));
   }
 }

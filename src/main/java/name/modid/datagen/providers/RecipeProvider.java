@@ -26,6 +26,7 @@ public class RecipeProvider extends FabricRecipeProvider {
     ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, BlocksRegistry.JEWELRY_TABLE)
         .pattern("DG ")
         .pattern("PP ")
+        .pattern("PP ")
         .input('D', Items.DIAMOND)
         .input('G', Items.GLASS)
         .input('P', ItemTags.PLANKS)
@@ -39,7 +40,7 @@ public class RecipeProvider extends FabricRecipeProvider {
         .input('D', Items.DIAMOND)
         .input('I', Items.IRON_INGOT)
         .input('S', Items.STICK)
-        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
+        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
         .offerTo(exporter);
 
     ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ItemsRegistry.NETHERITE_TIPPED_CHISEL)
@@ -49,7 +50,7 @@ public class RecipeProvider extends FabricRecipeProvider {
         .input('N', Items.NETHERITE_INGOT)
         .input('I', Items.GOLD_INGOT)
         .input('S', Items.STICK)
-        .criterion(hasItem(Items.NETHERITE_INGOT), conditionsFromItem(Items.NETHERITE_INGOT))
+        .criterion(hasItem(Items.GOLD_INGOT), conditionsFromItem(Items.GOLD_INGOT))
         .offerTo(exporter);
 
     ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ItemsRegistry.JEWELRY_PLIERS)
@@ -60,6 +61,24 @@ public class RecipeProvider extends FabricRecipeProvider {
         .input('G', Items.GOLD_INGOT)
         .input('S', Items.STICK)
         .criterion(hasItem(Items.GOLD_INGOT), conditionsFromItem(Items.GOLD_INGOT))
+        .offerTo(exporter);
+
+    ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ItemsRegistry.JEWELRY_HAMMER)
+        .pattern("GIG")
+        .pattern(" S ")
+        .pattern(" S ")
+        .input('I', Items.IRON_INGOT)
+        .input('G', Items.GOLD_INGOT)
+        .input('S', Items.STICK)
+        .criterion(hasItem(Items.GOLD_INGOT), conditionsFromItem(Items.GOLD_INGOT))
+        .offerTo(exporter);
+
+    ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ItemsRegistry.EXPANSION_CRYSTAL)
+        .pattern("SS ")
+        .pattern("DS ")
+        .input('S', Items.AMETHYST_SHARD)
+        .input('D', Items.DIAMOND)
+        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
         .offerTo(exporter);
   }
 }

@@ -1,5 +1,6 @@
 package name.modid.core.content.screen.slots;
 
+import name.modid.core.content.items.ExpansionCrystalItem;
 import name.modid.core.content.items.GemstoneItem;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,7 @@ public class GemstoneSlot extends Slot {
 
   @Override
   public boolean canInsert(ItemStack stack) {
-    return stack.getItem() instanceof GemstoneItem;
+    return stack.getItem() instanceof GemstoneItem
+        || stack.getItem() instanceof ExpansionCrystalItem;
   }
 }

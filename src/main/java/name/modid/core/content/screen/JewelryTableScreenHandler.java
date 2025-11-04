@@ -1,8 +1,10 @@
 package name.modid.core.content.screen;
 
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
+import name.modid.core.content.items.ExpansionCrystalItem;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.tools.ChiselItem;
+import name.modid.core.content.items.tools.JewelryHammerItem;
 import name.modid.core.content.items.tools.JewelryPliersItem;
 import name.modid.core.content.screen.slots.GemstoneSlot;
 import name.modid.core.content.screen.slots.ResultSlot;
@@ -75,17 +77,25 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
   }
 
   public enum ActionMode {
-    INSERT, EXTRACT, NONE
+    INSERT, EXPAND, EXTRACT, NONE
   }
 
   private ActionMode getMode() {
     ItemStack tool = inventory.getStack(SLOT_ACTION);
+    ItemStack gemSlot = inventory.getStack(SLOT_GEM);
+
     if (tool.isEmpty())
       return ActionMode.NONE;
-    if (tool.getItem() instanceof ChiselItem)
+
+    if (tool.getItem() instanceof ChiselItem && gemSlot.getItem() instanceof ExpansionCrystalItem)
+      return ActionMode.EXPAND;
+
+    if (tool.getItem() instanceof JewelryHammerItem && gemSlot.getItem() instanceof GemstoneItem)
       return ActionMode.INSERT;
+
     if (tool.getItem() instanceof JewelryPliersItem)
       return ActionMode.EXTRACT;
+
     return ActionMode.NONE;
   }
 
@@ -98,8 +108,32 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     switch (mode) {
       case INSERT -> buildInsertResult();
       case EXTRACT -> buildExtractResult();
+      case EXPAND -> buildExpandResult();
       default -> inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
     }
+  }
+
+  private void buildExpandResult() {
+    ItemStack base = inventory.getStack(SLOT_BASE);
+    ItemStack crystal = inventory.getStack(SLOT_GEM);
+
+    if (base.isEmpty() || crystal.isEmpty() || !(crystal.getItem() instanceof ExpansionCrystalItem)) {
+      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      return;
+    }
+
+    if (!GemstoneSlotHelper.isItemValid(base.getItem())) {
+      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      return;
+    }
+
+    if (!GemstoneSlotHelper.canAddNewSlot(base)) {
+      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      return;
+    }
+
+    ItemStack result = GemstoneSlotHelper.addNewGemSlot(base.copy());
+    inventory.setStack(SLOT_RESULT, result);
   }
 
   private void buildInsertResult() {
@@ -156,7 +190,6 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       }
       damageActionTool(player, 1);
       playInsertSound(player);
-
     } else if (mode == ActionMode.EXTRACT) {
       ItemStack base = inventory.getStack(SLOT_BASE);
       int idx = GemstoneSlotHelper.getLastFilledSlotIndex(base);
@@ -170,6 +203,34 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       }
       damageActionTool(player, 1);
       playExtractSound(player);
+    } else if (mode == ActionMode.EXPAND) {
+      ItemStack base = inventory.getStack(SLOT_BASE);
+      ItemStack crystal = inventory.getStack(SLOT_GEM);
+
+      if (!base.isEmpty() && !crystal.isEmpty() && GemstoneSlotHelper.canAddNewSlot(base)) {
+        ItemStack modified = GemstoneSlotHelper.addNewGemSlot(base.copy());
+
+        inventory.setStack(SLOT_RESULT, modified);
+
+        base.decrement(1);
+        if (base.isEmpty()) {
+          inventory.setStack(SLOT_BASE, ItemStack.EMPTY);
+        } else {
+          inventory.setStack(SLOT_BASE, base);
+        }
+
+        crystal.decrement(1);
+        if (crystal.isEmpty()) {
+          inventory.setStack(SLOT_GEM, ItemStack.EMPTY);
+        } else {
+          inventory.setStack(SLOT_GEM, crystal);
+        }
+
+        playExpandSound(player);
+      }
+
+      damageActionTool(player, 1);
+      sendContentUpdates();
     }
   }
 
@@ -209,6 +270,14 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     var pos = player.getBlockPos();
     w.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1f, 1f);
     w.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.6f, 1.2f);
+  }
+
+  private void playExpandSound(PlayerEntity player) {
+    if (player.getWorld().isClient)
+      return;
+    var w = player.getWorld();
+    var pos = player.getBlockPos();
+    w.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1f, 1.2f);
   }
 
   private void playExtractSound(PlayerEntity player) {

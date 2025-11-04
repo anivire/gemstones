@@ -6,9 +6,11 @@ import java.util.function.Function;
 
 import name.modid.Gemstones;
 import name.modid.core.content.blocks.BlocksRegistry;
+import name.modid.core.content.items.ExpansionCrystalItem;
 import name.modid.core.content.items.GeodeItem;
 import name.modid.core.content.items.MossyBox;
 import name.modid.core.content.items.tools.ChiselItem;
+import name.modid.core.content.items.tools.JewelryHammerItem;
 import name.modid.core.content.items.tools.JewelryPliersItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.component.DataComponentTypes;
@@ -45,7 +47,15 @@ public final class ItemsRegistry {
 
   public static final Item JEWELRY_PLIERS = register("jewelry_pliers",
       settings -> new JewelryPliersItem(settings),
-      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1).maxDamage(100));
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1).maxDamage(75));
+
+  public static final Item JEWELRY_HAMMER = register("jewelry_hammer",
+      settings -> new JewelryHammerItem(settings),
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1).maxDamage(75));
+
+  public static final Item EXPANSION_CRYSTAL = register("expansion_crystal",
+      settings -> new ExpansionCrystalItem(settings),
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 8));
 
   public static Item register(String path, Function<Item.Settings, Item> factory,
       Item.Settings settings) {
@@ -80,6 +90,8 @@ public final class ItemsRegistry {
           entries.add(DIAMOND_TIPPED_CHISEL);
           entries.add(NETHERITE_TIPPED_CHISEL);
           entries.add(JEWELRY_PLIERS);
+          entries.add(JEWELRY_HAMMER);
+          entries.add(EXPANSION_CRYSTAL);
           entries.add(BlocksRegistry.JEWELRY_TABLE.asItem());
         });
   }

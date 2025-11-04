@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_gold_ingot": {
+    "has_diamond": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:gold_ingot"
+            "items": "minecraft:diamond"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "gemstones:netherite_tipped_chisel"
+        "recipe": "gemstones:expansion_crystal"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_gold_ingot"
+      "has_diamond"
     ]
   ],
   "rewards": {
     "recipes": [
-      "gemstones:netherite_tipped_chisel"
+      "gemstones:expansion_crystal"
     ]
   }
 }
