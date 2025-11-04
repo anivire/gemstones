@@ -3,8 +3,8 @@ package name.modid.core.content.items;
 import java.util.List;
 
 import name.modid.Gemstones;
-import name.modid.core.api.modifiers.tooltips.TooltipHelper.Icons;
-import name.modid.core.api.modifiers.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.api.tooltips.TooltipHelper.Icons;
+import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

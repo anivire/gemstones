@@ -1,12 +1,12 @@
-package name.modid.core.api.modifiers.tooltips.handlers;
+package name.modid.core.api.tooltips.handlers;
 
 import name.modid.Gemstones;
 import name.modid.core.api.modifiers.config.ModifierConfig;
-import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
-import name.modid.core.api.modifiers.tooltips.TooltipHelper;
-import name.modid.core.api.modifiers.tooltips.TooltipHelper.Icons;
-import name.modid.core.api.modifiers.tooltips.TooltipHelper.InlineIcons;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.tooltips.TooltipBuilder;
+import name.modid.core.api.tooltips.TooltipHelper;
+import name.modid.core.api.tooltips.TooltipHelper.Icons;
+import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;

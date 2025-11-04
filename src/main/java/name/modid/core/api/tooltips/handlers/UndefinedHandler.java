@@ -1,4 +1,4 @@
-package name.modid.core.api.modifiers.tooltips.handlers;
+package name.modid.core.api.tooltips.handlers;
 
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

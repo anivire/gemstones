@@ -1,10 +1,10 @@
-package name.modid.core.api.modifiers.tooltips.handlers;
+package name.modid.core.api.tooltips.handlers;
 
 import name.modid.core.api.modifiers.config.ModifierConfig;
-import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
-import name.modid.core.api.modifiers.tooltips.TooltipHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.tooltips.TooltipBuilder;
+import name.modid.core.api.tooltips.TooltipHelper;
 import net.minecraft.text.MutableText;
 
 public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T> {
