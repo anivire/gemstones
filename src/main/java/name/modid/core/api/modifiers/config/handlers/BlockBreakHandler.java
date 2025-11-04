@@ -1,8 +1,11 @@
 package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
@@ -18,15 +21,20 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBreakConfig> {
+  private static final Set<Identifier> BLOCKED_ITEMS = new HashSet<>();
+
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (modifiers.isEmpty())
@@ -42,6 +50,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
         case ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP -> handleAdditionalGoldDrop(group, ctx);
         case ON_BLOCK_BREAK_INCREASE_GEODES_DROP -> handleIncreaseGeodesDrop(group, ctx);
         case ON_BLOCK_BREAK_EXTRA_HEALTH -> handleExtraHealth(group, ctx);
+        case ON_BLOCK_BREAK_RANDOM_ITEM_DROP -> handleRandomItemDrop(group, ctx);
         default -> {
         }
       }
@@ -183,5 +192,63 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
           (int) totalMaxStacks - 1, false, false, true));
       player.setAbsorptionAmount(currentAbsorption + (float) healthPerProc);
     }
+  }
+
+  private void handleRandomItemDrop(
+      List<GemstoneModifier> modifiers,
+      ModifierContext ctx) {
+    if (ctx.getBlockPos() == null) {
+      return;
+    }
+
+    List<Double> chances = new ArrayList<>();
+    for (GemstoneModifier modifier : modifiers) {
+      BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
+      chances.add(config.values().get(modifier.getRarityType()));
+    }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
+
+    if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+      initializeBlacklist();
+
+      Item randomItem = getRandomAllowedItem();
+      if (randomItem == null)
+        return;
+
+      ItemStack stack = new ItemStack(randomItem, 1);
+      Block.dropStack(ctx.getWorld(), ctx.getBlockPos(), stack);
+    }
+  }
+
+  private void initializeBlacklist() {
+    List<String> blocked = List.of(
+        "minecraft:air",
+        "minecraft:bedrock",
+        "minecraft:barrier",
+        "minecraft:command_block",
+        "minecraft:chain_command_block",
+        "minecraft:repeating_command_block",
+        "minecraft:structure_block",
+        "minecraft:structure_void",
+        "minecraft:debug_stick",
+        "minecraft:jigsaw",
+        "minecraft:light");
+
+    for (String id : blocked) {
+      BLOCKED_ITEMS.add(Identifier.of(id));
+    }
+  }
+
+  private Item getRandomAllowedItem() {
+    Random random = new Random();
+    List<Item> allItems = Registries.ITEM.stream()
+        .filter(item -> !BLOCKED_ITEMS.contains(Registries.ITEM.getId(item)))
+        .toList();
+
+    if (allItems.isEmpty())
+      return null;
+
+    return allItems.get(random.nextInt(allItems.size()));
   }
 }

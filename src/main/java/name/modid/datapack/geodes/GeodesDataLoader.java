@@ -24,34 +24,33 @@ public class GeodesDataLoader implements SimpleSynchronousResourceReloadListener
 
   @Override
   public void reload(ResourceManager manager) {
-    LOGGER.info("[GeodesConfig] Reloading geode configs...");
+    LOGGER.info("Reloading geode configs...");
 
     Map<String, GeodesConfig> newConfigs = new HashMap<>();
 
-    manager.findResources("", path -> {
-      return true;
-    })
+    manager.findResources(Gemstones.MOD_ID, id -> id.getPath().endsWith(".json"))
         .forEach((id, resource) -> {
-          // TODO: proper namespace gathering
-          LOGGER.debug(resource.toString());
-          if (id.getNamespace().equals(Gemstones.MOD_ID)) {
-            try (InputStreamReader reader = new InputStreamReader(resource.getInputStream())) {
-              GeodesConfig config = GSON.fromJson(reader, GeodesConfig.class);
-              if (config != null && config.geodeId != null) {
-                newConfigs.put(config.geodeId, config);
-                LOGGER.debug("Loaded geode config {}", config.geodeId);
-              } else {
-                LOGGER.warn("Skipping invalid geode config: {}", id);
-              }
-            } catch (Exception e) {
-              LOGGER.error("Error loading geode config {}: {}", id, e.getMessage());
+          if (!id.getNamespace().equals(Gemstones.MOD_ID)) {
+            return;
+          }
+
+          try (InputStreamReader reader = new InputStreamReader(resource.getInputStream())) {
+            GeodesConfig config = GSON.fromJson(reader, GeodesConfig.class);
+
+            if (config != null && config.geodeId != null) {
+              newConfigs.put(config.geodeId, config);
+              LOGGER.debug("Loaded geode config {}", config.geodeId);
+            } else {
+              LOGGER.warn("Skipping invalid geode config: {}", id);
             }
+          } catch (Exception e) {
+            LOGGER.error("Error loading geode config {}: {}", id, e.getMessage());
           }
         });
 
     loadedGeodeConfigs = Collections.unmodifiableMap(newConfigs);
 
-    LOGGER.info("[GeodesConfig] Finished. Loaded {}", loadedGeodeConfigs.size());
+    LOGGER.info("Finished. Loaded {}", loadedGeodeConfigs.size());
     GeodesRegistry.clearCache();
   }
 

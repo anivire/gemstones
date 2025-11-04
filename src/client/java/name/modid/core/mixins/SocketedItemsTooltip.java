@@ -35,7 +35,6 @@ import net.minecraft.util.Identifier;
 
 @Mixin(ItemStack.class)
 public class SocketedItemsTooltip {
-  // TODO: move geodes and probably all other tooltips to client for SHIFT support
   @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0, shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
   private void tooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type,
       CallbackInfoReturnable<List<Text>> cir, List<Text> tooltip) {

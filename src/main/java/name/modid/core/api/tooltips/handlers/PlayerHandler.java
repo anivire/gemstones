@@ -79,8 +79,9 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
             builder.formatValue(seconds, " seconds"))
             .formatted(Formatting.GREEN);
 
-        firstArg = secondsText;
-        secondArg = chanceMutable;
+        firstArg = chanceMutable;
+        secondArg = builder.getEventText(cfg.eventType());
+        thirdArg = secondsText;
       }
       default -> {
         firstArg = valueText;
