@@ -2,6 +2,8 @@ package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
@@ -25,15 +27,18 @@ public class HitMeleeHandler
     if (modifiers.isEmpty())
       return;
 
-    EventType type = ((HitMeleeConfig) modifiers.get(0).getConfig()).eventType();
+    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
+        .collect(Collectors.groupingBy(m -> ((HitMeleeConfig) m.getConfig()).eventType()));
 
-    switch (type) {
-      case ON_HIT_LIFE_STEAL -> handleLifesteal(modifiers, ctx);
-      case ON_HIT_MULTIPLY_DAMAGE_ARMORLESS -> multiplyDamageArmorless(modifiers, ctx);
-      case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(modifiers, ctx);
-      default -> {
+    types.forEach((type, group) -> {
+      switch (type) {
+        case ON_HIT_LIFE_STEAL -> handleLifesteal(group, ctx);
+        case ON_HIT_MULTIPLY_DAMAGE_ARMORLESS -> multiplyDamageArmorless(group, ctx);
+        case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
+        default -> {
+        }
       }
-    }
+    });
   }
 
   private void handleLifesteal(
@@ -44,11 +49,14 @@ public class HitMeleeHandler
       return;
     }
 
-    double combinedChance = 0.0;
+    List<Double> chances = new ArrayList<>();
+
     for (GemstoneModifier modifier : modifiers) {
       HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
-      combinedChance += config.chance().get(modifier.getRarityType());
+      chances.add(config.chance().get(modifier.getRarityType()));
     }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       float healAmount = (float) (ctx.getBaseDamageTaken() * 0.1 + 1.0);
@@ -69,20 +77,22 @@ public class HitMeleeHandler
     ctx.setDamageResult(ctx.getBaseDamageTaken());
   }
 
-  private void multiplyDamageArmorless(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
+  private void multiplyDamageArmorless(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (ctx.getOwner() == null) {
       return;
     }
 
-    float additionalDamagePercent = 0.0F;
+    List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
       HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
-      additionalDamagePercent += config.chance().get(modifier.getRarityType());
+      chances.add(config.chance().get(modifier.getRarityType()));
     }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
 
     if (ctx.getOwner() instanceof LivingEntity livingEntity
         && !ModifierUtils.isArmorEquiped(livingEntity)) {
-      ctx.setDamageResult(ctx.getBaseDamageTaken() + ctx.getBaseDamageTaken() * additionalDamagePercent);
+      ctx.setDamageResult(ctx.getBaseDamageTaken() + ctx.getBaseDamageTaken() * (float) combinedChance);
     } else {
       ctx.setDamageResult(ctx.getBaseDamageTaken());
     }
@@ -93,11 +103,13 @@ public class HitMeleeHandler
       return;
     }
 
-    double combinedChance = 0.0;
+    List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
       HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
-      combinedChance += config.chance().get(modifier.getRarityType());
+      chances.add(config.chance().get(modifier.getRarityType()));
     }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
 
     Random random = ctx.getWorld().getRandom();
     int duration = 15 * 20;

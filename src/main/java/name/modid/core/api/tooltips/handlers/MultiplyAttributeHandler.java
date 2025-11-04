@@ -1,12 +1,12 @@
-package name.modid.core.api.modifiers.tooltips.handlers;
+package name.modid.core.api.tooltips.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import name.modid.core.api.modifiers.config.ModifierCategoryType;
 import name.modid.core.api.modifiers.config.ModifierConfig;
-import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.tooltips.TooltipBuilder;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

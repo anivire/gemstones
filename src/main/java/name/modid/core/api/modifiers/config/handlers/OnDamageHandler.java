@@ -1,6 +1,9 @@
 package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
@@ -15,11 +18,14 @@ public class OnDamageHandler implements ModifierHandler<ModifierConfig.OnDamageC
     if (modifiers.isEmpty())
       return;
 
-    EventType type = ((OnDamageConfig) modifiers.get(0).getConfig()).eventType();
+    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
+        .collect(Collectors.groupingBy(m -> ((OnDamageConfig) m.getConfig()).eventType()));
 
-    switch (type) {
-      default -> {
+    types.forEach((type, group) -> {
+      switch (type) {
+        default -> {
+        }
       }
-    }
+    });
   }
 }

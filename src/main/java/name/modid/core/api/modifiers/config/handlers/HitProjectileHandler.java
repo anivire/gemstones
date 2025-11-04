@@ -2,6 +2,8 @@ package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
@@ -15,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
@@ -35,17 +38,20 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
     if (modifiers.isEmpty())
       return;
 
-    EventType type = ((HitProjectileConfig) modifiers.get(0).getConfig()).eventType();
+    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
+        .collect(Collectors.groupingBy(m -> ((HitProjectileConfig) m.getConfig()).eventType()));
 
-    switch (type) {
-      case ON_HIT_LIFE_STEAL -> handleLifesteal(modifiers, ctx);
-      case ON_HIT_LIGHTNING_BOLT -> handleLightingBolt(modifiers, ctx);
-      case ON_HIT_COPY_ENTITY_DROP -> handleCopyEntityLoot(modifiers, ctx);
-      case ON_HIT_SMALL_FLAT_EXPLOSION -> handleSmallExplostion(modifiers, ctx);
-      case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(modifiers, ctx);
-      default -> {
+    types.forEach((type, group) -> {
+      switch (type) {
+        case ON_HIT_LIFE_STEAL -> handleLifesteal(group, ctx);
+        case ON_HIT_LIGHTNING_BOLT -> handleLightingBolt(group, ctx);
+        case ON_HIT_COPY_ENTITY_DROP -> handleCopyEntityLoot(group, ctx);
+        case ON_HIT_SMALL_FLAT_EXPLOSION -> handleSmallExplostion(group, ctx);
+        case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
+        default -> {
+        }
       }
-    }
+    });
   }
 
   private void handleLifesteal(List<GemstoneModifier> modifiers,
@@ -54,11 +60,13 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       return;
     }
 
-    double combinedChance = 0.0;
+    List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
       HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
-      combinedChance += config.chance().get(modifier.getRarityType());
+      chances.add(config.chance().get(modifier.getRarityType()));
     }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
 
     if (ctx.getOwner() instanceof LivingEntity owner
         && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
@@ -85,11 +93,13 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       return;
     }
 
-    double combinedChance = 0.0;
+    List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
       HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
-      combinedChance += config.chance().get(modifier.getRarityType());
+      chances.add(config.chance().get(modifier.getRarityType()));
     }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       BlockPos pos = ctx.getTarget() != null
@@ -111,11 +121,13 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       return;
     }
 
-    double combinedChance = 0.0;
+    List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
       HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
-      combinedChance += config.chance().get(modifier.getRarityType());
+      chances.add(config.chance().get(modifier.getRarityType()));
     }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
 
     if (ctx.getTarget() instanceof LivingEntity target
         && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
@@ -124,9 +136,14 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
           .getReloadableRegistries()
           .getLootTable(target.getLootTable());
 
+      DamageSource damageSource = ctx.getProjectile() != null
+          ? ctx.getWorld().getDamageSources().arrow(ctx.getProjectile(), ctx.getOwner())
+          : ctx.getWorld().getDamageSources().generic();
+
       LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder(ctx.getWorld())
           .add(LootContextParameters.THIS_ENTITY, ctx.getTarget())
-          .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(ctx.getTarget().getBlockPos()));
+          .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(ctx.getTarget().getBlockPos()))
+          .add(LootContextParameters.DAMAGE_SOURCE, damageSource);
 
       List<ItemStack> loot = lootTable.generateLoot(builder.build(LootContextTypes.ENTITY));
 
@@ -138,11 +155,16 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
   private void handleSmallExplostion(List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    double combinedChance = 0.0;
+    if (ctx.getTarget() == null || ctx.getBlockPos() == null)
+      return;
+
+    List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
       HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
-      combinedChance += config.chance().get(modifier.getRarityType());
+      chances.add(config.chance().get(modifier.getRarityType()));
     }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       BlockPos pos = null;
@@ -170,11 +192,13 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       return;
     }
 
-    double combinedChance = 0.0;
+    List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
       HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
-      combinedChance += config.chance().get(modifier.getRarityType());
+      chances.add(config.chance().get(modifier.getRarityType()));
     }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
 
     Random random = ctx.getWorld().getRandom();
     int duration = 15 * 20;

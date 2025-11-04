@@ -2,6 +2,8 @@ package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
@@ -21,13 +23,16 @@ public class OnPotionBrewHandler
     if (modifiers.isEmpty())
       return;
 
-    EventType type = ((OnPotionBrewConfig) modifiers.get(0).getConfig()).eventType();
+    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
+        .collect(Collectors.groupingBy(m -> ((OnPotionBrewConfig) m.getConfig()).eventType()));
 
-    switch (type) {
-      case ON_POTION_BREW_INCREASE_DURATION -> handleIncreaseDuration(modifiers, ctx);
-      default -> {
+    types.forEach((type, group) -> {
+      switch (type) {
+        case ON_POTION_BREW_INCREASE_DURATION -> handleIncreaseDuration(group, ctx);
+        default -> {
+        }
       }
-    }
+    });
   }
 
   private void handleIncreaseDuration(

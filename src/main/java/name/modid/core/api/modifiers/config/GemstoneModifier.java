@@ -1,9 +1,9 @@
 package name.modid.core.api.modifiers.config;
 
-import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
+import name.modid.core.api.tooltips.TooltipBuilder;
 import net.minecraft.text.MutableText;
 
 public class GemstoneModifier {

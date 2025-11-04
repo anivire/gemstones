@@ -2,6 +2,8 @@ package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
@@ -20,37 +22,31 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
     if (modifiers.isEmpty())
       return;
 
-    EventType type = ((AfterDeathConfig) modifiers.get(0).getConfig()).eventType();
+    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
+        .collect(Collectors.groupingBy(m -> ((AfterDeathConfig) m.getConfig()).eventType()));
 
-    switch (type) {
-      case AFTER_DEATH_DETONATE -> handleDetonate(modifiers, ctx);
-      case AFTER_DEATH_HARVEST_MARK -> handleHarvestMark(modifiers, ctx);
-      default -> {
+    types.forEach((type, group) -> {
+      switch (type) {
+        case AFTER_DEATH_DETONATE -> handleDetonate(group, ctx);
+        case AFTER_DEATH_HARVEST_MARK -> handleHarvestMark(group, ctx);
+        default -> {
+        }
       }
-    }
+    });
   }
 
-  private void handleDetonate(List<GemstoneModifier> modifiers,
-      ModifierContext ctx) {
+  private void handleDetonate(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     final float EXPLOSION_POWER = 0.5F;
 
     if (ctx.getOwner() instanceof LivingEntity owner
         && owner.hasStatusEffect(EffectsRegistry.DETONATE_EFFECT)) {
-      ctx.getOwner().getWorld().createExplosion(
-          owner,
-          null,
-          null,
-          owner.getX(),
-          owner.getY(),
-          owner.getZ(),
-          EXPLOSION_POWER + owner.getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(),
-          false,
+      ctx.getOwner().getWorld().createExplosion(owner, null, null, owner.getX(), owner.getY(), owner.getZ(),
+          EXPLOSION_POWER + owner.getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(), false,
           World.ExplosionSourceType.MOB);
     }
   }
 
-  private void handleHarvestMark(List<GemstoneModifier> modifiers,
-      ModifierContext ctx) {
+  private void handleHarvestMark(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     final int MIN_ADDITIONAL_XP = 3;
     final int MAX_ADDITIONAL_XP = 5;
 
@@ -60,12 +56,8 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
       int exp = (int) (Math.random() * (MAX_ADDITIONAL_XP - MIN_ADDITIONAL_XP + 1) + MIN_ADDITIONAL_XP);
 
       for (int i = 0; i < stackCount; i++) {
-        ctx.getWorld().spawnEntity(new ExperienceOrbEntity(
-            ctx.getWorld(),
-            owner.getX(),
-            owner.getY(),
-            owner.getZ(),
-            exp));
+        ctx.getWorld()
+            .spawnEntity(new ExperienceOrbEntity(ctx.getWorld(), owner.getX(), owner.getY(), owner.getZ(), exp));
       }
     }
   }

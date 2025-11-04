@@ -1,8 +1,8 @@
-package name.modid.core.api.modifiers.tooltips.handlers;
+package name.modid.core.api.tooltips.handlers;
 
 import name.modid.core.api.modifiers.config.ModifierConfig;
-import name.modid.core.api.modifiers.tooltips.TooltipBuilder;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.tooltips.TooltipBuilder;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;

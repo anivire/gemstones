@@ -113,16 +113,18 @@ public class EffectHandler {
           RegistryEntry<StatusEffect> effect = entry.getKey();
           List<GemstoneModifier> effectGroup = entry.getValue();
 
-          double combinedChance = 0.0;
+          List<Double> chances = new ArrayList<>();
           int maxAmplifier = -1;
           int maxDuration = 0;
 
           for (GemstoneModifier modifier : effectGroup) {
             HitEffectMeleeConfig config = (HitEffectMeleeConfig) modifier.getConfig();
-            combinedChance += config.chance().get(modifier.getRarityType());
+            chances.add(config.chance().get(modifier.getRarityType()));
             maxAmplifier = Math.max(maxAmplifier, config.amplifier());
             maxDuration = Math.max(maxDuration, config.duration());
           }
+
+          double combinedChance = ModifierUtils.combinedProcChance(chances);
 
           if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
             target.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier));
@@ -145,16 +147,18 @@ public class EffectHandler {
           RegistryEntry<StatusEffect> effect = entry.getKey();
           List<GemstoneModifier> effectGroup = entry.getValue();
 
-          double combinedChance = 0.0;
+          List<Double> chances = new ArrayList<>();
           int maxAmplifier = -1;
           int maxDuration = 0;
 
           for (GemstoneModifier modifier : effectGroup) {
             HitEffectProjectileConfig config = (HitEffectProjectileConfig) modifier.getConfig();
-            combinedChance += config.chance().get(modifier.getRarityType());
+            chances.add(config.chance().get(modifier.getRarityType()));
             maxAmplifier = Math.max(maxAmplifier, config.amplifier());
             maxDuration = Math.max(maxDuration, config.duration());
           }
+
+          double combinedChance = ModifierUtils.combinedProcChance(chances);
 
           if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
             target.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier));

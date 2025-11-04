@@ -1,5 +1,6 @@
 package name.modid.core.api.modifiers.config;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -27,6 +28,14 @@ public class ModifierUtils {
 
   public static boolean proc(ServerWorld world, double chance) {
     return world.getRandom().nextDouble() < chance;
+  }
+
+  public static double combinedProcChance(Collection<Double> chances) {
+    double result = 1.0;
+    for (double p : chances) {
+      result *= (1.0 - p);
+    }
+    return 1.0 - result;
   }
 
   public static void applyStatusEffect(LivingEntity target, StatusEffectInstance effect) {
@@ -108,6 +117,22 @@ public class ModifierUtils {
         player.getEquippedStack(EquipmentSlot.CHEST),
         player.getEquippedStack(EquipmentSlot.LEGS),
         player.getEquippedStack(EquipmentSlot.FEET))
+        .filter(stack -> !stack.isEmpty())
+        .map(callback)
+        .flatMap(List::stream)
+        .toList();
+  }
+
+  public static <T> List<T> collectValuesFromAllEquipment(
+      ServerPlayerEntity player,
+      Function<ItemStack, List<T>> callback) {
+    return Stream.of(
+        player.getEquippedStack(EquipmentSlot.HEAD),
+        player.getEquippedStack(EquipmentSlot.CHEST),
+        player.getEquippedStack(EquipmentSlot.LEGS),
+        player.getEquippedStack(EquipmentSlot.FEET),
+        player.getEquippedStack(EquipmentSlot.MAINHAND),
+        player.getEquippedStack(EquipmentSlot.OFFHAND))
         .filter(stack -> !stack.isEmpty())
         .map(callback)
         .flatMap(List::stream)
