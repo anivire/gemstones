@@ -12,10 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.PlayerConfig;
-import name.modid.core.api.modifiers.config.ModifierContext;
-import name.modid.core.api.modifiers.config.ModifierContext.ContextBuilder;
-import name.modid.core.api.modifiers.config.ModifierManager;
+import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
+import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.utils.WitherSkullOrbitFlag;
 import name.modid.core.utils.WitherSkullOwner;
 import net.minecraft.entity.EntityType;
@@ -24,10 +23,10 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -118,11 +117,23 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
       }
     }
 
-    List<GemstoneModifier> modifiers = ModifierGatheringHelper.getModifiers(
-        player.getMainHandStack(),
-        PlayerConfig.class);
+    if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+      return;
+    }
 
-    if (modifiers.isEmpty()) {
+    List<GemstoneModifier> modifiers = ModifierUtils.collectValuesFromAllEquipment(
+        serverPlayer,
+        armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, PlayerConfig.class));
+
+    boolean hasWitherGuard = modifiers.stream()
+        .anyMatch(mod -> {
+          if (mod.getConfig() instanceof PlayerConfig config) {
+            return config.eventType() == EventType.PLAYER_WITHER_GUARD;
+          }
+          return false;
+        });
+
+    if (!hasWitherGuard) {
       if (!orbitingSkulls.isEmpty()) {
         witherSkullCount = orbitingSkulls.size();
 
@@ -155,14 +166,6 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
     }
 
     hadValidItemLastTick = true;
-
-    ModifierContext ctx = new ContextBuilder((ServerWorld) player.getWorld()).withOwner(player).build();
-    ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctx);
-
-    ActionResult isItemValid = ctx.getActionResult();
-
-    if (isItemValid == ActionResult.FAIL)
-      return;
 
     witherSkullCount = orbitingSkulls.size();
     if (witherSkullCount < MAX_SKULLS) {

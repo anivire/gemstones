@@ -69,7 +69,7 @@
 
   "tooltip.gemstones.event.on_hit_random_effect": "%s to inflict %s",
   "tooltip.gemstones.event.on_block_break_random_item_drop": "%s to receive %s after mining",
-  "tooltip.gemstones.event.player_random_effect": "every %s with %s chance apply %s on player",
+  "tooltip.gemstones.event.player_random_effect": "killing mob with %s chance apply %s for %s",
 
   "effect.gemstones.bleeding": "Bleeding",
   "effect.gemstones.guardian_smite": "Guardian Smite",

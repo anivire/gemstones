@@ -2,13 +2,15 @@ package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.OnFishingConfig;
-import name.modid.core.api.modifiers.config.ModifierConfig.OnPotionBrewConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
+import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.items.registries.ItemsRegistry;
 import net.minecraft.entity.ExperienceOrbEntity;
@@ -24,13 +26,16 @@ public class OnFishingHandler
     if (modifiers.isEmpty())
       return;
 
-    EventType type = ((OnFishingConfig) modifiers.get(0).getConfig()).eventType();
+    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
+        .collect(Collectors.groupingBy(m -> ((OnFishingConfig) m.getConfig()).eventType()));
 
-    switch (type) {
-      case ON_FISHING_INCREASE_MOSSY_BOX_DROP -> handleMossyBoxDrop(modifiers, ctx);
-      default -> {
+    types.forEach((type, group) -> {
+      switch (type) {
+        case ON_FISHING_INCREASE_MOSSY_BOX_DROP -> handleMossyBoxDrop(group, ctx);
+        default -> {
+        }
       }
-    }
+    });
   }
 
   private void handleMossyBoxDrop(
@@ -40,15 +45,17 @@ public class OnFishingHandler
       return;
     }
 
-    double totalIncreasedChanceValue = 0.0;
+    List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
-      OnPotionBrewConfig config = (OnPotionBrewConfig) modifier.getConfig();
-      totalIncreasedChanceValue += config.values().get(modifier.getRarityType());
+      OnFishingConfig config = (OnFishingConfig) modifier.getConfig();
+      chances.add(config.values().get(modifier.getRarityType()));
     }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
 
     if (ctx.getOwner() instanceof LivingEntity owner
         && ctx.getTarget() instanceof FishingBobberEntity target
-        && ctx.getWorld().random.nextFloat() < totalIncreasedChanceValue) {
+        && ctx.getWorld().random.nextFloat() < (float) combinedChance) {
       ItemStack specialDrop = new ItemStack(ItemsRegistry.MOSSY_BOX);
       ItemEntity itemEntity = new ItemEntity(
           ctx.getWorld(),

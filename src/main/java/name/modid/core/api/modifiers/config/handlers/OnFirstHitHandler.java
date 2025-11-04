@@ -2,6 +2,8 @@ package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
@@ -18,13 +20,16 @@ public class OnFirstHitHandler
     if (modifiers.isEmpty())
       return;
 
-    EventType type = ((OnFirstHitConfig) modifiers.get(0).getConfig()).eventType();
+    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
+        .collect(Collectors.groupingBy(m -> ((OnFirstHitConfig) m.getConfig()).eventType()));
 
-    switch (type) {
-      case ON_FIRST_HIT_ADDITIONAL_DAMAGE -> handleAdditionalDamage(modifiers, ctx);
-      default -> {
+    types.forEach((type, group) -> {
+      switch (type) {
+        case ON_FIRST_HIT_ADDITIONAL_DAMAGE -> handleAdditionalDamage(group, ctx);
+        default -> {
+        }
       }
-    }
+    });
   }
 
   private void handleAdditionalDamage(
@@ -38,6 +43,7 @@ public class OnFirstHitHandler
     if (ctx.getTarget() instanceof LivingEntity target &&
         target.getHealth() == target.getMaxHealth()) {
       float additionalDamagePercent = 0.0F;
+
       for (GemstoneModifier modifier : modifiers) {
         OnFirstHitConfig config = (OnFirstHitConfig) modifier.getConfig();
         additionalDamagePercent += config.values().get(modifier.getRarityType());

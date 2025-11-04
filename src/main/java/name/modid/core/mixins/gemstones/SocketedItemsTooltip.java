@@ -13,12 +13,17 @@ import name.modid.Gemstones;
 import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.api.modifiers.tooltips.TooltipHelper;
+import name.modid.core.api.modifiers.tooltips.TooltipHelper.Icons;
+import name.modid.core.api.modifiers.tooltips.TooltipHelper.InlineIcons;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 @Mixin(ItemStack.class)
 public class SocketedItemsTooltip {
@@ -47,6 +52,23 @@ public class SocketedItemsTooltip {
 
       tooltip.add(Text.translatable("tooltip.gemstones.category_name").formatted(Formatting.GRAY));
       tooltip.addAll(TooltipHelper.getItemGemstoneBonusesRows(gemstones, itemStack));
+
+      MutableText iconInfo = Text.literal(InlineIcons.SHIFT.getSymbol())
+          .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
+              Icons.INLINE.getPath())))
+          .formatted(Formatting.WHITE);
+      MutableText arrowInfo = Text.literal(" > ")
+          .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+          .formatted(Formatting.DARK_GRAY);
+      MutableText actionInfo = Text.literal("Hold Shift to see ")
+          .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+          .formatted(Formatting.YELLOW);
+      MutableText keywordInfo = Text.literal("Gemstones Additional Info")
+          .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+          .formatted(Formatting.GOLD);
+
+      tooltip.addLast(Text.empty());
+      tooltip.addLast(iconInfo.append(arrowInfo).append(actionInfo).append(keywordInfo));
     }
   }
 }

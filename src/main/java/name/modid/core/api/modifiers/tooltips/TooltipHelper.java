@@ -71,8 +71,7 @@ public class TooltipHelper {
     }
 
     public MutableText asText() {
-      return Text.literal(symbol)
-          .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())));
+      return Text.literal(symbol).styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())));
     }
   }
 
@@ -99,8 +98,7 @@ public class TooltipHelper {
 
   public static MutableText getGemstoneQualitySprite(GemstoneQuality rarityType) {
     return Text.literal(rarityType.getRarityLiteral())
-        .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.QUALITY.getPath())))
-        .formatted(Formatting.WHITE);
+        .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.QUALITY.getPath()))).formatted(Formatting.WHITE);
   }
 
   public static Text getGemstoneSocketedRow(GemstoneComponent[] gemstones) {
@@ -114,8 +112,7 @@ public class TooltipHelper {
   public static MutableText safeTranslatable(String key, Object... args) {
     try {
       MutableText text = Text.translatable(key, args);
-      if (Language.getInstance() != null
-          && !Language.getInstance().hasTranslation(key)) {
+      if (Language.getInstance() != null && !Language.getInstance().hasTranslation(key)) {
         Gemstones.LOGGER.warn("Missing lang key: {}", key);
         return Text.literal("?" + key + "?").formatted(Formatting.RED);
       }
@@ -136,20 +133,17 @@ public class TooltipHelper {
 
       // Empty and locked sockets
       if (type == GemstoneType.EMPTY || type == GemstoneType.LOCKED) {
-        String iconSymbol = (type == GemstoneType.EMPTY)
-            ? InlineIcons.EMPTY.getSymbol()
+        String iconSymbol = (type == GemstoneType.EMPTY) ? InlineIcons.EMPTY.getSymbol()
             : InlineIcons.LOCKED.getSymbol();
 
-        Text slotText = TooltipHelper.safeTranslatable(getSlotText(type))
-            .formatted(getSlotColor(type))
+        Text slotText = TooltipHelper.safeTranslatable(getSlotText(type)).formatted(getSlotColor(type))
             .styled(s -> s.withFont(Style.DEFAULT_FONT_ID));
 
         rows.add(makeRow(iconSymbol, Icons.INLINE.getPath(), slotText, Optional.empty()));
         continue;
       }
 
-      GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(
-          type, quality, item.getItem());
+      GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(type, quality, item.getItem());
 
       if (showGemName) {
         List<Item> b = GemstonesRegistry.getGemstonesByType(type);
@@ -160,28 +154,21 @@ public class TooltipHelper {
             .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
             .formatted(Formatting.WHITE);
 
-        MutableText name = Text.literal("")
-            .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
+        MutableText name = Text.literal("").setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
             .append(c.map(itemFound -> itemFound.getDefaultStack().toHoverableText())
                 .orElse(Text.literal("Undefined").formatted(Formatting.RED)));
 
         MutableText q = Text.translatable(quality.getTranslationString())
             .formatted(quality.getQualityTextcolor() == null ? Formatting.WHITE : quality.getQualityTextcolor());
 
-        rows.add(Text.empty().append(icon).append(" > ").formatted(Formatting.DARK_GRAY)
-            .append(name)
-            .append(" ").append(q));
+        rows.add(
+            Text.empty().append(icon).append(" > ").formatted(Formatting.DARK_GRAY).append(name).append(" ").append(q));
       } else {
         if (modifier != null) {
           rows.add(modifier.getTooltipText(quality, false));
         } else {
-          rows.add(makeRow(
-              type.getGemstoneLiteral(),
-              Icons.INLINE_GEMSTONE,
-              Text.literal("Undefined modifier")
-                  .formatted(Formatting.RED)
-                  .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)),
-              Optional.of(true)));
+          rows.add(makeRow(type.getGemstoneLiteral(), Icons.INLINE_GEMSTONE, Text.literal("Undefined modifier")
+              .formatted(Formatting.RED).styled(s -> s.withFont(Style.DEFAULT_FONT_ID)), Optional.of(true)));
         }
       }
     }
@@ -196,12 +183,9 @@ public class TooltipHelper {
   private static MutableText makeRow(String icon, String fontPath, Text content, Optional<Boolean> isGemstoneIcon) {
     Formatting iconColor = isGemstoneIcon.orElse(false) ? Formatting.WHITE : Formatting.DARK_GRAY;
 
-    MutableText prefix = Text.literal(icon)
-        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, fontPath)))
+    MutableText prefix = Text.literal(icon).setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, fontPath)))
         .formatted(iconColor)
-        .append(Text.literal(" > ")
-            .formatted(Formatting.DARK_GRAY)
-            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)));
+        .append(Text.literal(" > ").formatted(Formatting.DARK_GRAY).styled(s -> s.withFont(Style.DEFAULT_FONT_ID)));
 
     return prefix.append(content);
   }

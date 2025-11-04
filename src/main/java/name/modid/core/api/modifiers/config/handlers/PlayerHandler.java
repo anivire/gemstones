@@ -2,6 +2,8 @@ package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
@@ -22,43 +24,33 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     if (modifiers.isEmpty())
       return;
 
-    EventType type = ((PlayerConfig) modifiers.get(0).getConfig()).eventType();
+    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
+        .collect(Collectors.groupingBy(m -> ((PlayerConfig) m.getConfig()).eventType()));
 
-    switch (type) {
-      case PLAYER_WITHER_GUARD -> handleWitherGuard(modifiers, ctx);
-      case PLAYER_PROJECTILE_IMMUNE -> handleProjectileImmune(modifiers, ctx);
-      case PLAYER_RANDOM_EFFECT -> handleRandomEffect(modifiers, ctx);
-      default -> {
+    types.forEach((type, group) -> {
+      switch (type) {
+        case PLAYER_WITHER_GUARD -> handleWitherGuard(group, ctx);
+        case PLAYER_PROJECTILE_IMMUNE -> handleProjectileImmune(group, ctx);
+        case PLAYER_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
+        default -> {
+        }
       }
-    }
+    });
   }
 
-  private void handleWitherGuard(
-      List<GemstoneModifier> modifiers,
-      ModifierContext ctx) {
+  private void handleWitherGuard(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (ctx.getOwner() == null) {
       return;
     }
 
-    var isHaveWitherGuard = false;
-    for (GemstoneModifier modifier : modifiers) {
-      PlayerConfig config = (PlayerConfig) modifier.getConfig();
-      if (config.eventType() == EventType.PLAYER_WITHER_GUARD) {
-        isHaveWitherGuard = true;
-      }
-    }
-
-    if (!isHaveWitherGuard) {
+    if (!modifiers.isEmpty()) {
+      ctx.setActionResult(ActionResult.SUCCESS);
+    } else {
       ctx.setActionResult(ActionResult.FAIL);
-      return;
     }
-
-    ctx.setActionResult(ActionResult.SUCCESS);
   }
 
-  private void handleProjectileImmune(
-      List<GemstoneModifier> modifiers,
-      ModifierContext ctx) {
+  private void handleProjectileImmune(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (!(ctx.getTarget() instanceof LivingEntity target) || ctx.getProjectile() == null) {
       ctx.setIsHurtable(true);
       return;
@@ -97,7 +89,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     }
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-      StatusEffectInstance buff = GetRandomBuff.positive(combinedDuration, amplifier);
+      StatusEffectInstance buff = GetRandomBuff.positive(combinedDuration * 20, amplifier);
       owner.addStatusEffect(buff);
     }
   }

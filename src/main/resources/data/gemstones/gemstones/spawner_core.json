@@ -12,7 +12,7 @@
     },
     "RANGED": {
       "type": "ON_HIT_PROJECTILE",
-      "chance_levels": [0.01, 0.025, 0.035, 0.045],
+      "chance_levels": [0.1, 0.15, 0.20, 0.25],
       "event_type": "ON_HIT_COPY_ENTITY_DROP"
     },
     "TOOLS": {
