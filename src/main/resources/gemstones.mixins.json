@@ -11,6 +11,7 @@
     "attributes.ArrowDamageAttribute",
     "attributes.ProjectileCountAttributeBow",
     "attributes.ProjectileCountAttributeCrossbow",
+    "attributes.ArmorPierceAttribute",
     "effects.GuardianSmiteEffect",
     "effects.StunnedEffect",
     "effects.witherGuard.PlayerWitherGuard",

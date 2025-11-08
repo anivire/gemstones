@@ -24,7 +24,7 @@ public class EventOnBlockBreak {
         && player instanceof LivingEntity owner) {
       List<GemstoneModifier> modifiers = ModifierGatheringHelper.getModifiers(
           // TODO: needed mainHandStack or enough this?
-          player.getWeaponStack(),
+          player.getMainHandStack(),
           BlockBreakConfig.class);
 
       if (modifiers.isEmpty()) {

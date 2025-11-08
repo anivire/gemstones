@@ -40,6 +40,7 @@ public class GemstonesRegistry {
   private static final List<Item> GARNET_GEMSTONES = new ArrayList<>();
   private static final List<Item> WITHER_BONE = new ArrayList<>();
   private static final List<Item> POLYCHROME_CRYSTAL = new ArrayList<>();
+  private static final List<Item> ONYX = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -108,7 +109,7 @@ public class GemstonesRegistry {
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       SPAWNER_CORE_GEMSTONES.add(ItemsRegistry.register(
-          "spawner_core_gemstone_" + rarityName,
+          "spawner_core_" + rarityName,
           settings -> new GemstoneItem(settings, GemstoneType.SPAWNER_CORE, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
@@ -137,6 +138,11 @@ public class GemstonesRegistry {
         "wither_bone_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
         settings -> new GemstoneItem(settings, GemstoneType.WITHER_BONE, GemstoneQuality.UNUSUAL),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+    ONYX.add(ItemsRegistry.register(
+        "onyx_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
+        settings -> new GemstoneItem(settings, GemstoneType.ONYX, GemstoneQuality.UNUSUAL),
+        new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
   }
 
   public static void addGemstonesToItemGroup(FabricItemGroupEntries entries) {
@@ -156,6 +162,7 @@ public class GemstonesRegistry {
     GARNET_GEMSTONES.forEach(entries::add);
     WITHER_BONE.forEach(entries::add);
     POLYCHROME_CRYSTAL.forEach(entries::add);
+    ONYX.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -176,6 +183,7 @@ public class GemstonesRegistry {
     all.addAll(GARNET_GEMSTONES);
     all.addAll(WITHER_BONE);
     all.addAll(POLYCHROME_CRYSTAL);
+    all.addAll(ONYX);
     return all;
   }
 
@@ -243,6 +251,10 @@ public class GemstonesRegistry {
     return POLYCHROME_CRYSTAL;
   }
 
+  public static List<Item> getOnyxGemstones() {
+    return ONYX;
+  }
+
   public static List<Item> getGemstonesByType(GemstoneType type) {
     return switch (type) {
       case RUBY -> RUBY_GEMSTONES;
@@ -261,6 +273,7 @@ public class GemstonesRegistry {
       case GARNET -> GARNET_GEMSTONES;
       case WITHER_BONE -> WITHER_BONE;
       case POLYCHROME_CRYSTAL -> POLYCHROME_CRYSTAL;
+      case ONYX -> ONYX;
       default -> List.of();
     };
   }

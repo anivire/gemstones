@@ -8,6 +8,7 @@ import name.modid.core.content.effects.ExperienceThirstEffect;
 import name.modid.core.content.effects.FreezingEffect;
 import name.modid.core.content.effects.GuardianSmiteEffect;
 import name.modid.core.content.effects.HarvestMarkEffect;
+import name.modid.core.content.effects.LethalWeaknessEffect;
 import name.modid.core.content.effects.LootTouchEffect;
 import name.modid.core.content.effects.PlagueEffect;
 import name.modid.core.content.effects.QuickSandsEffect;
@@ -15,7 +16,6 @@ import name.modid.core.content.effects.ScarabEffect;
 import name.modid.core.content.effects.SoulBurnEffect;
 import name.modid.core.content.effects.SparklingEffect;
 import name.modid.core.content.effects.StunnedEffect;
-import name.modid.core.content.effects.WitherPresenceEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -69,8 +69,8 @@ public class EffectsRegistry {
   public static final RegistryEntry<StatusEffect> SPARKLING_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "sparkling"), new SparklingEffect());
 
-  public static final RegistryEntry<StatusEffect> WITHER_PRESENCE_EFFECT = Registry.registerReference(
-      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "wither_presence"), new WitherPresenceEffect());
+  public static final RegistryEntry<StatusEffect> LETHAL_WEAKNESS_EFFECT = Registry.registerReference(
+      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "lethal_weakness"), new LethalWeaknessEffect());
 
   public static void initialize() {
     Gemstones.LOGGER.info("Registering mod effects for {}", Gemstones.MOD_ID);

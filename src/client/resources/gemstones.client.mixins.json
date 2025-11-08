@@ -6,6 +6,7 @@
     "AbstractClientPlayerEntityMixin",
     "LivingEntityRendererMixin",
     "EntityRenderDispatcherMixin",
+    "WorldRendererMixin",
     "SocketedItemsTooltip"
   ],
   "injectors": {

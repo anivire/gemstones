@@ -16,6 +16,7 @@ public enum EventType {
   ON_BLOCK_BREAK_SMELTER("tooltip.gemstones.event_name.smelter"),
   ON_BLOCK_BREAK_EXTRA_HEALTH("tooltip.gemstones.event_name.extra_health"),
   ON_BLOCK_BREAK_HEAL("tooltip.gemstones.event_name.heal"),
+  ON_BLOCK_BREAK_MINER("tooltip.gemstones.event_name.miner"),
 
   WORLD_EVENT_INCREASE_MOB_SPAWNRATE("tooltip.gemstones.event_name.increase_mob_spawnrate"),
 
@@ -31,7 +32,9 @@ public enum EventType {
 
   ON_HIT_RANDOM_EFFECT("tooltip.gemstones.event_name.target_random_effect"),
   ON_BLOCK_BREAK_RANDOM_ITEM_DROP("tooltip.gemstones.event_name.random_item_drop"),
-  PLAYER_RANDOM_EFFECT("tooltip.gemstones.event_name.player_random_effect");
+
+  PLAYER_RANDOM_EFFECT("tooltip.gemstones.event_name.player_random_effect"),
+  PLAYER_SAVE_LETHAL("tooltip.gemstones.event_name.save_lethal");
 
   private final String getTranslationKey;
 

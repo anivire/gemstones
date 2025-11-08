@@ -20,7 +20,13 @@ public enum GemstoneType {
   PYRITE("\uE014", "item.gemstones.gemstone_name.pyrite"),
   GARNET("\uE015", "item.gemstones.gemstone_name.garnet"),
   WITHER_BONE("\uE016", "item.gemstones.gemstone_name.wither_bone"),
-  POLYCHROME_CRYSTAL("\uE017", "item.gemstones.gemstone_name.polychrome_crystal");
+  POLYCHROME_CRYSTAL("\uE017", "item.gemstones.gemstone_name.polychrome_crystal"),
+  ONYX("\uE018", "item.gemstones.gemstone_name.onyx"),
+  ASTRALITE("\uE019", "item.gemstones.gemstone_name.astralite"),
+  CRYSTALLIZED_EXPIRIENCE("\uE020", "item.gemstones.gemstone_name.crystallized_expirience"),
+  ENDER_SCALE("\uE021", "item.gemstones.gemstone_name.crystallized_expirience"),
+  CHAOS_STONE("\uE022", "item.gemstones.gemstone_name.chaos_stone"),
+  BLOODSTONE("\uE023", "item.gemstones.gemstone_name.bloodstone");
 
   private final String translationString;
   private final String fontLiteral;

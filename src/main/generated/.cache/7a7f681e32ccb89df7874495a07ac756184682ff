@@ -1,8 +1,8 @@
-// 1.21.1	2025-11-05T00:56:08.7620583	Gemstones/Recipes
+// 1.21.1	2025-11-06T21:01:04.2312485	Gemstones/Recipes
 b4ba21497dd3579f1d2caf3bc527b0c529c2092b data\gemstones\advancement\recipes\tools\jewelry_hammer.json
 76d184588a9077d605a32637888c8988cf41fa28 data\gemstones\recipe\jewelry_hammer.json
-957938551a7f31182962aec1858dd6ca57abd8c5 data\gemstones\recipe\netherite_tipped_chisel.json
 4bbeeeff0615f76cfb6d02005f6e8d6e3aef1067 data\gemstones\advancement\recipes\tools\diamond_tipped_chisel.json
+957938551a7f31182962aec1858dd6ca57abd8c5 data\gemstones\recipe\netherite_tipped_chisel.json
 0fd97c30dc3d164e920e1aa69089fac6f6ace138 data\gemstones\recipe\diamond_tipped_chisel.json
 32aed881d55521291b454b35b787621ae7b40cc1 data\gemstones\advancement\recipes\tools\jewelry_pliers.json
 0cffe93aef7fb814702da533aa917e3274ac7b9a data\gemstones\advancement\recipes\tools\netherite_tipped_chisel.json

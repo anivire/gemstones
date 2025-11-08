@@ -71,8 +71,7 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
 
         MutableText chanceMutable = Text.empty()
             .append(builder.getArrowPrefix(isPositive).copy())
-            .append(Text.literal(chanceText)
-                .formatted(Formatting.GREEN));
+            .append(Text.literal(chanceText).formatted(Formatting.GREEN));
 
         double seconds = cfg.values().get(rarityType);
         MutableText secondsText = Text.literal(
@@ -82,6 +81,36 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
         firstArg = chanceMutable;
         secondArg = builder.getEventText(cfg.eventType());
         thirdArg = secondsText;
+      }
+      case PLAYER_SAVE_LETHAL -> {
+        double hpThreshold = cfg.additionValues().get(rarityType);
+
+        MutableText icon = Text.literal(InlineIcons.HALF_HEART.getSymbol())
+            .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+            .formatted(Formatting.WHITE);
+
+        String hpTextStr = builder.formatValue(hpThreshold, "");
+        MutableText hpNumber = Text.literal(hpTextStr)
+            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+            .formatted(Formatting.RED);
+
+        MutableText hpPostfix = Text.literal(" HP")
+            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+            .formatted(Formatting.RED);
+
+        firstArg = Text.empty()
+            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+            .append(icon)
+            .append(Text.literal(" ")
+                .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)))
+            .append(hpNumber)
+            .append(hpPostfix);
+
+        secondArg = builder.getEventText(cfg.eventType());
+
+        double seconds = cfg.values().get(rarityType);
+        thirdArg = Text.literal(builder.formatValue(seconds, " seconds"))
+            .formatted(Formatting.GREEN);
       }
       default -> {
         firstArg = valueText;

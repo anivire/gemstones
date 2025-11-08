@@ -45,6 +45,8 @@
   "tooltip.gemstones.event_name.target_random_effect": "Random Negative Effect",
   "tooltip.gemstones.event_name.random_item_drop": "Random Item Drop",
   "tooltip.gemstones.event_name.player_random_effect": "Random Positive Effect",
+  "tooltip.gemstones.event_name.miner": "3x3 Area",
+  "tooltip.gemstones.event_name.save_lethal": "Borrowed Time",
   
   "tooltip.gemstones.category.unknown": "undefined modifier",
   "tooltip.gemstones.event.unknown": "undefined event",
@@ -61,11 +63,13 @@
   "tooltip.gemstones.event.on_block_break_smelter": "%s to %s on mine",
   "tooltip.gemstones.event.on_block_break_extra_health": "%s gain %s while mining",
   "tooltip.gemstones.event.on_block_break_heal": "%s to %s on mine",
+  "tooltip.gemstones.event.on_block_break_miner": "can mine %s",
   "tooltip.gemstones.event.on_fishing_increase_mossy_box_drop": "%s to loot %s from fishing",
   "tooltip.gemstones.event.on_potion_brew_increase_duration": "%s %s after brewing",
   "tooltip.gemstones.event.world_event_increase_mob_spawnrate": "%s %s",
   "tooltip.gemstones.event.player_wither_guard": "while holding provide %s",
   "tooltip.gemstones.event.player_projectile_immune": "while %s provide %s",
+  "tooltip.gemstones.event.player_save_lethal": "while below %s provide %s for %s",
 
   "tooltip.gemstones.event.on_hit_random_effect": "%s to inflict %s",
   "tooltip.gemstones.event.on_block_break_random_item_drop": "%s to drop %s after mining",
@@ -83,6 +87,7 @@
   "effect.gemstones.amber_blessing": "Amber Blessing",
   "effect.gemstones.soul_burn": "Soul Burn",
   "effect.gemstones.sparkling": "Sparkling",
+  "effect.gemstones.lethal_weakness": "Lethal Weakness",
 
   "attribute.name.generic.pull_speed": "Pull Speed",
   "attribute.name.generic.crit_damage": "Critical Hit Damage",
@@ -91,6 +96,7 @@
   "attribute.name.generic.projectile_speed": "Projectile Speed",
   "attribute.name.generic.projectile_count": "Projectile Count",
   "attribute.name.generic.arrow_damage": "Arrow Damage",
+  "attribute.name.generic.armor_pierce": "Armor Pierce",
 
   "entity.gemstones.spark": "Spark",
 
@@ -213,10 +219,13 @@
   "item.gemstones.wither_bone_unusual": "Wither Bone",
   "item.gemstones.gemstone_name.wither_bone": "Wither Bone",
   
-  "item.gemstones.spawner_core_gemstone_crude": "Spawner Core",
-  "item.gemstones.spawner_core_gemstone_polished": "Spawner Core",
-  "item.gemstones.spawner_core_gemstone_flawless": "Spawner Core",
-  "item.gemstones.spawner_core_gemstone_radiant": "Spawner Core",
+  "item.gemstones.onyx_unusual": "Onyx",
+  "item.gemstones.gemstone_name.onyx": "Onyx",
+  
+  "item.gemstones.spawner_core_crude": "Spawner Core",
+  "item.gemstones.spawner_core_polished": "Spawner Core",
+  "item.gemstones.spawner_core_flawless": "Spawner Core",
+  "item.gemstones.spawner_core_radiant": "Spawner Core",
   "item.gemstones.gemstone_name.spawner_core": "Spawner Core",
   
   "item.gemstones.polychrome_crystal_gemstone_crude": "Polychrome Crystal",

@@ -1,6 +1,7 @@
 package name.modid.core.api.tooltips.handlers;
 
 import name.modid.core.api.modifiers.config.ModifierConfig;
+import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import net.minecraft.text.MutableText;
@@ -28,9 +29,15 @@ public class OnBlockBreakHandler extends BaseTooltipHandler<ModifierConfig.Block
 
   @Override
   protected MutableText buildText(ModifierConfig.BlockBreakConfig cfg, MutableText valueText, boolean isPositive) {
-    return Text
-        .translatable(builder.getTranslationKeyByEvent(cfg.eventType()), valueText,
-            builder.getEventText(cfg.eventType()))
-        .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+    if (cfg.eventType() == EventType.ON_BLOCK_BREAK_MINER) {
+      return Text
+          .translatable(builder.getTranslationKeyByEvent(cfg.eventType()), builder.getEventText(cfg.eventType()))
+          .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+    } else {
+      return Text
+          .translatable(builder.getTranslationKeyByEvent(cfg.eventType()), valueText,
+              builder.getEventText(cfg.eventType()))
+          .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+    }
   }
 }

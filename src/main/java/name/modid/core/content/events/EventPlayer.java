@@ -20,7 +20,6 @@ public class EventPlayer {
   public static boolean setupEvent(LivingEntity entity, DamageSource source, float amount) {
     if (entity.getWorld() instanceof ServerWorld serverWorld &&
         source.getAttacker() instanceof LivingEntity owner &&
-        source.getSource() instanceof PersistentProjectileEntity proj &&
         entity instanceof ServerPlayerEntity player) {
       List<GemstoneModifier> modifiers = ModifierUtils.collectValuesFromArmor(
           player,
@@ -28,6 +27,11 @@ public class EventPlayer {
 
       if (modifiers.isEmpty()) {
         return true;
+      }
+
+      PersistentProjectileEntity proj = null;
+      if (source.getSource() instanceof PersistentProjectileEntity p) {
+        proj = p;
       }
 
       ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
@@ -38,6 +42,13 @@ public class EventPlayer {
       ModifierContext ctx = ctxBuilder.build();
       ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctx);
 
+      // if (modifiers
+      // .stream()
+      // .filter(x -> x.getConfig() instanceof PlayerConfig c
+      // && c.eventType() == EventType.PLAYER_PROJECTILE_IMMUNE)
+      // .count() == 0) {
+      // return true;
+      // } else {
       return ctx.getIsHurtable();
     }
 

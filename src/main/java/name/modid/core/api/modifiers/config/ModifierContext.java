@@ -35,7 +35,7 @@ public class ModifierContext {
     this.blockState = builder.blockState;
     this.baseDamageTaken = builder.baseDamageTaken;
     this.inventory = builder.inventory;
-    this.isHurtable = false;
+    this.isHurtable = true;
   }
 
   public boolean isCancelled() {

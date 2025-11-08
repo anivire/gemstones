@@ -7,11 +7,16 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
 public class BlocksRegistry {
   public static final Block JEWELRY_TABLE = registerBlock("jewelry_table",
-      new JewelryTable(AbstractBlock.Settings.create().nonOpaque()));
+      new JewelryTable(AbstractBlock.Settings.create()
+          .nonOpaque()
+          .strength(2.5F)
+          .sounds(BlockSoundGroup.WOOD)
+          .burnable()));
 
   private static Block registerBlock(String name, Block block) {
     registerBlockItem(name, block);
