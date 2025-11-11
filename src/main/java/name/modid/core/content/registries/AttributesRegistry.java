@@ -17,6 +17,7 @@ public class AttributesRegistry {
   public static RegistryEntry<EntityAttribute> ARROW_DAMAGE_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> PROJECTILE_COUNT_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> ARMOR_PIERCE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> JUMP_COUNT_ATTRIBUTE;
 
   public static final EntityAttribute PULL_SPEED = new ClampedEntityAttribute("attribute.name.generic.pull_speed", 1.0,
       0.1, 1024.0)
@@ -50,6 +51,10 @@ public class AttributesRegistry {
       "attribute.name.generic.armor_pierce", 0.0, 0.0, 1024.0)
       .setTracked(true);
 
+  public static final EntityAttribute JUMP_COUNT = new ClampedEntityAttribute(
+      "attribute.name.generic.jump_count", 0.0, 0.0, 1024.0)
+      .setTracked(true);
+
   public static void initialize() {
     PULL_SPEED_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
         Identifier.of(Gemstones.MOD_ID, "pull_speed"), PULL_SPEED);
@@ -74,5 +79,8 @@ public class AttributesRegistry {
 
     ARMOR_PIERCE_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
         Identifier.of(Gemstones.MOD_ID, "armor_pierce"), ARMOR_PIERCE);
+
+    JUMP_COUNT_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "jump_count"), JUMP_COUNT);
   }
 }

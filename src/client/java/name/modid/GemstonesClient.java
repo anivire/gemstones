@@ -1,5 +1,6 @@
 package name.modid;
 
+import name.modid.core.ClientKeyHandler;
 import name.modid.core.api.entities.JewelryTableBlockEntityRenderer;
 import name.modid.core.api.entities.JewelryTableScreen;
 import name.modid.core.api.models.ModelsRegistry;
@@ -9,6 +10,7 @@ import name.modid.core.api.projectiles.spark.SparkProjectileRenderer;
 import name.modid.core.content.blocks.entity.core.BlockEntitiesRegistry;
 import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.content.screen.ScreenRegistry;
+import name.modid.core.network.NetworkHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -27,5 +29,8 @@ public class GemstonesClient implements ClientModInitializer {
 
     ModelsRegistry.initialize();
     ClientParticlesRegistry.initialize();
+    ClientKeyHandler.initialize();
+
+    NetworkHandler.registerClient();
   }
 }

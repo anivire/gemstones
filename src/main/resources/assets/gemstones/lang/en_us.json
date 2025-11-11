@@ -97,6 +97,7 @@
   "attribute.name.generic.projectile_count": "Projectile Count",
   "attribute.name.generic.arrow_damage": "Arrow Damage",
   "attribute.name.generic.armor_pierce": "Armor Pierce",
+  "attribute.name.generic.jump_count": "Jump Count",
 
   "entity.gemstones.spark": "Spark",
 
@@ -219,8 +220,11 @@
   "item.gemstones.wither_bone_unusual": "Wither Bone",
   "item.gemstones.gemstone_name.wither_bone": "Wither Bone",
   
-  "item.gemstones.onyx_unusual": "Onyx",
-  "item.gemstones.gemstone_name.onyx": "Onyx",
+  "item.gemstones.onyx_unusual": "Onyx Gemstone",
+  "item.gemstones.gemstone_name.onyx": "Ony Gemstonex",
+
+  "item.gemstones.astralite_unusual": "Astralite Gemstone",
+  "item.gemstones.astralite_name.onyx": "Astralite Gemstone",
   
   "item.gemstones.spawner_core_crude": "Spawner Core",
   "item.gemstones.spawner_core_polished": "Spawner Core",
@@ -228,11 +232,11 @@
   "item.gemstones.spawner_core_radiant": "Spawner Core",
   "item.gemstones.gemstone_name.spawner_core": "Spawner Core",
   
-  "item.gemstones.polychrome_crystal_gemstone_crude": "Polychrome Crystal",
-  "item.gemstones.polychrome_crystal_gemstone_polished": "Polychrome Crystal",
-  "item.gemstones.polychrome_crystal_gemstone_flawless": "Polychrome Crystal",
-  "item.gemstones.polychrome_crystal_gemstone_radiant": "Polychrome Crystal",
-  "item.gemstones.gemstone_name.polychrome_crystal": "Polychrome Crystal",
+  "item.gemstones.polychrome_crystal_gemstone_crude": "Polychrome Gemstone",
+  "item.gemstones.polychrome_crystal_gemstone_polished": "Polychrome Gemstone",
+  "item.gemstones.polychrome_crystal_gemstone_flawless": "Polychrome Gemstone",
+  "item.gemstones.polychrome_crystal_gemstone_radiant": "Polychrome Gemstone",
+  "item.gemstones.gemstone_name.polychrome_crystal": "Polychrome Gemstone",
 
   "block.gemstones.jewelry_table": "Jewelry Table"
 }

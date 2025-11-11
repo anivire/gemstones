@@ -1,4 +1,4 @@
-// 1.21.1	2025-11-06T21:01:04.2287472	Gemstones/Model Definitions
+// 1.21.1	2025-11-11T06:10:40.0469822	Gemstones/Model Definitions
 75d84b4d5ece1691232c37fe879c04708f5362b5 assets\gemstones\models\item\ruby_gemstone_polished.json
 4f918441e658f69451d0f1d92449ba818fe55553 assets\gemstones\models\item\amber_gemstone_flawless.json
 264602f33f74a2257e8ec35ca51bcb488eb76610 assets\gemstones\models\item\pyrite_gemstone_radiant.json
@@ -7,12 +7,14 @@
 71a8daaad585f59e4903b4f998341279d8d47150 assets\gemstones\models\item\obsidian_shard_gemstone_radiant.json
 31e6732fdffe2cc239c6809129123ea47bf476fa assets\gemstones\models\item\zircon_gemstone_flawless.json
 7a92361a5b13d8ccd399fcc92d75efa8c449cc93 assets\gemstones\models\item\topaz_gemstone_radiant.json
+b30e6d29de1576b90e6006df64ef690a0596314b assets\gemstones\models\item\astralite_unusual.json
 a656c0fd6dad94f76e9bf251b12315b59f25144b assets\gemstones\models\item\jewelry_table.json
 a190a8968a48e2a65e4947c38188070658fa044c assets\gemstones\models\item\sapphire_gemstone_radiant.json
 4f868d41b0a572cab931aaf7767dc22abdfe7a96 assets\gemstones\models\item\aquamarine_gemstone_crude.json
 e53f739f6b0114687dba0ca54d0441fb818e9ad1 assets\gemstones\models\item\jewelry_pliers.json
 280661bc010f8dc5d3a121c884b7ffc1611b7c4a assets\gemstones\models\item\jade_gemstone_polished.json
 90252d0656a44142a9f7ea59e5f60f18990514ee assets\gemstones\models\item\polychrome_crystal_gemstone_radiant.json
+2d98d7c34ea0f5a9af7e0e19cf5da9dd2f419916 assets\gemstones\models\item\crystallized_expirience_unusual.json
 120828000f5b704e04c4c97c7ec550ca7a640a81 assets\gemstones\models\item\diamond_tipped_chisel.json
 71a8daaad585f59e4903b4f998341279d8d47150 assets\gemstones\models\item\obsidian_shard_gemstone_polished.json
 280661bc010f8dc5d3a121c884b7ffc1611b7c4a assets\gemstones\models\item\jade_gemstone_radiant.json
@@ -66,5 +68,5 @@ d95edce62c9139b4f3e4e7b735550a7d86d2d114 assets\gemstones\models\item\wither_bon
 91912333f9f7ee1468d09ae2d36b444994a38fa1 assets\gemstones\models\item\onyx_unusual.json
 71a8daaad585f59e4903b4f998341279d8d47150 assets\gemstones\models\item\obsidian_shard_gemstone_crude.json
 11f1b6a719e3c9f14d8ff9233fc5219f809a7dd7 assets\gemstones\models\item\spawner_core_flawless.json
-4f918441e658f69451d0f1d92449ba818fe55553 assets\gemstones\models\item\amber_gemstone_polished.json
 6384eb9c0985ccd86170c9ebef6fa011440c4022 assets\gemstones\models\item\malachite_gemstone_radiant.json
+4f918441e658f69451d0f1d92449ba818fe55553 assets\gemstones\models\item\amber_gemstone_polished.json

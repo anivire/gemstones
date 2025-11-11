@@ -41,6 +41,8 @@ public class GemstonesRegistry {
   private static final List<Item> WITHER_BONE = new ArrayList<>();
   private static final List<Item> POLYCHROME_CRYSTAL = new ArrayList<>();
   private static final List<Item> ONYX = new ArrayList<>();
+  private static final List<Item> CRYSTALLIZED_EXPIRIENCE = new ArrayList<>();
+  private static final List<Item> ASTRALITE = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -143,6 +145,16 @@ public class GemstonesRegistry {
         "onyx_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
         settings -> new GemstoneItem(settings, GemstoneType.ONYX, GemstoneQuality.UNUSUAL),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+    CRYSTALLIZED_EXPIRIENCE.add(ItemsRegistry.register(
+        "crystallized_expirience_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
+        settings -> new GemstoneItem(settings, GemstoneType.CRYSTALLIZED_EXPIRIENCE, GemstoneQuality.UNUSUAL),
+        new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+    ASTRALITE.add(ItemsRegistry.register(
+        "astralite_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
+        settings -> new GemstoneItem(settings, GemstoneType.ASTRALITE, GemstoneQuality.UNUSUAL),
+        new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
   }
 
   public static void addGemstonesToItemGroup(FabricItemGroupEntries entries) {
@@ -163,6 +175,8 @@ public class GemstonesRegistry {
     WITHER_BONE.forEach(entries::add);
     POLYCHROME_CRYSTAL.forEach(entries::add);
     ONYX.forEach(entries::add);
+    CRYSTALLIZED_EXPIRIENCE.forEach(entries::add);
+    ASTRALITE.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -184,6 +198,8 @@ public class GemstonesRegistry {
     all.addAll(WITHER_BONE);
     all.addAll(POLYCHROME_CRYSTAL);
     all.addAll(ONYX);
+    all.addAll(CRYSTALLIZED_EXPIRIENCE);
+    all.addAll(ASTRALITE);
     return all;
   }
 
@@ -255,6 +271,14 @@ public class GemstonesRegistry {
     return ONYX;
   }
 
+  public static List<Item> getCrystallizedExpirienceGemstones() {
+    return CRYSTALLIZED_EXPIRIENCE;
+  }
+
+  public static List<Item> getAstraliteGemstones() {
+    return ASTRALITE;
+  }
+
   public static List<Item> getGemstonesByType(GemstoneType type) {
     return switch (type) {
       case RUBY -> RUBY_GEMSTONES;
@@ -274,6 +298,8 @@ public class GemstonesRegistry {
       case WITHER_BONE -> WITHER_BONE;
       case POLYCHROME_CRYSTAL -> POLYCHROME_CRYSTAL;
       case ONYX -> ONYX;
+      case CRYSTALLIZED_EXPIRIENCE -> CRYSTALLIZED_EXPIRIENCE;
+      case ASTRALITE -> ASTRALITE;
       default -> List.of();
     };
   }

@@ -16,38 +16,40 @@ import net.minecraft.sound.SoundEvents;
 
 @Mixin(LivingEntity.class)
 public class EvasionAttribute {
-  @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"), cancellable = true)
-  private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-    LivingEntity entity = (LivingEntity) (Object) this;
 
-    double evasionChance = Math.min(0.0,
-        ModifierUtils.collectAttributeValuesFromArmor(entity, AttributesRegistry.EVASION_ATTRIBUTE)
-            + ModifierUtils.collectAttributeValuesFromItem(entity, AttributesRegistry.EVASION_ATTRIBUTE));
+  @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"), cancellable = true, require = 0)
+  private void gemstones$onDamage(
+      DamageSource source,
+      float amount,
+      CallbackInfoReturnable<Boolean> cir) {
+    LivingEntity self = (LivingEntity) (Object) this;
 
-    if (entity.getRandom().nextDouble() < evasionChance
-        && entity.getWorld() instanceof ServerWorld serverWorld) {
+    double fromArmor = ModifierUtils.collectAttributeValuesFromArmor(
+        self, AttributesRegistry.EVASION_ATTRIBUTE);
+    double fromItem = ModifierUtils.collectAttributeValuesFromItem(
+        self, AttributesRegistry.EVASION_ATTRIBUTE);
+
+    double evasionChance = Math.max(0.0, Math.min(1.0, fromArmor + fromItem));
+    boolean evaded = self.getRandom().nextDouble() < evasionChance;
+
+    if (evaded) {
       cir.setReturnValue(false);
 
-      serverWorld.playSound(
-          null,
-          entity.getX(),
-          entity.getY(),
-          entity.getZ(),
-          SoundEvents.ENTITY_ENDERMAN_TELEPORT,
-          SoundCategory.PLAYERS,
-          1.0F,
-          1.0F);
-
-      serverWorld.spawnParticles(
-          ParticleTypes.CLOUD,
-          entity.getX(),
-          entity.getY() + 1.0,
-          entity.getZ(),
-          20,
-          0.3,
-          0.3,
-          0.3,
-          0.2);
+      if (self.getWorld() instanceof ServerWorld serverWorld) {
+        serverWorld.playSound(
+            null,
+            self.getX(), self.getY(), self.getZ(),
+            SoundEvents.ENTITY_ENDERMAN_TELEPORT,
+            SoundCategory.PLAYERS,
+            1.0F,
+            1.0F);
+        serverWorld.spawnParticles(
+            ParticleTypes.CLOUD,
+            self.getX(), self.getY() + 1.0, self.getZ(),
+            20,
+            0.3, 0.3, 0.3,
+            0.2);
+      }
     }
   }
 }

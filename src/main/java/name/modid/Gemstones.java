@@ -14,9 +14,12 @@ import name.modid.core.content.registries.EventsRegistry;
 import name.modid.core.content.registries.ParticlesRegistry;
 import name.modid.core.content.registries.TagsRegistry;
 import name.modid.core.content.screen.ScreenRegistry;
+import name.modid.core.network.AirJumpPayload;
+import name.modid.core.network.NetworkHandler;
 import name.modid.datapack.geodes.GeodesDataLoader;
 import name.modid.datapack.modifiers.ModifiersDataLoader;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
 
@@ -31,6 +34,18 @@ public class Gemstones implements ModInitializer {
 
     ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ModifiersDataLoader());
     ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new GeodesDataLoader());
+
+    AirJumpPayload.registerCodecs();
+    NetworkHandler.registerServer();
+
+    ServerPlayNetworking.registerGlobalReceiver(
+        AirJumpPayload.ID,
+        (payload, context) -> {
+          context.player().server.execute(() -> {
+            var player = context.player();
+            System.out.println("[Gemstones] AirJumpPayload received from " + player.getName().getString());
+          });
+        });
 
     AttributesRegistry.initialize();
     ComponentsRegistry.initialize();

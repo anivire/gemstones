@@ -1,0 +1,17 @@
+{
+  "gemstone_type": "ASTRALITE",
+  "modifiers": {
+    "TOOLS": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "minecraft:generic.gravity",
+      "value_levels": [-0.8],
+      "operation": "ADD_MULTIPLIED_TOTAL"
+    },
+    "ARMOR": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:jump_count",
+      "value_levels": [1.00],
+      "operation": "ADD_VALUE"
+    }
+  }
+}

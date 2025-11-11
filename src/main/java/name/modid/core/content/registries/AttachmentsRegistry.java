@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 
 public final class AttachmentsRegistry {
   public static final AttachmentType<Boolean> PIERCE_INVULNERABILITY = AttachmentRegistry.create(
-      Identifier.of("modid", "pierce_invulnerability"),
+      Identifier.of(Gemstones.MOD_ID, "pierce_invulnerability"),
       builder -> builder.initializer(() -> false).persistent(Codec.BOOL));
 
   public static void initialize() {
