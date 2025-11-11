@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import name.modid.Gemstones;
 import name.modid.core.api.modifiers.config.handlers.AttributeModifierHandler;
@@ -16,7 +17,22 @@ public class ModifierManager {
         .filter(x -> x.getConfig() instanceof ModifierConfig.AttributeConfig)
         .toList());
 
-    AttributeModifierHandler.apply(new ArrayList<>(attributeModifiers), stack);
+    List<GemstoneModifier> attributeMultModifiers = modifiers.stream()
+        .filter(m -> m.getConfig() instanceof ModifierConfig.MultiplyAttributeConfig)
+        .flatMap(m -> {
+          ModifierConfig.MultiplyAttributeConfig mac = (ModifierConfig.MultiplyAttributeConfig) m.getConfig();
+          return mac.instances().stream().map(attrCfg -> new GemstoneModifier(
+              m.getGemstoneType(),
+              m.getRarityType(),
+              m.getItemCategory(),
+              attrCfg));
+        })
+        .toList();
+
+    List<GemstoneModifier> merged = Stream.concat(attributeModifiers.stream(), attributeMultModifiers.stream())
+        .toList();
+
+    AttributeModifierHandler.apply(new ArrayList<>(merged), stack);
   }
 
   public static void applyModifiers(ArrayList<GemstoneModifier> allModifiers, ModifierContext ctx) {
