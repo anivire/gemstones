@@ -35,10 +35,45 @@ public class HitMeleeHandler
         case ON_HIT_LIFE_STEAL -> handleLifesteal(group, ctx);
         case ON_HIT_MULTIPLY_DAMAGE_ARMORLESS -> multiplyDamageArmorless(group, ctx);
         case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
+        case ON_HIT_MAGIC_STRIKE -> handleMagicStrike(group, ctx);
         default -> {
         }
       }
     });
+  }
+
+  private void handleMagicStrike(
+      List<GemstoneModifier> modifiers,
+      ModifierContext ctx) {
+    if (!(ctx.getTarget() instanceof LivingEntity target)) {
+      return;
+    }
+
+    List<Double> chances = new ArrayList<>();
+
+    for (GemstoneModifier modifier : modifiers) {
+      HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
+      chances.add(config.chance().get(modifier.getRarityType()));
+    }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
+
+    if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+      float bonusDamage = ctx.getBaseDamageTaken() * 0.3f;
+
+      target.getWorld().getServer().execute(() -> {
+        if (target.isAlive()) {
+          try {
+            target.hurtTime = 0;
+            target.timeUntilRegen = 0;
+            target.damage(target.getDamageSources().magic(), bonusDamage);
+          } finally {
+          }
+        }
+      });
+    }
+
+    ctx.setDamageResult(ctx.getBaseDamageTaken());
   }
 
   private void handleLifesteal(

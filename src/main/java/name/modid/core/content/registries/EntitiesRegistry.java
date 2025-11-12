@@ -1,6 +1,7 @@
 package name.modid.core.content.registries;
 
 import name.modid.Gemstones;
+import name.modid.core.content.entities.RainArrowEntity;
 import name.modid.core.content.entities.SparkProjectileEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -18,18 +19,14 @@ public class EntitiesRegistry {
           .trackingTickInterval(10)
           .build());
 
-  // // ИСПРАВЛЕНО: Используем ванильный EntityType.Builder
-  // public static final EntityType<HomingSkullProjectileEntity>
-  // HOMING_SKULL_PROJECTILE = Registry.register(
-  // Registries.ENTITY_TYPE,
-  // Identifier.of(Gemstones.MOD_ID, "homing_skull_projectile"), // <--
-  // ИСПРАВЛЕНО: Правильная ссылка на MOD_ID
-  // EntityType.Builder.<HomingSkullProjectileEntity>create(HomingSkullProjectileEntity::new,
-  // SpawnGroup.MISC)
-  // .dimensions(0.5f, 0.5f)
-  // .maxTrackingRange(4) // <-- Современный способ
-  // .trackingTickInterval(10) // <-- Современный способ
-  // .build());
+  public static final EntityType<RainArrowEntity> RAIN_ARROW = Registry.register(
+      Registries.ENTITY_TYPE,
+      Identifier.of(Gemstones.MOD_ID, "rain_arrow"),
+      EntityType.Builder.<RainArrowEntity>create(RainArrowEntity::new, SpawnGroup.MISC)
+          .dimensions(0.5f, 0.5f)
+          .maxTrackingRange(64)
+          .trackingTickInterval(20)
+          .build());
 
   public static void init() {
     Gemstones.LOGGER.info("Registering mod entities for {}", Gemstones.MOD_ID);

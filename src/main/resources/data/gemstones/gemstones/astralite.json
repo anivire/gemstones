@@ -1,6 +1,16 @@
 {
   "gemstone_type": "ASTRALITE",
   "modifiers": {
+    "MELEE": {
+      "type": "ON_HIT_MELEE",
+      "chance_levels": [0.5],
+      "event_type": "ON_HIT_MAGIC_STRIKE"
+    },
+    "RANGED": {
+      "type": "ON_HIT_PROJECTILE",
+      "chance_levels": [0.35],
+      "event_type": "ON_HIT_ARROW_RAIN"
+    },
     "TOOLS": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:generic.gravity",

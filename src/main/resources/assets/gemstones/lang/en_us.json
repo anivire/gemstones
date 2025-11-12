@@ -47,6 +47,8 @@
   "tooltip.gemstones.event_name.player_random_effect": "Random Positive Effect",
   "tooltip.gemstones.event_name.miner": "3x3 Area",
   "tooltip.gemstones.event_name.save_lethal": "Borrowed Time",
+  "tooltip.gemstones.event_name.magic_strike": "Magic Strike",
+  "tooltip.gemstones.event_name.arrow_rain": "Arrow Rain",
   
   "tooltip.gemstones.category.unknown": "undefined modifier",
   "tooltip.gemstones.event.unknown": "undefined event",
@@ -56,6 +58,8 @@
   "tooltip.gemstones.event.on_hit_small_flat_explosion": "%s to trigger %s on hit",
   "tooltip.gemstones.event.on_hit_copy_entity_drop": "%s to drop copy %s on hit",
   "tooltip.gemstones.event.on_hit_multiply_damage_armorless": "%s %s if not wearing any armor",
+  "tooltip.gemstones.event.on_hit_magic_strike": "%s to %s of %s total damage",
+  "tooltip.gemstones.event.on_hit_arrow_rain": "%s to trigger %s",
   "tooltip.gemstones.event.on_first_hit_additional_damage": "%s %s on first hit",
   "tooltip.gemstones.event.on_block_break_increase_geodes_drop": "%s loot %s from ores",
   "tooltip.gemstones.event.on_block_break_additional_gold_drop": "%s to drop additional %s from ores",

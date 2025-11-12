@@ -18,6 +18,7 @@ public class AttributesRegistry {
   public static RegistryEntry<EntityAttribute> PROJECTILE_COUNT_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> ARMOR_PIERCE_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> JUMP_COUNT_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> MAGIC_PIERCE_ATTRIBUTE;
 
   public static final EntityAttribute PULL_SPEED = new ClampedEntityAttribute("attribute.name.generic.pull_speed", 1.0,
       0.1, 1024.0)

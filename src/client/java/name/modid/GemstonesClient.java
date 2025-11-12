@@ -16,12 +16,14 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.render.entity.ArrowEntityRenderer;
 
 public class GemstonesClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
     EntityModelLayerRegistry.registerModelLayer(SparkProjectileModel.SPARK, SparkProjectileModel::getTexturedModelData);
     EntityRendererRegistry.register(EntitiesRegistry.SPARK_ENTITY, SparkProjectileRenderer::new);
+    EntityRendererRegistry.register(EntitiesRegistry.RAIN_ARROW, context -> new ArrowEntityRenderer(context));
 
     BlockEntityRendererFactories.register(BlockEntitiesRegistry.JEWELRY_TABLE_BLOCK_ENTITY,
         JewelryTableBlockEntityRenderer::new);

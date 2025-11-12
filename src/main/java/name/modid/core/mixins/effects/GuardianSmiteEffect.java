@@ -23,7 +23,9 @@ public class GuardianSmiteEffect {
     LivingEntity target = (LivingEntity) (Object) this;
     StatusEffectInstance effect = target.getStatusEffect(EffectsRegistry.GUARDIAN_SMITE_EFFECT);
 
-    if (effect != null && target.getWorld() != null && target.getWorld().getServer() != null) {
+    if (effect != null
+        && target.getWorld() != null
+        && target.getWorld().getServer() != null) {
       float bonusDamage = 3.0F * (effect.getAmplifier() + 1);
 
       target.getWorld().getServer().execute(() -> {

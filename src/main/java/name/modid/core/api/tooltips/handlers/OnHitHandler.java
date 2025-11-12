@@ -6,11 +6,17 @@ import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import name.modid.core.api.tooltips.TooltipHelper;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T> {
   private final boolean projectile;
 
-  public OnHitHandler(TooltipBuilder builder, ModifierConfig config, GemstoneQuality rarityType, boolean projectile) {
+  public OnHitHandler(
+      TooltipBuilder builder,
+      ModifierConfig config,
+      GemstoneQuality rarityType,
+      boolean projectile) {
     super(builder, config, rarityType);
     this.projectile = projectile;
   }
@@ -36,10 +42,33 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
 
   @Override
   protected MutableText buildText(T cfg, MutableText valueText, boolean isPositive) {
-    EventType ev = (cfg instanceof ModifierConfig.HitMeleeConfig melee) ? melee.eventType()
-        : (cfg instanceof ModifierConfig.HitProjectileConfig proj) ? proj.eventType() : null;
+    EventType ev = (cfg instanceof ModifierConfig.HitMeleeConfig melee)
+        ? melee.eventType()
+        : (cfg instanceof ModifierConfig.HitProjectileConfig proj)
+            ? proj.eventType()
+            : null;
 
-    return TooltipHelper.safeTranslatable(builder.getTranslationKeyByEvent(ev), valueText, builder.getEventText(ev))
+    MutableText firstArg = valueText;
+    MutableText secondArg = builder.getEventText(ev);
+    MutableText thirdArg = null;
+
+    if (ev == EventType.ON_HIT_MAGIC_STRIKE) {
+      thirdArg = Text.literal("30%").formatted(Formatting.RED);
+
+      return TooltipHelper
+          .safeTranslatable(
+              builder.getTranslationKeyByEvent(ev),
+              firstArg,
+              secondArg,
+              thirdArg)
+          .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+    }
+
+    return TooltipHelper
+        .safeTranslatable(
+            builder.getTranslationKeyByEvent(ev),
+            firstArg,
+            secondArg)
         .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
   }
 }
