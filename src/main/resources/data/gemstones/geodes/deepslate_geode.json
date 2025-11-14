@@ -1,0 +1,12 @@
+{
+  "geode_id": "deepslate_geode",
+  "gemstones": {
+    "CELESTINE": 0.6,
+    "RUBY": 0.4
+  },
+  "qualities": {
+    "POLISHED": 0.3,
+    "FLAWLESS": 0.45,
+    "RADIANT": 0.25
+  }
+}

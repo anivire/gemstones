@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern": [
+    "SS ",
+    "DS "
+  ],
+  "result": {
+    "count": 1,
+    "id": "gemstones:expansion_crystal"
+  }
+}

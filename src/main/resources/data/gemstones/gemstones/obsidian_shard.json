@@ -1,0 +1,35 @@
+{
+  "gemstone_type": "OBSIDIAN_SHARD",
+  "modifiers": {
+    "MELEE": {
+      "type": "ON_HIT_EFFECT_MELEE",
+      "chance_levels": [0.08, 0.15, 0.25, 0.3],
+      "amplifier": 0,
+      "effect_id": "gemstones:stunned",
+      "duration": 2,
+      "is_stacking": false,
+      "max_stack_count": 0
+    },
+    "RANGED": {
+      "type": "ON_HIT_EFFECT_PROJECTILE",
+      "chance_levels": [0.16, 0.25, 0.35, 0.45],
+      "amplifier": 0,
+      "effect_id": "gemstones:stunned",
+      "duration": 2,
+      "is_stacking": false,
+      "max_stack_count": 0
+    },
+    "TOOLS": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:max_durability",
+      "value_levels": [125.0, 255.0, 350.0, 500.0],
+      "operation": "ADD_VALUE"
+    },
+    "ARMOR": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:max_durability",
+      "value_levels": [95.0, 155.0, 205.0, 300.0],
+      "operation": "ADD_VALUE"
+    }
+  }
+}

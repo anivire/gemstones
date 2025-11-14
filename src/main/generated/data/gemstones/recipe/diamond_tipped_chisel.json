@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " D ",
+    " I ",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "gemstones:diamond_tipped_chisel"
+  }
+}

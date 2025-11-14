@@ -1,10 +1,30 @@
 {
   "required": true,
-  "package": "name.modid.mixin",
+  "package": "name.modid.core.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AnvilScreenHandlerMixin",
-    "ItemStackMixin"
+    "attributes.BowPullSpeedAttribute",
+    "attributes.CrossbowPullSpeedAttrbute",
+    "attributes.CriticalHitDamageAttribute",
+    "attributes.EvasionAttribute",
+    "attributes.ItemMaxDurabilityAttribute",
+    "attributes.ArrowDamageAttribute",
+    "attributes.ProjectileCountAttributeBow",
+    "attributes.ProjectileCountAttributeCrossbow",
+    "attributes.ArmorPierceAttribute",
+    "attributes.JumpCountAttribute",
+    "effects.GuardianSmiteEffect",
+    "effects.StunnedEffect",
+    "effects.witherGuard.PlayerWitherGuard",
+    "effects.witherGuard.PlayerWitherGuardEntity",
+    "effects.witherGuard.WitherSkullEntityTeleport",
+    "gemstones.SlotsInitialization",
+    "modifiers.OnFirstHit",
+    "modifiers.OnPotionBrew",
+    "modifiers.OnFishing",
+    "modifiers.OnHitProjectile",
+    "modifiers.OnHitMelee",
+    "trackers.SoulBurnTracker"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,9 +1,13 @@
 {
   "required": true,
-  "package": "name.modid.mixin.client",
+  "package": "name.modid.core.mixins",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ItemStackMixin"
+    "AbstractClientPlayerEntityMixin",
+    "LivingEntityRendererMixin",
+    "EntityRenderDispatcherMixin",
+    "WorldRendererMixin",
+    "SocketedItemsTooltip"
   ],
   "injectors": {
     "defaultRequire": 1

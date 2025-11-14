@@ -1,0 +1,40 @@
+{
+  "gemstone_type": "TOPAZ",
+  "modifiers": {
+    "MELEE": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:crit_damage",
+      "value_levels": [0.25, 0.35, 0.50, 0.65],
+      "operation": "ADD_MULTIPLIED_TOTAL"
+    },
+    "RANGED": {
+      "type": "ON_HIT_EFFECT_PROJECTILE",
+      "chance_levels": [0.06, 0.12, 0.18, 1.24],
+      "amplifier": 0,
+      "effect_id": "gemstones:sparkling",
+      "duration": 10,
+      "is_stacking": false,
+      "max_stack_count": 0
+    },
+    "TOOLS": {
+      "type": "ON_BLOCK_BREAK",
+      "chance_levels": [0.15, 0.2, 0.25, 0.3],
+      "value_levels": [0.0, 0.0, 0.0, 0.0],
+      "event_type": "ON_BLOCK_BREAK_SMELTER"
+    },
+    "ARMOR": {
+      "type": "MULTIPLY_ATTRIBUTE",
+      "instances": [
+        {
+          "attribute_id": "minecraft:generic.armor",
+          "value_levels": [0.5, 1.0, 1.5, 2.0],
+          "operation": "ADD_VALUE"
+        },{
+          "attribute_id": "minecraft:generic.armor_toughness",
+          "value_levels": [0.5, 0.5, 1.0, 1.5],
+          "operation": "ADD_VALUE"
+        }
+      ]
+    }
+  }
+}
