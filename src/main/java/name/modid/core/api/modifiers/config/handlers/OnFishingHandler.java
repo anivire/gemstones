@@ -41,9 +41,9 @@ public class OnFishingHandler
   private void handleMossyBoxDrop(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (ctx.getInventory() == null) {
-      return;
-    }
+    // if (ctx.getInventory() == null) {
+    // return;
+    // }
 
     List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {

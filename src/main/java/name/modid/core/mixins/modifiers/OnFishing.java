@@ -38,7 +38,6 @@ public abstract class OnFishing {
     }
 
     if (player.getWorld() instanceof ServerWorld serverWorld
-        && hookedEntity != null
         && hookCountdown > 0) {
       List<GemstoneModifier> modifiers = ModifierUtils.collectValuesFromArmor(
           player,

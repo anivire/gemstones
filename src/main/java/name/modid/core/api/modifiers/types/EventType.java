@@ -27,6 +27,7 @@ public enum EventType {
   AFTER_DEATH_HARVEST_MARK("tooltip.gemstones.event_name.harvest_mark"),
   ON_BLOCK_BREAK_RANDOM_ITEM_DROP("tooltip.gemstones.event_name.random_item_drop"),
   PLAYER_RANDOM_EFFECT("tooltip.gemstones.event_name.player_random_effect"),
+  PLAYER_BONUS_DAMAGE_MISSING_HEALTH("tooltip.gemstones.event_name.bonus_missing_health"),
   PLAYER_SAVE_LETHAL("tooltip.gemstones.event_name.save_lethal");
 
   private final String getTranslationKey;

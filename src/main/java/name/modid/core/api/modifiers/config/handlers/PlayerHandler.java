@@ -36,6 +36,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
         case PLAYER_PROJECTILE_IMMUNE -> handleProjectileImmune(group, ctx);
         case PLAYER_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
         case PLAYER_SAVE_LETHAL -> handleSaveLethal(group, ctx);
+        case PLAYER_BONUS_DAMAGE_MISSING_HEALTH -> handleBonusDamageMissingHealth(group, ctx);
         default -> {
         }
       }
@@ -108,6 +109,9 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       StatusEffectInstance buff = GetRandomBuff.positive(combinedDuration * 20, amplifier);
       owner.addStatusEffect(buff);
     }
+  }
+
+  private void handleBonusDamageMissingHealth(List<GemstoneModifier> modifiers, ModifierContext ctx) {
   }
 
   private void handleSaveLethal(List<GemstoneModifier> modifiers, ModifierContext ctx) {

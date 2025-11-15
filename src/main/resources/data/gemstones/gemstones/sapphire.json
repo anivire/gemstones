@@ -25,7 +25,7 @@
       "type": "ON_FISHING",
       "value_levels": [0.03, 0.055, 0.1, 0.155],
       "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
-      "event_type": "ON_DROP_INCREASE_MOSSY_BOX_DROP"
+      "event_type": "ON_FISHING_INCREASE_MOSSY_BOX_DROP"
     }
   }
 }
