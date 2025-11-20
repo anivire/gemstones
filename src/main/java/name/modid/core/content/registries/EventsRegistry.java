@@ -9,6 +9,7 @@ import name.modid.core.content.events.EventLastBrewer;
 import name.modid.core.content.events.EventMeleeEffect;
 import name.modid.core.content.events.EventOnBeforeBlockBreak;
 import name.modid.core.content.events.EventOnBlockBreak;
+import name.modid.core.content.events.EventOnDamage;
 import name.modid.core.content.events.EventPlayer;
 import name.modid.core.content.events.EventProjectileEffect;
 import name.modid.core.content.events.PlayerRandomBuff;
@@ -31,6 +32,7 @@ public class EventsRegistry {
     });
     AttackEntityCallback.EVENT.register(EventMeleeEffect::setupEvent);
     ServerLivingEntityEvents.AFTER_DAMAGE.register(EventProjectileEffect::setup);
+    ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnDamage::setup);
 
     // Block break
     PlayerBlockBreakEvents.AFTER.register(EventOnBlockBreak::setupEvent);
@@ -45,6 +47,7 @@ public class EventsRegistry {
     ServerEntityEvents.ENTITY_LOAD.register(ProjectileSpeed::setup);
     UseBlockCallback.EVENT.register(EventLastBrewer::setup);
     ServerLivingEntityEvents.AFTER_DEATH.register(SparkSpawner::setup);
+
     ServerLivingEntityEvents.ALLOW_DAMAGE.register(EventPlayer::setupEvent);
   }
 }

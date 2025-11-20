@@ -20,6 +20,7 @@ import name.modid.core.api.tooltips.handlers.AreaEffectHandler;
 import name.modid.core.api.tooltips.handlers.AttributeHandler;
 import name.modid.core.api.tooltips.handlers.MultiplyAttributeHandler;
 import name.modid.core.api.tooltips.handlers.OnBlockBreakHandler;
+import name.modid.core.api.tooltips.handlers.OnDamageHandler;
 import name.modid.core.api.tooltips.handlers.OnFirstHitHandler;
 import name.modid.core.api.tooltips.handlers.OnFishingHandler;
 import name.modid.core.api.tooltips.handlers.OnHitEffectHandler;
@@ -74,6 +75,7 @@ public class TooltipBuilder {
     handlers.put(ModifierCategoryType.ON_DEATH, new AfterDeathHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.ON_POTION_BREW, new OnPotionBrewHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.ON_FISHING, new OnFishingHandler(this, config, rarityType));
+    handlers.put(ModifierCategoryType.ON_DAMAGE, new OnDamageHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.UNDEFINED, new UndefinedHandler());
   }
 

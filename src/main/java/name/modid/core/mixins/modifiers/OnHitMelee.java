@@ -13,11 +13,12 @@ import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.HitMeleeConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierManager;
-import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
+import name.modid.core.api.modifiers.config.ModifierUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
 @Mixin(PlayerEntity.class)
@@ -41,7 +42,10 @@ public abstract class OnHitMelee {
     }
 
     ItemStack weapon = player.getMainHandStack();
-    List<GemstoneModifier> modifiers = ModifierGatheringHelper.getModifiers(weapon, HitMeleeConfig.class);
+    // List<GemstoneModifier> modifiersHand =
+    // ModifierGatheringHelper.getModifiers(weapon, HitMeleeConfig.class);
+    List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
+        (ServerPlayerEntity) (Object) this, HitMeleeConfig.class);
 
     if (modifiers.isEmpty()) {
       return vanillaDamage;

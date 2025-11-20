@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.AttributeModifiersComponent.Entry;
@@ -52,6 +53,14 @@ public class ModifierUtils {
           duration * 20,
           amplifier));
     }
+  }
+
+  public static List<GemstoneModifier> collectGemstoneModifiersFromAllEquipment(
+      ServerPlayerEntity player,
+      Class<? extends ModifierConfig> configClass) {
+    return collectValuesFromAllEquipment(
+        player,
+        itemStack -> ModifierGatheringHelper.getModifiers(itemStack, configClass));
   }
 
   public static double collectAttributeValuesFromArmor(LivingEntity entity, RegistryEntry<EntityAttribute> attribute) {
