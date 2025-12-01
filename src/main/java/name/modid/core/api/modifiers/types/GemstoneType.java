@@ -24,7 +24,7 @@ public enum GemstoneType {
   ONYX("\uE018", "item.gemstones.gemstone_name.onyx"),
   ASTRALITE("\uE019", "item.gemstones.gemstone_name.astralite"),
   CRYSTALLIZED_EXPIRIENCE("\uE020", "item.gemstones.gemstone_name.crystallized_expirience"),
-  ENDER_SCALE("\uE021", "item.gemstones.gemstone_name.crystallized_expirience"),
+  ENDER_SCALE("\uE021", "item.gemstones.gemstone_name.ender_scale"),
   CHAOS_STONE("\uE022", "item.gemstones.gemstone_name.chaos_stone"),
   BLOODSTONE("\uE023", "item.gemstones.gemstone_name.bloodstone");
 

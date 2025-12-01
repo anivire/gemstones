@@ -1,0 +1,23 @@
+{
+  "gemstone_type": "ENDER_SCALE",
+  "modifiers": {
+    "MELEE":{
+      "type": "ON_HIT_MELEE",
+      "chance_levels": [0.05],
+      "additional_value_levels": [8.0],
+      "event_type": "ON_HIT_EXP_ADDITIONAL_DAMAGE"
+    },
+    "TOOLS":{
+      "type": "PLAYER",
+      "value_levels": [0.0],
+      "additional_value_levels": [0.0],
+      "event_type": "PLAYER_WITHER_GUARD"
+    },
+    "ARMOR": {
+      "type": "PLAYER",
+      "value_levels": [0.25],
+      "additional_value_levels": [0.0],
+      "event_type": "PLAYER_ADDITIONAL_EXP_GAIN"
+    }
+  }
+}

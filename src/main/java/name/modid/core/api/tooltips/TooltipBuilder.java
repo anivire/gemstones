@@ -19,6 +19,7 @@ import name.modid.core.api.tooltips.handlers.AfterDeathHandler;
 import name.modid.core.api.tooltips.handlers.AreaEffectHandler;
 import name.modid.core.api.tooltips.handlers.AttributeHandler;
 import name.modid.core.api.tooltips.handlers.MultiplyAttributeHandler;
+import name.modid.core.api.tooltips.handlers.OnBeforeBlockBreakHandler;
 import name.modid.core.api.tooltips.handlers.OnBlockBreakHandler;
 import name.modid.core.api.tooltips.handlers.OnDamageHandler;
 import name.modid.core.api.tooltips.handlers.OnFirstHitHandler;
@@ -69,6 +70,7 @@ public class TooltipBuilder {
     handlers.put(ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE,
         new OnHitEffectHandler<>(this, config, rarityType, true));
     handlers.put(ModifierCategoryType.ON_BLOCK_BREAK, new OnBlockBreakHandler(this, config, rarityType));
+    handlers.put(ModifierCategoryType.ON_BEFORE_BLOCK_BREAK, new OnBeforeBlockBreakHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.AREA_EFFECT, new AreaEffectHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.ON_FIRST_HIT, new OnFirstHitHandler(this, config, rarityType));
     handlers.put(ModifierCategoryType.PLAYER, new PlayerHandler(this, config, rarityType));
@@ -100,8 +102,12 @@ public class TooltipBuilder {
       return ModifierCategoryType.ON_FIRST_HIT;
     if (config instanceof ModifierConfig.BlockBreakConfig)
       return ModifierCategoryType.ON_BLOCK_BREAK;
+    if (config instanceof ModifierConfig.BeforeBlockBreakConfig)
+      return ModifierCategoryType.ON_BEFORE_BLOCK_BREAK;
     if (config instanceof ModifierConfig.PlayerConfig)
       return ModifierCategoryType.PLAYER;
+    if (config instanceof ModifierConfig.AfterDeathConfig)
+      return ModifierCategoryType.ON_DEATH;
     if (config instanceof ModifierConfig.OnPotionBrewConfig)
       return ModifierCategoryType.ON_POTION_BREW;
     if (config instanceof ModifierConfig.OnFishingConfig)

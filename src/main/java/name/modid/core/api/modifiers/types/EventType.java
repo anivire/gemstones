@@ -10,11 +10,13 @@ public enum EventType {
   ON_HIT_MAGIC_STRIKE("tooltip.gemstones.event_name.magic_strike"),
   ON_HIT_ARROW_RAIN("tooltip.gemstones.event_name.arrow_rain"),
   ON_HIT_RANDOM_EFFECT("tooltip.gemstones.event_name.target_random_effect"),
+  ON_HIT_EXP_ADDITIONAL_DAMAGE("tooltip.gemstones.event_name.exp_additional_damage"),
   ON_FIRST_HIT_ADDITIONAL_DAMAGE("tooltip.gemstones.event_name.additional_damage"),
   ON_BLOCK_BREAK_INCREASE_GEODES_DROP("tooltip.gemstones.event_name.increase_geodes_drop"),
   ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP("tooltip.gemstones.event_name.additional_gold_drop"),
   ON_BLOCK_BREAK_REGENERATE_BLOCK("tooltip.gemstones.event_name.regenerate_block"),
   ON_BLOCK_BREAK_SMELTER("tooltip.gemstones.event_name.smelter"),
+  ON_BLOCK_BREAK_ENCHANTER("tooltip.gemstones.event_name.block_enchanter"),
   ON_BLOCK_BREAK_EXTRA_HEALTH("tooltip.gemstones.event_name.extra_health"),
   ON_BLOCK_BREAK_HEAL("tooltip.gemstones.event_name.heal"),
   ON_BLOCK_BREAK_MINER("tooltip.gemstones.event_name.miner"),
@@ -28,6 +30,7 @@ public enum EventType {
   ON_BLOCK_BREAK_RANDOM_ITEM_DROP("tooltip.gemstones.event_name.random_item_drop"),
   PLAYER_RANDOM_EFFECT("tooltip.gemstones.event_name.player_random_effect"),
   PLAYER_BONUS_DAMAGE_MISSING_HEALTH("tooltip.gemstones.event_name.bonus_missing_health"),
+  AFTER_DEATH_ADDITIONAL_EXP_GAIN("tooltip.gemstones.event_name.additional_exp_gain"),
   PLAYER_SAVE_LETHAL("tooltip.gemstones.event_name.save_lethal");
 
   private final String getTranslationKey;

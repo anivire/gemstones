@@ -21,6 +21,7 @@ import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
@@ -52,6 +53,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
         case ON_HIT_SMALL_FLAT_EXPLOSION -> handleSmallExplostion(group, ctx);
         case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
         case ON_HIT_ARROW_RAIN -> handleArrowRain(group, ctx);
+        case ON_HIT_EXP_ADDITIONAL_DAMAGE -> handleAdditionalDamage(group, ctx);
         default -> {
         }
       }
@@ -286,5 +288,41 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
           0.8f,
           0.9f + world.getRandom().nextFloat() * 0.2f);
     }
+  }
+
+  private void handleAdditionalDamage(
+      List<GemstoneModifier> modifiers,
+      ModifierContext ctx) {
+    if (!(ctx.getOwner() instanceof LivingEntity attacker)) {
+      return;
+    }
+
+    if (!(ctx.getProjectile() instanceof PersistentProjectileEntity projectile)) {
+      return;
+    }
+
+    int experienceLevel = attacker instanceof PlayerEntity player
+        ? player.experienceLevel
+        : 0;
+
+    if (experienceLevel == 0) {
+      return;
+    }
+
+    int levelOffset = 0;
+    float bonusDamagePercent = 0.0f;
+    for (GemstoneModifier modifier : modifiers) {
+      HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
+      bonusDamagePercent += config.chance().get(modifier.getRarityType());
+      levelOffset += config.additionValues().get(modifier.getRarityType()).intValue();
+    }
+
+    int bonusDamageSteps = experienceLevel / levelOffset;
+    float extraDamageMultiplier = 1.0f + bonusDamageSteps * bonusDamagePercent;
+
+    float baseDamage = (float) projectile.getDamage();
+    float newDamage = baseDamage * extraDamageMultiplier;
+
+    projectile.applyDamageModifier(newDamage);
   }
 }

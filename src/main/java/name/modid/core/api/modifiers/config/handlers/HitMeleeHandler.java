@@ -15,6 +15,7 @@ import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.utils.GetRandomBuff;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -28,7 +29,10 @@ public class HitMeleeHandler
       return;
 
     Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
-        .collect(Collectors.groupingBy(m -> ((HitMeleeConfig) m.getConfig()).eventType()));
+        .collect(Collectors.groupingBy(
+            m -> ((HitMeleeConfig) m.getConfig()).eventType(),
+            () -> new java.util.EnumMap<>(EventType.class),
+            Collectors.toList()));
 
     types.forEach((type, group) -> {
       switch (type) {
@@ -36,6 +40,7 @@ public class HitMeleeHandler
         case ON_HIT_MULTIPLY_DAMAGE_ARMORLESS -> multiplyDamageArmorless(group, ctx);
         case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
         case ON_HIT_MAGIC_STRIKE -> handleMagicStrike(group, ctx);
+        case ON_HIT_EXP_ADDITIONAL_DAMAGE -> handleAdditionalDamage(group, ctx);
         default -> {
         }
       }
@@ -72,8 +77,6 @@ public class HitMeleeHandler
         }
       });
     }
-
-    ctx.setDamageResult(ctx.getBaseDamageTaken());
   }
 
   private void handleLifesteal(
@@ -108,8 +111,6 @@ public class HitMeleeHandler
           attacker.getZ(),
           6, 0.6, 0.6, 0.6, 0.4);
     }
-
-    ctx.setDamageResult(ctx.getBaseDamageTaken());
   }
 
   private void multiplyDamageArmorless(List<GemstoneModifier> modifiers, ModifierContext ctx) {
@@ -155,7 +156,39 @@ public class HitMeleeHandler
       StatusEffectInstance buff = GetRandomBuff.negative(duration, amplifier);
       target.addStatusEffect(buff);
     }
+  }
 
-    ctx.setDamageResult(ctx.getBaseDamageTaken());
+  private void handleAdditionalDamage(
+      List<GemstoneModifier> modifiers,
+      ModifierContext ctx) {
+    if (!(ctx.getOwner() instanceof LivingEntity attacker)) {
+      return;
+    }
+
+    int experienceLevel = attacker instanceof PlayerEntity player
+        ? player.experienceLevel
+        : 0;
+
+    if (experienceLevel == 0) {
+      return;
+    }
+
+    int levelOffset = 0;
+    float bonusDamagePercent = 0.0f;
+    for (GemstoneModifier modifier : modifiers) {
+      HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
+      bonusDamagePercent += config.chance().get(modifier.getRarityType());
+      levelOffset += config.additionValues().get(modifier.getRarityType()).intValue();
+    }
+
+    int bonusDamageSteps = experienceLevel / levelOffset;
+    float extraDamageMultiplier = 1.0f + bonusDamageSteps * bonusDamagePercent;
+
+    float baseDamage = ctx.getDamageResult() > 0
+        ? ctx.getDamageResult()
+        : ctx.getBaseDamageTaken();
+    float newDamage = baseDamage * extraDamageMultiplier;
+
+    ctx.setDamageResult(newDamage);
   }
 }

@@ -14,10 +14,16 @@ import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -34,6 +40,7 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
     types.forEach((type, group) -> {
       switch (type) {
         case ON_BLOCK_BREAK_SMELTER -> handleBlockSmelter(group, ctx);
+        case ON_BLOCK_BREAK_ENCHANTER -> handleEnchanter(group, ctx);
         default -> {
         }
       }
@@ -41,7 +48,11 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
   }
 
   private void handleBlockSmelter(List<GemstoneModifier> modifiers, ModifierContext ctx) {
-    if (ctx.getTarget() == null) {
+    if (!(ctx.getOwner() instanceof LivingEntity owner)) {
+      return;
+    }
+
+    if (ctx.getBlockPos() == null) {
       return;
     }
 
@@ -53,7 +64,7 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
 
     double combinedChance = ModifierUtils.combinedProcChance(chances);
 
-    if (ctx.getOwner() instanceof LivingEntity owner && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+    if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       List<ItemStack> drops = Block.getDroppedStacks(ctx.getBlockState(), ctx.getWorld(), ctx.getBlockPos(),
           ctx.getWorld().getBlockEntity(ctx.getBlockPos()), owner, owner.getMainHandStack());
 
@@ -73,7 +84,7 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
         }
 
         BlockPos pos = ctx.getBlockPos();
-        ctx.getWorld().playSound(null, ctx.getBlockPos(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0f,
+        ctx.getWorld().playSound(null, ctx.getBlockPos(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5f,
             1.0f);
         ctx.getWorld().spawnParticles(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 10,
             0.3, 0.3, 0.3, 0.01);
@@ -85,4 +96,74 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
       }
     }
   }
+
+  private void handleEnchanter(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+    if (!(ctx.getOwner() instanceof LivingEntity owner)) {
+      return;
+    }
+
+    if (ctx.getBlockPos() == null || ctx.getBlockState() == null) {
+      return;
+    }
+
+    List<Double> chances = new ArrayList<>();
+
+    for (GemstoneModifier modifier : modifiers) {
+      BeforeBlockBreakConfig config = (BeforeBlockBreakConfig) modifier.getConfig();
+      chances.add(config.values().get(modifier.getRarityType()));
+    }
+
+    double combinedChance = ModifierUtils.combinedProcChance(chances);
+
+    if (!ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+      return;
+    }
+
+    int roll = ctx.getWorld().getRandom().nextInt(100);
+    int fortuneLevel;
+    if (roll < 70) {
+      fortuneLevel = 1;
+    } else if (roll < 90) {
+      fortuneLevel = 2;
+    } else {
+      fortuneLevel = 3;
+    }
+
+    BlockPos pos = ctx.getBlockPos();
+    Block block = ctx.getBlockState().getBlock();
+    ItemStack enchantedBlock = new ItemStack(block.asItem());
+
+    if (enchantedBlock.isEmpty()) {
+      return;
+    }
+
+    Registry<Enchantment> enchRegistry = ctx.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+    RegistryEntry<Enchantment> fortuneEntry = enchRegistry.getEntry(Enchantments.FORTUNE).orElseThrow();
+    EnchantmentHelper.apply(enchantedBlock, builder -> {
+      builder.add(fortuneEntry, fortuneLevel);
+    });
+
+    Block.dropStack(ctx.getWorld(), pos, enchantedBlock);
+    ctx.getWorld().setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+
+    ItemStack tool = owner.getMainHandStack();
+    if (tool.isDamageable()) {
+      tool.damage(1, owner, EquipmentSlot.MAINHAND);
+    }
+
+    ctx.getWorld().playSound(
+        null,
+        pos,
+        SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
+        SoundCategory.BLOCKS,
+        0.5f,
+        1.0f);
+    ctx.getWorld().spawnParticles(
+        ParticleTypes.ENCHANT,
+        pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+        20, 0.5, 0.5, 0.5, 0.1);
+
+    ctx.cancel();
+  }
+
 }

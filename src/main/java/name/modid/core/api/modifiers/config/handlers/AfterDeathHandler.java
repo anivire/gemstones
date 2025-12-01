@@ -29,6 +29,7 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
       switch (type) {
         case AFTER_DEATH_DETONATE -> handleDetonate(group, ctx);
         case AFTER_DEATH_HARVEST_MARK -> handleHarvestMark(group, ctx);
+        case AFTER_DEATH_ADDITIONAL_EXP_GAIN -> handleBonusExpGain(group, ctx);
         default -> {
         }
       }
@@ -61,4 +62,39 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
       }
     }
   }
+
+  private void handleBonusExpGain(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+    if (!(ctx.getTarget() instanceof LivingEntity target)) {
+      return;
+    }
+
+    float bonusPercent = 0.0f;
+    for (GemstoneModifier modifier : modifiers) {
+      AfterDeathConfig config = (AfterDeathConfig) modifier.getConfig();
+      bonusPercent += config.values().get(modifier.getRarityType());
+    }
+
+    if (bonusPercent <= 0.0f) {
+      return;
+    }
+
+    int vanillaXp = target.getXpToDrop((net.minecraft.server.world.ServerWorld) ctx.getWorld(), null);
+    if (vanillaXp <= 0) {
+      return;
+    }
+
+    float result = vanillaXp * (1.0f + bonusPercent);
+    int xp = Math.max(0, Math.round(result));
+    if (xp <= 0) {
+      return;
+    }
+
+    ctx.getWorld().spawnEntity(new ExperienceOrbEntity(
+        ctx.getWorld(),
+        target.getX(),
+        target.getY(),
+        target.getZ(),
+        xp));
+  }
+
 }

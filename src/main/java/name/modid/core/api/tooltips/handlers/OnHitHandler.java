@@ -3,6 +3,7 @@ package name.modid.core.api.tooltips.handlers;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.LevelValues;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import name.modid.core.api.tooltips.TooltipHelper;
 import net.minecraft.text.MutableText;
@@ -47,6 +48,11 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
         : (cfg instanceof ModifierConfig.HitProjectileConfig proj)
             ? proj.eventType()
             : null;
+    LevelValues additionalValues = (cfg instanceof ModifierConfig.HitMeleeConfig melee)
+        ? melee.additionValues()
+        : (cfg instanceof ModifierConfig.HitProjectileConfig proj)
+            ? proj.additionValues()
+            : null;
 
     MutableText firstArg = valueText;
     MutableText secondArg = builder.getEventText(ev);
@@ -61,6 +67,26 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
               firstArg,
               secondArg,
               thirdArg)
+          .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+    }
+
+    if (ev == EventType.ON_HIT_EXP_ADDITIONAL_DAMAGE) {
+      int levelsPerStep = additionalValues.get(rarityType).intValue();
+
+      MutableText levelsNumberText = Text.literal(
+          String.valueOf(levelsPerStep))
+          .formatted(Formatting.GREEN);
+
+      MutableText levelsWordText = Text.translatable(
+          EventType.ON_HIT_EXP_ADDITIONAL_DAMAGE.getTranslationKey())
+          .formatted(Formatting.BLUE);
+
+      return TooltipHelper
+          .safeTranslatable(
+              builder.getTranslationKeyByEvent(ev),
+              valueText,
+              levelsNumberText,
+              levelsWordText)
           .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
     }
 

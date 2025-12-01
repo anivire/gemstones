@@ -9,7 +9,7 @@
     },
     "RANGED": {
       "type": "ON_HIT_EFFECT_PROJECTILE",
-      "chance_levels": [0.06, 0.12, 0.18, 1.24],
+      "chance_levels": [0.06, 0.12, 0.18, 0.24],
       "amplifier": 0,
       "effect_id": "gemstones:sparkling",
       "duration": 10,
@@ -17,7 +17,7 @@
       "max_stack_count": 0
     },
     "TOOLS": {
-      "type": "ON_BLOCK_BREAK",
+      "type": "ON_BEFORE_BLOCK_BREAK",
       "chance_levels": [0.15, 0.2, 0.25, 0.3],
       "value_levels": [0.0, 0.0, 0.0, 0.0],
       "event_type": "ON_BLOCK_BREAK_SMELTER"

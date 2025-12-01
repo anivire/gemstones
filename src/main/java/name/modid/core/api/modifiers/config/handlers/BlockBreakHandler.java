@@ -366,7 +366,6 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     double tMin = 0.0;
     double tMax = reach;
 
-    // Слаб-метод
     // X
     if (Math.abs(dir.x) < EPS) {
       if (eye.x < x1 || eye.x > x2)

@@ -22,8 +22,8 @@ public class EventOnBeforeBlockBreak {
       BlockEntity blockEntity) {
     if (world instanceof ServerWorld serverWorld
         && player instanceof LivingEntity owner) {
+
       List<GemstoneModifier> modifiers = ModifierGatheringHelper.getModifiers(
-          // TODO: needed mainHandStack or enough this?
           player.getWeaponStack(),
           BeforeBlockBreakConfig.class);
 
@@ -35,10 +35,11 @@ public class EventOnBeforeBlockBreak {
           .withOwner(owner)
           .withBlockPos(pos)
           .withBlockState(state);
+
       ModifierContext ctx = ctxBuilder.build();
       ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctx);
 
-      return ctx.isCancelled();
+      return !ctx.isCancelled();
     } else {
       return true;
     }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import name.modid.core.api.modifiers.config.handlers.AfterDeathHandler;
+import name.modid.core.api.modifiers.config.handlers.BeforeBlockBreakHandler;
 import name.modid.core.api.modifiers.config.handlers.BlockBreakHandler;
 import name.modid.core.api.modifiers.config.handlers.EffectHandler;
 import name.modid.core.api.modifiers.config.handlers.HitMeleeHandler;
@@ -24,6 +25,7 @@ public class ModifierHandlerRegistry {
     register(ModifierConfig.HitEffectProjectileConfig.class, new EffectHandler.Projectile());
     register(ModifierConfig.OnFirstHitConfig.class, new OnFirstHitHandler());
     register(ModifierConfig.AreaEffectConfig.class, new EffectHandler.Area());
+    register(ModifierConfig.BeforeBlockBreakConfig.class, new BeforeBlockBreakHandler());
     register(ModifierConfig.BlockBreakConfig.class, new BlockBreakHandler());
     register(ModifierConfig.AfterDeathConfig.class, new AfterDeathHandler());
     register(ModifierConfig.PlayerConfig.class, new PlayerHandler());

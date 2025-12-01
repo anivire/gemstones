@@ -120,6 +120,13 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
         yield new ModifierConfig.BlockBreakConfig(chance, values, event);
       }
 
+      case ON_BEFORE_BLOCK_BREAK -> {
+        LevelValues chance = context.deserialize(obj.get("chance_levels"), LevelValues.class);
+        LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
+        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        yield new ModifierConfig.BeforeBlockBreakConfig(chance, values, event);
+      }
+
       case ON_FIRST_HIT -> {
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
         EventType event = context.deserialize(obj.get("event_type"), EventType.class);
@@ -145,6 +152,13 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
         EventType event = context.deserialize(obj.get("event_type"), EventType.class);
         yield new ModifierConfig.OnDamageConfig(values, additional_values, event);
+      }
+
+      case ON_DEATH -> {
+        LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
+        LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
+        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        yield new ModifierConfig.AfterDeathConfig(values, additional_values, event);
       }
 
       case ON_FISHING -> {

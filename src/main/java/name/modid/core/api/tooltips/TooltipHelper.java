@@ -106,7 +106,7 @@ public class TooltipHelper {
       MutableText text = Text.translatable(key, args);
       if (Language.getInstance() != null && !Language.getInstance().hasTranslation(key)) {
         Gemstones.LOGGER.warn("Missing lang key: {}", key);
-        return Text.literal("?" + key + "?").formatted(Formatting.RED);
+        return Text.literal("Missing lang key: " + key).formatted(Formatting.RED);
       }
       return text;
     } catch (Throwable t) {

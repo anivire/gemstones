@@ -1,0 +1,29 @@
+{
+  "gemstone_type": "CRYSTALLIZED_EXPIRIENCE",
+  "modifiers": {
+    "MELEE":{
+      "type": "ON_HIT_MELEE",
+      "chance_levels": [0.035],
+      "additional_value_levels": [8.0],
+      "event_type": "ON_HIT_EXP_ADDITIONAL_DAMAGE"
+    },
+    "RANGED": {
+      "type": "ON_HIT_PROJECTILE",
+      "chance_levels": [0.04],
+      "additional_value_levels": [8.0],
+      "event_type": "ON_HIT_EXP_ADDITIONAL_DAMAGE"
+    },
+    "TOOLS":{
+      "type": "ON_BEFORE_BLOCK_BREAK",
+      "chance_levels": [0.15],
+      "value_levels": [0.0],
+      "event_type": "ON_BLOCK_BREAK_ENCHANTER"
+    },
+    "ARMOR": {
+      "type": "ON_DEATH",
+      "value_levels": [0.55],
+      "additional_value_levels": [0.0],
+      "event_type": "AFTER_DEATH_ADDITIONAL_EXP_GAIN"
+    }
+  }
+}
