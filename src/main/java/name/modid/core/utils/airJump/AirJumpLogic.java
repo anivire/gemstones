@@ -72,9 +72,14 @@ public final class AirJumpLogic {
   public static void applyAirJumpImpulse(PlayerEntity player) {
     Vec3d vel = player.getVelocity();
 
+    double horizontalSpeedSq = vel.x * vel.x + vel.z * vel.z;
+    boolean isStanding = horizontalSpeedSq < 0.0001;
+
     double newY = Math.max(vel.y, 0.0) + 0.76;
     Vec3d look = player.getRotationVec(1.0f).normalize();
-    double forwardBoost = 0.1;
+
+    double forwardBoost = isStanding ? 0.0 : 0.5;
+
     Vec3d boosted = new Vec3d(
         vel.x + look.x * forwardBoost,
         newY,

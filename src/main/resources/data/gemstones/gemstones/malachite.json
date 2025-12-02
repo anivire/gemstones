@@ -22,13 +22,19 @@
       "event_type": "ON_BLOCK_BREAK_INCREASE_GEODES_DROP"
     },
     "ARMOR": {
-      "type": "AREA_EFFECT",
-      "effect_id": "gemstones:plague",
-      "radius_levels": [1.0, 2.0, 3.0, 4.0],
-      "amplifier": 0,
-      "duration": 10,
-      "not_me": true,
-      "only_players": false
+      "type": "MULTIPLY_ATTRIBUTE",
+      "instances": [
+        {
+          "attribute_id": "minecraft:generic.fall_damage_multiplier",
+          "value_levels": [-0.10, -0.15, -0.20, -0.30],
+          "operation": "ADD_MULTIPLIED_TOTAL"
+        },{
+          "type": "ATTRIBUTE",
+          "attribute_id": "minecraft:generic.knockback_resistance",
+          "value_levels": [0.10, 0.15, 0.25, 0.35],
+          "operation": "ADD_MULTIPLIED_TOTAL"
+        }
+      ]
     }
   }
 }
