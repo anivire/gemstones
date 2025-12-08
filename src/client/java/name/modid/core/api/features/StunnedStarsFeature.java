@@ -1,7 +1,7 @@
-package name.modid.core.api.entities.renderFeatures;
+package name.modid.core.api.features;
 
 import name.modid.Gemstones;
-import name.modid.core.api.entities.RenderUtils;
+import name.modid.core.api.RenderUtils;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;

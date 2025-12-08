@@ -24,7 +24,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 
 @Mixin(WorldRenderer.class)
-public class WorldRendererMixin {
+public class BlockOutlineRenderer {
 
   @Inject(method = "drawBlockOutline", at = @At("HEAD"), cancellable = true)
   private void drawMergedCrossOutline(MatrixStack matrices, VertexConsumer vertexConsumer,

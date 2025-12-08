@@ -19,19 +19,27 @@ public class EventAfterDeath {
   public static void setupEvent(LivingEntity entity, DamageSource damageSource) {
     World world = entity.getWorld();
 
-    if (world instanceof ServerWorld serverWorld
-        && damageSource.getAttacker() instanceof LivingEntity owner) {
-      List<GemstoneModifier> modifiers = ModifierUtils.collectValuesFromArmor(
-          (ServerPlayerEntity) damageSource.getAttacker(),
-          armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, AfterDeathConfig.class));
-
-      if (modifiers.isEmpty())
-        return;
-
-      ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
-          .withOwner(owner)
-          .withTarget(entity);
-      ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctxBuilder.build());
+    if (!(world instanceof ServerWorld serverWorld)) {
+      return;
     }
+
+    if (!(damageSource.getAttacker() instanceof ServerPlayerEntity player)) {
+      return;
+    }
+
+    List<GemstoneModifier> modifiers = ModifierUtils.collectValuesFromArmor(
+        player,
+        armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, AfterDeathConfig.class));
+
+    if (modifiers.isEmpty()) {
+      return;
+    }
+
+    ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
+        .withOwner(player)
+        .withTarget(entity);
+
+    ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctxBuilder.build());
   }
+
 }

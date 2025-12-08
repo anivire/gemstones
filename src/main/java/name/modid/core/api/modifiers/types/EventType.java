@@ -8,10 +8,13 @@ public enum EventType {
   ON_HIT_COPY_ENTITY_DROP("tooltip.gemstones.event_name.copy_entity_drop"),
   ON_HIT_MULTIPLY_DAMAGE_ARMORLESS("tooltip.gemstones.event_name.multiply_damage_armorless"),
   ON_HIT_MAGIC_STRIKE("tooltip.gemstones.event_name.magic_strike"),
+  ON_HIT_ENDER_JUDGEMENT("tooltip.gemstones.event_name.ender_judgement"),
+  ON_HIT_ENTITY_PULL("tooltip.gemstones.event_name.entity_pull"),
   ON_HIT_ARROW_RAIN("tooltip.gemstones.event_name.arrow_rain"),
   ON_HIT_RANDOM_EFFECT("tooltip.gemstones.event_name.target_random_effect"),
   ON_HIT_EXP_ADDITIONAL_DAMAGE("tooltip.gemstones.event_name.exp_additional_damage"),
   ON_FIRST_HIT_ADDITIONAL_DAMAGE("tooltip.gemstones.event_name.additional_damage"),
+
   ON_BLOCK_BREAK_INCREASE_GEODES_DROP("tooltip.gemstones.event_name.increase_geodes_drop"),
   ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP("tooltip.gemstones.event_name.additional_gold_drop"),
   ON_BLOCK_BREAK_REGENERATE_BLOCK("tooltip.gemstones.event_name.regenerate_block"),
@@ -20,18 +23,25 @@ public enum EventType {
   ON_BLOCK_BREAK_EXTRA_HEALTH("tooltip.gemstones.event_name.extra_health"),
   ON_BLOCK_BREAK_HEAL("tooltip.gemstones.event_name.heal"),
   ON_BLOCK_BREAK_MINER("tooltip.gemstones.event_name.miner"),
-  WORLD_EVENT_INCREASE_MOB_SPAWNRATE("tooltip.gemstones.event_name.increase_mob_spawnrate"),
+  ON_BLOCK_BREAK_RANDOM_ITEM_DROP("tooltip.gemstones.event_name.random_item_drop"),
+
   ON_POTION_BREW_INCREASE_DURATION("tooltip.gemstones.event_name.potion_duration"),
   ON_FISHING_INCREASE_MOSSY_BOX_DROP("tooltip.gemstones.event_name.increase_mossy_box_drop"),
+
   PLAYER_WITHER_GUARD("tooltip.gemstones.event_name.wither_guard"),
   PLAYER_PROJECTILE_IMMUNE("tooltip.gemstones.event_name.projectile_immune"),
-  AFTER_DEATH_DETONATE("tooltip.gemstones.event_name.detonate"),
-  AFTER_DEATH_HARVEST_MARK("tooltip.gemstones.event_name.harvest_mark"),
-  ON_BLOCK_BREAK_RANDOM_ITEM_DROP("tooltip.gemstones.event_name.random_item_drop"),
   PLAYER_RANDOM_EFFECT("tooltip.gemstones.event_name.player_random_effect"),
   PLAYER_BONUS_DAMAGE_MISSING_HEALTH("tooltip.gemstones.event_name.bonus_missing_health"),
+  PLAYER_SAVE_LETHAL("tooltip.gemstones.event_name.save_lethal"),
+
+  PLAYER_TICK_ENDER_CYCLE("tooltip.gemstones.event_name.ender_cycle"),
+  PLAYER_TICK_ORE_VISION("tooltip.gemstones.event_name.ore_vision"),
+
+  AFTER_DEATH_DETONATE("tooltip.gemstones.event_name.detonate"),
+  AFTER_DEATH_HARVEST_MARK("tooltip.gemstones.event_name.harvest_mark"),
   AFTER_DEATH_ADDITIONAL_EXP_GAIN("tooltip.gemstones.event_name.additional_exp_gain"),
-  PLAYER_SAVE_LETHAL("tooltip.gemstones.event_name.save_lethal");
+
+  WORLD_EVENT_INCREASE_MOB_SPAWNRATE("tooltip.gemstones.event_name.increase_mob_spawnrate");
 
   private final String getTranslationKey;
 

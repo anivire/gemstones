@@ -15,6 +15,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 
 public class EventPlayer {
   public static boolean setupEvent(LivingEntity entity, DamageSource source, float amount) {
@@ -46,5 +47,29 @@ public class EventPlayer {
     }
 
     return true;
+  }
+
+  public static void setupEventEndTick(ServerPlayerEntity player) {
+    World world = player.getWorld();
+
+    if (world instanceof ServerWorld serverWorld) {
+      List<GemstoneModifier> modifiers = new ArrayList<>(
+          ModifierUtils.collectValuesFromAllEquipment(
+              player,
+              armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, PlayerConfig.class)));
+
+      modifiers.removeIf(x -> {
+        if (x.getConfig() instanceof PlayerConfig c) {
+          return !c.eventType().name().startsWith("PLAYER_TICK_");
+        }
+        return true;
+      });
+
+      if (modifiers.isEmpty())
+        return;
+
+      ContextBuilder ctxBuilder = new ContextBuilder(serverWorld).withOwner(player);
+      ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctxBuilder.build());
+    }
   }
 }

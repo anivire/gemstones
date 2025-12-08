@@ -1,4 +1,4 @@
-package name.modid.core;
+package name.modid.core.api;
 
 import name.modid.core.network.AirJumpPayload;
 import name.modid.core.utils.airJump.AirJumpLogic;

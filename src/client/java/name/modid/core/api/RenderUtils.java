@@ -1,4 +1,4 @@
-package name.modid.core.api.entities;
+package name.modid.core.api;
 
 import org.joml.Matrix4f;
 

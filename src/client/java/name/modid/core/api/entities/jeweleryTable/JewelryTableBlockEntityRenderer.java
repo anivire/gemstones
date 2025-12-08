@@ -1,4 +1,4 @@
-package name.modid.core.api.entities;
+package name.modid.core.api.entities.jeweleryTable;
 
 import name.modid.core.content.blocks.entity.JewelryTableBlockEntity;
 import net.minecraft.client.MinecraftClient;

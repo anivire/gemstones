@@ -42,12 +42,19 @@ public class EventsRegistry {
     ServerLivingEntityEvents.AFTER_DEATH.register(EventAfterDeath::setupEvent);
     ServerLivingEntityEvents.AFTER_DEATH.register(PlayerRandomBuff::setupEvent);
 
+    // Player (PLAYER_TICK_ events going in END_SERVER_TICK)
+    ServerTickEvents.END_SERVER_TICK.register(server -> {
+      for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+        EventPlayer.setupEventEndTick(player);
+      }
+    });
+    ServerLivingEntityEvents.ALLOW_DAMAGE.register(EventPlayer::setupEvent);
+
     // Other
     AttackEntityCallback.EVENT.register(EventStunned::setupEvent);
     ServerEntityEvents.ENTITY_LOAD.register(ProjectileSpeed::setup);
     UseBlockCallback.EVENT.register(EventLastBrewer::setup);
     ServerLivingEntityEvents.AFTER_DEATH.register(SparkSpawner::setup);
 
-    ServerLivingEntityEvents.ALLOW_DAMAGE.register(EventPlayer::setupEvent);
   }
 }

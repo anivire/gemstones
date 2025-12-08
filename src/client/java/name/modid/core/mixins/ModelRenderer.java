@@ -13,7 +13,7 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 
 @Mixin(AbstractClientPlayerEntity.class)
-public class AbstractClientPlayerEntityMixin {
+public class ModelRenderer {
   private static final float BASE_PULL_TIME = 20.0f;
 
   @Inject(method = "getFovMultiplier", at = @At("RETURN"), cancellable = true)

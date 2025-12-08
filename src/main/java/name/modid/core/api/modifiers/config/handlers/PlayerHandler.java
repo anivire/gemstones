@@ -13,12 +13,18 @@ import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.registries.EffectsRegistry;
+import name.modid.core.network.OreVisionPayload;
 import name.modid.core.utils.GetRandomBuff;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 
 public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfig> {
@@ -36,10 +42,57 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
         case PLAYER_PROJECTILE_IMMUNE -> handleProjectileImmune(group, ctx);
         case PLAYER_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
         case PLAYER_SAVE_LETHAL -> handleSaveLethal(group, ctx);
+        case PLAYER_TICK_ORE_VISION -> handleOreVision(group, ctx);
         default -> {
         }
       }
     });
+  }
+
+  private void handleOreVision(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+    if (!(ctx.getOwner() instanceof ServerPlayerEntity player))
+      return;
+    if (!(ctx.getWorld() instanceof ServerWorld serverWorld))
+      return;
+
+    if (player.age % 20 != 0)
+      return;
+
+    int radius = 12;
+    var origin = player.getBlockPos();
+
+    var valuableOres = List.of(
+        net.minecraft.block.Blocks.DIAMOND_ORE,
+        net.minecraft.block.Blocks.DEEPSLATE_DIAMOND_ORE,
+        net.minecraft.block.Blocks.EMERALD_ORE,
+        net.minecraft.block.Blocks.DEEPSLATE_EMERALD_ORE,
+        net.minecraft.block.Blocks.ANCIENT_DEBRIS,
+        net.minecraft.block.Blocks.GOLD_ORE,
+        net.minecraft.block.Blocks.DEEPSLATE_GOLD_ORE,
+        net.minecraft.block.Blocks.NETHER_GOLD_ORE);
+
+    List<BlockPos> found = new ArrayList<>();
+
+    for (int dx = -radius; dx <= radius; dx++) {
+      for (int dy = -radius; dy <= radius; dy++) {
+        for (int dz = -radius; dz <= radius; dz++) {
+          var pos = origin.add(dx, dy, dz);
+          if (valuableOres.contains(serverWorld.getBlockState(pos).getBlock())) {
+            found.add(pos);
+          }
+        }
+      }
+    }
+
+    if (found.isEmpty())
+      return;
+
+    PacketByteBuf buf = PacketByteBufs.create();
+    buf.writeVarInt(found.size());
+    for (var pos : found)
+      buf.writeBlockPos(pos);
+
+    ServerPlayNetworking.send(player, new OreVisionPayload(found));
   }
 
   private void handleWitherGuard(List<GemstoneModifier> modifiers, ModifierContext ctx) {

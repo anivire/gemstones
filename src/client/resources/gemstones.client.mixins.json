@@ -3,10 +3,9 @@
   "package": "name.modid.core.mixins",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "AbstractClientPlayerEntityMixin",
-    "LivingEntityRendererMixin",
-    "EntityRenderDispatcherMixin",
-    "WorldRendererMixin",
+    "ModelRenderer",
+    "FeaturesRenderer",
+    "BlockOutlineRenderer",
     "SocketedItemsTooltip"
   ],
   "injectors": {

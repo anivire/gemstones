@@ -1,4 +1,4 @@
-package name.modid.core.api.entities;
+package name.modid.core.api.entities.jeweleryTable;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 

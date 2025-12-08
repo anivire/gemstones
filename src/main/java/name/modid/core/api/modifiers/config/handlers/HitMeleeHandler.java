@@ -17,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.random.Random;
@@ -41,10 +42,46 @@ public class HitMeleeHandler
         case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
         case ON_HIT_MAGIC_STRIKE -> handleMagicStrike(group, ctx);
         case ON_HIT_EXP_ADDITIONAL_DAMAGE -> handleAdditionalDamage(group, ctx);
+        case ON_HIT_ENDER_JUDGEMENT -> handleEnderJudgement(group, ctx);
         default -> {
         }
       }
     });
+  }
+
+  private void handleEnderJudgement(
+      List<GemstoneModifier> modifiers,
+      ModifierContext ctx) {
+    if (!(ctx.getTarget() instanceof LivingEntity target)) {
+      return;
+    }
+
+    List<Double> capPercents = new ArrayList<>();
+
+    for (GemstoneModifier modifier : modifiers) {
+      HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
+      capPercents.add(config.chance().get(modifier.getRarityType()));
+    }
+
+    double capDeathPercent = ModifierUtils.combinedProcChance(capPercents);
+    double healthPercent = target.getHealth() / target.getMaxHealth();
+
+    if (healthPercent < capDeathPercent) {
+
+      if (ctx.getWorld() instanceof ServerWorld serverWorld) {
+        serverWorld.spawnParticles(
+            ParticleTypes.REVERSE_PORTAL,
+            target.getX(),
+            target.getBodyY(0.5),
+            target.getZ(),
+            40,
+            0.6, 1.0, 0.6, 0.05);
+      }
+
+      ctx.setDamageResult(Float.MAX_VALUE);
+    } else {
+      ctx.setDamageResult(ctx.getDamageResult() > 0.000 ? ctx.getDamageResult() : ctx.getBaseDamageTaken());
+    }
   }
 
   private void handleMagicStrike(
