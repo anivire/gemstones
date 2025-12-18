@@ -138,14 +138,6 @@ public class OreHighlighter {
         box.minX, box.minY, box.minZ,
         box.maxX, box.maxY, box.maxZ,
         r, g, b, a, r, g, b);
-
-    float fr = 0.3f, fg = 0.8f, fb = 1.0f, fa = 0.25f;
-    double shrink = 0.05;
-
-    WorldRenderer.drawBox(matrices, fill,
-        box.minX + shrink, box.minY + shrink, box.minZ + shrink,
-        box.maxX - shrink, box.maxY - shrink, box.maxZ - shrink,
-        fr, fg, fb, fa, fr, fg, fb);
   }
 
   private static void spawnParticles(MinecraftClient client, Box box) {

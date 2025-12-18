@@ -7,12 +7,11 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public final class NetworkHandler {
-
-  public static void registerClient() {
-  }
-
-  public static void registerServer() {
+  public static void initialize() {
     AirJumpPayload.registerCodecs();
+
+    PayloadTypeRegistry.playS2C().register(OreVisionPayload.ID, OreVisionPayload.CODEC);
+
     ServerPlayNetworking.registerGlobalReceiver(
         AirJumpPayload.ID,
         (payload, context) -> {
@@ -21,7 +20,7 @@ public final class NetworkHandler {
             System.out.println("[Gemstones] AirJumpPayload received from " + player.getName().getString());
           });
         });
-    PayloadTypeRegistry.playS2C().register(OreVisionPayload.ID, OreVisionPayload.CODEC);
+
     ServerPlayNetworking.registerGlobalReceiver(
         AirJumpPayload.ID,
         (payload, context) -> {

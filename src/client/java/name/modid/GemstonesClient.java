@@ -11,7 +11,6 @@ import name.modid.core.api.projectiles.spark.SparkProjectileRenderer;
 import name.modid.core.content.blocks.entity.core.BlockEntitiesRegistry;
 import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.content.screen.ScreenRegistry;
-import name.modid.core.network.NetworkHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -23,19 +22,18 @@ public class GemstonesClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
     EntityModelLayerRegistry.registerModelLayer(SparkProjectileModel.SPARK, SparkProjectileModel::getTexturedModelData);
+
+    OreHighlighter.register();
+    HandledScreens.register(ScreenRegistry.JEWELRY_TABLE_SCREEN_HANDLER, JewelryTableScreen::new);
     EntityRendererRegistry.register(EntitiesRegistry.SPARK_ENTITY, SparkProjectileRenderer::new);
     EntityRendererRegistry.register(EntitiesRegistry.RAIN_ARROW, context -> new ArrowEntityRenderer(context));
-
-    BlockEntityRendererFactories.register(BlockEntitiesRegistry.JEWELRY_TABLE_BLOCK_ENTITY,
+    BlockEntityRendererFactories.register(
+        BlockEntitiesRegistry.JEWELRY_TABLE_BLOCK_ENTITY,
         JewelryTableBlockEntityRenderer::new);
-    HandledScreens.register(ScreenRegistry.JEWELRY_TABLE_SCREEN_HANDLER, JewelryTableScreen::new);
 
     ModelsRegistry.initialize();
     ClientParticlesRegistry.initialize();
     ClientKeyHandler.initialize();
 
-    NetworkHandler.registerClient();
-
-    OreHighlighter.register();
   }
 }

@@ -15,11 +15,8 @@ import name.modid.core.content.registries.ParticlesRegistry;
 import name.modid.core.content.registries.TagsRegistry;
 import name.modid.core.content.screen.ScreenRegistry;
 import name.modid.core.network.NetworkHandler;
-import name.modid.datapack.geodes.GeodesDataLoader;
-import name.modid.datapack.modifiers.ModifiersDataLoader;
+import name.modid.datagen.RecourceHandler;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.resource.ResourceType;
 
 public class Gemstones implements ModInitializer {
   public static final String MOD_ID = "gemstones";
@@ -30,10 +27,8 @@ public class Gemstones implements ModInitializer {
   public void onInitialize() {
     LOGGER.info("Initializing Gemstones");
 
-    ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ModifiersDataLoader());
-    ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new GeodesDataLoader());
-
-    NetworkHandler.registerServer();
+    RecourceHandler.initialize();
+    NetworkHandler.initialize();
 
     AttributesRegistry.initialize();
     ComponentsRegistry.initialize();
