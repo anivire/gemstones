@@ -30,8 +30,8 @@ public class OnFishingHandler
         .collect(Collectors.groupingBy(m -> ((OnFishingConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case ON_FISHING_INCREASE_MOSSY_BOX_DROP -> handleMossyBoxDrop(group, ctx);
+      switch (type.getName()) {
+        case "ON_FISHING_INCREASE_MOSSY_BOX_DROP" -> handleMossyBoxDrop(group, ctx);
         default -> {
         }
       }

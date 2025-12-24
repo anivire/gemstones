@@ -27,8 +27,8 @@ public class OnPotionBrewHandler
         .collect(Collectors.groupingBy(m -> ((OnPotionBrewConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case ON_POTION_BREW_INCREASE_DURATION -> handleIncreaseDuration(group, ctx);
+      switch (type.getName()) {
+        case "ON_POTION_BREW_INCREASE_DURATION" -> handleIncreaseDuration(group, ctx);
         default -> {
         }
       }

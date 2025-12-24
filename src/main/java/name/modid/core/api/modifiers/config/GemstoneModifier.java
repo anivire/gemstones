@@ -35,13 +35,24 @@ public class GemstoneModifier {
     return itemCategory;
   }
 
+  public ModifierConfig getConfig() {
+    return config;
+  }
+
   public MutableText getTooltipText(GemstoneQuality quality, Boolean isItemTooltip) {
     return new TooltipBuilder(gemstoneType, itemCategory, quality, this)
         .withItemTooltip(isItemTooltip)
         .build();
   }
 
-  public ModifierConfig getConfig() {
-    return config;
+  public <C extends ModifierConfigBase> C getConfig(Class<C> expectedClass) {
+    if (!expectedClass.isInstance(config)) {
+      throw new ClassCastException(
+          String.format("Expected config type %s, but got %s",
+              expectedClass.getSimpleName(),
+              config.getClass().getSimpleName()));
+    }
+
+    return expectedClass.cast(config);
   }
 }

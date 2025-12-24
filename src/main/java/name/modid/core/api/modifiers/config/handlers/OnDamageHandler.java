@@ -30,8 +30,8 @@ public class OnDamageHandler implements ModifierHandler<ModifierConfig.OnDamageC
         .collect(Collectors.groupingBy(m -> ((OnDamageConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case PLAYER_BONUS_DAMAGE_MISSING_HEALTH -> handleBonusDamageMissingHealth(group, ctx);
+      switch (type.getName()) {
+        case "PLAYER_BONUS_DAMAGE_MISSING_HEALTH" -> handleBonusDamageMissingHealth(group, ctx);
         default -> {
         }
       }

@@ -56,16 +56,17 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
     MutableText secondArg;
     MutableText thirdArg = builder.getEventText(cfg.eventType());
 
-    switch (cfg.eventType()) {
-      case PLAYER_WITHER_GUARD -> {
+    // TODO: need switch with id not name
+    switch (cfg.eventType().getName()) {
+      case "PLAYER_WITHER_GUARD" -> {
         firstArg = builder.getEventText(cfg.eventType());
         secondArg = thirdArg;
       }
-      case PLAYER_PROJECTILE_IMMUNE -> {
+      case "PLAYER_PROJECTILE_IMMUNE" -> {
         firstArg = valueText.copy().append(healthPart);
         secondArg = thirdArg;
       }
-      case PLAYER_RANDOM_EFFECT -> {
+      case "PLAYER_RANDOM_EFFECT" -> {
         double chance = cfg.additionValues().get(rarityType);
         String chanceText = builder.formatValue(chance * 100, "%");
 
@@ -82,7 +83,7 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
         secondArg = builder.getEventText(cfg.eventType());
         thirdArg = secondsText;
       }
-      case PLAYER_SAVE_LETHAL -> {
+      case "PLAYER_SAVE_LETHAL" -> {
         double hpThreshold = cfg.additionValues().get(rarityType);
 
         MutableText icon = Text.literal(InlineIcons.HALF_HEART.getSymbol())

@@ -58,9 +58,10 @@ public class EventPlayer {
               player,
               armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, PlayerConfig.class)));
 
+      // TODO: check with id not name
       modifiers.removeIf(x -> {
         if (x.getConfig() instanceof PlayerConfig c) {
-          return !c.eventType().name().startsWith("PLAYER_TICK_");
+          return !c.eventType().getName().startsWith("PLAYER_TICK_");
         }
         return true;
       });

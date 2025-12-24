@@ -14,7 +14,6 @@ import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.PlayerConfig;
 import name.modid.core.api.modifiers.config.ModifierUtils;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.utils.WitherSkullOrbitFlag;
 import name.modid.core.utils.WitherSkullOwner;
 import net.minecraft.entity.EntityType;
@@ -125,10 +124,11 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
         serverPlayer,
         armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, PlayerConfig.class));
 
+    // TODO: check with id not name
     boolean hasWitherGuard = modifiers.stream()
         .anyMatch(mod -> {
           if (mod.getConfig() instanceof PlayerConfig config) {
-            return config.eventType() == EventType.PLAYER_WITHER_GUARD;
+            return config.eventType().getName() == "PLAYER_WITHER_GUARD";
           }
           return false;
         });

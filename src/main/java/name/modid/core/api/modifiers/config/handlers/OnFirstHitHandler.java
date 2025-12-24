@@ -24,8 +24,8 @@ public class OnFirstHitHandler
         .collect(Collectors.groupingBy(m -> ((OnFirstHitConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case ON_FIRST_HIT_ADDITIONAL_DAMAGE -> handleAdditionalDamage(group, ctx);
+      switch (type.getName()) {
+        case "ON_FIRST_HIT_ADDITIONAL_DAMAGE" -> handleAdditionalDamage(group, ctx);
         default -> {
         }
       }

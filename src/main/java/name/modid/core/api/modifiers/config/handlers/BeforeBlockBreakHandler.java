@@ -38,9 +38,9 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
         .collect(Collectors.groupingBy(m -> ((BeforeBlockBreakConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case ON_BLOCK_BREAK_SMELTER -> handleBlockSmelter(group, ctx);
-        case ON_BLOCK_BREAK_ENCHANTER -> handleEnchanter(group, ctx);
+      switch (type.getName()) {
+        case "ON_BLOCK_BREAK_SMELTER" -> handleBlockSmelter(group, ctx);
+        case "ON_BLOCK_BREAK_ENCHANTER" -> handleEnchanter(group, ctx);
         default -> {
         }
       }

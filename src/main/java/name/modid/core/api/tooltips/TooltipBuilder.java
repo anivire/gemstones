@@ -172,7 +172,7 @@ public class TooltipBuilder {
 
   public String getTranslationKeyByEvent(EventType event) {
     return event == null ? "tooltip.gemstones.event.unknown"
-        : "tooltip.gemstones.event." + event.toString().toLowerCase();
+        : "tooltip.gemstones.event." + event.getName().toLowerCase();
   }
 
   public MutableText getArrowPrefix(boolean isPositive) {
@@ -189,12 +189,12 @@ public class TooltipBuilder {
       return TooltipHelper.safeTranslatable("tooltip.gemstones.event.unknown").formatted(Formatting.RED);
     }
 
-    switch (eventType) {
-      case ON_BLOCK_BREAK_EXTRA_HEALTH -> {
+    switch (eventType.getName()) {
+      case "ON_BLOCK_BREAK_EXTRA_HEALTH" -> {
         eventIcon.append(Text.literal(InlineIcons.HALF_EXTRA_HEART.getSymbol()));
         textColor = Formatting.YELLOW;
       }
-      case ON_BLOCK_BREAK_HEAL -> {
+      case "ON_BLOCK_BREAK_HEAL" -> {
         eventIcon.append(Text.literal(InlineIcons.HALF_HEART.getSymbol()));
         textColor = Formatting.GREEN;
       }

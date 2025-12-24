@@ -9,7 +9,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.entry.RegistryEntry;
 
-public sealed interface ModifierConfig permits
+public sealed interface ModifierConfig extends ModifierConfigBase permits
     ModifierConfig.AttributeConfig,
     ModifierConfig.MultiplyAttributeConfig,
     ModifierConfig.HitMeleeConfig,
@@ -39,13 +39,15 @@ public sealed interface ModifierConfig permits
   public record HitMeleeConfig(
       LevelValues chance,
       LevelValues additionValues,
-      EventType eventType) implements ModifierConfig {
+      EventType eventType)
+      implements ModifierConfig {
   }
 
   public record HitProjectileConfig(
       LevelValues chance,
       LevelValues additionValues,
-      EventType eventType) implements ModifierConfig {
+      EventType eventType)
+      implements ModifierConfig {
   }
 
   public record HitEffectMeleeConfig(
@@ -78,31 +80,36 @@ public sealed interface ModifierConfig permits
   public record OnDamageConfig(
       LevelValues values,
       LevelValues additionalValues,
-      EventType eventType) implements ModifierConfig {
+      EventType eventType)
+      implements ModifierConfig {
   }
 
   public record BlockBreakConfig(
       LevelValues values,
       LevelValues additionValues,
-      EventType eventType) implements ModifierConfig {
+      EventType eventType)
+      implements ModifierConfig {
   }
 
   public record BeforeBlockBreakConfig(
       LevelValues values,
       LevelValues additionValues,
-      EventType eventType) implements ModifierConfig {
+      EventType eventType)
+      implements ModifierConfig {
   }
 
   public record PlayerConfig(
       LevelValues values,
       LevelValues additionValues,
-      EventType eventType) implements ModifierConfig {
+      EventType eventType)
+      implements ModifierConfig {
   }
 
   public record AfterDeathConfig(
       LevelValues values,
-      LevelValues additionValues,
-      EventType eventType) implements ModifierConfig {
+      LevelValues additionalValues,
+      EventType eventType)
+      implements ModifierConfig {
   }
 
   public record OnFirstHitConfig(
@@ -113,12 +120,14 @@ public sealed interface ModifierConfig permits
   public record OnPotionBrewConfig(
       LevelValues values,
       LevelValues additionValues,
-      EventType eventType) implements ModifierConfig {
+      EventType eventType)
+      implements ModifierConfig {
   }
 
   public record OnFishingConfig(
       LevelValues values,
       LevelValues additionValues,
-      EventType eventType) implements ModifierConfig {
+      EventType eventType)
+      implements ModifierConfig {
   }
 }

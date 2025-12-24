@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.BlockBreakConfig;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.api.modifiers.types.EventType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.WorldRenderer;
@@ -37,9 +36,10 @@ public class BlockOutlineRenderer {
     List<GemstoneModifier> modifiers = ModifierGatheringHelper.getModifiers(
         player.getMainHandStack(), BlockBreakConfig.class);
 
+    // TODO: check with id not name
     if (modifiers.stream()
         .noneMatch(x -> x.getConfig() instanceof BlockBreakConfig c
-            && c.eventType() == EventType.ON_BLOCK_BREAK_MINER))
+            && c.eventType().getName() == "ON_BLOCK_BREAK_MINER"))
       return;
 
     HitResult hit = player.raycast(5.0, 0, false);

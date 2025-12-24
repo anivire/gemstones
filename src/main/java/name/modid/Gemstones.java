@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import name.modid.core.api.components.ComponentsRegistry;
+import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.blocks.entity.core.BlockEntitiesRegistry;
 import name.modid.core.content.items.registries.ItemsRegistry;
@@ -30,6 +31,7 @@ public class Gemstones implements ModInitializer {
     RecourceHandler.initialize();
     NetworkHandler.initialize();
 
+    EventType.initialize();
     AttributesRegistry.initialize();
     ComponentsRegistry.initialize();
     TagsRegistry.initialize();

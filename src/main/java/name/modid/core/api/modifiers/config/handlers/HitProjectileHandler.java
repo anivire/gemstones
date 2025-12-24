@@ -46,14 +46,14 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
         .collect(Collectors.groupingBy(m -> ((HitProjectileConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case ON_HIT_LIFE_STEAL -> handleLifesteal(group, ctx);
-        case ON_HIT_LIGHTNING_BOLT -> handleLightingBolt(group, ctx);
-        case ON_HIT_COPY_ENTITY_DROP -> handleCopyEntityLoot(group, ctx);
-        case ON_HIT_SMALL_FLAT_EXPLOSION -> handleSmallExplostion(group, ctx);
-        case ON_HIT_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
-        case ON_HIT_ARROW_RAIN -> handleArrowRain(group, ctx);
-        case ON_HIT_EXP_ADDITIONAL_DAMAGE -> handleAdditionalDamage(group, ctx);
+      switch (type.getName()) {
+        case "ON_HIT_LIFE_STEAL" -> handleLifesteal(group, ctx);
+        case "ON_HIT_LIGHTNING_BOLT" -> handleLightingBolt(group, ctx);
+        case "ON_HIT_COPY_ENTITY_DROP" -> handleCopyEntityLoot(group, ctx);
+        case "ON_HIT_SMALL_FLAT_EXPLOSION" -> handleSmallExplostion(group, ctx);
+        case "ON_HIT_RANDOM_EFFECT" -> handleRandomEffect(group, ctx);
+        case "ON_HIT_ARROW_RAIN" -> handleArrowRain(group, ctx);
+        case "ON_HIT_EXP_ADDITIONAL_DAMAGE" -> handleAdditionalDamage(group, ctx);
         default -> {
         }
       }

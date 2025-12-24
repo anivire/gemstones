@@ -26,10 +26,10 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
         .collect(Collectors.groupingBy(m -> ((AfterDeathConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case AFTER_DEATH_DETONATE -> handleDetonate(group, ctx);
-        case AFTER_DEATH_HARVEST_MARK -> handleHarvestMark(group, ctx);
-        case AFTER_DEATH_ADDITIONAL_EXP_GAIN -> handleBonusExpGain(group, ctx);
+      switch (type.getName()) {
+        case "AFTER_DEATH_DETONATE" -> handleDetonate(group, ctx);
+        case "AFTER_DEATH_HARVEST_MARK" -> handleHarvestMark(group, ctx);
+        case "AFTER_DEATH_ADDITIONAL_EXP_GAIN" -> handleBonusExpGain(group, ctx);
         default -> {
         }
       }

@@ -55,14 +55,14 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
         .collect(Collectors.groupingBy(m -> ((BlockBreakConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case ON_BLOCK_BREAK_HEAL -> handleHeal(group, ctx);
-        case ON_BLOCK_BREAK_REGENERATE_BLOCK -> handleRegenerateBlock(group, ctx);
-        case ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP -> handleAdditionalGoldDrop(group, ctx);
-        case ON_BLOCK_BREAK_INCREASE_GEODES_DROP -> handleIncreaseGeodesDrop(group, ctx);
-        case ON_BLOCK_BREAK_EXTRA_HEALTH -> handleExtraHealth(group, ctx);
-        case ON_BLOCK_BREAK_RANDOM_ITEM_DROP -> handleRandomItemDrop(group, ctx);
-        case ON_BLOCK_BREAK_MINER -> handleMiner(group, ctx);
+      switch (type.getName()) {
+        case "ON_BLOCK_BREAK_HEAL" -> handleHeal(group, ctx);
+        case "ON_BLOCK_BREAK_REGENERATE_BLOCK" -> handleRegenerateBlock(group, ctx);
+        case "ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP" -> handleAdditionalGoldDrop(group, ctx);
+        case "ON_BLOCK_BREAK_INCREASE_GEODES_DROP" -> handleIncreaseGeodesDrop(group, ctx);
+        case "ON_BLOCK_BREAK_EXTRA_HEALTH" -> handleExtraHealth(group, ctx);
+        case "ON_BLOCK_BREAK_RANDOM_ITEM_DROP" -> handleRandomItemDrop(group, ctx);
+        case "ON_BLOCK_BREAK_MINER" -> handleMiner(group, ctx);
         default -> {
         }
       }

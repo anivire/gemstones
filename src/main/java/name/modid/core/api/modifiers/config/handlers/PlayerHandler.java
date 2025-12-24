@@ -37,12 +37,12 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
         .collect(Collectors.groupingBy(m -> ((PlayerConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case PLAYER_WITHER_GUARD -> handleWitherGuard(group, ctx);
-        case PLAYER_PROJECTILE_IMMUNE -> handleProjectileImmune(group, ctx);
-        case PLAYER_RANDOM_EFFECT -> handleRandomEffect(group, ctx);
-        case PLAYER_SAVE_LETHAL -> handleSaveLethal(group, ctx);
-        case PLAYER_TICK_ORE_VISION -> handleOreVision(group, ctx);
+      switch (type.getName()) {
+        case "PLAYER_WITHER_GUARD" -> handleWitherGuard(group, ctx);
+        case "PLAYER_PROJECTILE_IMMUNE" -> handleProjectileImmune(group, ctx);
+        case "PLAYER_RANDOM_EFFECT" -> handleRandomEffect(group, ctx);
+        case "PLAYER_SAVE_LETHAL" -> handleSaveLethal(group, ctx);
+        case "PLAYER_TICK_ORE_VISION" -> handleOreVision(group, ctx);
         default -> {
         }
       }
@@ -125,7 +125,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     float healthPercentageCap = 0.0F;
     for (GemstoneModifier modifier : modifiers) {
       if (modifier.getConfig() instanceof PlayerConfig m
-          && m.eventType() == EventType.PLAYER_PROJECTILE_IMMUNE) {
+          && m.eventType().getName() == "PLAYER_PROJECTILE_IMMUNE") {
         PlayerConfig config = (PlayerConfig) modifier.getConfig();
         healthPercentageCap += Math.abs(config.values().get(modifier.getRarityType()));
       }
