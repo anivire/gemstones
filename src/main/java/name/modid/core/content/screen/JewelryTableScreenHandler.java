@@ -174,7 +174,6 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
 
   public void finalizeTakeResult(PlayerEntity player) {
     ActionMode mode = getMode();
-    ItemStack actionTool = inventory.getStack(SLOT_ACTION);
     lastGemBroken = false;
 
     if (mode == ActionMode.INSERT) {

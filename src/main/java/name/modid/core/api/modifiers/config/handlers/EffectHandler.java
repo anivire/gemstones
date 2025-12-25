@@ -124,7 +124,7 @@ public class EffectHandler {
             maxDuration = Math.max(maxDuration, config.duration());
           }
 
-          double combinedChance = ModifierUtils.combinedProcChance(chances);
+          double combinedChance = ModifierUtils.cappedProcChance(chances);
 
           if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
             target.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier));
@@ -158,7 +158,7 @@ public class EffectHandler {
             maxDuration = Math.max(maxDuration, config.duration());
           }
 
-          double combinedChance = ModifierUtils.combinedProcChance(chances);
+          double combinedChance = ModifierUtils.cappedProcChance(chances);
 
           if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
             target.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier));

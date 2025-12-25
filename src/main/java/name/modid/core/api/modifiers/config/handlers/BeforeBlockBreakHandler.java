@@ -62,7 +62,7 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       List<ItemStack> drops = Block.getDroppedStacks(ctx.getBlockState(), ctx.getWorld(), ctx.getBlockPos(),
@@ -113,7 +113,7 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (!ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       return;

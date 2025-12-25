@@ -31,7 +31,7 @@ public class ModifierUtils {
     return world.getRandom().nextDouble() < chance;
   }
 
-  public static double combinedProcChance(Collection<Double> chances) {
+  public static double cappedProcChance(Collection<Double> chances) {
     double result = 1.0;
     for (double p : chances) {
       result *= (1.0 - p);

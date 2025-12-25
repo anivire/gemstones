@@ -17,7 +17,6 @@ import name.modid.core.api.modifiers.config.ModifierUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
@@ -41,7 +40,7 @@ public abstract class OnHitMelee {
       return vanillaDamage;
     }
 
-    ItemStack weapon = player.getMainHandStack();
+    // ItemStack weapon = player.getMainHandStack();
     // List<GemstoneModifier> modifiersHand =
     // ModifierGatheringHelper.getModifiers(weapon, HitMeleeConfig.class);
     List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(

@@ -18,6 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
+// TODO: cleanup and refactor
 @Mixin(PlayerEntity.class)
 public abstract class ArmorPierceAttribute {
 
@@ -50,8 +51,6 @@ public abstract class ArmorPierceAttribute {
     if (comp.modifiers().isEmpty())
       return;
 
-    // Идентификатор вашего кастомного атрибута (как строка)
-    // RegistryEntry<EntityAttribute> имеет getIdAsString() в 1.21.1
     String pierceAttrIdStr = AttributesRegistry.ARMOR_PIERCE_ATTRIBUTE.getIdAsString();
     if (pierceAttrIdStr == null)
       return;

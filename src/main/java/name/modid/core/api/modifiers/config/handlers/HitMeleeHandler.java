@@ -68,15 +68,11 @@ public class HitMeleeHandler
       return;
     }
 
-    List<Double> capPercents = new ArrayList<>();
-
-    for (GemstoneModifier modifier : modifiers) {
-      HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
-      capPercents.add(config.chance().get(modifier.getRarityType()));
-    }
-
-    double capDeathPercent = ModifierUtils.combinedProcChance(capPercents);
     double healthPercent = target.getHealth() / target.getMaxHealth();
+    double capDeathPercent = ModifierUtils.cappedProcChance(
+        modifiers.stream()
+            .map(m -> ((HitMeleeConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .toList());
 
     if (healthPercent < capDeathPercent) {
       if (ctx.getWorld() instanceof ServerWorld serverWorld) {
@@ -100,14 +96,12 @@ public class HitMeleeHandler
       return;
     }
 
-    List<Double> chances = new ArrayList<>();
+    double chance = ModifierUtils.cappedProcChance(
+        modifiers.stream()
+            .map(m -> ((HitMeleeConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .toList());
 
-    for (GemstoneModifier modifier : modifiers) {
-      HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
-      chances.add(config.chance().get(modifier.getRarityType()));
-    }
-
-    if (ModifierUtils.proc(ctx.getWorld(), ModifierUtils.combinedProcChance(chances))) {
+    if (ModifierUtils.proc(ctx.getWorld(), chance)) {
       float bonusDamage = ctx.getDamageResult() * 0.3f;
 
       target.getWorld().getServer().execute(() -> {
@@ -131,14 +125,12 @@ public class HitMeleeHandler
       return;
     }
 
-    List<Double> chances = new ArrayList<>();
+    double chance = ModifierUtils.cappedProcChance(
+        modifiers.stream()
+            .map(m -> ((HitMeleeConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .toList());
 
-    for (GemstoneModifier modifier : modifiers) {
-      HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
-      chances.add(config.chance().get(modifier.getRarityType()));
-    }
-
-    if (ModifierUtils.proc(ctx.getWorld(), ModifierUtils.combinedProcChance(chances))) {
+    if (ModifierUtils.proc(ctx.getWorld(), chance)) {
       float healAmount = (float) (ctx.getDamageResult() * 0.1 + 1.0);
       attacker.heal(healAmount);
 
@@ -155,6 +147,7 @@ public class HitMeleeHandler
     }
   }
 
+  // NOTE: don't capped
   private void multiplyDamageArmorless(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (!(ctx.getOwner() instanceof LivingEntity owner)
         || ModifierUtils.isArmorEquiped(owner)) {
@@ -173,7 +166,7 @@ public class HitMeleeHandler
       return;
     }
 
-    double chance = ModifierUtils.combinedProcChance(
+    double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
             .map(m -> ((HitMeleeConfig) m.getConfig()).chance().get(m.getRarityType()))
             .toList());

@@ -10,54 +10,60 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.OnDamageConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
-import name.modid.core.api.modifiers.types.EventType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.world.World;
 
 public class OnDamageHandler implements ModifierHandler<ModifierConfig.OnDamageConfig> {
+  private final Map<String, java.util.function.BiConsumer<List<GemstoneModifier>, ModifierContext>> handlers = Map.of(
+      "PLAYER_BONUS_DAMAGE_MISSING_HEALTH", this::handleBonusDamageMissingHealth);
+
+  private static final List<String> ORDER = List.of(
+      "PLAYER_BONUS_DAMAGE_MISSING_HEALTH");
+
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
-    if (modifiers.isEmpty())
+    if (modifiers.isEmpty()) {
       return;
+    }
 
-    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
-        .collect(Collectors.groupingBy(m -> ((OnDamageConfig) m.getConfig()).eventType()));
+    Map<String, List<GemstoneModifier>> grouped = modifiers.stream()
+        .collect(Collectors.groupingBy(inst -> ((OnDamageConfig) inst.getConfig()).eventType().getName()));
 
-    types.forEach((type, group) -> {
-      switch (type.getName()) {
-        case "PLAYER_BONUS_DAMAGE_MISSING_HEALTH" -> handleBonusDamageMissingHealth(group, ctx);
-        default -> {
-        }
-      }
-    });
+    for (String key : ORDER) {
+      var group = grouped.get(key);
+      if (group == null || group.isEmpty())
+        continue;
+
+      var fn = handlers.get(key);
+      if (fn != null)
+        fn.accept(group, ctx);
+    }
   }
 
-  private void handleBonusDamageMissingHealth(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+  // NOTE: don't capped
+  private void handleBonusDamageMissingHealth(
+      List<GemstoneModifier> modifiers,
+      ModifierContext ctx) {
     if (!(ctx.getOwner() instanceof LivingEntity attacker) ||
         !(ctx.getTarget() instanceof LivingEntity target)) {
       return;
     }
 
-    float currentHealth = attacker.getHealth();
-    float maxHealth = attacker.getMaxHealth();
-    float missingHealth = Math.max(0, maxHealth - currentHealth);
+    DamageSource bonusSource = ctx.getWorld().getDamageSources().generic();
+    float missingHealth = Math.max(0, attacker.getMaxHealth() - attacker.getHealth());
     int missingHearts = (int) Math.ceil(missingHealth / 2.0f);
 
     if (missingHearts <= 0) {
       return;
     }
 
-    double bonusPercentPerHeart = 0.0;
-    for (GemstoneModifier modifier : modifiers) {
-      OnDamageConfig config = (OnDamageConfig) modifier.getConfig();
-      bonusPercentPerHeart += config.values().get(modifier.getRarityType());
-    }
+    double bonusPercentPerHeart = modifiers.stream()
+        .mapToDouble(m -> ((OnDamageConfig) m.getConfig()).values().get(m.getRarityType()))
+        .sum();
 
     double bonusMultiplier = missingHearts * (bonusPercentPerHeart / 100.0);
     float bonusDamage = (float) (ctx.getBaseDamageTaken() * bonusMultiplier);
@@ -66,32 +72,24 @@ public class OnDamageHandler implements ModifierHandler<ModifierConfig.OnDamageC
       return;
     }
 
-    World world = ctx.getWorld();
-    DamageSources damageSources = world.getDamageSources();
-
-    DamageSource bonusSource = damageSources.generic();
-
-    if (!target.isInvulnerableTo(bonusSource)) {
+    if (!target.isInvulnerableTo(bonusSource) && target.isAlive()) {
       int originalHurtTime = target.hurtTime;
+
       target.hurtTime = 0;
       target.timeUntilRegen = 0;
-
+      target.hurtTime = Math.max(1, originalHurtTime / 2);
       target.damage(bonusSource, bonusDamage);
 
-      target.hurtTime = Math.max(1, originalHurtTime / 2);
-    }
-
-    if (target.isAlive()) {
-      world.playSound(null, target.getBlockPos(),
+      ctx.getWorld().playSound(null, target.getBlockPos(),
           SoundEvents.ENTITY_PLAYER_ATTACK_CRIT,
           SoundCategory.PLAYERS,
           0.8f, 1.2f + (missingHearts * 0.1f));
 
-      if (world instanceof ServerWorld serverWorld) {
-        double x = target.getX();
-        double y = target.getBodyY(0.5);
-        double z = target.getZ();
+      double x = target.getX();
+      double y = target.getBodyY(0.5);
+      double z = target.getZ();
 
+      if (ctx.getWorld() instanceof ServerWorld serverWorld) {
         serverWorld.spawnParticles(
             ParticleTypes.ANGRY_VILLAGER,
             x, y, z,

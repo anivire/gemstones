@@ -86,7 +86,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       totalHealAmount += config.additionValues().get(modifier.getRarityType()).floatValue();
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       player.heal(totalHealAmount);
@@ -106,7 +106,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)
         && ctx.getWorld() instanceof ServerWorld serverWorld) {
@@ -135,7 +135,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       ItemStack goldIngot = new ItemStack(Items.GOLD_INGOT);
@@ -163,7 +163,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       ItemStack geode = ctx.getBlockState().isIn(TagsRegistry.DEEPSLATE_ORES)
@@ -190,7 +190,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       totalMaxStacks += config.additionValues().get(modifier.getRarityType()).intValue();
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (totalMaxStacks > 0
         && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
@@ -219,7 +219,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       initializeBlacklist();
