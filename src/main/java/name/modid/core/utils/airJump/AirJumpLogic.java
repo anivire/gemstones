@@ -1,6 +1,6 @@
 package name.modid.core.utils.airJump;
 
-import name.modid.core.api.modifiers.config.ModifierUtils;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;

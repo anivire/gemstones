@@ -7,7 +7,7 @@ import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.HitMeleeConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierManager;
-import name.modid.core.api.modifiers.config.ModifierUtils;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;

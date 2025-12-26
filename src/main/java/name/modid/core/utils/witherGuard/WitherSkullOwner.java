@@ -1,4 +1,4 @@
-package name.modid.core.utils;
+package name.modid.core.utils.witherGuard;
 
 public interface WitherSkullOwner {
   int getWitherSkullCount();

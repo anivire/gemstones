@@ -1,4 +1,4 @@
-package name.modid.core.api.modifiers.config;
+package name.modid.core.api.modifiers.config.utils;
 
 import java.util.Collection;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -13,8 +15,6 @@ import net.minecraft.component.type.AttributeModifiersComponent.Entry;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeType;
@@ -37,22 +37,6 @@ public class ModifierUtils {
       result *= (1.0 - p);
     }
     return 1.0 - result;
-  }
-
-  public static void applyStatusEffect(LivingEntity target, StatusEffectInstance effect) {
-    if (target == null)
-      return;
-    target.addStatusEffect(effect);
-  }
-
-  public static void applyStatusEffectToTarget(ModifierContext ctx, RegistryEntry<StatusEffect> effect, int duration,
-      int amplifier) {
-    if (ctx.getTarget() instanceof LivingEntity target) {
-      target.addStatusEffect(new StatusEffectInstance(
-          effect,
-          duration * 20,
-          amplifier));
-    }
   }
 
   public static List<GemstoneModifier> collectGemstoneModifiersFromAllEquipment(

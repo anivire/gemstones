@@ -8,7 +8,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig.BeforeBlockBreakConfi
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierContext.ContextBuilder;
 import name.modid.core.api.modifiers.config.ModifierManager;
-import name.modid.core.api.modifiers.config.ModifierUtils;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;

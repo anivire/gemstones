@@ -14,7 +14,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig.HitEffectMeleeConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.HitEffectProjectileConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
-import name.modid.core.api.modifiers.config.ModifierUtils;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;

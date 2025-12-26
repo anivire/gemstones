@@ -10,7 +10,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.HitProjectileConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
-import name.modid.core.api.modifiers.config.ModifierUtils;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.content.entities.RainArrowEntity;
 import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.utils.GetRandomBuff;

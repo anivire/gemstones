@@ -2,6 +2,7 @@ package name.modid.core.api.tooltips.handlers;
 
 import name.modid.Gemstones;
 import name.modid.core.api.modifiers.config.ModifierConfig;
+import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import name.modid.core.api.tooltips.TooltipHelper;
@@ -56,67 +57,60 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
     MutableText secondArg;
     MutableText thirdArg = builder.getEventText(cfg.eventType());
 
-    // TODO: need switch with id not name
-    switch (cfg.eventType().getName()) {
-      case "PLAYER_WITHER_GUARD" -> {
-        firstArg = builder.getEventText(cfg.eventType());
-        secondArg = thirdArg;
-      }
-      case "PLAYER_PROJECTILE_IMMUNE" -> {
-        firstArg = valueText.copy().append(healthPart);
-        secondArg = thirdArg;
-      }
-      case "PLAYER_RANDOM_EFFECT" -> {
-        double chance = cfg.additionValues().get(rarityType);
-        String chanceText = builder.formatValue(chance * 100, "%");
+    if (cfg.eventType() == EventType.PLAYER_WITHER_GUARD) {
+      firstArg = builder.getEventText(cfg.eventType());
+      secondArg = thirdArg;
+    } else if (cfg.eventType() == EventType.PLAYER_PROJECTILE_IMMUNE) {
+      firstArg = valueText.copy().append(healthPart);
+      secondArg = thirdArg;
+    } else if (cfg.eventType() == EventType.PLAYER_RANDOM_EFFECT) {
+      double chance = cfg.additionValues().get(rarityType);
+      String chanceText = builder.formatValue(chance * 100, "%");
 
-        MutableText chanceMutable = Text.empty()
-            .append(builder.getArrowPrefix(isPositive).copy())
-            .append(Text.literal(chanceText).formatted(Formatting.GREEN));
+      MutableText chanceMutable = Text.empty()
+          .append(builder.getArrowPrefix(isPositive).copy())
+          .append(Text.literal(chanceText).formatted(Formatting.GREEN));
 
-        double seconds = cfg.values().get(rarityType);
-        MutableText secondsText = Text.literal(
-            builder.formatValue(seconds, " seconds"))
-            .formatted(Formatting.GREEN);
+      double seconds = cfg.values().get(rarityType);
+      MutableText secondsText = Text.literal(
+          builder.formatValue(seconds, " seconds"))
+          .formatted(Formatting.GREEN);
 
-        firstArg = chanceMutable;
-        secondArg = builder.getEventText(cfg.eventType());
-        thirdArg = secondsText;
-      }
-      case "PLAYER_SAVE_LETHAL" -> {
-        double hpThreshold = cfg.additionValues().get(rarityType);
+      firstArg = chanceMutable;
+      secondArg = builder.getEventText(cfg.eventType());
+      thirdArg = secondsText;
+    } else if (cfg.eventType() == EventType.PLAYER_SAVE_LETHAL) {
+      double hpThreshold = cfg.additionValues().get(rarityType);
 
-        MutableText icon = Text.literal(InlineIcons.HALF_HEART.getSymbol())
-            .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-            .formatted(Formatting.WHITE);
+      MutableText icon = Text.literal(InlineIcons.HALF_HEART.getSymbol())
+          .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+          .formatted(Formatting.WHITE);
 
-        String hpTextStr = builder.formatValue(hpThreshold, "");
-        MutableText hpNumber = Text.literal(hpTextStr)
-            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-            .formatted(Formatting.RED);
+      String hpTextStr = builder.formatValue(hpThreshold, "");
+      MutableText hpNumber = Text.literal(hpTextStr)
+          .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+          .formatted(Formatting.RED);
 
-        MutableText hpPostfix = Text.literal(" HP")
-            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-            .formatted(Formatting.RED);
+      MutableText hpPostfix = Text.literal(" HP")
+          .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+          .formatted(Formatting.RED);
 
-        firstArg = Text.empty()
-            .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-            .append(icon)
-            .append(Text.literal(" ")
-                .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)))
-            .append(hpNumber)
-            .append(hpPostfix);
+      firstArg = Text.empty()
+          .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+          .append(icon)
+          .append(Text.literal(" ")
+              .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)))
+          .append(hpNumber)
+          .append(hpPostfix);
 
-        secondArg = builder.getEventText(cfg.eventType());
+      secondArg = builder.getEventText(cfg.eventType());
 
-        double seconds = cfg.values().get(rarityType);
-        thirdArg = Text.literal(builder.formatValue(seconds, " seconds"))
-            .formatted(Formatting.GREEN);
-      }
-      default -> {
-        firstArg = valueText;
-        secondArg = thirdArg;
-      }
+      double seconds = cfg.values().get(rarityType);
+      thirdArg = Text.literal(builder.formatValue(seconds, " seconds"))
+          .formatted(Formatting.GREEN);
+    } else {
+      firstArg = valueText;
+      secondArg = thirdArg;
     }
 
     return TooltipHelper.safeTranslatable(

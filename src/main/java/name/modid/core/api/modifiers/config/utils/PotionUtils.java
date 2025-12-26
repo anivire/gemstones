@@ -1,4 +1,4 @@
-package name.modid.core.api.modifiers.config;
+package name.modid.core.api.modifiers.config.utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -12,10 +12,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.PlayerConfig;
-import name.modid.core.api.modifiers.config.ModifierUtils;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import name.modid.core.utils.WitherSkullOrbitFlag;
-import name.modid.core.utils.WitherSkullOwner;
+import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.utils.witherGuard.WitherSkullOrbitFlag;
+import name.modid.core.utils.witherGuard.WitherSkullOwner;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
@@ -124,11 +125,10 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
         serverPlayer,
         armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, PlayerConfig.class));
 
-    // TODO: check with id not name
     boolean hasWitherGuard = modifiers.stream()
         .anyMatch(mod -> {
           if (mod.getConfig() instanceof PlayerConfig config) {
-            return config.eventType().getName() == "PLAYER_WITHER_GUARD";
+            return config.eventType() == EventType.PLAYER_WITHER_GUARD;
           }
           return false;
         });
@@ -195,7 +195,7 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
         Vec3d targetPos = target.getPos().add(0, target.getHeight(), 0);
         Vec3d dir = targetPos.subtract(start).normalize();
 
-        ((WitherSkullOrbitFlag) (Object) skull).gemstones$setOrbiting(false);
+        ((WitherSkullOrbitFlag) (Object) skull).setOrbiting(false);
         skull.noClip = false;
         skull.setInvulnerable(false);
         skull.setNoGravity(false);
@@ -245,7 +245,7 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
     skull.noClip = true;
     skull.setInvulnerable(true);
 
-    ((WitherSkullOrbitFlag) (Object) skull).gemstones$setOrbiting(true);
+    ((WitherSkullOrbitFlag) (Object) skull).setOrbiting(true);
 
     world.spawnEntity(skull);
     orbitingSkulls.add(skull);
@@ -274,7 +274,7 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
 
       skull.noClip = true;
       skull.setInvulnerable(true);
-      ((WitherSkullOrbitFlag) (Object) skull).gemstones$setOrbiting(true);
+      ((WitherSkullOrbitFlag) (Object) skull).setOrbiting(true);
       skull.setNoGravity(true);
       skull.velocityDirty = true;
     }
