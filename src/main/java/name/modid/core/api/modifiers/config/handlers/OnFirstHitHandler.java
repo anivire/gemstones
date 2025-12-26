@@ -10,7 +10,6 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.OnFirstHitConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
-import net.minecraft.entity.LivingEntity;
 
 public class OnFirstHitHandler implements ModifierHandler<ModifierConfig.OnFirstHitConfig> {
 
@@ -44,17 +43,10 @@ public class OnFirstHitHandler implements ModifierHandler<ModifierConfig.OnFirst
   private void handleAdditionalDamage(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getTarget() instanceof LivingEntity target)
-        || ctx.getOwner() == null) {
-      return;
-    }
+    float additionalDamagePercent = (float) modifiers.stream()
+        .mapToDouble(m -> ((OnFirstHitConfig) m.getConfig()).values().get(m.getRarityType()))
+        .sum();
 
-    if (target.getHealth() == target.getMaxHealth()) {
-      float additionalDamagePercent = (float) modifiers.stream()
-          .mapToDouble(m -> ((OnFirstHitConfig) m.getConfig()).values().get(m.getRarityType()))
-          .sum();
-
-      ctx.setDamageResult(ctx.getBaseDamageTaken() * (1 + additionalDamagePercent));
-    }
+    ctx.setDamageResult(ctx.getBaseDamageTaken() * (1 + additionalDamagePercent));
   }
 }

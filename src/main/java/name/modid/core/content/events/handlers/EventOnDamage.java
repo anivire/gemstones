@@ -1,4 +1,4 @@
-package name.modid.core.content.events;
+package name.modid.core.content.events.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +9,11 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierContext.ContextBuilder;
 import name.modid.core.api.modifiers.config.ModifierManager;
 import name.modid.core.api.modifiers.config.ModifierUtils;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
 
 public class EventOnDamage {
   public static void setup(LivingEntity entity,
@@ -23,35 +21,24 @@ public class EventOnDamage {
       float baseDamageTaken,
       float damageTaken,
       boolean blocked) {
-    World world = entity.getWorld();
-
-    if (!(world instanceof ServerWorld serverWorld)) {
-      return;
-    }
-
-    Entity attackerEntity = source.getAttacker();
-    if (!(attackerEntity instanceof ServerPlayerEntity player)) {
+    if (!(source.getAttacker() instanceof ServerPlayerEntity serverPlayer)
+        || !(entity.getWorld() instanceof ServerWorld serverWorld)
+        || !(source.getSource() instanceof PersistentProjectileEntity proj)) {
       return;
     }
 
     List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
-        player, OnDamageConfig.class);
+        serverPlayer, OnDamageConfig.class);
 
     if (modifiers.isEmpty()) {
       return;
     }
 
-    PersistentProjectileEntity proj = null;
-    if (source.getSource() instanceof PersistentProjectileEntity p) {
-      proj = p;
-    }
-
     ModifierContext.ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
-        .withOwner(player)
+        .withOwner(serverPlayer)
         .withProjectile(proj)
         .withBaseDamageTaken(baseDamageTaken)
         .withTarget(entity);
-
     ModifierContext ctx = ctxBuilder.build();
     ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctx);
   }

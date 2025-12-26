@@ -1,4 +1,4 @@
-package name.modid.core.content.attributes;
+package name.modid.core.content.events.misc;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +16,7 @@ public class EventStunned {
     if (player.hasStatusEffect(EffectsRegistry.STUNNED_EFFECT)) {
       return ActionResult.FAIL;
     }
+
     return ActionResult.PASS;
   }
 }
