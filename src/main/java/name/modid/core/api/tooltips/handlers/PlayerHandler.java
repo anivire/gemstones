@@ -1,18 +1,14 @@
 package name.modid.core.api.tooltips.handlers;
 
-import name.modid.Gemstones;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import name.modid.core.api.tooltips.TooltipHelper;
-import name.modid.core.api.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfig> {
 
@@ -38,86 +34,52 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
   }
 
   @Override
-  protected MutableText buildText(ModifierConfig.PlayerConfig cfg,
+  protected MutableText buildText(
+      ModifierConfig.PlayerConfig cfg,
       MutableText valueText,
       boolean isPositive) {
-
-    MutableText iconHeart = Text.literal(InlineIcons.HALF_HEART.getSymbol())
-        .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-        .formatted(Formatting.WHITE);
-    MutableText textHealth = Text.literal(" Health")
-        .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.RED);
-    MutableText healthPart = Text.literal(" ")
-        .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-        .append(iconHeart)
-        .append(textHealth);
-
+    EventType type = cfg.eventType();
     MutableText firstArg;
-    MutableText secondArg;
-    MutableText thirdArg = builder.getEventText(cfg.eventType());
+    MutableText secondArg = builder.getEventText(type);
+    MutableText thirdArg = builder.getEventText(type);
 
-    if (cfg.eventType() == EventType.PLAYER_WITHER_GUARD) {
-      firstArg = builder.getEventText(cfg.eventType());
-      secondArg = thirdArg;
-    } else if (cfg.eventType() == EventType.PLAYER_PROJECTILE_IMMUNE) {
-      firstArg = valueText.copy().append(healthPart);
-      secondArg = thirdArg;
-    } else if (cfg.eventType() == EventType.PLAYER_RANDOM_EFFECT) {
-      double chance = cfg.additionValues().get(rarityType);
-      String chanceText = builder.formatValue(chance * 100, "%");
+    if (type == EventType.PLAYER_WITHER_GUARD) {
+      firstArg = secondArg;
+    }
 
-      MutableText chanceMutable = Text.empty()
-          .append(builder.getArrowPrefix(isPositive).copy())
-          .append(Text.literal(chanceText).formatted(Formatting.GREEN));
+    else if (type == EventType.PLAYER_PROJECTILE_IMMUNE) {
+      firstArg = valueText.copy()
+          .append(Text.literal(" "))
+          .append(TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART, "Health"));
+    }
 
+    else if (type == EventType.PLAYER_RANDOM_EFFECT) {
+      double chance = cfg.additionalValues().get(rarityType);
       double seconds = cfg.values().get(rarityType);
-      MutableText secondsText = Text.literal(
-          builder.formatValue(seconds, " seconds"))
-          .formatted(Formatting.GREEN);
 
-      firstArg = chanceMutable;
-      secondArg = builder.getEventText(cfg.eventType());
-      thirdArg = secondsText;
-    } else if (cfg.eventType() == EventType.PLAYER_SAVE_LETHAL) {
-      double hpThreshold = cfg.additionValues().get(rarityType);
+      firstArg = TooltipHelper.buildChanceText(builder, chance, isPositive, Formatting.GREEN);
+      secondArg = builder.getEventText(type);
+      thirdArg = TooltipHelper.buildSecondsText(builder, seconds, Formatting.GREEN);
+    }
 
-      MutableText icon = Text.literal(InlineIcons.HALF_HEART.getSymbol())
-          .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-          .formatted(Formatting.WHITE);
-
-      String hpTextStr = builder.formatValue(hpThreshold, "");
-      MutableText hpNumber = Text.literal(hpTextStr)
-          .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-          .formatted(Formatting.RED);
-
-      MutableText hpPostfix = Text.literal(" HP")
-          .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-          .formatted(Formatting.RED);
-
-      firstArg = Text.empty()
-          .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-          .append(icon)
-          .append(Text.literal(" ")
-              .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)))
-          .append(hpNumber)
-          .append(hpPostfix);
-
-      secondArg = builder.getEventText(cfg.eventType());
-
+    else if (type == EventType.PLAYER_SAVE_LETHAL) {
+      double hpThreshold = cfg.additionalValues().get(rarityType);
       double seconds = cfg.values().get(rarityType);
-      thirdArg = Text.literal(builder.formatValue(seconds, " seconds"))
-          .formatted(Formatting.GREEN);
-    } else {
+
+      firstArg = TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
+          builder.formatValue(hpThreshold, " Health"));
+      secondArg = builder.getEventText(type);
+      thirdArg = TooltipHelper.buildSecondsText(builder, seconds, null);
+    }
+
+    else {
       firstArg = valueText;
-      secondArg = thirdArg;
     }
 
     return TooltipHelper.safeTranslatable(
-        builder.getTranslationKeyByEvent(cfg.eventType()),
+        builder.getTranslationKeyByEvent(type),
         firstArg,
         secondArg,
-        thirdArg)
-        .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+        thirdArg).formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
   }
 }

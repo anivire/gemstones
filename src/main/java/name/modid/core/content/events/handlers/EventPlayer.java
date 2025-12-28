@@ -7,8 +7,8 @@ import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.PlayerConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierContext.ContextBuilder;
-import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.config.ModifierManager;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -49,9 +49,8 @@ public class EventPlayer {
       return;
     }
 
-    List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
-        serverPlayer,
-        PlayerConfig.class);
+    List<GemstoneModifier> modifiers = new ArrayList<>(
+        ModifierUtils.collectGemstoneModifiersFromAllEquipment(serverPlayer, PlayerConfig.class));
 
     modifiers.removeIf(x -> {
       if (x.getConfig() instanceof PlayerConfig c) {

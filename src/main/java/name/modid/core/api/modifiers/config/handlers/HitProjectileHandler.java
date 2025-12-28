@@ -83,7 +83,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
     double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitProjectileConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitProjectileConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     if (ModifierUtils.proc(ctx.getWorld(), chance)) {
@@ -112,7 +112,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
     double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitProjectileConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitProjectileConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     if (ModifierUtils.proc(ctx.getWorld(), chance)) {
@@ -137,7 +137,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
     double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitProjectileConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitProjectileConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     if (ModifierUtils.proc(ctx.getWorld(), chance)) {
@@ -171,7 +171,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
     double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitProjectileConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitProjectileConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     if (ModifierUtils.proc(ctx.getWorld(), chance)) {
@@ -192,7 +192,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
     double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitProjectileConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitProjectileConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     int duration = 15 * 20;
@@ -212,7 +212,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
     double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitProjectileConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitProjectileConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     if (ModifierUtils.proc(ctx.getWorld(), chance)) {
@@ -285,8 +285,8 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
     for (GemstoneModifier modifier : modifiers) {
       HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
-      levelOffset += config.additionValues().get(modifier.getRarityType()).intValue();
-      bonusDamagePercent += config.chance().get(modifier.getRarityType());
+      levelOffset += config.additionalValues().get(modifier.getRarityType()).intValue();
+      bonusDamagePercent += config.values().get(modifier.getRarityType());
     }
 
     float extraDamageMultiplier = 1.0f + (player.experienceLevel / levelOffset) * bonusDamagePercent;

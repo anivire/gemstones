@@ -83,7 +83,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     for (GemstoneModifier modifier : modifiers) {
       BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
       chances.add(config.values().get(modifier.getRarityType()));
-      totalHealAmount += config.additionValues().get(modifier.getRarityType()).floatValue();
+      totalHealAmount += config.additionalValues().get(modifier.getRarityType()).floatValue();
     }
 
     double combinedChance = ModifierUtils.cappedProcChance(chances);
@@ -187,7 +187,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     for (GemstoneModifier modifier : modifiers) {
       BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
       chances.add(config.values().get(modifier.getRarityType()));
-      totalMaxStacks += config.additionValues().get(modifier.getRarityType()).intValue();
+      totalMaxStacks += config.additionalValues().get(modifier.getRarityType()).intValue();
     }
 
     double combinedChance = ModifierUtils.cappedProcChance(chances);

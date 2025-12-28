@@ -2,6 +2,8 @@ package name.modid.core.api.tooltips;
 
 import java.util.Optional;
 
+import org.jetbrains.annotations.Nullable;
+
 import name.modid.Gemstones;
 import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
@@ -127,5 +129,45 @@ public class TooltipHelper {
         .append(Text.literal(" > ").formatted(Formatting.DARK_GRAY).styled(s -> s.withFont(Style.DEFAULT_FONT_ID)));
 
     return prefix.append(content);
+  }
+
+  public static MutableText buildTextWithIcon(InlineIcons icon, String text) {
+    MutableText i = Text.literal(icon.getSymbol())
+        .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+        .formatted(Formatting.WHITE);
+
+    // TODO: translatable text
+    MutableText t = Text.literal(" " + text)
+        .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.RED);
+
+    return Text.empty()
+        // .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+        .append(i)
+        .append(t);
+  }
+
+  public static MutableText buildChanceText(
+      TooltipBuilder builder,
+      double chance,
+      boolean isPositive,
+      @Nullable Formatting color) {
+    Formatting actualColor = color != null ? color : Formatting.GREEN;
+    String chanceText = builder.formatValue(chance * 100, "%");
+
+    return Text.empty()
+        .append(builder.getArrowPrefix(isPositive).copy())
+        .append(Text.literal(chanceText).formatted(actualColor))
+        .styled(s -> s.withFont(Style.DEFAULT_FONT_ID));
+  }
+
+  public static MutableText buildSecondsText(
+      TooltipBuilder builder,
+      double seconds,
+      @Nullable Formatting color) {
+    Formatting actualColor = color != null ? color : Formatting.GREEN;
+    return Text.literal(builder.formatValue(seconds, " seconds"))
+        .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(actualColor);
   }
 }

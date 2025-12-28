@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.PlayerConfig;
-import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.content.registries.EffectsRegistry;
 import name.modid.core.network.OreVisionPayload;
 import name.modid.core.utils.GetRandomBuff;
@@ -154,7 +154,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     for (GemstoneModifier modifier : modifiers) {
       PlayerConfig config = (PlayerConfig) modifier.getConfig();
       duration += config.values().get(modifier.getRarityType());
-      chance += config.additionValues().get(modifier.getRarityType());
+      chance += config.additionalValues().get(modifier.getRarityType());
     }
 
     if (ModifierUtils.proc(ctx.getWorld(), chance)) {
@@ -179,7 +179,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     for (GemstoneModifier modifier : modifiers) {
       PlayerConfig config = (PlayerConfig) modifier.getConfig();
       duration += config.values().get(modifier.getRarityType());
-      healthThresholdBonus += config.additionValues().get(modifier.getRarityType());
+      healthThresholdBonus += config.additionalValues().get(modifier.getRarityType());
     }
 
     float healthThreshold = (float) (0.0 + healthThresholdBonus);

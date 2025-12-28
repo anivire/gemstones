@@ -25,9 +25,9 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
   @Override
   protected double extractValue(T cfg) {
     if (cfg instanceof ModifierConfig.HitMeleeConfig melee)
-      return melee.chance().get(rarityType);
+      return melee.values().get(rarityType);
     if (cfg instanceof ModifierConfig.HitProjectileConfig proj)
-      return proj.chance().get(rarityType);
+      return proj.values().get(rarityType);
     return 0;
   }
 
@@ -49,9 +49,9 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
             ? proj.eventType()
             : null;
     LevelValues additionalValues = (cfg instanceof ModifierConfig.HitMeleeConfig melee)
-        ? melee.additionValues()
+        ? melee.additionalValues()
         : (cfg instanceof ModifierConfig.HitProjectileConfig proj)
-            ? proj.additionValues()
+            ? proj.additionalValues()
             : null;
 
     MutableText firstArg = valueText;

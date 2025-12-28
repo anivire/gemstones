@@ -2,7 +2,6 @@ package name.modid.core.api.tooltips;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.EnumMap;
 import java.util.Map;
 
 import name.modid.Gemstones;
@@ -15,21 +14,6 @@ import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.api.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
-import name.modid.core.api.tooltips.handlers.AfterDeathHandler;
-import name.modid.core.api.tooltips.handlers.AreaEffectHandler;
-import name.modid.core.api.tooltips.handlers.AttributeHandler;
-import name.modid.core.api.tooltips.handlers.MultiplyAttributeHandler;
-import name.modid.core.api.tooltips.handlers.OnBeforeBlockBreakHandler;
-import name.modid.core.api.tooltips.handlers.OnBlockBreakHandler;
-import name.modid.core.api.tooltips.handlers.OnDamageHandler;
-import name.modid.core.api.tooltips.handlers.OnFirstHitHandler;
-import name.modid.core.api.tooltips.handlers.OnFishingHandler;
-import name.modid.core.api.tooltips.handlers.OnHitEffectHandler;
-import name.modid.core.api.tooltips.handlers.OnHitHandler;
-import name.modid.core.api.tooltips.handlers.OnPotionBrewHandler;
-import name.modid.core.api.tooltips.handlers.PlayerHandler;
-import name.modid.core.api.tooltips.handlers.TooltipHandler;
-import name.modid.core.api.tooltips.handlers.UndefinedHandler;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -43,12 +27,14 @@ public class TooltipBuilder {
   private final ModifierItemCategory itemCategory;
   private final GemstoneQuality rarityType;
   private final ModifierConfig config;
-  private final ModifierCategoryType modifierCategory;
+  private final ModifierCategoryType categoryType;
+
+  private final TooltipHandlerRegistry registry;
+
   private boolean isItemTooltip = false;
 
-  private final Map<ModifierCategoryType, TooltipHandler> handlers = new EnumMap<>(ModifierCategoryType.class);
-
-  public TooltipBuilder(GemstoneType gemstoneType,
+  public TooltipBuilder(
+      GemstoneType gemstoneType,
       ModifierItemCategory itemCategory,
       GemstoneQuality rarityType,
       GemstoneModifier modifier) {
@@ -56,63 +42,29 @@ public class TooltipBuilder {
     this.itemCategory = itemCategory;
     this.rarityType = rarityType;
     this.config = modifier.getConfig();
-    this.modifierCategory = resolveType(config);
-
-    registerHandlers();
+    this.categoryType = resolveCategory(config);
+    this.registry = new TooltipHandlerRegistry(this, config, rarityType);
   }
 
-  private void registerHandlers() {
-    handlers.put(ModifierCategoryType.ATTRIBUTE, new AttributeHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.MULTIPLY_ATTRIBUTE, new MultiplyAttributeHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.ON_HIT_MELEE, new OnHitHandler<>(this, config, rarityType, false));
-    handlers.put(ModifierCategoryType.ON_HIT_PROJECTILE, new OnHitHandler<>(this, config, rarityType, true));
-    handlers.put(ModifierCategoryType.ON_HIT_EFFECT_MELEE, new OnHitEffectHandler<>(this, config, rarityType, false));
-    handlers.put(ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE,
-        new OnHitEffectHandler<>(this, config, rarityType, true));
-    handlers.put(ModifierCategoryType.ON_BLOCK_BREAK, new OnBlockBreakHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.ON_BEFORE_BLOCK_BREAK, new OnBeforeBlockBreakHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.AREA_EFFECT, new AreaEffectHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.ON_FIRST_HIT, new OnFirstHitHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.PLAYER, new PlayerHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.ON_DEATH, new AfterDeathHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.ON_POTION_BREW, new OnPotionBrewHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.ON_FISHING, new OnFishingHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.ON_DAMAGE, new OnDamageHandler(this, config, rarityType));
-    handlers.put(ModifierCategoryType.UNDEFINED, new UndefinedHandler());
-  }
+  private static final Map<Class<? extends ModifierConfig>, ModifierCategoryType> CONFIG_TYPE_MAP = Map.ofEntries(
+      Map.entry(ModifierConfig.AttributeConfig.class, ModifierCategoryType.ATTRIBUTE),
+      Map.entry(ModifierConfig.MultiplyAttributeConfig.class, ModifierCategoryType.MULTIPLY_ATTRIBUTE),
+      Map.entry(ModifierConfig.HitMeleeConfig.class, ModifierCategoryType.ON_HIT_MELEE),
+      Map.entry(ModifierConfig.HitProjectileConfig.class, ModifierCategoryType.ON_HIT_PROJECTILE),
+      Map.entry(ModifierConfig.HitEffectMeleeConfig.class, ModifierCategoryType.ON_HIT_EFFECT_MELEE),
+      Map.entry(ModifierConfig.HitEffectProjectileConfig.class, ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE),
+      Map.entry(ModifierConfig.AreaEffectConfig.class, ModifierCategoryType.AREA_EFFECT),
+      Map.entry(ModifierConfig.OnDamageConfig.class, ModifierCategoryType.ON_DAMAGE),
+      Map.entry(ModifierConfig.OnFirstHitConfig.class, ModifierCategoryType.ON_FIRST_HIT),
+      Map.entry(ModifierConfig.BlockBreakConfig.class, ModifierCategoryType.ON_BLOCK_BREAK),
+      Map.entry(ModifierConfig.BeforeBlockBreakConfig.class, ModifierCategoryType.ON_BEFORE_BLOCK_BREAK),
+      Map.entry(ModifierConfig.PlayerConfig.class, ModifierCategoryType.PLAYER),
+      Map.entry(ModifierConfig.AfterDeathConfig.class, ModifierCategoryType.ON_DEATH),
+      Map.entry(ModifierConfig.OnPotionBrewConfig.class, ModifierCategoryType.ON_POTION_BREW),
+      Map.entry(ModifierConfig.OnFishingConfig.class, ModifierCategoryType.ON_FISHING));
 
-  private ModifierCategoryType resolveType(ModifierConfig config) {
-    if (config instanceof ModifierConfig.AttributeConfig)
-      return ModifierCategoryType.ATTRIBUTE;
-    if (config instanceof ModifierConfig.MultiplyAttributeConfig)
-      return ModifierCategoryType.MULTIPLY_ATTRIBUTE;
-    if (config instanceof ModifierConfig.HitMeleeConfig)
-      return ModifierCategoryType.ON_HIT_MELEE;
-    if (config instanceof ModifierConfig.HitProjectileConfig)
-      return ModifierCategoryType.ON_HIT_PROJECTILE;
-    if (config instanceof ModifierConfig.HitEffectMeleeConfig)
-      return ModifierCategoryType.ON_HIT_EFFECT_MELEE;
-    if (config instanceof ModifierConfig.HitEffectProjectileConfig)
-      return ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE;
-    if (config instanceof ModifierConfig.AreaEffectConfig)
-      return ModifierCategoryType.AREA_EFFECT;
-    if (config instanceof ModifierConfig.OnDamageConfig)
-      return ModifierCategoryType.ON_DAMAGE;
-    if (config instanceof ModifierConfig.OnFirstHitConfig)
-      return ModifierCategoryType.ON_FIRST_HIT;
-    if (config instanceof ModifierConfig.BlockBreakConfig)
-      return ModifierCategoryType.ON_BLOCK_BREAK;
-    if (config instanceof ModifierConfig.BeforeBlockBreakConfig)
-      return ModifierCategoryType.ON_BEFORE_BLOCK_BREAK;
-    if (config instanceof ModifierConfig.PlayerConfig)
-      return ModifierCategoryType.PLAYER;
-    if (config instanceof ModifierConfig.AfterDeathConfig)
-      return ModifierCategoryType.ON_DEATH;
-    if (config instanceof ModifierConfig.OnPotionBrewConfig)
-      return ModifierCategoryType.ON_POTION_BREW;
-    if (config instanceof ModifierConfig.OnFishingConfig)
-      return ModifierCategoryType.ON_FISHING;
-    return ModifierCategoryType.UNDEFINED;
+  private ModifierCategoryType resolveCategory(ModifierConfig config) {
+    return CONFIG_TYPE_MAP.getOrDefault(config.getClass(), ModifierCategoryType.UNDEFINED);
   }
 
   public TooltipBuilder withItemTooltip(boolean flag) {
@@ -121,48 +73,47 @@ public class TooltipBuilder {
   }
 
   public MutableText build() {
-    String tooltipItemType = isItemTooltip
-        ? "tooltip.gemstones." + itemCategory.toString().toLowerCase() + "_type"
-        : "tooltip.gemstones.category_dot";
+    MutableText prefix;
 
-    TooltipHandler handler = handlers.getOrDefault(modifierCategory, new UndefinedHandler());
+    if (!isItemTooltip) {
+      String symbol = gemstoneType == GemstoneType.EMPTY
+          ? InlineIcons.EMPTY.getSymbol()
+          : gemstoneType == GemstoneType.LOCKED
+              ? InlineIcons.LOCKED.getSymbol()
+              : gemstoneType.getGemstoneLiteral();
 
-    if (Gemstones.ALT_STYLE) {
-      MutableText prefix;
+      String fontPath = (gemstoneType != GemstoneType.EMPTY && gemstoneType != GemstoneType.LOCKED)
+          ? Icons.INLINE_GEMSTONE.getPath()
+          : Icons.INLINE.getPath();
 
-      if (!isItemTooltip) {
-        String l = gemstoneType == GemstoneType.EMPTY
-            ? InlineIcons.EMPTY.getSymbol()
-            : gemstoneType == GemstoneType.LOCKED
-                ? InlineIcons.LOCKED.getSymbol()
-                : gemstoneType.getGemstoneLiteral();
-
-        String p = gemstoneType != GemstoneType.EMPTY && gemstoneType != GemstoneType.LOCKED
-            ? Icons.INLINE_GEMSTONE.getPath()
-            : Icons.INLINE.getPath();
-
-        prefix = Text.literal(l)
-            .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, p)))
-            .formatted(Formatting.WHITE)
-            .append(Text.literal(" > ").formatted(Formatting.DARK_GRAY)
-                .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
-
-      } else {
-        prefix = TooltipHelper.safeTranslatable("tooltip.gemstones.category_dot").formatted(Formatting.DARK_GRAY)
-            .append(TooltipHelper.safeTranslatable(tooltipItemType).formatted(Formatting.GRAY));
-      }
-
-      return prefix.append(handler.buildTooltip()
-          .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
+      prefix = Text.literal(symbol)
+          .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, fontPath)))
+          .formatted(Formatting.WHITE)
+          .append(Text.literal(" > ").formatted(Formatting.DARK_GRAY)
+              .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
     } else {
-      MutableText prefix = TooltipHelper.safeTranslatable(tooltipItemType).formatted(Formatting.DARK_GRAY);
-      return prefix.append(handler.buildTooltip());
+      prefix = TooltipHelper.safeTranslatable("tooltip.gemstones.category_dot")
+          .formatted(Formatting.DARK_GRAY)
+          .append(TooltipHelper
+              .safeTranslatable(String.format("tooltip.gemstones.%s_type", itemCategory.toString().toLowerCase()))
+              .formatted(Formatting.GRAY));
     }
+
+    return prefix.append(
+        registry.get(categoryType)
+            .buildTooltip()
+            .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
   }
 
   public String formatValue(double value, String postfix) {
     BigDecimal v = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
     return postfix.isBlank() ? v.toPlainString() : v.toPlainString() + postfix;
+  }
+
+  public MutableText getArrowPrefix(boolean isPositive) {
+    return Text.literal(isPositive ? InlineIcons.ARROW_UP.getSymbol() : InlineIcons.ARROW_DOWN.getSymbol())
+        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+        .formatted(isPositive ? Formatting.GREEN : Formatting.RED);
   }
 
   public String getTranslationKeyByModifier(ModifierCategoryType category) {
@@ -175,10 +126,8 @@ public class TooltipBuilder {
         : "tooltip.gemstones.event." + event.getName().toLowerCase();
   }
 
-  public MutableText getArrowPrefix(boolean isPositive) {
-    return Text.literal(isPositive ? InlineIcons.ARROW_UP.getSymbol() : InlineIcons.ARROW_DOWN.getSymbol())
-        .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-        .formatted(isPositive ? Formatting.GREEN : Formatting.RED);
+  public MutableText getEventText(Object eventType) {
+    return Text.translatable("tooltip.gemstones.event_text." + eventType.toString().toLowerCase());
   }
 
   public MutableText getEventText(EventType eventType) {

@@ -71,7 +71,7 @@ public class HitMeleeHandler
     double healthPercent = target.getHealth() / target.getMaxHealth();
     double capDeathPercent = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitMeleeConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitMeleeConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     if (healthPercent < capDeathPercent) {
@@ -98,7 +98,7 @@ public class HitMeleeHandler
 
     double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitMeleeConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitMeleeConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     if (ModifierUtils.proc(ctx.getWorld(), chance)) {
@@ -127,7 +127,7 @@ public class HitMeleeHandler
 
     double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitMeleeConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitMeleeConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     if (ModifierUtils.proc(ctx.getWorld(), chance)) {
@@ -155,7 +155,7 @@ public class HitMeleeHandler
     }
 
     float amplifierPercent = (float) modifiers.stream()
-        .mapToDouble(m -> ((HitMeleeConfig) m.getConfig()).chance().get(m.getRarityType()))
+        .mapToDouble(m -> ((HitMeleeConfig) m.getConfig()).values().get(m.getRarityType()))
         .sum();
 
     ctx.setDamageResult(ctx.getDamageResult() * (1.0f + amplifierPercent));
@@ -168,7 +168,7 @@ public class HitMeleeHandler
 
     double chance = ModifierUtils.cappedProcChance(
         modifiers.stream()
-            .map(m -> ((HitMeleeConfig) m.getConfig()).chance().get(m.getRarityType()))
+            .map(m -> ((HitMeleeConfig) m.getConfig()).values().get(m.getRarityType()))
             .toList());
 
     int duration = 15 * 20;
@@ -193,8 +193,8 @@ public class HitMeleeHandler
 
     for (GemstoneModifier modifier : modifiers) {
       HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
-      levelOffset += config.additionValues().get(modifier.getRarityType()).intValue();
-      bonusDamageAmplifierPercent += config.chance().get(modifier.getRarityType());
+      levelOffset += config.additionalValues().get(modifier.getRarityType()).intValue();
+      bonusDamageAmplifierPercent += config.values().get(modifier.getRarityType());
     }
 
     float extraDamageMultiplier = 1.0f + (player.experienceLevel / levelOffset) * bonusDamageAmplifierPercent;

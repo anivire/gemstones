@@ -130,8 +130,9 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
 
       case ON_FIRST_HIT -> {
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
+        LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
         EventType event = deserializeEvent(obj);
-        yield new ModifierConfig.OnFirstHitConfig(values, event);
+        yield new ModifierConfig.OnFirstHitConfig(values, additional_values, event);
       }
 
       case ON_POTION_BREW -> {
