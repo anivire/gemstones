@@ -19,11 +19,13 @@ public class OnHitEffectHandler<T extends ModifierConfig> extends BaseTooltipHan
 
   @Override
   protected double extractValue(T cfg) {
-    if (cfg instanceof ModifierConfig.HitEffectMeleeConfig melee)
+    if (cfg instanceof ModifierConfig.HitEffectMeleeConfig melee) {
       return melee.chance().get(rarityType);
-    if (cfg instanceof ModifierConfig.HitEffectProjectileConfig proj)
+    } else if (cfg instanceof ModifierConfig.HitEffectProjectileConfig proj) {
       return proj.chance().get(rarityType);
-    return 0;
+    } else {
+      return 0;
+    }
   }
 
   @Override

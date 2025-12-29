@@ -18,7 +18,7 @@ public sealed interface ModifierConfig extends ModifierConfigBase permits
   }
 
   sealed interface Events extends ModifierConfig
-      permits HitMeleeConfig, HitProjectileConfig, OnDamageConfig,
+      permits HitMeleeConfig, HitProjectileConfig, OnMobDamageConfig, OnPlayerDamageConfig,
       BlockBreakConfig, BeforeBlockBreakConfig, PlayerConfig,
       AfterDeathConfig, OnFirstHitConfig, OnPotionBrewConfig, OnFishingConfig {
     LevelValues values();
@@ -81,7 +81,13 @@ public sealed interface ModifierConfig extends ModifierConfigBase permits
       EventType eventType) implements Events {
   }
 
-  record OnDamageConfig(
+  record OnMobDamageConfig(
+      LevelValues values,
+      LevelValues additionalValues,
+      EventType eventType) implements Events {
+  }
+
+  record OnPlayerDamageConfig(
       LevelValues values,
       LevelValues additionalValues,
       EventType eventType) implements Events {

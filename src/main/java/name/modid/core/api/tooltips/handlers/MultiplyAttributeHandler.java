@@ -13,13 +13,16 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.MultiplyAttributeConfig> {
-  public MultiplyAttributeHandler(TooltipBuilder builder, ModifierConfig config, GemstoneQuality rarityType) {
+  public MultiplyAttributeHandler(
+      TooltipBuilder builder,
+      ModifierConfig config,
+      GemstoneQuality rarityType) {
     super(builder, config, rarityType);
   }
 
   @Override
   protected double extractValue(ModifierConfig.MultiplyAttributeConfig cfg) {
-    return 0; // не используется
+    return 0;
   }
 
   @Override
@@ -28,10 +31,10 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
 
     for (ModifierConfig.AttributeConfig sub : config.instances()) {
       double value = sub.values().get(rarityType);
-      boolean isPositive = value > 0;
       double adjusted = sub.operation() == Operation.ADD_VALUE ? value : value * 100;
       String postfix = sub.operation() == Operation.ADD_VALUE ? "" : "%";
       String formatted = builder.formatValue(Math.abs(adjusted), postfix);
+      boolean isPositive = value > 0;
 
       MutableText part = Text.empty()
           .append(builder.getArrowPrefix(isPositive))
@@ -43,13 +46,12 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
       parts.add(part);
     }
 
-    String joiner = Text.translatable("tooltip.gemstones.multiply_attribute.split").getString();
-
     MutableText combined = Text.empty();
+
     for (int i = 0; i < parts.size(); i++) {
       combined.append(parts.get(i));
       if (i < parts.size() - 1) {
-        combined.append(joiner);
+        combined.append(Text.translatable("tooltip.gemstones.multiply_attribute.split").getString());
       }
     }
 
@@ -59,7 +61,9 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
   }
 
   @Override
-  protected MutableText buildText(ModifierConfig.MultiplyAttributeConfig cfg, MutableText valueText,
+  protected MutableText buildText(
+      ModifierConfig.MultiplyAttributeConfig cfg,
+      MutableText valueText,
       boolean isPositive) {
     return Text.empty();
   }

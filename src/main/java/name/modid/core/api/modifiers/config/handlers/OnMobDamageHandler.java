@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
-import name.modid.core.api.modifiers.config.ModifierConfig.OnDamageConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.OnMobDamageConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +17,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 
-public class OnDamageHandler implements ModifierHandler<ModifierConfig.OnDamageConfig> {
+public class OnMobDamageHandler implements ModifierHandler<ModifierConfig.OnMobDamageConfig> {
   private final Map<String, java.util.function.BiConsumer<List<GemstoneModifier>, ModifierContext>> handlers = Map.of(
       "PLAYER_BONUS_DAMAGE_MISSING_HEALTH", this::handleBonusDamageMissingHealth);
 
@@ -31,7 +31,7 @@ public class OnDamageHandler implements ModifierHandler<ModifierConfig.OnDamageC
     }
 
     Map<String, List<GemstoneModifier>> grouped = modifiers.stream()
-        .collect(Collectors.groupingBy(inst -> ((OnDamageConfig) inst.getConfig()).eventType().getName()));
+        .collect(Collectors.groupingBy(inst -> ((OnMobDamageConfig) inst.getConfig()).eventType().getName()));
 
     for (String key : ORDER) {
       var group = grouped.get(key);
@@ -62,7 +62,7 @@ public class OnDamageHandler implements ModifierHandler<ModifierConfig.OnDamageC
     }
 
     double bonusPercentPerHeart = modifiers.stream()
-        .mapToDouble(m -> ((OnDamageConfig) m.getConfig()).values().get(m.getRarityType()))
+        .mapToDouble(m -> ((OnMobDamageConfig) m.getConfig()).values().get(m.getRarityType()))
         .sum();
 
     double bonusMultiplier = missingHearts * (bonusPercentPerHeart / 100.0);

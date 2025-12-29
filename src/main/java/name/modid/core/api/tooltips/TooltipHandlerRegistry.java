@@ -13,6 +13,7 @@ import name.modid.core.api.tooltips.handlers.MultiplyAttributeHandler;
 import name.modid.core.api.tooltips.handlers.OnBlockBreakHandler;
 import name.modid.core.api.tooltips.handlers.OnHitEffectHandler;
 import name.modid.core.api.tooltips.handlers.OnHitHandler;
+import name.modid.core.api.tooltips.handlers.OnPlayerDamageHandler;
 import name.modid.core.api.tooltips.handlers.OnPotionBrewHandler;
 import name.modid.core.api.tooltips.handlers.PlayerHandler;
 import name.modid.core.api.tooltips.handlers.TooltipHandler;
@@ -35,12 +36,14 @@ public final class TooltipHandlerRegistry {
         new DefaultPercentHandler<>(builder, config, rarityType));
     handlers.put(ModifierCategoryType.ON_BEFORE_BLOCK_BREAK,
         new DefaultPercentHandler<>(builder, config, rarityType));
-    handlers.put(ModifierCategoryType.ON_DAMAGE,
+    handlers.put(ModifierCategoryType.ON_MOB_DAMAGE,
         new DefaultPercentHandler<>(builder, config, rarityType));
     handlers.put(ModifierCategoryType.ON_FIRST_HIT,
         new DefaultPercentHandler<>(builder, config, rarityType));
 
     // Custom event handlers
+    handlers.put(ModifierCategoryType.ON_PLAYER_DAMAGE,
+        new OnPlayerDamageHandler(builder, config, rarityType));
     handlers.put(ModifierCategoryType.PLAYER,
         new PlayerHandler(builder, config, rarityType));
     handlers.put(ModifierCategoryType.ON_POTION_BREW,

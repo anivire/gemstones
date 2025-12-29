@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
-import name.modid.core.api.modifiers.config.ModifierConfig.OnDamageConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.OnPlayerDamageConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierContext.ContextBuilder;
 import name.modid.core.api.modifiers.config.ModifierManager;
@@ -15,20 +15,20 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
-public class EventOnDamage {
-  public static void setup(LivingEntity entity,
+public class EventOnPlayerDamage {
+  public static void setup(
+      LivingEntity targetEntity,
       DamageSource source,
       float baseDamageTaken,
       float damageTaken,
       boolean blocked) {
-    if (!(source.getAttacker() instanceof ServerPlayerEntity serverPlayer)
-        || !(entity.getWorld() instanceof ServerWorld serverWorld)
-        || !(source.getSource() instanceof PersistentProjectileEntity proj)) {
+    if (!(targetEntity instanceof ServerPlayerEntity serverPlayer)
+        || !(targetEntity.getWorld() instanceof ServerWorld serverWorld)) {
       return;
     }
 
     List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
-        serverPlayer, OnDamageConfig.class);
+        serverPlayer, OnPlayerDamageConfig.class);
 
     if (modifiers.isEmpty()) {
       return;
@@ -36,9 +36,13 @@ public class EventOnDamage {
 
     ModifierContext.ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
         .withOwner(serverPlayer)
-        .withProjectile(proj)
         .withBaseDamageTaken(baseDamageTaken)
-        .withTarget(entity);
+        .withTarget(source.getAttacker());
+
+    if (source.getSource() instanceof PersistentProjectileEntity proj) {
+      ctxBuilder.withProjectile(proj);
+    }
+
     ModifierContext ctx = ctxBuilder.build();
     ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctx);
   }

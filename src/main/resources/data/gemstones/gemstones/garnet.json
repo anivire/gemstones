@@ -26,8 +26,8 @@
       "event_type": "ON_BLOCK_BREAK_EXTRA_HEALTH"
     },
     "ARMOR": {
-      "type": "ON_DAMAGE",
-      "value_levels": [2.0, 4.0, 6.0, 9.0],
+      "type": "ON_MOB_DAMAGE",
+      "value_levels": [0.2, 0.3, 0.4, 0.5],
       "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
       "event_type": "PLAYER_BONUS_DAMAGE_MISSING_HEALTH"
     }

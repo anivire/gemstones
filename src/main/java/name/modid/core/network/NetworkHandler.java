@@ -12,14 +12,15 @@ public final class NetworkHandler {
 
     PayloadTypeRegistry.playS2C().register(OreVisionPayload.ID, OreVisionPayload.CODEC);
 
-    ServerPlayNetworking.registerGlobalReceiver(
-        AirJumpPayload.ID,
-        (payload, context) -> {
-          context.player().server.execute(() -> {
-            var player = context.player();
-            System.out.println("[Gemstones] AirJumpPayload received from " + player.getName().getString());
-          });
-        });
+    // ServerPlayNetworking.registerGlobalReceiver(
+    // AirJumpPayload.ID,
+    // (payload, context) -> {
+    // context.player().server.execute(() -> {
+    // var player = context.player();
+    // System.out.println("[Gemstones] AirJumpPayload received from " +
+    // player.getName().getString());
+    // });
+    // });
 
     ServerPlayNetworking.registerGlobalReceiver(
         AirJumpPayload.ID,

@@ -6,11 +6,12 @@ import name.modid.core.content.events.handlers.EventAreaEffect;
 import name.modid.core.content.events.handlers.EventMeleeEffect;
 import name.modid.core.content.events.handlers.EventOnBeforeBlockBreak;
 import name.modid.core.content.events.handlers.EventOnBlockBreak;
-import name.modid.core.content.events.handlers.EventOnDamage;
 import name.modid.core.content.events.handlers.EventOnFirstHit;
 import name.modid.core.content.events.handlers.EventOnFishing;
 import name.modid.core.content.events.handlers.EventOnHitMelee;
 import name.modid.core.content.events.handlers.EventOnHitProjectile;
+import name.modid.core.content.events.handlers.EventOnMobDamage;
+import name.modid.core.content.events.handlers.EventOnPlayerDamage;
 import name.modid.core.content.events.handlers.EventPlayer;
 import name.modid.core.content.events.handlers.EventProjectileEffect;
 import name.modid.core.content.events.handlers.PlayerRandomBuff;
@@ -42,7 +43,8 @@ public class EventsRegistry {
     });
     AttackEntityCallback.EVENT.register(EventMeleeEffect::setupEvent);
     ServerLivingEntityEvents.AFTER_DAMAGE.register(EventProjectileEffect::setup);
-    ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnDamage::setup);
+    ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnMobDamage::setup);
+    ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnPlayerDamage::setup);
 
     // Block break
     PlayerBlockBreakEvents.AFTER.register(EventOnBlockBreak::setupEvent);

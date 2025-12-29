@@ -11,14 +11,12 @@ import name.modid.core.api.modifiers.config.ModifierConfig.PlayerConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
-import name.modid.core.content.registries.EffectsRegistry;
 import name.modid.core.network.OreVisionPayload;
 import name.modid.core.utils.GetRandomBuff;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -30,14 +28,12 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       "PLAYER_WITHER_GUARD", this::handleWitherGuard,
       "PLAYER_PROJECTILE_IMMUNE", this::handleProjectileImmune,
       "PLAYER_RANDOM_EFFECT", this::handleRandomEffect,
-      "PLAYER_SAVE_LETHAL", this::handleSaveLethal,
       "PLAYER_TICK_ORE_VISION", this::handleOreVision);
 
   private static final List<String> ORDER = List.of(
       "PLAYER_WITHER_GUARD",
       "PLAYER_PROJECTILE_IMMUNE",
       "PLAYER_RANDOM_EFFECT",
-      "PLAYER_SAVE_LETHAL",
       "PLAYER_TICK_ORE_VISION");
 
   @Override
@@ -163,89 +159,4 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     }
   }
 
-  private void handleSaveLethal(List<GemstoneModifier> modifiers, ModifierContext ctx) {
-    if (!(ctx.getTarget() instanceof LivingEntity owner)
-        || owner.isDead()
-        || owner.isRemoved()
-        || owner.isSpectator()
-        || owner.hasStatusEffect(EffectsRegistry.LETHAL_WEAKNESS_EFFECT)) {
-      return;
-    }
-
-    int amplifier = 1;
-    int duration = 0;
-    double healthThresholdBonus = 0.0;
-
-    for (GemstoneModifier modifier : modifiers) {
-      PlayerConfig config = (PlayerConfig) modifier.getConfig();
-      duration += config.values().get(modifier.getRarityType());
-      healthThresholdBonus += config.additionalValues().get(modifier.getRarityType());
-    }
-
-    float healthThreshold = (float) (0.0 + healthThresholdBonus);
-    int buffDurationTicks = Math.max(0, duration) * 20;
-
-    if (buffDurationTicks <= 0
-        && owner.getHealth() > healthThreshold) {
-      return;
-    }
-
-    owner.getWorld().playSound(
-        null,
-        owner.getBlockPos(),
-        net.minecraft.sound.SoundEvents.ITEM_TOTEM_USE,
-        net.minecraft.sound.SoundCategory.PLAYERS,
-        1.0f,
-        1.0f);
-
-    owner.addStatusEffect(new StatusEffectInstance(
-        StatusEffects.REGENERATION,
-        buffDurationTicks,
-        amplifier,
-        false,
-        true,
-        true));
-
-    owner.addStatusEffect(new StatusEffectInstance(
-        StatusEffects.RESISTANCE,
-        buffDurationTicks,
-        0,
-        false,
-        true,
-        true));
-
-    owner.addStatusEffect(new StatusEffectInstance(
-        EffectsRegistry.LETHAL_WEAKNESS_EFFECT,
-        3 * 60 * 20,
-        0,
-        false,
-        true,
-        true));
-
-    owner.addStatusEffect(new StatusEffectInstance(
-        StatusEffects.ABSORPTION,
-        buffDurationTicks,
-        1,
-        false,
-        true,
-        true));
-
-    if (owner.getWorld() instanceof ServerWorld server) {
-      double x = owner.getX();
-      double y = owner.getBodyY(0.5);
-      double z = owner.getZ();
-      server.spawnParticles(
-          net.minecraft.particle.ParticleTypes.TOTEM_OF_UNDYING,
-          x, y, z,
-          50,
-          0.5, 0.8, 0.5,
-          0.1);
-      server.spawnParticles(
-          net.minecraft.particle.ParticleTypes.GLOW,
-          x, y, z,
-          20,
-          0.3, 0.6, 0.3,
-          0.02);
-    }
-  }
 }

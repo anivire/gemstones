@@ -149,11 +149,18 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
         yield new ModifierConfig.PlayerConfig(values, additional_values, event);
       }
 
-      case ON_DAMAGE -> {
+      case ON_MOB_DAMAGE -> {
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
         EventType event = deserializeEvent(obj);
-        yield new ModifierConfig.OnDamageConfig(values, additional_values, event);
+        yield new ModifierConfig.OnMobDamageConfig(values, additional_values, event);
+      }
+
+      case ON_PLAYER_DAMAGE -> {
+        LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
+        LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
+        EventType event = deserializeEvent(obj);
+        yield new ModifierConfig.OnPlayerDamageConfig(values, additional_values, event);
       }
 
       case ON_DEATH -> {

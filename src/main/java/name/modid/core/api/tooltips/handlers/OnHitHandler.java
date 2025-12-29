@@ -43,7 +43,7 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
 
   @Override
   protected MutableText buildText(T cfg, MutableText valueText, boolean isPositive) {
-    EventType ev = (cfg instanceof ModifierConfig.HitMeleeConfig melee)
+    EventType e = (cfg instanceof ModifierConfig.HitMeleeConfig melee)
         ? melee.eventType()
         : (cfg instanceof ModifierConfig.HitProjectileConfig proj)
             ? proj.eventType()
@@ -53,28 +53,20 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
         : (cfg instanceof ModifierConfig.HitProjectileConfig proj)
             ? proj.additionalValues()
             : null;
-
     MutableText firstArg = valueText;
-    MutableText secondArg = builder.getEventText(ev);
-    MutableText thirdArg = null;
+    MutableText secondArg = builder.getEventText(e);
 
-    if (ev == EventType.ON_HIT_MAGIC_STRIKE) {
-      thirdArg = Text.literal("30%").formatted(Formatting.RED);
-
+    if (e == EventType.ON_HIT_MAGIC_STRIKE) {
       return TooltipHelper
           .safeTranslatable(
-              builder.getTranslationKeyByEvent(ev),
+              builder.getTranslationKeyByEvent(e),
               firstArg,
               secondArg,
-              thirdArg)
+              Text.literal("30%").formatted(Formatting.RED))
           .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
-    }
-
-    if (ev == EventType.ON_HIT_EXP_ADDITIONAL_DAMAGE) {
-      int levelsPerStep = additionalValues.get(rarityType).intValue();
-
+    } else if (e == EventType.ON_HIT_EXP_ADDITIONAL_DAMAGE) {
       MutableText levelsNumberText = Text.literal(
-          String.valueOf(levelsPerStep))
+          String.valueOf(additionalValues.get(rarityType).intValue()))
           .formatted(Formatting.GREEN);
 
       MutableText levelsWordText = Text.translatable(
@@ -83,18 +75,18 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
 
       return TooltipHelper
           .safeTranslatable(
-              builder.getTranslationKeyByEvent(ev),
+              builder.getTranslationKeyByEvent(e),
               valueText,
               levelsNumberText,
               levelsWordText)
           .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+    } else {
+      return TooltipHelper
+          .safeTranslatable(
+              builder.getTranslationKeyByEvent(e),
+              firstArg,
+              secondArg)
+          .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
     }
-
-    return TooltipHelper
-        .safeTranslatable(
-            builder.getTranslationKeyByEvent(ev),
-            firstArg,
-            secondArg)
-        .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
   }
 }

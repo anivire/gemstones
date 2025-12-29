@@ -45,13 +45,16 @@
   "tooltip.gemstones.event_name.target_random_effect": "Random Negative Effect",
   "tooltip.gemstones.event_name.random_item_drop": "Random Item Drop",
   "tooltip.gemstones.event_name.player_random_effect": "Random Positive Effect",
-  "tooltip.gemstones.event_name.miner": "3x3 Area",
-  "tooltip.gemstones.event_name.save_lethal": "Borrowed Time",
+  "tooltip.gemstones.event_name.miner": "Terraformer",
+  "tooltip.gemstones.event_name.save_lethal": "Last Chance",
   "tooltip.gemstones.event_name.magic_strike": "Magic Strike",
   "tooltip.gemstones.event_name.arrow_rain": "Arrow Rain",
   "tooltip.gemstones.event_name.exp_additional_damage": "Expirience Levels",
   "tooltip.gemstones.event_name.block_enchanter": "Enchanted Block",
   "tooltip.gemstones.event_name.additional_exp_gain": "Killing Mobs",
+  "tooltip.gemstones.event_name.bonus_missing_health": "Missing Heart",
+  "tooltip.gemstones.event_name.ore_vision": "Geomancy Sight",
+  "tooltip.gemstones.event_name.ender_judgement": "Ender Judgement",
   
   "tooltip.gemstones.category.unknown": "undefined modifier",
   "tooltip.gemstones.event.unknown": "undefined event",
@@ -62,7 +65,7 @@
   "tooltip.gemstones.event.on_hit_small_flat_explosion": "%s to trigger %s on hit",
   "tooltip.gemstones.event.on_hit_copy_entity_drop": "%s to drop copy %s on hit",
   "tooltip.gemstones.event.on_hit_multiply_damage_armorless": "%s %s if not wearing any armor",
-  "tooltip.gemstones.event.on_hit_magic_strike": "%s to %s of %s total damage",
+  "tooltip.gemstones.event.on_hit_magic_strike": "%s to deal %s of %s total damage",
   "tooltip.gemstones.event.on_hit_arrow_rain": "%s to trigger %s",
   "tooltip.gemstones.event.on_hit_exp_additional_damage": "%s bonus total damage for each %s %s",
   "tooltip.gemstones.event.on_hit_random_effect": "%s to inflict %s",
@@ -76,7 +79,7 @@
   "tooltip.gemstones.event.on_block_break_enchanter": "%s to drop %s on mine",
   "tooltip.gemstones.event.on_block_break_extra_health": "%s gain %s while mining",
   "tooltip.gemstones.event.on_block_break_heal": "%s to %s on mine",
-  "tooltip.gemstones.event.on_block_break_miner": "can mine %s",
+  "tooltip.gemstones.event.on_block_break_miner": "%s",
   "tooltip.gemstones.event.on_block_break_random_item_drop": "%s to drop %s after mining",
 
   "tooltip.gemstones.event.on_fishing_increase_mossy_box_drop": "%s to loot %s from fishing",
@@ -87,8 +90,10 @@
 
   "tooltip.gemstones.event.player_wither_guard": "while holding provide %s",
   "tooltip.gemstones.event.player_projectile_immune": "while %s provide %s",
-  "tooltip.gemstones.event.player_save_lethal": "while below %s provide %s for %s",
+  "tooltip.gemstones.event.player_save_lethal": "while below %s trigger %s",
   "tooltip.gemstones.event.player_random_effect": "killing mob with %s chance apply %s for %s",
+  "tooltip.gemstones.event.player_bonus_damage_missing_health": "gain %s bonus damage for each %s",
+  "tooltip.gemstones.event.player_tick_ore_vision": "while holding provide %s",
 
   "tooltip.gemstones.event.after_death_additional_exp_gain": "%s expirience from %s",
 
@@ -123,7 +128,7 @@
   
   "item.gemstones.diamond_tipped_chisel": "Diamond Tipped Chisel",
   "item.gemstones.netherite_tipped_chisel": "Netherite Tipped Chisel",
-  "item.gemstones.chisel.info_1": "Allows to add new gemstone sockets gemstones into equipment, weapons and tools.",
+  "item.gemstones.chisel.info_1": "Allows to add new gemstone sockets into equipment, weapons and tools.",
   "item.gemstones.chisel.info_2": "Required %s to process.",
   
   "item.gemstones.jewelry_hammer": "Jewelry Hammer",

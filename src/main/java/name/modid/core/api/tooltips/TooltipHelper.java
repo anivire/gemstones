@@ -166,7 +166,17 @@ public class TooltipHelper {
       double seconds,
       @Nullable Formatting color) {
     Formatting actualColor = color != null ? color : Formatting.GREEN;
-    return Text.literal(builder.formatValue(seconds, " seconds"))
+    return Text.literal(builder.formatValue(seconds, " second"))
+        .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(actualColor);
+  }
+
+  public static MutableText buildBlocksText(
+      TooltipBuilder builder,
+      double blocks,
+      @Nullable Formatting color) {
+    Formatting actualColor = color != null ? color : Formatting.GREEN;
+    return Text.literal(builder.formatValue(blocks, " block"))
         .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
         .formatted(actualColor);
   }
