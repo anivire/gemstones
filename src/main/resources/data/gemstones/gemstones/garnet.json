@@ -27,7 +27,7 @@
     },
     "ARMOR": {
       "type": "ON_MOB_DAMAGE",
-      "value_levels": [0.2, 0.3, 0.4, 0.5],
+      "value_levels": [0.03, 0.06, 0.09, 0.12],
       "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
       "event_type": "PLAYER_BONUS_DAMAGE_MISSING_HEALTH"
     }

@@ -22,11 +22,14 @@ public class EventOnMobDamage {
       float baseDamageTaken,
       float damageTaken,
       boolean blocked) {
+
+    // Проверяем, что атакующий — игрок
     if (!(source.getAttacker() instanceof ServerPlayerEntity serverPlayer)
         || !(targetEntity.getWorld() instanceof ServerWorld serverWorld)) {
       return;
     }
 
+    // Берем модификаторы с экипировки атакующего игрока
     List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
         serverPlayer, OnMobDamageConfig.class);
 
@@ -34,10 +37,11 @@ public class EventOnMobDamage {
       return;
     }
 
+    // Формируем контекст: игрок — владелец эффекта, цель — моб, получающий урон
     ModifierContext.ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
         .withOwner(serverPlayer)
-        .withBaseDamageTaken(baseDamageTaken)
-        .withTarget(targetEntity);
+        .withTarget(targetEntity)
+        .withBaseDamageTaken(baseDamageTaken);
 
     if (source.getSource() instanceof PersistentProjectileEntity proj) {
       ctxBuilder.withProjectile(proj);

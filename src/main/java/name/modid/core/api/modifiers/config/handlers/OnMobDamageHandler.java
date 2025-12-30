@@ -48,13 +48,13 @@ public class OnMobDamageHandler implements ModifierHandler<ModifierConfig.OnMobD
   private void handleBonusDamageMissingHealth(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getOwner() instanceof LivingEntity attacker) ||
-        !(ctx.getTarget() instanceof LivingEntity target)) {
+    if (!(ctx.getOwner() instanceof LivingEntity playerOwner) ||
+        !(ctx.getTarget() instanceof LivingEntity targetedMob)) {
       return;
     }
 
     DamageSource bonusSource = ctx.getWorld().getDamageSources().generic();
-    float missingHealth = Math.max(0, attacker.getMaxHealth() - attacker.getHealth());
+    float missingHealth = Math.max(0, playerOwner.getMaxHealth() - playerOwner.getHealth());
     int missingHearts = (int) Math.ceil(missingHealth / 2.0f);
 
     if (missingHearts <= 0) {
@@ -65,29 +65,29 @@ public class OnMobDamageHandler implements ModifierHandler<ModifierConfig.OnMobD
         .mapToDouble(m -> ((OnMobDamageConfig) m.getConfig()).values().get(m.getRarityType()))
         .sum();
 
-    double bonusMultiplier = missingHearts * (bonusPercentPerHeart / 100.0);
+    double bonusMultiplier = missingHearts * bonusPercentPerHeart;
     float bonusDamage = (float) (ctx.getBaseDamageTaken() * bonusMultiplier);
 
-    if (bonusDamage <= 0 || !target.isAlive()) {
+    if (bonusDamage <= 0 || !targetedMob.isAlive()) {
       return;
     }
 
-    if (!target.isInvulnerableTo(bonusSource) && target.isAlive()) {
-      int originalHurtTime = target.hurtTime;
+    if (!targetedMob.isInvulnerableTo(bonusSource) && targetedMob.isAlive()) {
+      int originalHurtTime = targetedMob.hurtTime;
 
-      target.hurtTime = 0;
-      target.timeUntilRegen = 0;
-      target.hurtTime = Math.max(1, originalHurtTime / 2);
-      target.damage(bonusSource, bonusDamage);
+      targetedMob.hurtTime = 0;
+      targetedMob.timeUntilRegen = 0;
+      targetedMob.hurtTime = Math.max(1, originalHurtTime / 2);
+      targetedMob.damage(bonusSource, bonusDamage);
 
-      ctx.getWorld().playSound(null, target.getBlockPos(),
+      ctx.getWorld().playSound(null, targetedMob.getBlockPos(),
           SoundEvents.ENTITY_PLAYER_ATTACK_CRIT,
           SoundCategory.PLAYERS,
           0.8f, 1.2f + (missingHearts * 0.1f));
 
-      double x = target.getX();
-      double y = target.getBodyY(0.5);
-      double z = target.getZ();
+      double x = targetedMob.getX();
+      double y = targetedMob.getBodyY(0.5);
+      double z = targetedMob.getZ();
 
       if (ctx.getWorld() instanceof ServerWorld serverWorld) {
         serverWorld.spawnParticles(
