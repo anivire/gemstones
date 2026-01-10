@@ -52,7 +52,8 @@ public class TooltipHelper {
     MOUSE_LMB("\uE015"),
     SHIFT("\uE016"),
     LOCKED("\uE017"),
-    EMPTY("\uE018");
+    EMPTY("\uE018"),
+    INFO("\uE019");
 
     private final String symbol;
 

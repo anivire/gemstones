@@ -85,15 +85,13 @@ public class OnMobDamageHandler implements ModifierHandler<ModifierConfig.OnMobD
           SoundCategory.PLAYERS,
           0.8f, 1.2f + (missingHearts * 0.1f));
 
-      double x = targetedMob.getX();
-      double y = targetedMob.getBodyY(0.5);
-      double z = targetedMob.getZ();
-
       if (ctx.getWorld() instanceof ServerWorld serverWorld) {
         serverWorld.spawnParticles(
-            ParticleTypes.ANGRY_VILLAGER,
-            x, y, z,
-            (int) (missingHearts * 2),
+            ParticleTypes.ENCHANTED_HIT,
+            targetedMob.getX(),
+            targetedMob.getBodyY(0.5),
+            targetedMob.getZ(),
+            5,
             0.5, 0.5, 0.5,
             0.1);
       }

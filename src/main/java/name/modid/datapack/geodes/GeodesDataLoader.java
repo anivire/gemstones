@@ -28,7 +28,7 @@ public class GeodesDataLoader implements SimpleSynchronousResourceReloadListener
 
     Map<String, GeodesConfig> newConfigs = new HashMap<>();
 
-    manager.findResources(Gemstones.MOD_ID, id -> id.getPath().endsWith(".json"))
+    manager.findResources("geodes", id -> id.getPath().endsWith(".json"))
         .forEach((id, resource) -> {
           if (!id.getNamespace().equals(Gemstones.MOD_ID)) {
             return;

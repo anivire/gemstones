@@ -1,4 +1,4 @@
-// 1.21.1	2025-11-11T06:10:40.0469822	Gemstones/Model Definitions
+// 1.21.1	2026-01-10T03:17:48.115929	Gemstones/Model Definitions
 75d84b4d5ece1691232c37fe879c04708f5362b5 assets\gemstones\models\item\ruby_gemstone_polished.json
 4f918441e658f69451d0f1d92449ba818fe55553 assets\gemstones\models\item\amber_gemstone_flawless.json
 264602f33f74a2257e8ec35ca51bcb488eb76610 assets\gemstones\models\item\pyrite_gemstone_radiant.json
@@ -9,6 +9,7 @@
 7a92361a5b13d8ccd399fcc92d75efa8c449cc93 assets\gemstones\models\item\topaz_gemstone_radiant.json
 b30e6d29de1576b90e6006df64ef690a0596314b assets\gemstones\models\item\astralite_unusual.json
 a656c0fd6dad94f76e9bf251b12315b59f25144b assets\gemstones\models\item\jewelry_table.json
+856157d1c811118b963960f6d8e512ad5598a2ec assets\gemstones\models\item\ender_scale_unusual.json
 a190a8968a48e2a65e4947c38188070658fa044c assets\gemstones\models\item\sapphire_gemstone_radiant.json
 4f868d41b0a572cab931aaf7767dc22abdfe7a96 assets\gemstones\models\item\aquamarine_gemstone_crude.json
 e53f739f6b0114687dba0ca54d0441fb818e9ad1 assets\gemstones\models\item\jewelry_pliers.json

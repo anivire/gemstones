@@ -9,13 +9,13 @@
     "TOOLS": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:generic.gravity",
-      "value_levels": [-0.8],
+      "value_levels": [-0.666],
       "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "ARMOR": {
       "type": "ATTRIBUTE",
       "attribute_id": "gemstones:jump_count",
-      "value_levels": [1.00],
+      "value_levels": [1.0],
       "operation": "ADD_VALUE"
     }
   }

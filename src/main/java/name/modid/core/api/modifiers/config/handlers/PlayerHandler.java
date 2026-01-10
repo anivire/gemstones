@@ -25,15 +25,16 @@ import net.minecraft.util.math.BlockPos;
 
 public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfig> {
   private final Map<String, java.util.function.BiConsumer<List<GemstoneModifier>, ModifierContext>> handlers = Map.of(
+
+      "PLAYER_RANDOM_EFFECT", this::handleRandomEffect,
       "PLAYER_WITHER_GUARD", this::handleWitherGuard,
       "PLAYER_PROJECTILE_IMMUNE", this::handleProjectileImmune,
-      "PLAYER_RANDOM_EFFECT", this::handleRandomEffect,
       "PLAYER_TICK_ORE_VISION", this::handleOreVision);
 
   private static final List<String> ORDER = List.of(
+      "PLAYER_RANDOM_EFFECT",
       "PLAYER_WITHER_GUARD",
       "PLAYER_PROJECTILE_IMMUNE",
-      "PLAYER_RANDOM_EFFECT",
       "PLAYER_TICK_ORE_VISION");
 
   @Override
@@ -138,8 +139,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
   private void handleRandomEffect(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (!(ctx.getOwner() instanceof LivingEntity owner)
         || !(ctx.getTarget() instanceof LivingEntity target)
-        // I don't remember why i need this here
-        || !owner.getUuid().equals(target.getUuid())) {
+        || owner.getUuid().equals(target.getUuid())) {
       return;
     }
 
@@ -153,10 +153,10 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       chance += config.additionalValues().get(modifier.getRarityType());
     }
 
-    if (ModifierUtils.proc(ctx.getWorld(), chance)) {
+    if (ModifierUtils.proc(ctx.getWorld(), chance)
+        && !target.isAlive()) {
       StatusEffectInstance buff = GetRandomBuff.positive(duration * 20, amplifier);
       owner.addStatusEffect(buff);
     }
   }
-
 }

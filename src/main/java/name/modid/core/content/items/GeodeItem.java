@@ -189,22 +189,24 @@ public class GeodeItem extends Item {
     // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
     // .formatted(Formatting.GOLD);
 
+    tooltip.add(Text.empty());
+    MutableText iconInfo = Text.literal(InlineIcons.INFO.getSymbol())
+        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+        .formatted(Formatting.WHITE);
     MutableText iconOpen = Text.literal(InlineIcons.MOUSE_RMB.getSymbol())
         .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
         .formatted(Formatting.WHITE);
-    MutableText arrowOpen = Text.literal(" > ")
+    MutableText actionStart = Text.literal(" Press ")
         .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.DARK_GRAY);
-    MutableText actionOpen = Text.literal("Right-click in hand to ")
+        .formatted(Formatting.GRAY);
+    MutableText actionOpen = Text.literal(" in hand to ")
         .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.YELLOW);
+        .formatted(Formatting.GRAY);
     MutableText keywordOpen = Text.literal("Open Geode")
         .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
         .formatted(Formatting.GOLD);
 
-    tooltip.add(Text.empty());
-    // tooltip.add(iconInfo.append(arrowInfo).append(actionInfo).append(keywordInfo));
-    tooltip.add(iconOpen.append(arrowOpen).append(actionOpen).append(keywordOpen));
+    tooltip.add(iconInfo.append(actionStart.append(iconOpen).append(actionOpen).append(keywordOpen)));
   }
 
   private Item getItemFromType(GemstoneType type) {

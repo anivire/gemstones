@@ -128,27 +128,28 @@
   
   "item.gemstones.diamond_tipped_chisel": "Diamond Tipped Chisel",
   "item.gemstones.netherite_tipped_chisel": "Netherite Tipped Chisel",
-  "item.gemstones.chisel.info_1": "Allows to add new gemstone sockets into equipment, weapons and tools.",
+  "item.gemstones.chisel.info_1": "Allows %s new gemstone sockets into equipment, weapons and tools.",
+  "item.gemstones.chisel.info_add": "adding",
   "item.gemstones.chisel.info_2": "Required %s to process.",
   
   "item.gemstones.jewelry_hammer": "Jewelry Hammer",
-  "item.gemstones.jewelry_hammer.info": "Allows to insert gemstones into equipment, weapons and tools.",
+  "item.gemstones.jewelry_hammer.info": "Allows inserting gemstones into equipment, weapons, and tools.",
   
   "item.gemstones.jewelry_pliers": "Jewelry Pliers",
-  "item.gemstones.jewelry_pliers.info_1": "Allows to extract %s gemstone from equipment, weapons and tools.",
-  "item.gemstones.jewelry_pliers.info_1_1": "last",
-  "item.gemstones.jewelry_pliers.info_2": "Gemstones have a %s chance to break when extracted.",
+  "item.gemstones.jewelry_pliers.info_1": "Allows extracting %s gemstone from equipment, weapons and tools.",
+  "item.gemstones.jewelry_pliers.info_last": "last",
+  "item.gemstones.jewelry_pliers.info_2": "Gemstones have a %s chance to break during extraction.",
 
   "item.gemstones.stone_geode": "Stone Geode",
   "item.gemstones.deepslate_geode": "Deepslate Geode",
 
-  "tooltip.gemstones.stone_geode.info": "Can be cracked open to reveal common gemstones.",
-  "tooltip.gemstones.deepslate_geode.info": "Can be cracked open to reveal rarer gemstones.",
+  "tooltip.gemstones.stone_geode.info": "Contains common gemstones.",
+  "tooltip.gemstones.deepslate_geode.info": "Contains rare gemstones.",
 
   "tooltip.gemstones.geode.info": "Possible Gemstones:",
   
   "item.gemstones.mossy_box": "Mossy Box",
-  "tooltip.gemstones.mossy_box.info": "Open to obtain a small gift from the depths.",
+  "tooltip.gemstones.mossy_box.info": "Contains small gifts from the depths.",
 
   "tooltip.gemstones.opening_item.info": "(Click RMB in hand for open)",
 
