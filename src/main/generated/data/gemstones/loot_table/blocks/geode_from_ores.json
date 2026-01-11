@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "gemstones:block_in_tag",
+          "tag": "#gemstones:stone_ores"
+        },
+        {
+          "base_chance": 0.045,
+          "condition": "gemstones:geode_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "gemstones:stone_geode"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "gemstones:block_in_tag",
+          "tag": "#gemstones:deepslate_ores"
+        },
+        {
+          "base_chance": 0.025,
+          "condition": "gemstones:geode_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "gemstones:deepslate_geode"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

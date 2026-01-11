@@ -94,8 +94,7 @@ public class SocketedItemsTooltip {
         int count = 1;
         int j = i + 1;
 
-        while (j < gemstones.length
-            && gemstones[j].gemstoneType() == type) {
+        while (j < gemstones.length && gemstones[j].gemstoneType() == type) {
           count++;
           j++;
         }

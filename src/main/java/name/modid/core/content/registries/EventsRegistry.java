@@ -1,5 +1,6 @@
 package name.modid.core.content.registries;
 
+import name.modid.Gemstones;
 import name.modid.core.content.events.CustomEvents;
 import name.modid.core.content.events.handlers.EventAfterDeath;
 import name.modid.core.content.events.handlers.EventAreaEffect;
@@ -25,7 +26,13 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.entry.LootTableEntry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 
 public class EventsRegistry {
 
@@ -68,5 +75,25 @@ public class EventsRegistry {
     ServerEntityEvents.ENTITY_LOAD.register(EventProjectileSpeed::setup);
     UseBlockCallback.EVENT.register(EventLastBrewer::setup);
     ServerLivingEntityEvents.AFTER_DEATH.register(EventSparkSpawner::setup);
+
+    LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
+      if (!key.getValue().getNamespace().equals("minecraft")) {
+        return;
+      }
+
+      if (!key.getValue().getPath().startsWith("blocks/")) {
+        return;
+      }
+
+      tableBuilder.pool(
+          LootPool.builder()
+              .with(
+                  LootTableEntry.builder(
+                      RegistryKey.of(
+                          RegistryKeys.LOOT_TABLE,
+                          Identifier.of(
+                              Gemstones.MOD_ID,
+                              "blocks/geode_from_ores")))));
+    });
   }
 }

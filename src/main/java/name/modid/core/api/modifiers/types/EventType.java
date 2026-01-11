@@ -48,8 +48,6 @@ public final class EventType {
   public static final EventType ON_FIRST_HIT_ADDITIONAL_DAMAGE = register("ON_FIRST_HIT_ADDITIONAL_DAMAGE",
       "tooltip.gemstones.event_name.additional_damage");
 
-  public static final EventType ON_BLOCK_BREAK_INCREASE_GEODES_DROP = register("ON_BLOCK_BREAK_INCREASE_GEODES_DROP",
-      "tooltip.gemstones.event_name.increase_geodes_drop");
   public static final EventType ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP = register("ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP",
       "tooltip.gemstones.event_name.additional_gold_drop");
   public static final EventType ON_BLOCK_BREAK_REGENERATE_BLOCK = register("ON_BLOCK_BREAK_REGENERATE_BLOCK",

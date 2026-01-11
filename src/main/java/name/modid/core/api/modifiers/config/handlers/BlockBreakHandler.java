@@ -15,8 +15,6 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
-import name.modid.core.content.items.registries.ItemsRegistry;
-import name.modid.core.content.registries.TagsRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -59,7 +57,6 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
         case "ON_BLOCK_BREAK_HEAL" -> handleHeal(group, ctx);
         case "ON_BLOCK_BREAK_REGENERATE_BLOCK" -> handleRegenerateBlock(group, ctx);
         case "ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP" -> handleAdditionalGoldDrop(group, ctx);
-        case "ON_BLOCK_BREAK_INCREASE_GEODES_DROP" -> handleIncreaseGeodesDrop(group, ctx);
         case "ON_BLOCK_BREAK_EXTRA_HEALTH" -> handleExtraHealth(group, ctx);
         case "ON_BLOCK_BREAK_RANDOM_ITEM_DROP" -> handleRandomItemDrop(group, ctx);
         case "ON_BLOCK_BREAK_MINER" -> handleMiner(group, ctx);
@@ -146,31 +143,6 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
 
       Block.dropStack(ctx.getWorld(), ctx.getBlockPos(),
           ctx.getWorld().getRandom().nextDouble() >= 0.6F ? goldIngot : goldNugget);
-    }
-  }
-
-  private void handleIncreaseGeodesDrop(
-      List<GemstoneModifier> modifiers,
-      ModifierContext ctx) {
-    if (!ctx.getBlockState().isIn(TagsRegistry.ALL_ORES)
-        && ctx.getBlockPos() == null) {
-      return;
-    }
-
-    List<Double> chances = new ArrayList<>();
-    for (GemstoneModifier modifier : modifiers) {
-      BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
-      chances.add(config.values().get(modifier.getRarityType()));
-    }
-
-    double combinedChance = ModifierUtils.cappedProcChance(chances);
-
-    if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-      ItemStack geode = ctx.getBlockState().isIn(TagsRegistry.DEEPSLATE_ORES)
-          ? new ItemStack(ItemsRegistry.DEEPSLATE_GEODE)
-          : new ItemStack(ItemsRegistry.STONE_GEODE);
-
-      Block.dropStack(ctx.getWorld(), ctx.getBlockPos(), geode);
     }
   }
 

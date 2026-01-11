@@ -29,7 +29,6 @@
   "tooltip.gemstones.event_name.heal": "Heal",
   "tooltip.gemstones.event_name.lifesteal": "Lifesteal",
   "tooltip.gemstones.event_name.torrent": "Torrent",
-  "tooltip.gemstones.event_name.increase_geodes_drop": "Geodes",
   "tooltip.gemstones.event_name.increase_mossy_box_drop": "Mossy Box",
   "tooltip.gemstones.event_name.increase_mob_spawnrate": "Mobs Spawnrate",
   "tooltip.gemstones.event_name.additional_gold_drop": "Gold",
@@ -73,7 +72,6 @@
   "tooltip.gemstones.event.on_first_hit_additional_damage": "%s %s on first hit",
 
   "tooltip.gemstones.event.on_block_break_increase_geodes_drop": "%s loot %s from ores",
-  "tooltip.gemstones.event.on_block_break_additional_gold_drop": "%s to drop additional %s from ores",
   "tooltip.gemstones.event.on_block_break_regenerate_block": "%s %s after mining",
   "tooltip.gemstones.event.on_block_break_smelter": "%s to %s on mine",
   "tooltip.gemstones.event.on_block_break_enchanter": "%s to drop %s on mine",
@@ -121,6 +119,7 @@
   "attribute.name.generic.arrow_damage": "Arrow Damage",
   "attribute.name.generic.armor_pierce": "Armor Pierce",
   "attribute.name.generic.jump_count": "Jump Count",
+  "attribute.name.generic.geode_drop_chance": "Geode Drop Chance",
 
   "entity.gemstones.spark": "Spark",
 

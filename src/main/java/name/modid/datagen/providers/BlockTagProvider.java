@@ -26,6 +26,16 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         .addOptionalTag(BlockTags.LAPIS_ORES)
         .addOptionalTag(BlockTags.DIAMOND_ORES);
 
+    getOrCreateTagBuilder(TagsRegistry.STONE_ORES)
+        .add(Blocks.COAL_ORE)
+        .add(Blocks.IRON_ORE)
+        .add(Blocks.COPPER_ORE)
+        .add(Blocks.GOLD_ORE)
+        .add(Blocks.REDSTONE_ORE)
+        .add(Blocks.EMERALD_ORE)
+        .add(Blocks.LAPIS_ORE)
+        .add(Blocks.DIAMOND_ORE);
+
     getOrCreateTagBuilder(TagsRegistry.DEEPSLATE_ORES)
         .add(Blocks.DEEPSLATE_COAL_ORE)
         .add(Blocks.DEEPSLATE_IRON_ORE)

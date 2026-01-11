@@ -8,6 +8,7 @@ import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.blocks.entity.core.BlockEntitiesRegistry;
 import name.modid.core.content.items.registries.ItemsRegistry;
+import name.modid.core.content.loot.LootConditionRegistry;
 import name.modid.core.content.registries.AttachmentsRegistry;
 import name.modid.core.content.registries.AttributesRegistry;
 import name.modid.core.content.registries.EffectsRegistry;
@@ -31,10 +32,12 @@ public class Gemstones implements ModInitializer {
     RecourceHandler.initialize();
     NetworkHandler.initialize();
 
+    TagsRegistry.initialize();
+    LootConditionRegistry.initialize();
+
     EventType.initialize();
     AttributesRegistry.initialize();
     ComponentsRegistry.initialize();
-    TagsRegistry.initialize();
     EventsRegistry.initialize();
     ItemsRegistry.initialize();
     EffectsRegistry.initialize();

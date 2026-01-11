@@ -12,6 +12,10 @@ public class TagsRegistry {
       RegistryKeys.BLOCK,
       Identifier.of(Gemstones.MOD_ID, "all_ores"));
 
+  public static final TagKey<Block> STONE_ORES = TagKey.of(
+      RegistryKeys.BLOCK,
+      Identifier.of(Gemstones.MOD_ID, "stone_ores"));
+
   public static final TagKey<Block> DEEPSLATE_ORES = TagKey.of(
       RegistryKeys.BLOCK,
       Identifier.of(Gemstones.MOD_ID, "deepslate_ores"));
