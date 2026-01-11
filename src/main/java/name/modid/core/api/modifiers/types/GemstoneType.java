@@ -3,8 +3,8 @@ package name.modid.core.api.modifiers.types;
 import com.mojang.serialization.Codec;
 
 public enum GemstoneType {
-  LOCKED("\uE000", "item.gemstones.locked_slot"),
-  EMPTY("\uE001", "item.gemstones.empty_slot"),
+  LOCKED("", "item.gemstones.locked_slot"),
+  EMPTY("", "item.gemstones.empty_slot"),
   RUBY("\uE002", "item.gemstones.gemstone_name.ruby"),
   CELESTINE("\uE003", "item.gemstones.gemstone_name.celestine"),
   SAPPHIRE("\uE004", "item.gemstones.gemstone_name.sapphire"),
