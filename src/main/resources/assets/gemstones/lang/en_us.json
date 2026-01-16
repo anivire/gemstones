@@ -145,6 +145,8 @@
   "tooltip.gemstones.stone_geode.info": "Contains common gemstones.",
   "tooltip.gemstones.deepslate_geode.info": "Contains rare gemstones.",
 
+  "tooltip.gemstones.unusual_quality_warning": " You can socket only one copy of this gemstone.",
+
   "tooltip.gemstones.geode.info": "Possible Gemstones:",
   
   "item.gemstones.mossy_box": "Mossy Box",
