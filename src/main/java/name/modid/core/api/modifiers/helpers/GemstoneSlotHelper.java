@@ -12,6 +12,7 @@ import name.modid.core.api.modifiers.config.ModifierManager;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.GemstoneItem;
+import name.modid.core.content.items.registries.GemstonesRegistry;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
@@ -241,15 +242,15 @@ public class GemstoneSlotHelper {
     if (type == null || type == GemstoneType.EMPTY || quality == null)
       return ItemStack.EMPTY;
 
-    for (net.minecraft.item.Item item : name.modid.core.content.items.registries.GemstonesRegistry
+    for (Item item : GemstonesRegistry
         .getGemstonesByType(type)) {
-      if (item instanceof name.modid.core.content.items.GemstoneItem gi) {
+      if (item instanceof GemstoneItem gi) {
         if (gi.getRarityType() == quality) {
-          return new net.minecraft.item.ItemStack(item);
+          return new ItemStack(item);
         }
       }
     }
-    return net.minecraft.item.ItemStack.EMPTY;
+    return ItemStack.EMPTY;
   }
 
   public static int getLastFilledSlotIndex(ItemStack stack) {

@@ -36,8 +36,10 @@ public class ResultSlot extends Slot {
     handler.updateOutputs();
     handler.sendContentUpdates();
 
-    if (player.getWorld().isClient && !handler.wasLastGemBroken())
+    if (player.getWorld().isClient
+        && !handler.wasLastGemBroken()) {
       return;
+    }
 
     var world = player.getWorld();
     var pos = player.getBlockPos();
@@ -45,17 +47,24 @@ public class ResultSlot extends Slot {
     world.playSound(
         null,
         pos,
-        net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME,
-        net.minecraft.sound.SoundCategory.BLOCKS,
+        SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME,
+        SoundCategory.BLOCKS,
         1.0f,
         1.0f);
-    world.playSound(null, pos, net.minecraft.sound.SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
-        net.minecraft.sound.SoundCategory.BLOCKS, 0.6f, 1.2f);
+
+    world.playSound(
+        null,
+        pos,
+        SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+        SoundCategory.BLOCKS,
+        0.6f,
+        1.2f);
   }
 
   private void playGemBrokenSound(PlayerEntity player) {
-    if (player.getWorld().isClient)
+    if (player.getWorld().isClient) {
       return;
+    }
 
     var world = player.getWorld();
     var pos = player.getBlockPos();
