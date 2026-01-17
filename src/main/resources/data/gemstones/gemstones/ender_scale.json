@@ -17,6 +17,12 @@
       "chance_levels": [1.0],
       "value_levels": [0.0],
       "event_type": "PLAYER_TICK_ORE_VISION"
+    },
+    "ARMOR": {
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:invulnerability_frames",
+      "value_levels": [0.5],
+      "operation": "ADD_MULTIPLIED_BASE"
     }
   }
 }

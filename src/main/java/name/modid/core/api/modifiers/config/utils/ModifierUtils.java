@@ -47,6 +47,7 @@ public class ModifierUtils {
         itemStack -> ModifierGatheringHelper.getModifiers(itemStack, configClass));
   }
 
+  // TODO: add operations
   public static double collectAttributeValuesFromArmor(LivingEntity entity, RegistryEntry<EntityAttribute> attribute) {
     double v = 0;
 
@@ -76,6 +77,7 @@ public class ModifierUtils {
     return v;
   }
 
+  // TODO: add operations
   public static double collectAttributeValuesFromItem(LivingEntity entity, RegistryEntry<EntityAttribute> attribute) {
     double v = 0;
 

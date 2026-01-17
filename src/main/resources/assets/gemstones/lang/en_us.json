@@ -123,6 +123,7 @@
   "attribute.name.generic.armor_pierce": "Armor Pierce",
   "attribute.name.generic.jump_count": "Jump Count",
   "attribute.name.generic.geode_drop_chance": "Geode Drop Chance",
+  "attribute.name.generic.invulnerability_frames": "Invulnerability Time",
 
   "entity.gemstones.spark": "Spark",
 
@@ -144,6 +145,7 @@
 
   "item.gemstones.stone_geode": "Stone Geode",
   "item.gemstones.deepslate_geode": "Deepslate Geode",
+  "tooltip.gemstones.geode.info_open": "Open Geode",
 
   "tooltip.gemstones.stone_geode.info": "Contains common gemstones.",
   "tooltip.gemstones.deepslate_geode.info": "Contains rare gemstones.",
@@ -154,8 +156,10 @@
   
   "item.gemstones.mossy_box": "Mossy Box",
   "tooltip.gemstones.mossy_box.info": "Contains small gifts from the depths.",
-
-  "tooltip.gemstones.opening_item.info": "(Click RMB in hand for open)",
+  "tooltip.gemstones.mossy_box.info_open": "Open Mossy Box",
+  
+  "tooltip.gemstones.utils.info_action": " Press %s %s to %s.",
+  "tooltip.gemstones.utils.info_in_hand": "in hand to",
 
   "item.gemstones.empty_slot": "Empty socket",
   "item.gemstones.locked_slot": "Locked socket",

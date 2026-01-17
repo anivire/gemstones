@@ -175,38 +175,24 @@ public class GeodeItem extends Item {
       }
     }
 
-    // MutableText iconInfo = Text.literal(InlineIcons.SHIFT.getSymbol())
-    // .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
-    // Icons.INLINE.getPath())))
-    // .formatted(Formatting.WHITE);
-    // MutableText arrowInfo = Text.literal(" > ")
-    // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-    // .formatted(Formatting.DARK_GRAY);
-    // MutableText actionInfo = Text.literal("Hold Shift to see ")
-    // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-    // .formatted(Formatting.YELLOW);
-    // MutableText keywordInfo = Text.literal("Gemstones Drop Chances")
-    // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-    // .formatted(Formatting.GOLD);
-
     tooltip.add(Text.empty());
+
     MutableText iconInfo = Text.literal(InlineIcons.INFO.getSymbol())
         .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
         .formatted(Formatting.WHITE);
     MutableText iconOpen = Text.literal(InlineIcons.MOUSE_RMB.getSymbol())
         .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
         .formatted(Formatting.WHITE);
-    MutableText actionStart = Text.literal(" Press ")
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.GRAY);
-    MutableText actionOpen = Text.literal(" in hand to ")
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.GRAY);
-    MutableText keywordOpen = Text.literal("Open Geode")
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.GOLD);
 
-    tooltip.add(iconInfo.append(actionStart.append(iconOpen).append(actionOpen).append(keywordOpen)));
+    MutableText text = Text
+        .translatable("tooltip.gemstones.utils.info_action",
+            iconOpen,
+            Text.translatable("tooltip.gemstones.utils.info_in_hand"),
+            Text.translatable("tooltip.gemstones.geode.info_open").formatted(Formatting.GOLD))
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.GRAY);
+
+    tooltip.add(iconInfo.append(text));
   }
 
   private Item getItemFromType(GemstoneType type) {

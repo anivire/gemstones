@@ -204,6 +204,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
     }
   }
 
+  // TODO: fix me
   private void handleArrowRain(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (!(ctx.getTarget() instanceof LivingEntity target)
         || !(ctx.getProjectile() instanceof RainArrowEntity)) {
