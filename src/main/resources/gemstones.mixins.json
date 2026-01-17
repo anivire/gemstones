@@ -24,7 +24,10 @@
     "modifiers.OnFishing",
     "modifiers.OnHitProjectile",
     "modifiers.OnHitMelee",
-    "trackers.SoulBurnTracker"
+    "other.MarkHomingArrowBow",
+    "other.MarkHomingArrowCrossbow",
+    "trackers.SoulBurnTracker",
+    "trackers.HomingArrowTracker"
   ],
   "injectors": {
     "defaultRequire": 1

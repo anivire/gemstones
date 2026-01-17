@@ -96,6 +96,9 @@ public final class EventType {
   public static final EventType WORLD_EVENT_INCREASE_MOB_SPAWNRATE = register("WORLD_EVENT_INCREASE_MOB_SPAWNRATE",
       "tooltip.gemstones.event_name.increase_mob_spawnrate");
 
+  public static final EventType HOMING_ARROW = register("HOMING_ARROW",
+      "tooltip.gemstones.event_name.homing");
+
   private EventType(String name, String translationKey) {
     this.name = name;
     this.translationKey = translationKey;

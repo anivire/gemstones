@@ -64,6 +64,12 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
               secondArg,
               Text.literal("30%").formatted(Formatting.RED))
           .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+    } else if (e == EventType.HOMING_ARROW) {
+      return TooltipHelper
+          .safeTranslatable(
+              builder.getTranslationKeyByEvent(e),
+              secondArg)
+          .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
     } else if (e == EventType.ON_HIT_EXP_ADDITIONAL_DAMAGE) {
       MutableText levelsNumberText = Text.literal(
           String.valueOf(additionalValues.get(rarityType).intValue()))

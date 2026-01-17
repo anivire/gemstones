@@ -54,6 +54,7 @@
   "tooltip.gemstones.event_name.bonus_missing_health": "Missing Heart",
   "tooltip.gemstones.event_name.ore_vision": "Geomancy Sight",
   "tooltip.gemstones.event_name.ender_judgement": "Ender Judgement",
+  "tooltip.gemstones.event_name.homing": "Homing Effect",
   
   "tooltip.gemstones.category.unknown": "undefined modifier",
   "tooltip.gemstones.event.unknown": "undefined event",
@@ -94,6 +95,8 @@
   "tooltip.gemstones.event.player_tick_ore_vision": "while holding provide %s",
 
   "tooltip.gemstones.event.after_death_additional_exp_gain": "%s expirience from %s",
+
+  "tooltip.gemstones.event.homing_arrow": "all arrows now have %s",
 
 
   "effect.gemstones.bleeding": "Bleeding",

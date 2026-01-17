@@ -9,8 +9,8 @@
     },
     "RANGED": {
       "type": "ON_HIT_PROJECTILE",
-      "chance_levels": [0.04],
-      "additional_value_levels": [8.0],
+      "chance_levels": [0.030],
+      "additional_value_levels": [12.0],
       "event_type": "ON_HIT_EXP_ADDITIONAL_DAMAGE"
     },
     "TOOLS":{

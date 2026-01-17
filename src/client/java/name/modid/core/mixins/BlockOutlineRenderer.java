@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 
+// TODO: rework
 @Mixin(WorldRenderer.class)
 public class BlockOutlineRenderer {
 
