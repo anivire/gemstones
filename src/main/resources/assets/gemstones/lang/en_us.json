@@ -30,7 +30,7 @@
   "tooltip.gemstones.event_name.lifesteal": "Lifesteal",
   "tooltip.gemstones.event_name.torrent": "Torrent",
   "tooltip.gemstones.event_name.increase_mossy_box_drop": "Mossy Box",
-  "tooltip.gemstones.event_name.increase_mob_spawnrate": "Mobs Spawnrate",
+  "tooltip.gemstones.event_name.increase_mob_spawnrate": "Mob Spawnrate",
   "tooltip.gemstones.event_name.additional_gold_drop": "Gold",
   "tooltip.gemstones.event_name.potion_duration": "Potion Duration",
   "tooltip.gemstones.event_name.regenerate_block": "Regenerate Block",
@@ -85,14 +85,14 @@
 
   "tooltip.gemstones.event.on_potion_brew_increase_duration": "%s %s after brewing",
 
-  "tooltip.gemstones.event.world_event_increase_mob_spawnrate": "%s %s",
-
+  
   "tooltip.gemstones.event.player_wither_guard": "while holding provide %s",
   "tooltip.gemstones.event.player_projectile_immune": "while %s provide %s",
   "tooltip.gemstones.event.player_save_lethal": "while below %s trigger %s",
   "tooltip.gemstones.event.player_random_effect": "%s to apply %s after killing mob",
   "tooltip.gemstones.event.player_bonus_damage_missing_health": "gain %s bonus damage each %s",
   "tooltip.gemstones.event.player_tick_ore_vision": "while holding provide %s",
+  "tooltip.gemstones.event.player_tick_increase_mob_spawnrate": "%s increased %s while equipped",
 
   "tooltip.gemstones.event.after_death_additional_exp_gain": "%s expirience from %s",
 

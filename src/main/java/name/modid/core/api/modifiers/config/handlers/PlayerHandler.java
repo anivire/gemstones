@@ -15,26 +15,45 @@ import name.modid.core.network.OreVisionPayload;
 import name.modid.core.utils.GetRandomBuff;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.world.biome.SpawnSettings.SpawnEntry;
 
 public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfig> {
+  enum SpawnEnviroment {
+    GROUND, WATER, LAVA
+  }
+
   private final Map<String, java.util.function.BiConsumer<List<GemstoneModifier>, ModifierContext>> handlers = Map.of(
 
       "PLAYER_RANDOM_EFFECT", this::handleRandomEffect,
       "PLAYER_WITHER_GUARD", this::handleWitherGuard,
       "PLAYER_PROJECTILE_IMMUNE", this::handleProjectileImmune,
+      "PLAYER_TICK_INCREASE_MOB_SPAWNRATE", this::handleIncreaseSpawnrate,
       "PLAYER_TICK_ORE_VISION", this::handleOreVision);
 
   private static final List<String> ORDER = List.of(
       "PLAYER_RANDOM_EFFECT",
       "PLAYER_WITHER_GUARD",
       "PLAYER_PROJECTILE_IMMUNE",
+      "PLAYER_TICK_INCREASE_MOB_SPAWNRATE",
       "PLAYER_TICK_ORE_VISION");
 
   @Override
@@ -103,6 +122,195 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     }
 
     ServerPlayNetworking.send(player, new OreVisionPayload(found));
+  }
+
+  private void handleIncreaseSpawnrate(
+      List<GemstoneModifier> modifiers,
+      ModifierContext ctx) {
+    final int SPAWN_COOLDOWN = 7;
+
+    if (!(ctx.getOwner() instanceof ServerPlayerEntity player)
+        || !(ctx.getWorld() instanceof ServerWorld world)
+        || player.age % (SPAWN_COOLDOWN * 20) != 0
+        || player.isSpectator()) {
+      return;
+    }
+
+    int radius = 12;
+    int attempts = 3 + modifiers.size();
+    BlockPos origin = player.getBlockPos();
+    boolean spawnedAny = false;
+
+    Biome biome = world.getBiome(origin).value();
+    Pool<SpawnEntry> spawnPool = biome.getSpawnSettings()
+        .getSpawnEntries(SpawnGroup.MONSTER);
+
+    if (spawnPool == null) {
+      return;
+    }
+
+    Random random = world.getRandom();
+    boolean playerInWater = world.getFluidState(player.getBlockPos()).isIn(FluidTags.WATER);
+    boolean playerInLava = world.getFluidState(player.getBlockPos()).isIn(FluidTags.LAVA);
+
+    double increasedSpawnPercent = 0.0;
+
+    for (GemstoneModifier modifier : modifiers) {
+      PlayerConfig config = (PlayerConfig) modifier.getConfig();
+      increasedSpawnPercent += config.values().get(modifier.getRarityType());
+    }
+
+    for (int i = 0; i < attempts; i++) {
+      SpawnEntry entry = spawnPool
+          .getOrEmpty(random)
+          .orElse(null);
+
+      if (entry == null) {
+        continue;
+      }
+
+      int groupSize = random.nextBetween(entry.minGroupSize, entry.maxGroupSize);
+      final int DEFAULT_TRIES = 2; // tries to spawn pack of mobs
+      int triesCount = DEFAULT_TRIES + (int) increasedSpawnPercent;
+
+      if (random.nextDouble() < increasedSpawnPercent % 1.0) {
+        triesCount++;
+      }
+
+      for (int j = 0; j < groupSize; j++) {
+        boolean spawned = false;
+
+        for (int tries = 0; tries < triesCount && !spawned; tries++) {
+          BlockPos pos = origin.add(
+              random.nextBetween(-radius, radius),
+              random.nextBetween(-4, 4),
+              random.nextBetween(-radius, radius));
+
+          SpawnEnviroment env = playerInWater ? SpawnEnviroment.WATER
+              : playerInLava ? SpawnEnviroment.LAVA
+                  : SpawnEnviroment.GROUND;
+
+          boolean valid = switch (env) {
+            case WATER -> isWaterMob(entry.type)
+                && isValidWaterSpawn(world, pos);
+            case LAVA -> isLavaMob(entry.type)
+                && isValidLavaSpawn(world, pos);
+            case GROUND -> isValidGroundSpawn(world, pos);
+          };
+
+          if (!valid) {
+            continue;
+          }
+
+          // cap by 40 mob entities
+          if (world.getEntitiesByClass(
+              MobEntity.class,
+              player.getBoundingBox().expand(radius),
+              e -> true).size() > 40) {
+            return;
+          }
+
+          // spawn slimes only in swamp
+          if (!(world.getBiome(origin).matchesKey(BiomeKeys.SWAMP)
+              || world.getBiome(origin).matchesKey(BiomeKeys.MANGROVE_SWAMP))
+              && entry.type == EntityType.SLIME) {
+            continue;
+          }
+
+          // reduce ghasts spawn
+          if (entry.type == EntityType.GHAST) {
+            if (random.nextFloat() > 0.25f)
+              continue;
+
+            groupSize = 1;
+            triesCount = Math.max(1, triesCount / 3);
+          }
+
+          Entity entity = entry.type.spawn(
+              world,
+              pos,
+              SpawnReason.SPAWNER);
+
+          if (entity != null && entity instanceof LivingEntity living) {
+            spawned = true;
+            spawnedAny = true;
+
+            living.addStatusEffect(
+                new StatusEffectInstance(
+                    StatusEffects.GLOWING,
+                    5 * 20,
+                    0,
+                    false,
+                    false));
+
+            world.spawnParticles(
+                ParticleTypes.LARGE_SMOKE,
+                entity.getX(),
+                entity.getY() + 1,
+                entity.getZ(),
+                20,
+                0.5,
+                0.5,
+                0.5,
+                0.02);
+          }
+        }
+      }
+    }
+
+    if (spawnedAny) {
+      world.spawnParticles(
+          ParticleTypes.LARGE_SMOKE,
+          player.getX(),
+          player.getY() + 1,
+          player.getZ(),
+          10,
+          0.5,
+          0.5,
+          0.5,
+          0.02);
+      world.spawnParticles(
+          ParticleTypes.FLAME,
+          player.getX(),
+          player.getY() + 1,
+          player.getZ(),
+          20,
+          0.5,
+          0.5,
+          0.5,
+          0.02);
+    }
+  }
+
+  private boolean isValidGroundSpawn(ServerWorld world, BlockPos pos) {
+    return world.isAir(pos)
+        && world.isAir(pos.up())
+        && world.getBlockState(pos.down())
+            .isOpaqueFullCube(world, pos.down());
+  }
+
+  private boolean isValidWaterSpawn(ServerWorld world, BlockPos pos) {
+    return world.getFluidState(pos).isIn(FluidTags.WATER)
+        && world.getFluidState(pos.up()).isIn(FluidTags.WATER);
+  }
+
+  private boolean isValidLavaSpawn(ServerWorld world, BlockPos pos) {
+    return world.getFluidState(pos).isIn(FluidTags.LAVA)
+        && world.getFluidState(pos.up()).isIn(FluidTags.LAVA);
+  }
+
+  private boolean isWaterMob(EntityType<?> type) {
+    return type == EntityType.DROWNED
+        || type == EntityType.GUARDIAN
+        || type == EntityType.ELDER_GUARDIAN;
+  }
+
+  private boolean isLavaMob(EntityType<?> type) {
+    return type == EntityType.STRIDER;
+  }
+
+  private boolean isMonumentMob(EntityType<?> type) {
+    return type == EntityType.GUARDIAN;
   }
 
   private void handleWitherGuard(List<GemstoneModifier> modifiers, ModifierContext ctx) {

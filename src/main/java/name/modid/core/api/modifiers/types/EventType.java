@@ -85,6 +85,8 @@ public final class EventType {
       "tooltip.gemstones.event_name.ender_cycle");
   public static final EventType PLAYER_TICK_ORE_VISION = register("PLAYER_TICK_ORE_VISION",
       "tooltip.gemstones.event_name.ore_vision");
+  public static final EventType PLAYER_TICK_INCREASE_MOB_SPAWNRATE = register("PLAYER_TICK_INCREASE_MOB_SPAWNRATE",
+      "tooltip.gemstones.event_name.increase_mob_spawnrate");
 
   public static final EventType AFTER_DEATH_DETONATE = register("AFTER_DEATH_DETONATE",
       "tooltip.gemstones.event_name.detonate");
@@ -92,9 +94,6 @@ public final class EventType {
       "tooltip.gemstones.event_name.harvest_mark");
   public static final EventType AFTER_DEATH_ADDITIONAL_EXP_GAIN = register("AFTER_DEATH_ADDITIONAL_EXP_GAIN",
       "tooltip.gemstones.event_name.additional_exp_gain");
-
-  public static final EventType WORLD_EVENT_INCREASE_MOB_SPAWNRATE = register("WORLD_EVENT_INCREASE_MOB_SPAWNRATE",
-      "tooltip.gemstones.event_name.increase_mob_spawnrate");
 
   public static final EventType HOMING_ARROW = register("HOMING_ARROW",
       "tooltip.gemstones.event_name.homing");
