@@ -1,6 +1,5 @@
 package name.modid.core.content.registries;
 
-import name.modid.Gemstones;
 import name.modid.core.content.events.CustomEvents;
 import name.modid.core.content.events.handlers.EventAfterDeath;
 import name.modid.core.content.events.handlers.EventAreaEffect;
@@ -16,6 +15,9 @@ import name.modid.core.content.events.handlers.EventOnPlayerDamage;
 import name.modid.core.content.events.handlers.EventPlayer;
 import name.modid.core.content.events.handlers.EventProjectileEffect;
 import name.modid.core.content.events.handlers.PlayerRandomBuff;
+import name.modid.core.content.events.loot.BlocksLootTable;
+import name.modid.core.content.events.loot.ChestsLootTable;
+import name.modid.core.content.events.loot.EntitiesLootTable;
 import name.modid.core.content.events.misc.EventLastBrewer;
 import name.modid.core.content.events.misc.EventProjectileSpeed;
 import name.modid.core.content.events.misc.EventSparkSpawner;
@@ -27,15 +29,9 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.entry.LootTableEntry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 
 public class EventsRegistry {
-
   public static void initialize() {
     CustomEvents.ON_FIRST_HIT.register(EventOnFirstHit::setupEvent);
     CustomEvents.ON_FISHING.register(EventOnFishing::setupEvent);
@@ -76,24 +72,8 @@ public class EventsRegistry {
     UseBlockCallback.EVENT.register(EventLastBrewer::setup);
     ServerLivingEntityEvents.AFTER_DEATH.register(EventSparkSpawner::setup);
 
-    LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
-      if (!key.getValue().getNamespace().equals("minecraft")) {
-        return;
-      }
-
-      if (!key.getValue().getPath().startsWith("blocks/")) {
-        return;
-      }
-
-      tableBuilder.pool(
-          LootPool.builder()
-              .with(
-                  LootTableEntry.builder(
-                      RegistryKey.of(
-                          RegistryKeys.LOOT_TABLE,
-                          Identifier.of(
-                              Gemstones.MOD_ID,
-                              "blocks/geode_from_ores")))));
-    });
+    LootTableEvents.MODIFY.register(EntitiesLootTable::setup);
+    LootTableEvents.MODIFY.register(BlocksLootTable::setup);
+    LootTableEvents.MODIFY.register(ChestsLootTable::setup);
   }
 }

@@ -21,17 +21,22 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 
-public class MossyBoxLootTableProvider extends SimpleFabricLootTableProvider {
+public class ChestLootTableProvider
+    extends SimpleFabricLootTableProvider {
 
-  public MossyBoxLootTableProvider(FabricDataOutput output,
+  public ChestLootTableProvider(
+      FabricDataOutput output,
       CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
     super(output, registriesFuture, LootContextTypes.CHEST);
   }
 
   @Override
-  public void accept(BiConsumer<RegistryKey<LootTable>, LootTable.Builder> exporter) {
+  public void accept(
+      BiConsumer<RegistryKey<LootTable>, LootTable.Builder> exporter) {
     exporter.accept(
-        RegistryKey.of(RegistryKeys.LOOT_TABLE, Identifier.of(Gemstones.MOD_ID, "mossy_box_loot")),
+        RegistryKey.of(
+            RegistryKeys.LOOT_TABLE,
+            Identifier.of(Gemstones.MOD_ID, "mossy_box_loot")),
         LootTable.builder()
             .pool(LootPool.builder()
                 .rolls(UniformLootNumberProvider.create(1.0f, 2.0f))

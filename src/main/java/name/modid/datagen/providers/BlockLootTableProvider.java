@@ -23,8 +23,9 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 
 public class BlockLootTableProvider extends SimpleFabricLootTableProvider {
-  private final float BASE_STONE_CHANCE = 0.045f;
-  private final float BASE_DEEPSLATE_CHANCE = 0.025f;
+  private final float BASE_STONE_CHANCE = 0.055f;
+  private final float BASE_DEEPSLATE_CHANCE = 0.035f;
+  public static final float DEFAULT_GEMSTONE_DROP_CHANCE = 0.085f;
 
   public BlockLootTableProvider(FabricDataOutput output,
       CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {

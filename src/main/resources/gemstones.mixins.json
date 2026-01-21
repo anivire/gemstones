@@ -27,6 +27,7 @@
     "modifiers.OnHitMelee",
     "other.MarkHomingArrowBow",
     "other.MarkHomingArrowCrossbow",
+    "other.DropCrystallizedExpirienceGemstone",
     "trackers.SoulBurnTracker",
     "trackers.HomingArrowTracker"
   ],

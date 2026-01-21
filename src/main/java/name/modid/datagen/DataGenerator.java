@@ -2,8 +2,8 @@ package name.modid.datagen;
 
 import name.modid.datagen.providers.BlockLootTableProvider;
 import name.modid.datagen.providers.BlockTagProvider;
+import name.modid.datagen.providers.ChestLootTableProvider;
 import name.modid.datagen.providers.ModelProvider;
-import name.modid.datagen.providers.MossyBoxLootTableProvider;
 import name.modid.datagen.providers.RecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -16,7 +16,7 @@ public class DataGenerator implements DataGeneratorEntrypoint {
     pack.addProvider(ModelProvider::new);
     pack.addProvider(BlockTagProvider::new);
     pack.addProvider(BlockLootTableProvider::new);
-    pack.addProvider(MossyBoxLootTableProvider::new);
+    pack.addProvider(ChestLootTableProvider::new);
     pack.addProvider(RecipeProvider::new);
   }
 }

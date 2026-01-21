@@ -1,15 +1,14 @@
 {
   "geode_id": "deepslate_geode",
   "gemstones": {
+    "CELESTINE": 0.4,
     "JADE": 0.4,
     "OPAL": 0.4,
     "GARNET": 0.4,
-    "CELESTINE": 0.4,
     "AQUAMARINE": 0.3,
     "AMBER": 0.3,
     "TOPAZ": 0.2,
-    "MALACHITE": 0.2,
-    "RUBY": 0.2
+    "MALACHITE": 0.2
   },
   "qualities": {
     "POLISHED": 0.3,
