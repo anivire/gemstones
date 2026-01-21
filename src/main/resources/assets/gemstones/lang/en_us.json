@@ -73,6 +73,7 @@
   "tooltip.gemstones.event.on_first_hit_additional_damage": "%s %s on first hit",
 
   "tooltip.gemstones.event.on_block_break_increase_geodes_drop": "%s loot %s from ores",
+  "tooltip.gemstones.event.on_block_break_additional_gold_drop": "%s additional drop %s after mining",
   "tooltip.gemstones.event.on_block_break_regenerate_block": "%s %s after mining",
   "tooltip.gemstones.event.on_block_break_smelter": "%s to %s on mine",
   "tooltip.gemstones.event.on_block_break_enchanter": "%s to drop %s on mine",

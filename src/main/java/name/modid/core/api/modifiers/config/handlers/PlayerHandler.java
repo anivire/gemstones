@@ -136,11 +136,12 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       return;
     }
 
-    int radius = 12;
-    int attempts = 3 + modifiers.size();
-    BlockPos origin = player.getBlockPos();
-    boolean spawnedAny = false;
+    final int DEFAULT_RADIUS = 12;
+    final int DEFAULT_SPAWN_ATTEMPTS = 3;
+    final int DEFAULT_SPAWN_RETRIES = 2;
 
+    boolean spawnedAny = false;
+    BlockPos origin = player.getBlockPos();
     Biome biome = world.getBiome(origin).value();
     Pool<SpawnEntry> spawnPool = biome.getSpawnSettings()
         .getSpawnEntries(SpawnGroup.MONSTER);
@@ -154,24 +155,24 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     boolean playerInLava = world.getFluidState(player.getBlockPos()).isIn(FluidTags.LAVA);
 
     double increasedSpawnPercent = 0.0;
+    int totalGemsCopies = 0;
 
     for (GemstoneModifier modifier : modifiers) {
       PlayerConfig config = (PlayerConfig) modifier.getConfig();
       increasedSpawnPercent += config.values().get(modifier.getRarityType());
+      totalGemsCopies++;
     }
 
-    for (int i = 0; i < attempts; i++) {
-      SpawnEntry entry = spawnPool
-          .getOrEmpty(random)
-          .orElse(null);
+    for (int i = 0; i < DEFAULT_SPAWN_ATTEMPTS + totalGemsCopies; i++) {
+      SpawnEntry entry = spawnPool.getOrEmpty(random).orElse(null);
 
       if (entry == null) {
         continue;
       }
 
       int groupSize = random.nextBetween(entry.minGroupSize, entry.maxGroupSize);
-      final int DEFAULT_TRIES = 2; // tries to spawn pack of mobs
-      int triesCount = DEFAULT_TRIES + (int) increasedSpawnPercent;
+      int triesCount = (int) Math.round(
+          DEFAULT_SPAWN_RETRIES * (1.0f + increasedSpawnPercent));
 
       if (random.nextDouble() < increasedSpawnPercent % 1.0) {
         triesCount++;
@@ -182,19 +183,18 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
 
         for (int tries = 0; tries < triesCount && !spawned; tries++) {
           BlockPos pos = origin.add(
-              random.nextBetween(-radius, radius),
+              random.nextBetween(-DEFAULT_RADIUS, DEFAULT_RADIUS),
               random.nextBetween(-4, 4),
-              random.nextBetween(-radius, radius));
+              random.nextBetween(-DEFAULT_RADIUS, DEFAULT_RADIUS));
 
           SpawnEnviroment env = playerInWater ? SpawnEnviroment.WATER
               : playerInLava ? SpawnEnviroment.LAVA
                   : SpawnEnviroment.GROUND;
 
+          // Tweak spawn by adding mobs other pools
           boolean valid = switch (env) {
-            case WATER -> isWaterMob(entry.type)
-                && isValidWaterSpawn(world, pos);
-            case LAVA -> isLavaMob(entry.type)
-                && isValidLavaSpawn(world, pos);
+            case WATER -> isWaterMob(entry.type) && isValidWaterSpawn(world, pos);
+            case LAVA -> isLavaMob(entry.type) && isValidLavaSpawn(world, pos);
             case GROUND -> isValidGroundSpawn(world, pos);
           };
 
@@ -202,34 +202,33 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
             continue;
           }
 
-          // cap by 40 mob entities
+          // Additional spawn rules
+          // Cap spawrate by 50 mob entities
           if (world.getEntitiesByClass(
               MobEntity.class,
-              player.getBoundingBox().expand(radius),
+              player.getBoundingBox().expand(DEFAULT_RADIUS),
               e -> true).size() > 40) {
             return;
           }
 
-          // spawn slimes only in swamp
+          // Spawn slimes only in swamp
           if (!(world.getBiome(origin).matchesKey(BiomeKeys.SWAMP)
               || world.getBiome(origin).matchesKey(BiomeKeys.MANGROVE_SWAMP))
               && entry.type == EntityType.SLIME) {
             continue;
           }
 
-          // reduce ghasts spawn
+          // Reduce ghasts spawn
           if (entry.type == EntityType.GHAST) {
-            if (random.nextFloat() > 0.25f)
+            if (random.nextFloat() > 0.25f) {
               continue;
+            }
 
             groupSize = 1;
             triesCount = Math.max(1, triesCount / 3);
           }
 
-          Entity entity = entry.type.spawn(
-              world,
-              pos,
-              SpawnReason.SPAWNER);
+          Entity entity = entry.type.spawn(world, pos, SpawnReason.SPAWNER);
 
           if (entity != null && entity instanceof LivingEntity living) {
             spawned = true;
@@ -307,10 +306,6 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
 
   private boolean isLavaMob(EntityType<?> type) {
     return type == EntityType.STRIDER;
-  }
-
-  private boolean isMonumentMob(EntityType<?> type) {
-    return type == EntityType.GUARDIAN;
   }
 
   private void handleWitherGuard(List<GemstoneModifier> modifiers, ModifierContext ctx) {
