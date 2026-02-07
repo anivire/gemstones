@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-19T08:52:45.8614715	Gemstones/Model Definitions
+// 1.21.1	2026-02-07T19:48:18.8149444	Gemstones/Model Definitions
 75d84b4d5ece1691232c37fe879c04708f5362b5 assets\gemstones\models\item\ruby_gemstone_polished.json
 4f918441e658f69451d0f1d92449ba818fe55553 assets\gemstones\models\item\amber_gemstone_flawless.json
 264602f33f74a2257e8ec35ca51bcb488eb76610 assets\gemstones\models\item\pyrite_gemstone_radiant.json
@@ -69,5 +69,5 @@ d95edce62c9139b4f3e4e7b735550a7d86d2d114 assets\gemstones\models\item\wither_bon
 91912333f9f7ee1468d09ae2d36b444994a38fa1 assets\gemstones\models\item\onyx_unusual.json
 71a8daaad585f59e4903b4f998341279d8d47150 assets\gemstones\models\item\obsidian_shard_gemstone_crude.json
 11f1b6a719e3c9f14d8ff9233fc5219f809a7dd7 assets\gemstones\models\item\spawner_core_flawless.json
-4f918441e658f69451d0f1d92449ba818fe55553 assets\gemstones\models\item\amber_gemstone_polished.json
 6384eb9c0985ccd86170c9ebef6fa011440c4022 assets\gemstones\models\item\malachite_gemstone_radiant.json
+4f918441e658f69451d0f1d92449ba818fe55553 assets\gemstones\models\item\amber_gemstone_polished.json

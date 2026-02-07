@@ -24,7 +24,9 @@ fabricApi {
 sourceSets {
   main {
     resources {
-      srcDir("src/generated/resources")
+      // srcDir("src/generated/resources")
+      srcDir("src/main/generated")
+      srcDir("src/main/resources")
     }
   }
 }
@@ -97,4 +99,12 @@ publishing {
 	}
 
 	repositories { }
+}
+
+tasks.processResources {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+sourcesJar {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
