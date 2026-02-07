@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "gemstones:item/stone_geode.png"
+    "layer0": "gemstones:item/stone_geode"
   }
 }

@@ -24,7 +24,6 @@ fabricApi {
 sourceSets {
   main {
     resources {
-      // srcDir("src/generated/resources")
       srcDir("src/main/generated")
       srcDir("src/main/resources")
     }
@@ -35,7 +34,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"gemstones" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

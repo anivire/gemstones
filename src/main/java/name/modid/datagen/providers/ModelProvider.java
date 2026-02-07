@@ -30,7 +30,7 @@ public class ModelProvider extends FabricModelProvider {
 
       Models.GENERATED.upload(
           ModelIds.getItemModelId(item),
-          TextureMap.layer0(Identifier.of(Gemstones.MOD_ID, "item/" + baseName + ".png")),
+          TextureMap.layer0(Identifier.of(Gemstones.MOD_ID, "item/" + baseName)),
           itemModelGenerator.writer);
     }
   }

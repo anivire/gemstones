@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "gemstones:item/jewelry_table.png"
+    "layer0": "gemstones:item/jewelry_table"
   }
 }

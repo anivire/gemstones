@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "gemstones:item/mossy_box.png"
+    "layer0": "gemstones:item/mossy_box"
   }
 }
