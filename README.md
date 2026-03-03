@@ -1,3 +1,2 @@
-[![Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/modrinth_64h.png)](https://modrinth.com/mod/)
-[![Curseforge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/curseforge_64h.png)](https://www.curseforge.com/minecraft/mc-mods/)
-[![Github](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/github_64h.png)](https://github.com/MayaqqDev/)
+# Gemstones
+This mod adds various gemstones that allow you to upgrade weapons, tools and armor. Gemstones can be inserted into special slots in equipment, items and tools, giving various bonuses to owner. Gemstones can be obtained by looting structures, killing bosses and mining ores (from which now can be dropped geodes).
