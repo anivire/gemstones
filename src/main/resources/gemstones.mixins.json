@@ -13,6 +13,7 @@
     "attributes.ProjectileCountAttributeCrossbow",
     "attributes.ArmorPierceAttribute",
     "attributes.JumpCountAttribute",
+    "attributes.InvulnerabilityFramesAttribute",
     "effects.GuardianSmiteEffect",
     "effects.StunnedEffect",
     "effects.witherGuard.PlayerWitherGuard",
@@ -24,7 +25,11 @@
     "modifiers.OnFishing",
     "modifiers.OnHitProjectile",
     "modifiers.OnHitMelee",
-    "trackers.SoulBurnTracker"
+    "other.MarkHomingArrowBow",
+    "other.MarkHomingArrowCrossbow",
+    "other.DropCrystallizedExpirienceGemstone",
+    "trackers.SoulBurnTracker",
+    "trackers.HomingArrowTracker"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -19,6 +19,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+@SuppressWarnings("unused")
 public class JewelryTable extends BlockWithEntity implements BlockEntityProvider {
   public static final MapCodec<JewelryTable> CODEC = JewelryTable.createCodec(JewelryTable::new);
 

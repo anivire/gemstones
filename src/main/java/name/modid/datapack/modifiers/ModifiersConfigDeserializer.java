@@ -23,6 +23,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
+// TODO: cleanup and refactor
 public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierConfig> {
   @Override
   public ModifierConfig deserialize(
@@ -61,14 +62,14 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
       case ON_HIT_MELEE -> {
         LevelValues chance = context.deserialize(obj.get("chance_levels"), LevelValues.class);
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        EventType event = deserializeEvent(obj);
         yield new ModifierConfig.HitMeleeConfig(chance, additional_values, event);
       }
 
       case ON_HIT_PROJECTILE -> {
         LevelValues chance = context.deserialize(obj.get("chance_levels"), LevelValues.class);
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        EventType event = deserializeEvent(obj);
         yield new ModifierConfig.HitProjectileConfig(chance, additional_values, event);
       }
 
@@ -116,55 +117,63 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
       case ON_BLOCK_BREAK -> {
         LevelValues chance = context.deserialize(obj.get("chance_levels"), LevelValues.class);
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        EventType event = deserializeEvent(obj);
         yield new ModifierConfig.BlockBreakConfig(chance, values, event);
       }
 
       case ON_BEFORE_BLOCK_BREAK -> {
         LevelValues chance = context.deserialize(obj.get("chance_levels"), LevelValues.class);
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        EventType event = deserializeEvent(obj);
         yield new ModifierConfig.BeforeBlockBreakConfig(chance, values, event);
       }
 
       case ON_FIRST_HIT -> {
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
-        yield new ModifierConfig.OnFirstHitConfig(values, event);
+        LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
+        EventType event = deserializeEvent(obj);
+        yield new ModifierConfig.OnFirstHitConfig(values, additional_values, event);
       }
 
       case ON_POTION_BREW -> {
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        EventType event = deserializeEvent(obj);
         yield new ModifierConfig.OnPotionBrewConfig(values, additional_values, event);
       }
 
       case PLAYER -> {
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        EventType event = deserializeEvent(obj);
         yield new ModifierConfig.PlayerConfig(values, additional_values, event);
       }
 
-      case ON_DAMAGE -> {
+      case ON_MOB_DAMAGE -> {
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
-        yield new ModifierConfig.OnDamageConfig(values, additional_values, event);
+        EventType event = deserializeEvent(obj);
+        yield new ModifierConfig.OnMobDamageConfig(values, additional_values, event);
+      }
+
+      case ON_PLAYER_DAMAGE -> {
+        LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
+        LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
+        EventType event = deserializeEvent(obj);
+        yield new ModifierConfig.OnPlayerDamageConfig(values, additional_values, event);
       }
 
       case ON_DEATH -> {
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        EventType event = deserializeEvent(obj);
         yield new ModifierConfig.AfterDeathConfig(values, additional_values, event);
       }
 
       case ON_FISHING -> {
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
         LevelValues additional_values = context.deserialize(obj.get("additional_value_levels"), LevelValues.class);
-        EventType event = context.deserialize(obj.get("event_type"), EventType.class);
+        EventType event = deserializeEvent(obj);
         yield new ModifierConfig.OnFishingConfig(values, additional_values, event);
       }
 
@@ -184,5 +193,17 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
     Operation operation = Operation.valueOf(obj.get("operation").getAsString());
 
     return new ModifierConfig.AttributeConfig(values, operation, attrEntry);
+  }
+
+  private EventType deserializeEvent(JsonObject obj) {
+    if (!obj.has("event_type")) {
+      throw new JsonParseException("Missing event_type");
+    }
+
+    try {
+      return EventType.fromString(obj.get("event_type").getAsString());
+    } catch (IllegalArgumentException ex) {
+      throw new JsonParseException(ex.getMessage());
+    }
   }
 }

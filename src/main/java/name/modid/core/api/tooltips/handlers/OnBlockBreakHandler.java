@@ -30,13 +30,15 @@ public class OnBlockBreakHandler extends BaseTooltipHandler<ModifierConfig.Block
   @Override
   protected MutableText buildText(ModifierConfig.BlockBreakConfig cfg, MutableText valueText, boolean isPositive) {
     if (cfg.eventType() == EventType.ON_BLOCK_BREAK_MINER) {
-      return Text
-          .translatable(builder.getTranslationKeyByEvent(cfg.eventType()), builder.getEventText(cfg.eventType()))
+      return Text.translatable(
+          builder.getTranslationKeyByEvent(cfg.eventType()),
+          builder.getEventText(cfg.eventType()))
           .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
     } else {
-      return Text
-          .translatable(builder.getTranslationKeyByEvent(cfg.eventType()), valueText,
-              builder.getEventText(cfg.eventType()))
+      return Text.translatable(
+          builder.getTranslationKeyByEvent(cfg.eventType()),
+          valueText,
+          builder.getEventText(cfg.eventType()))
           .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
     }
   }

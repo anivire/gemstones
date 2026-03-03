@@ -16,10 +16,10 @@
       "max_stack_count": 0
     },
     "TOOLS": {
-      "type": "ON_BLOCK_BREAK",
-      "chance_levels": [0.03, 0.055, 0.1, 0.155],
-      "value_levels": [0.0, 0.0, 0.0, 0.0],
-      "event_type": "ON_BLOCK_BREAK_INCREASE_GEODES_DROP"
+      "type": "ATTRIBUTE",
+      "value_levels": [0.03, 0.055, 0.1, 0.155],
+      "attribute_id": "gemstones:geode_drop_chance",
+      "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "ARMOR": {
       "type": "MULTIPLY_ATTRIBUTE",

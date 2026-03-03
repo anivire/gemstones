@@ -37,12 +37,13 @@ public class AttributeModifierHandler {
     Function<AttributeModifiersComponent.Entry, String> entryKey = e -> String.format("%s.%s.%s", e.modifier().id(),
         e.slot(), e.attribute().value());
 
-    // Split modifiers
+    // Split and flat modifiers and merge in one array
     baseModifiers.modifiers().forEach(e -> {
       if (e.modifier().id() != null && !e.modifier().id().getNamespace().equalsIgnoreCase(Gemstones.MOD_ID)) {
         combinedModifiersMap.put(entryKey.apply(e), e);
       }
     });
+
     customModifiers.modifiers().forEach(e -> {
       if (e.modifier().id() != null && !e.modifier().id().getNamespace().equalsIgnoreCase(Gemstones.MOD_ID)) {
         combinedModifiersMap.put(entryKey.apply(e), e);

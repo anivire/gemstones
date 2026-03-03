@@ -10,46 +10,43 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.OnFirstHitConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
-import name.modid.core.api.modifiers.types.EventType;
-import net.minecraft.entity.LivingEntity;
 
-public class OnFirstHitHandler
-    implements ModifierHandler<ModifierConfig.OnFirstHitConfig> {
+public class OnFirstHitHandler implements ModifierHandler<ModifierConfig.OnFirstHitConfig> {
+
+  private final Map<String, java.util.function.BiConsumer<List<GemstoneModifier>, ModifierContext>> handlers = Map.of(
+      "ON_FIRST_HIT_ADDITIONAL_DAMAGE", this::handleAdditionalDamage);
+
+  private static final List<String> ORDER = List.of(
+      "ON_FIRST_HIT_ADDITIONAL_DAMAGE");
+
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
-    if (modifiers.isEmpty())
+    if (modifiers.isEmpty()) {
       return;
+    }
 
-    Map<EventType, List<GemstoneModifier>> types = modifiers.stream()
-        .collect(Collectors.groupingBy(m -> ((OnFirstHitConfig) m.getConfig()).eventType()));
+    Map<String, List<GemstoneModifier>> grouped = modifiers.stream()
+        .collect(Collectors.groupingBy(inst -> ((OnFirstHitConfig) inst.getConfig()).eventType().getName()));
 
-    types.forEach((type, group) -> {
-      switch (type) {
-        case ON_FIRST_HIT_ADDITIONAL_DAMAGE -> handleAdditionalDamage(group, ctx);
-        default -> {
-        }
-      }
-    });
+    for (String key : ORDER) {
+      var group = grouped.get(key);
+      if (group == null || group.isEmpty())
+        continue;
+
+      var fn = handlers.get(key);
+      if (fn != null)
+        fn.accept(group, ctx);
+    }
   }
 
+  // NOTE: don't capped
   private void handleAdditionalDamage(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (ctx.getOwner() == null
-        || ctx.getTarget() == null) {
-      return;
-    }
+    float additionalDamagePercent = (float) modifiers.stream()
+        .mapToDouble(m -> ((OnFirstHitConfig) m.getConfig()).values().get(m.getRarityType()))
+        .sum();
 
-    if (ctx.getTarget() instanceof LivingEntity target &&
-        target.getHealth() == target.getMaxHealth()) {
-      float additionalDamagePercent = 0.0F;
-
-      for (GemstoneModifier modifier : modifiers) {
-        OnFirstHitConfig config = (OnFirstHitConfig) modifier.getConfig();
-        additionalDamagePercent += config.values().get(modifier.getRarityType());
-      }
-
-      ctx.setDamageResult(ctx.getBaseDamageTaken() * (1 + additionalDamagePercent));
-    }
+    ctx.setDamageResult(ctx.getBaseDamageTaken() * (1 + additionalDamagePercent));
   }
 }

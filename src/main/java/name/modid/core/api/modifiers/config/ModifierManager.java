@@ -17,7 +17,7 @@ public class ModifierManager {
         .filter(x -> x.getConfig() instanceof ModifierConfig.AttributeConfig)
         .toList());
 
-    List<GemstoneModifier> attributeMultModifiers = modifiers.stream()
+    List<GemstoneModifier> attributeMultiplyModifiers = modifiers.stream()
         .filter(m -> m.getConfig() instanceof ModifierConfig.MultiplyAttributeConfig)
         .flatMap(m -> {
           ModifierConfig.MultiplyAttributeConfig mac = (ModifierConfig.MultiplyAttributeConfig) m.getConfig();
@@ -29,7 +29,7 @@ public class ModifierManager {
         })
         .toList();
 
-    List<GemstoneModifier> merged = Stream.concat(attributeModifiers.stream(), attributeMultModifiers.stream())
+    List<GemstoneModifier> merged = Stream.concat(attributeModifiers.stream(), attributeMultiplyModifiers.stream())
         .toList();
 
     AttributeModifierHandler.apply(new ArrayList<>(merged), stack);

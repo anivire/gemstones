@@ -10,7 +10,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.BeforeBlockBreakConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
-import name.modid.core.api.modifiers.config.ModifierUtils;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -38,9 +38,9 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
         .collect(Collectors.groupingBy(m -> ((BeforeBlockBreakConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case ON_BLOCK_BREAK_SMELTER -> handleBlockSmelter(group, ctx);
-        case ON_BLOCK_BREAK_ENCHANTER -> handleEnchanter(group, ctx);
+      switch (type.getName()) {
+        case "ON_BLOCK_BREAK_SMELTER" -> handleBlockSmelter(group, ctx);
+        case "ON_BLOCK_BREAK_ENCHANTER" -> handleEnchanter(group, ctx);
         default -> {
         }
       }
@@ -62,7 +62,7 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       List<ItemStack> drops = Block.getDroppedStacks(ctx.getBlockState(), ctx.getWorld(), ctx.getBlockPos(),
@@ -113,7 +113,7 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (!ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       return;

@@ -37,6 +37,6 @@
   },
   "suggests": {},
   "minecraft:font": [
-    "name.modid:gemstone"
+    "gemstones:gemstone"
   ]
 }

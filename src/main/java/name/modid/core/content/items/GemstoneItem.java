@@ -6,17 +6,23 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import name.modid.Gemstones;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.api.tooltips.TooltipHelper;
+import name.modid.core.api.tooltips.TooltipHelper.Icons;
+import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 public class GemstoneItem extends Item {
   protected GemstoneType gemstoneType;
@@ -66,5 +72,18 @@ public class GemstoneItem extends Item {
             tooltip.add(modifier.getTooltipText(gemstoneItem.getRarityType(), true));
           }
         });
+
+    if (gemstoneItem.getRarityType() == GemstoneQuality.UNUSUAL) {
+      MutableText iconInfo = Text.literal(InlineIcons.INFO.getSymbol())
+          .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+          .formatted(Formatting.WHITE);
+      MutableText actionStart = Text
+          .translatable("tooltip.gemstones.unusual_quality_warning")
+          .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+          .formatted(Formatting.GRAY);
+
+      tooltip.add(Text.empty());
+      tooltip.add(iconInfo.append(actionStart));
+    }
   }
 }

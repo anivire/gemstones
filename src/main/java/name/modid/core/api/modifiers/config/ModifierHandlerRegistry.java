@@ -9,9 +9,10 @@ import name.modid.core.api.modifiers.config.handlers.BlockBreakHandler;
 import name.modid.core.api.modifiers.config.handlers.EffectHandler;
 import name.modid.core.api.modifiers.config.handlers.HitMeleeHandler;
 import name.modid.core.api.modifiers.config.handlers.HitProjectileHandler;
-import name.modid.core.api.modifiers.config.handlers.OnDamageHandler;
 import name.modid.core.api.modifiers.config.handlers.OnFirstHitHandler;
 import name.modid.core.api.modifiers.config.handlers.OnFishingHandler;
+import name.modid.core.api.modifiers.config.handlers.OnMobDamageHandler;
+import name.modid.core.api.modifiers.config.handlers.OnPlayerDamageHandler;
 import name.modid.core.api.modifiers.config.handlers.OnPotionBrewHandler;
 import name.modid.core.api.modifiers.config.handlers.PlayerHandler;
 
@@ -30,7 +31,8 @@ public class ModifierHandlerRegistry {
     register(ModifierConfig.AfterDeathConfig.class, new AfterDeathHandler());
     register(ModifierConfig.PlayerConfig.class, new PlayerHandler());
     register(ModifierConfig.OnPotionBrewConfig.class, new OnPotionBrewHandler());
-    register(ModifierConfig.OnDamageConfig.class, new OnDamageHandler());
+    register(ModifierConfig.OnMobDamageConfig.class, new OnMobDamageHandler());
+    register(ModifierConfig.OnPlayerDamageConfig.class, new OnPlayerDamageHandler());
     register(ModifierConfig.OnFishingConfig.class, new OnFishingHandler());
   }
 

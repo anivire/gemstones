@@ -60,75 +60,102 @@ public class SocketedItemsTooltip {
       tooltip.add(Text.translatable("tooltip.gemstones.category_name").formatted(Formatting.GRAY));
       tooltip.addAll(getItemGemstoneBonusesRows(gemstones, itemStack));
 
-      MutableText iconInfo = Text.literal(InlineIcons.SHIFT.getSymbol())
-          .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
-              Icons.INLINE.getPath())))
-          .formatted(Formatting.WHITE);
-      MutableText arrowInfo = Text.literal(" > ")
-          .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-          .formatted(Formatting.DARK_GRAY);
-      MutableText actionInfo = Text.literal("Hold Shift to see ")
-          .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-          .formatted(Formatting.YELLOW);
-      MutableText keywordInfo = Text.literal("Gemstones Additional Info")
-          .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-          .formatted(Formatting.GOLD);
+      // MutableText iconInfo = Text.literal(InlineIcons.SHIFT.getSymbol())
+      // .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
+      // Icons.INLINE.getPath())))
+      // .formatted(Formatting.WHITE);
+      // MutableText arrowInfo = Text.literal(" > ")
+      // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+      // .formatted(Formatting.DARK_GRAY);
+      // MutableText actionInfo = Text.literal("Hold Shift to see ")
+      // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+      // .formatted(Formatting.YELLOW);
+      // MutableText keywordInfo = Text.literal("Gemstones Additional Info")
+      // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+      // .formatted(Formatting.GOLD);
 
-      tooltip.addLast(Text.empty());
-      tooltip.addLast(iconInfo.append(arrowInfo).append(actionInfo).append(keywordInfo));
+      // tooltip.addLast(Text.empty());
+      // tooltip.addLast(iconInfo.append(arrowInfo).append(actionInfo).append(keywordInfo));
     }
   }
 
   private List<Text> getItemGemstoneBonusesRows(GemstoneComponent[] gemstones, ItemStack item) {
     List<Text> rows = new ArrayList<>();
-    boolean showGemName = Screen.hasShiftDown();
+    boolean isShiftPressed = Screen.hasShiftDown();
 
-    for (GemstoneComponent slot : gemstones) {
+    int i = 0;
+    while (i < gemstones.length) {
+      GemstoneComponent slot = gemstones[i];
       GemstoneType type = slot.gemstoneType();
       GemstoneQuality quality = slot.gemstoneQualityType();
 
-      // Empty and locked sockets
-      if (type == GemstoneType.EMPTY || type == GemstoneType.LOCKED) {
+      if (type == GemstoneType.EMPTY
+          || type == GemstoneType.LOCKED) {
+        int count = 1;
+        int j = i + 1;
+
+        while (j < gemstones.length && gemstones[j].gemstoneType() == type) {
+          count++;
+          j++;
+        }
+
         String iconSymbol = (type == GemstoneType.EMPTY) ? InlineIcons.EMPTY.getSymbol()
             : InlineIcons.LOCKED.getSymbol();
-
-        Text slotText = TooltipHelper.safeTranslatable(TooltipHelper.getSlotText(type))
+        String countPrefix = (count > 1 ? count + "x " : "");
+        Text slotText = Text.literal(countPrefix)
+            .append(TooltipHelper.safeTranslatable(TooltipHelper.getSlotText(type)))
             .formatted(TooltipHelper.getSlotColor(type))
             .styled(s -> s.withFont(Style.DEFAULT_FONT_ID));
 
-        rows.add(TooltipHelper.makeRow(iconSymbol, Icons.INLINE.getPath(), slotText, Optional.empty()));
+        rows.add(
+            TooltipHelper.makeRow(iconSymbol, Icons.INLINE.getPath(), slotText, Optional.empty()));
+
+        i = j;
+
         continue;
       }
 
       GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(type, quality, item.getItem());
 
-      if (showGemName) {
-        List<Item> b = GemstonesRegistry.getGemstonesByType(type);
-        Optional<Item> c = b.stream().filter(x -> x.getName().toString().contains(quality.name().toLowerCase()))
+      if (isShiftPressed) {
+        List<Item> gemstonesByType = GemstonesRegistry.getGemstonesByType(type);
+        Optional<Item> found = gemstonesByType.stream()
+            .filter(x -> x.getName().toString().contains(quality.name().toLowerCase()))
             .findFirst();
-
         MutableText icon = Text.literal(type.getGemstoneLiteral())
             .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
             .formatted(Formatting.WHITE);
-
-        MutableText name = Text.literal("").setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
-            .append(c.map(itemFound -> itemFound.getDefaultStack().toHoverableText())
+        MutableText name = Text.literal("")
+            .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+            .append(found.map(f -> f.getDefaultStack().toHoverableText())
                 .orElse(Text.literal("Undefined").formatted(Formatting.RED)));
-
         MutableText q = Text.translatable(quality.getTranslationString())
-            .formatted(quality.getQualityTextcolor() == null ? Formatting.WHITE : quality.getQualityTextcolor());
+            .formatted(quality.getQualityTextcolor() == null
+                ? Formatting.WHITE
+                : quality.getQualityTextcolor());
 
-        rows.add(
-            Text.empty().append(icon).append(" > ").formatted(Formatting.DARK_GRAY).append(name).append(" ").append(q));
+        rows.add(Text.empty()
+            .append(icon)
+            .append(" > ")
+            .formatted(Formatting.DARK_GRAY)
+            .append(name)
+            .append(" ")
+            .append(q));
       } else {
         if (modifier != null) {
           rows.add(modifier.getTooltipText(quality, false));
         } else {
-          rows.add(
-              TooltipHelper.makeRow(type.getGemstoneLiteral(), Icons.INLINE_GEMSTONE, Text.literal("Undefined modifier")
-                  .formatted(Formatting.RED).styled(s -> s.withFont(Style.DEFAULT_FONT_ID)), Optional.of(true)));
+          rows.add(TooltipHelper.makeRow(
+              type.getGemstoneLiteral(),
+              Icons.INLINE_GEMSTONE,
+              Text.literal("Undefined modifier")
+                  .formatted(Formatting.RED)
+                  .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)),
+              Optional.of(true)));
         }
       }
+
+      i++;
     }
 
     return rows;

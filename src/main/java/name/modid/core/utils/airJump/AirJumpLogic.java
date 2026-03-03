@@ -1,15 +1,25 @@
 package name.modid.core.utils.airJump;
 
-import name.modid.core.api.modifiers.config.ModifierUtils;
+import name.modid.Gemstones;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.content.registries.AttributesRegistry;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public final class AirJumpLogic {
   public static final int AIR_JUMP_COOLDOWN_TICKS = 4;
   public static final float AIR_JUMP_FALL_FORGIVENESS_PER_JUMP = 5.0f;
-  public static final float AIR_JUMP_FALL_FORGIVENESS_MAX = 12.0f;
+  public static final float AIR_JUMP_FALL_FORGIVENESS_MAX = 16.0f;
   public static final float AIR_JUMP_FALL_FORGIVENESS_DRAIN_PER_TICK = 0.25f;
 
   private AirJumpLogic() {
@@ -95,11 +105,25 @@ public final class AirJumpLogic {
     state.airJumpsUsed += 1;
     state.cooldownTicks = AIR_JUMP_COOLDOWN_TICKS;
 
-    state.fallForgivenessRemaining = Math.min(
-        state.fallForgivenessRemaining + AIR_JUMP_FALL_FORGIVENESS_PER_JUMP,
-        AIR_JUMP_FALL_FORGIVENESS_MAX);
+    EntityAttributeInstance safeFall = player.getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE);
+    if (safeFall != null) {
+      safeFall.getModifiers().stream()
+          .filter(m -> m.idMatches(Identifier.of(Gemstones.MOD_ID, "air_jump_safe_fall_bonus")))
+          .findFirst()
+          .ifPresent(safeFall::removeModifier);
 
-    player.fallDistance = Math.max(0.0f, player.fallDistance - AIR_JUMP_FALL_FORGIVENESS_PER_JUMP * 0.5f);
+      double appliedBonus = Math.min(
+          AIR_JUMP_FALL_FORGIVENESS_PER_JUMP * state.airJumpsUsed,
+          AIR_JUMP_FALL_FORGIVENESS_MAX);
+
+      EntityAttributeModifier modifier = new EntityAttributeModifier(
+          Identifier.of(Gemstones.MOD_ID, "air_jump_safe_fall_bonus"),
+          appliedBonus,
+          EntityAttributeModifier.Operation.ADD_VALUE);
+
+      safeFall.addTemporaryModifier(modifier);
+    }
+
     state.sync(player);
   }
 
@@ -109,6 +133,8 @@ public final class AirJumpLogic {
     state.cooldownTicks = 0;
     state.groundGraceTicks = 1;
     state.fallForgivenessRemaining = 0.0f;
+    state.removeSafeFallDelay = 2;
+
     state.sync(player);
   }
 
@@ -125,5 +151,43 @@ public final class AirJumpLogic {
       state.fallForgivenessRemaining -= applied;
       player.fallDistance = Math.max(0.0f, player.fallDistance - applied);
     }
+
+    if (state.removeSafeFallDelay > 0) {
+      state.removeSafeFallDelay--;
+      if (state.removeSafeFallDelay == 0) {
+        var safeFall = player.getAttributeInstance(
+            EntityAttributes.GENERIC_SAFE_FALL_DISTANCE);
+        if (safeFall != null) {
+          safeFall.getModifiers().stream()
+              .filter(m -> m.idMatches(Identifier.of(Gemstones.MOD_ID, "air_jump_safe_fall_bonus")))
+              .findFirst()
+              .ifPresent(safeFall::removeModifier);
+        }
+      }
+    }
+  }
+
+  public static void playEffect(PlayerEntity player) {
+    World world = player.getWorld();
+
+    world.playSound(
+        null,
+        player.getX(),
+        player.getY(),
+        player.getZ(),
+        SoundEvents.ENTITY_PHANTOM_FLAP,
+        SoundCategory.PLAYERS,
+        1.5f,
+        1.1f);
+
+    if (!(world instanceof ServerWorld serverWorld))
+      return;
+
+    serverWorld.spawnParticles(
+        ParticleTypes.CLOUD,
+        player.getX(), player.getY() + 0.95, player.getZ(),
+        18,
+        0.25, 0.15, 0.25,
+        0.1);
   }
 }

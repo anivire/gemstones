@@ -23,7 +23,7 @@
       "event_type": "ON_BLOCK_BREAK_MINER"
     },
     "ARMOR": {
-      "type": "PLAYER",
+      "type": "ON_PLAYER_DAMAGE",
       "value_levels": [60.0],
       "additional_value_levels": [6.0],
       "event_type": "PLAYER_SAVE_LETHAL"

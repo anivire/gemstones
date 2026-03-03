@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import name.modid.core.api.components.ComponentsRegistry;
+import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.blocks.entity.core.BlockEntitiesRegistry;
 import name.modid.core.content.items.registries.ItemsRegistry;
+import name.modid.core.content.loot.LootConditionRegistry;
 import name.modid.core.content.registries.AttachmentsRegistry;
 import name.modid.core.content.registries.AttributesRegistry;
 import name.modid.core.content.registries.EffectsRegistry;
@@ -14,14 +16,9 @@ import name.modid.core.content.registries.EventsRegistry;
 import name.modid.core.content.registries.ParticlesRegistry;
 import name.modid.core.content.registries.TagsRegistry;
 import name.modid.core.content.screen.ScreenRegistry;
-import name.modid.core.network.AirJumpPayload;
 import name.modid.core.network.NetworkHandler;
-import name.modid.datapack.geodes.GeodesDataLoader;
-import name.modid.datapack.modifiers.ModifiersDataLoader;
+import name.modid.datagen.RecourceHandler;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.resource.ResourceType;
 
 public class Gemstones implements ModInitializer {
   public static final String MOD_ID = "gemstones";
@@ -32,24 +29,15 @@ public class Gemstones implements ModInitializer {
   public void onInitialize() {
     LOGGER.info("Initializing Gemstones");
 
-    ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ModifiersDataLoader());
-    ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new GeodesDataLoader());
+    RecourceHandler.initialize();
+    NetworkHandler.initialize();
 
-    AirJumpPayload.registerCodecs();
-    NetworkHandler.registerServer();
+    TagsRegistry.initialize();
+    LootConditionRegistry.initialize();
 
-    ServerPlayNetworking.registerGlobalReceiver(
-        AirJumpPayload.ID,
-        (payload, context) -> {
-          context.player().server.execute(() -> {
-            var player = context.player();
-            System.out.println("[Gemstones] AirJumpPayload received from " + player.getName().getString());
-          });
-        });
-
+    EventType.initialize();
     AttributesRegistry.initialize();
     ComponentsRegistry.initialize();
-    TagsRegistry.initialize();
     EventsRegistry.initialize();
     ItemsRegistry.initialize();
     EffectsRegistry.initialize();

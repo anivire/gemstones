@@ -163,6 +163,16 @@
       "chars": [
         "\uE018"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/info_icon.png",
+      "height": 9,
+      "width": 10,
+      "ascent": 7,
+      "chars": [
+        "\uE019"
+      ]
     }
   ]
 }

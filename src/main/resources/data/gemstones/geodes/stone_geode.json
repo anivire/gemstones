@@ -6,7 +6,8 @@
     "OPAL": 0.5,
     "GARNET": 0.4,
     "AQUAMARINE": 0.3,
-    "AMBER": 0.3
+    "AMBER": 0.3,
+    "TOPAZ": 0.2
   },
   "qualities": {
     "CRUDE": 0.7,

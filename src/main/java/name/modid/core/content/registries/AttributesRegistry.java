@@ -19,6 +19,8 @@ public class AttributesRegistry {
   public static RegistryEntry<EntityAttribute> ARMOR_PIERCE_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> JUMP_COUNT_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> MAGIC_PIERCE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> GEODE_DROP_CHANCE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> INVULNERABILITY_FRAMES_ATTRIBUTE;
 
   public static final EntityAttribute PULL_SPEED = new ClampedEntityAttribute("attribute.name.generic.pull_speed", 1.0,
       0.1, 1024.0)
@@ -56,32 +58,67 @@ public class AttributesRegistry {
       "attribute.name.generic.jump_count", 0.0, 0.0, 1024.0)
       .setTracked(true);
 
+  public static final EntityAttribute GEODE_DROP_CHANCE = new ClampedEntityAttribute(
+      "attribute.name.generic.geode_drop_chance", 0.0, 0.0, 1.0)
+      .setTracked(false);
+
+  public static final EntityAttribute INVULNERABILITY_FRAMES = new ClampedEntityAttribute(
+      "attribute.name.generic.invulnerability_frames", 1.0, 0.0, 32.0)
+      .setTracked(false);
+
   public static void initialize() {
-    PULL_SPEED_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
-        Identifier.of(Gemstones.MOD_ID, "pull_speed"), PULL_SPEED);
+    PULL_SPEED_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "pull_speed"),
+        PULL_SPEED);
 
-    CRIT_DAMAGE_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
-        Identifier.of(Gemstones.MOD_ID, "crit_damage"), CRIT_DAMAGE);
+    CRIT_DAMAGE_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "crit_damage"),
+        CRIT_DAMAGE);
 
-    MAX_DURABILITY_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
-        Identifier.of(Gemstones.MOD_ID, "max_durability"), MAX_DURABILITY);
+    MAX_DURABILITY_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "max_durability"),
+        MAX_DURABILITY);
 
-    EVASION_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
-        Identifier.of(Gemstones.MOD_ID, "evasion"), EVASION);
+    EVASION_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "evasion"),
+        EVASION);
 
     PROJECTILE_SPEED_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
-        Identifier.of(Gemstones.MOD_ID, "projectile_speed"), PROJECTILE_SPEED);
+        Identifier.of(Gemstones.MOD_ID, "projectile_speed"),
+        PROJECTILE_SPEED);
 
-    ARROW_DAMAGE_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
-        Identifier.of(Gemstones.MOD_ID, "arrow_damage"), ARROW_DAMAGE);
+    ARROW_DAMAGE_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "arrow_damage"),
+        ARROW_DAMAGE);
 
-    PROJECTILE_COUNT_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
-        Identifier.of(Gemstones.MOD_ID, "projectile_count"), PROJECTILE_COUNT);
+    PROJECTILE_COUNT_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "projectile_count"),
+        PROJECTILE_COUNT);
 
-    ARMOR_PIERCE_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
-        Identifier.of(Gemstones.MOD_ID, "armor_pierce"), ARMOR_PIERCE);
+    ARMOR_PIERCE_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "armor_pierce"),
+        ARMOR_PIERCE);
 
-    JUMP_COUNT_ATTRIBUTE = Registry.registerReference(Registries.ATTRIBUTE,
-        Identifier.of(Gemstones.MOD_ID, "jump_count"), JUMP_COUNT);
+    JUMP_COUNT_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "jump_count"),
+        JUMP_COUNT);
+
+    GEODE_DROP_CHANCE_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "geode_drop_chance"),
+        GEODE_DROP_CHANCE);
+
+    INVULNERABILITY_FRAMES_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "invulnerability_frames"),
+        INVULNERABILITY_FRAMES);
   }
 }

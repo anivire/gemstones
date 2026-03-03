@@ -18,7 +18,7 @@ public class OnPotionBrewHandler extends BaseTooltipHandler<ModifierConfig.OnPot
 
   @Override
   protected String getPostfix(ModifierConfig.OnPotionBrewConfig cfg) {
-    return " seconds";
+    return " second";
   }
 
   @Override

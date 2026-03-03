@@ -5,7 +5,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
+import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.registries.AttributesRegistry;
+import name.modid.core.utils.accessors.HomingArrowAccessor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -18,6 +21,7 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
@@ -32,14 +36,14 @@ public class ProjectileCountAttributeBow {
       LivingEntity user,
       int remainingUseTicks,
       CallbackInfo ci) {
-
-    if (!(user instanceof PlayerEntity player))
+    if (!(user instanceof PlayerEntity player)) {
       return;
+    }
 
     AttributeModifiersComponent mods = player.getMainHandStack()
         .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
-
     int projectileCount = 1;
+
     for (var entry : mods.modifiers()) {
       if (AttributesRegistry.PROJECTILE_COUNT_ATTRIBUTE.equals(entry.attribute())) {
         projectileCount += (int) entry.modifier().value();
@@ -47,35 +51,36 @@ public class ProjectileCountAttributeBow {
     }
 
     int requestedCount = Math.max(1, projectileCount);
-    if (requestedCount <= 1)
+    if (requestedCount <= 1) {
       return;
+    }
 
     ci.cancel();
 
     float pullProgress = BowItem.getPullProgress(bowStack.getMaxUseTime(user) - remainingUseTicks);
-    if (pullProgress < 0.1F)
+    if (pullProgress < 0.1F) {
       return;
+    }
 
     ItemStack arrowStack = player.getProjectileType(bowStack);
-    if (arrowStack.isEmpty())
+    if (arrowStack.isEmpty()) {
       return;
+    }
+
+    if (world.isClient()) {
+      return;
+    }
+
+    multishoot((ServerWorld) world, player, bowStack, arrowStack, projectileCount, pullProgress);
 
     var enchants = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
     boolean hasInfinity = enchants.getEntry(Enchantments.INFINITY)
         .map(e -> EnchantmentHelper.getLevel(e, bowStack) > 0)
         .orElse(false);
 
-    fireArrow(world, player, bowStack, arrowStack, pullProgress, 0f);
-
-    for (int i = 1; i < requestedCount; ++i) {
-      float side = (i % 2 == 0) ? -1f : 1f;
-      float step = (float) Math.ceil(i / 2.0);
-      float angle = side * step * 7.0f;
-      fireArrow(world, player, bowStack, arrowStack, pullProgress, angle);
-    }
-
-    if (!player.isCreative() && !(hasInfinity && arrowStack.isOf(Items.ARROW))) {
+    if (!player.isCreative() && !hasInfinity) {
       arrowStack.decrement(1);
+
       if (arrowStack.isEmpty()) {
         player.getInventory().removeOne(arrowStack);
       }
@@ -94,36 +99,40 @@ public class ProjectileCountAttributeBow {
     player.incrementStat(Stats.USED.getOrCreateStat(bowStack.getItem()));
   }
 
-  private void fireArrow(
-      World world, PlayerEntity player, ItemStack bowStack, ItemStack arrowStack,
-      float pullProgress, float angleOffset) {
+  private void multishoot(
+      ServerWorld world,
+      PlayerEntity shooter,
+      ItemStack bowStack,
+      ItemStack projectileStack,
+      int projectileCount,
+      float pullStrength) {
+    final float SPREAD = 10.0F;
 
-    var enchants = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
-    ArrowItem arrowItem = (ArrowItem) (arrowStack.getItem() instanceof ArrowItem
-        ? arrowStack.getItem()
-        : Items.ARROW);
+    float g = projectileCount == 1 ? 0.0F : 2.0F * SPREAD / (float) (projectileCount - 1);
+    float h = (float) ((projectileCount - 1) % 2) * g / 2.0F;
+    float dir = 1.0F;
 
-    PersistentProjectileEntity arrow = arrowItem.createArrow(world, arrowStack.copy(), player, bowStack);
+    for (int j = 0; j < projectileCount; ++j) {
+      float offset = h + dir * (float) ((j + 1) / 2) * g;
+      dir = -dir;
 
-    if (pullProgress == 1.0F)
-      arrow.setCritical(true);
+      PersistentProjectileEntity entity = ((ArrowItem) (projectileStack.getItem() instanceof ArrowItem
+          ? projectileStack.getItem()
+          : Items.ARROW)).createArrow(world, projectileStack.copy(), shooter, bowStack);
 
-    int power = enchants.getEntry(Enchantments.POWER)
-        .map(e -> EnchantmentHelper.getLevel(e, bowStack)).orElse(0);
-    if (power > 0)
-      arrow.setDamage(arrow.getDamage() + (double) power * 0.5 + 0.5);
+      if (!ModifierGatheringHelper.getModifiersByEventType(bowStack, EventType.HOMING_ARROW).isEmpty()) {
+        ((HomingArrowAccessor) entity).setHoming(true);
+      }
 
-    boolean flame = enchants.getEntry(Enchantments.FLAME)
-        .map(e -> EnchantmentHelper.getLevel(e, bowStack) > 0).orElse(false);
-    if (flame)
-      arrow.setOnFireFor(100);
+      entity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+      entity.setVelocity(shooter, shooter.getPitch(), shooter.getYaw() + offset, 0.0F,
+          pullStrength * 3.0F, 1.0F);
 
-    float yaw = player.getYaw() + angleOffset;
-    float pitch = player.getPitch();
+      if (pullStrength == 1.0F) {
+        entity.setCritical(true);
+      }
 
-    arrow.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
-
-    arrow.setVelocity(player, pitch, yaw, 0.0F, pullProgress * 3.0F, 1.0F);
-    world.spawnEntity(arrow);
+      world.spawnEntity(entity);
+    }
   }
 }

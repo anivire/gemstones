@@ -7,6 +7,9 @@ public final class AirJumpState {
   public int cooldownTicks = 0;
   public int groundGraceTicks = 0;
   public float fallForgivenessRemaining = 0.0f;
+  public boolean hasStoredSafeFall = false;
+  public double originalSafeFallDistance = 3.0;
+  public int removeSafeFallDelay = 0;
 
   public static AirJumpState get(PlayerEntity player) {
     if (player instanceof AirJumpStateHolder holder) {

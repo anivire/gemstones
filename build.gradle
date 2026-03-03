@@ -10,7 +10,9 @@ base {
 	archivesName = project.archives_base_name
 }
 
-repositories { }
+repositories {
+  maven { url "https://api.modrinth.com/maven" }
+}
 
 fabricApi {
   configureDataGeneration() {
@@ -22,7 +24,8 @@ fabricApi {
 sourceSets {
   main {
     resources {
-      srcDir("src/generated/resources")
+      srcDir("src/main/generated")
+      srcDir("src/main/resources")
     }
   }
 }
@@ -31,7 +34,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"gemstones" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -54,6 +57,7 @@ tasks.processResources {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
@@ -94,4 +98,12 @@ publishing {
 	}
 
 	repositories { }
+}
+
+tasks.processResources {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+sourcesJar {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

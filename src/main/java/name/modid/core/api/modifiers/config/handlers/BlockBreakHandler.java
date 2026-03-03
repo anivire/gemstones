@@ -13,10 +13,8 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.BlockBreakConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
-import name.modid.core.api.modifiers.config.ModifierUtils;
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
-import name.modid.core.content.items.registries.ItemsRegistry;
-import name.modid.core.content.registries.TagsRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -55,14 +53,13 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
         .collect(Collectors.groupingBy(m -> ((BlockBreakConfig) m.getConfig()).eventType()));
 
     types.forEach((type, group) -> {
-      switch (type) {
-        case ON_BLOCK_BREAK_HEAL -> handleHeal(group, ctx);
-        case ON_BLOCK_BREAK_REGENERATE_BLOCK -> handleRegenerateBlock(group, ctx);
-        case ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP -> handleAdditionalGoldDrop(group, ctx);
-        case ON_BLOCK_BREAK_INCREASE_GEODES_DROP -> handleIncreaseGeodesDrop(group, ctx);
-        case ON_BLOCK_BREAK_EXTRA_HEALTH -> handleExtraHealth(group, ctx);
-        case ON_BLOCK_BREAK_RANDOM_ITEM_DROP -> handleRandomItemDrop(group, ctx);
-        case ON_BLOCK_BREAK_MINER -> handleMiner(group, ctx);
+      switch (type.getName()) {
+        case "ON_BLOCK_BREAK_HEAL" -> handleHeal(group, ctx);
+        case "ON_BLOCK_BREAK_REGENERATE_BLOCK" -> handleRegenerateBlock(group, ctx);
+        case "ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP" -> handleAdditionalGoldDrop(group, ctx);
+        case "ON_BLOCK_BREAK_EXTRA_HEALTH" -> handleExtraHealth(group, ctx);
+        case "ON_BLOCK_BREAK_RANDOM_ITEM_DROP" -> handleRandomItemDrop(group, ctx);
+        case "ON_BLOCK_BREAK_MINER" -> handleMiner(group, ctx);
         default -> {
         }
       }
@@ -83,10 +80,10 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     for (GemstoneModifier modifier : modifiers) {
       BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
       chances.add(config.values().get(modifier.getRarityType()));
-      totalHealAmount += config.additionValues().get(modifier.getRarityType()).floatValue();
+      totalHealAmount += config.additionalValues().get(modifier.getRarityType()).floatValue();
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       player.heal(totalHealAmount);
@@ -106,7 +103,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)
         && ctx.getWorld() instanceof ServerWorld serverWorld) {
@@ -135,7 +132,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       ItemStack goldIngot = new ItemStack(Items.GOLD_INGOT);
@@ -146,31 +143,6 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
 
       Block.dropStack(ctx.getWorld(), ctx.getBlockPos(),
           ctx.getWorld().getRandom().nextDouble() >= 0.6F ? goldIngot : goldNugget);
-    }
-  }
-
-  private void handleIncreaseGeodesDrop(
-      List<GemstoneModifier> modifiers,
-      ModifierContext ctx) {
-    if (!ctx.getBlockState().isIn(TagsRegistry.ALL_ORES)
-        && ctx.getBlockPos() == null) {
-      return;
-    }
-
-    List<Double> chances = new ArrayList<>();
-    for (GemstoneModifier modifier : modifiers) {
-      BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
-      chances.add(config.values().get(modifier.getRarityType()));
-    }
-
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
-
-    if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-      ItemStack geode = ctx.getBlockState().isIn(TagsRegistry.DEEPSLATE_ORES)
-          ? new ItemStack(ItemsRegistry.DEEPSLATE_GEODE)
-          : new ItemStack(ItemsRegistry.STONE_GEODE);
-
-      Block.dropStack(ctx.getWorld(), ctx.getBlockPos(), geode);
     }
   }
 
@@ -187,10 +159,10 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     for (GemstoneModifier modifier : modifiers) {
       BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
       chances.add(config.values().get(modifier.getRarityType()));
-      totalMaxStacks += config.additionValues().get(modifier.getRarityType()).intValue();
+      totalMaxStacks += config.additionalValues().get(modifier.getRarityType()).intValue();
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (totalMaxStacks > 0
         && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
@@ -219,7 +191,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       chances.add(config.values().get(modifier.getRarityType()));
     }
 
-    double combinedChance = ModifierUtils.combinedProcChance(chances);
+    double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       initializeBlacklist();

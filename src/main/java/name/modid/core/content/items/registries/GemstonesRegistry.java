@@ -43,6 +43,7 @@ public class GemstonesRegistry {
   private static final List<Item> ONYX = new ArrayList<>();
   private static final List<Item> CRYSTALLIZED_EXPIRIENCE = new ArrayList<>();
   private static final List<Item> ASTRALITE = new ArrayList<>();
+  private static final List<Item> ENDER_SCALE = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -155,6 +156,11 @@ public class GemstonesRegistry {
         "astralite_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
         settings -> new GemstoneItem(settings, GemstoneType.ASTRALITE, GemstoneQuality.UNUSUAL),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+    ENDER_SCALE.add(ItemsRegistry.register(
+        "ender_scale_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
+        settings -> new GemstoneItem(settings, GemstoneType.ENDER_SCALE, GemstoneQuality.UNUSUAL),
+        new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
   }
 
   public static void addGemstonesToItemGroup(FabricItemGroupEntries entries) {
@@ -177,6 +183,7 @@ public class GemstonesRegistry {
     ONYX.forEach(entries::add);
     CRYSTALLIZED_EXPIRIENCE.forEach(entries::add);
     ASTRALITE.forEach(entries::add);
+    ENDER_SCALE.forEach(entries::add);
   }
 
   public static List<Item> getAllGemstones() {
@@ -200,6 +207,7 @@ public class GemstonesRegistry {
     all.addAll(ONYX);
     all.addAll(CRYSTALLIZED_EXPIRIENCE);
     all.addAll(ASTRALITE);
+    all.addAll(ENDER_SCALE);
     return all;
   }
 
@@ -279,6 +287,10 @@ public class GemstonesRegistry {
     return ASTRALITE;
   }
 
+  public static List<Item> getEnderScaleGemstones() {
+    return ENDER_SCALE;
+  }
+
   public static List<Item> getGemstonesByType(GemstoneType type) {
     return switch (type) {
       case RUBY -> RUBY_GEMSTONES;
@@ -300,6 +312,7 @@ public class GemstonesRegistry {
       case ONYX -> ONYX;
       case CRYSTALLIZED_EXPIRIENCE -> CRYSTALLIZED_EXPIRIENCE;
       case ASTRALITE -> ASTRALITE;
+      case ENDER_SCALE -> ENDER_SCALE;
       default -> List.of();
     };
   }

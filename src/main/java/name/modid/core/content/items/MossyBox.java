@@ -69,19 +69,21 @@ public class MossyBox extends Item {
     tooltip.add(Text.translatable("tooltip.gemstones.mossy_box.info"));
     tooltip.add(Text.empty());
 
+    MutableText iconInfo = Text.literal(InlineIcons.INFO.getSymbol())
+        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+        .formatted(Formatting.WHITE);
     MutableText iconOpen = Text.literal(InlineIcons.MOUSE_RMB.getSymbol())
         .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
         .formatted(Formatting.WHITE);
-    MutableText arrowOpen = Text.literal(" > ")
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.DARK_GRAY);
-    MutableText actionOpen = Text.literal("Right-click in hand to ")
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.YELLOW);
-    MutableText keywordOpen = Text.literal("Open Box")
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.GOLD);
 
-    tooltip.add(iconOpen.append(arrowOpen).append(actionOpen).append(keywordOpen));
+    MutableText text = Text
+        .translatable("tooltip.gemstones.utils.info_action",
+            iconOpen,
+            Text.translatable("tooltip.gemstones.utils.info_in_hand"),
+            Text.translatable("tooltip.gemstones.mossy_box.info_open").formatted(Formatting.GOLD))
+        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+        .formatted(Formatting.GRAY);
+
+    tooltip.add(iconInfo.append(text));
   }
 }

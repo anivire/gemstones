@@ -3,21 +3,26 @@
   "modifiers": {
     "MELEE":{
       "type": "ON_HIT_MELEE",
-      "chance_levels": [0.05],
+      "chance_levels": [0.35],
       "additional_value_levels": [8.0],
-      "event_type": "ON_HIT_EXP_ADDITIONAL_DAMAGE"
+      "event_type": "ON_HIT_ENDER_JUDGEMENT"
     },
-    "TOOLS":{
+    "RANGED": {
+      "type": "ON_HIT_PROJECTILE",
+      "chance_levels": [0.35],
+      "event_type": "ON_HIT_ARROW_RAIN"
+    },
+    "TOOLS": {
       "type": "PLAYER",
+      "chance_levels": [1.0],
       "value_levels": [0.0],
-      "additional_value_levels": [0.0],
-      "event_type": "PLAYER_WITHER_GUARD"
+      "event_type": "PLAYER_TICK_ORE_VISION"
     },
     "ARMOR": {
-      "type": "PLAYER",
-      "value_levels": [0.25],
-      "additional_value_levels": [0.0],
-      "event_type": "PLAYER_ADDITIONAL_EXP_GAIN"
+      "type": "ATTRIBUTE",
+      "attribute_id": "gemstones:invulnerability_frames",
+      "value_levels": [0.5],
+      "operation": "ADD_MULTIPLIED_BASE"
     }
   }
 }

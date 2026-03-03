@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import name.modid.Gemstones;
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -21,62 +22,83 @@ import net.minecraft.util.Identifier;
 @Mixin(PlayerEntity.class)
 public abstract class ArmorPierceAttribute {
 
-  private static final Identifier TEMP_APPLY_ARMOR_PIERCE_ID = Identifier.of("modid", "temp_apply_armor_pierce");
+  private static final Identifier TEMP_APPLY_ARMOR_PIERCE_ID = Identifier.of(Gemstones.MOD_ID,
+      "temporary_armor_pierce");
 
-  private LivingEntity ap$currentTarget;
-  private boolean ap$applied = false;
+  private LivingEntity currentTarget;
+  private boolean applied = false;
 
   @Shadow
   public abstract void attack(Entity target);
 
   @Inject(method = "attack", at = @At("HEAD"))
-  private void ap$captureTarget(Entity target, CallbackInfo ci) {
-    this.ap$currentTarget = target instanceof LivingEntity le ? le : null;
-    this.ap$applied = false;
+  private void captureTarget(Entity target, CallbackInfo ci) {
+    this.currentTarget = target instanceof LivingEntity living ? living : null;
+    this.applied = false;
   }
 
   @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", shift = At.Shift.BEFORE))
-  private void ap$applyPierceBeforeDamage(Entity target, CallbackInfo ci) {
-    if (!(this.ap$currentTarget instanceof LivingEntity livingTarget))
+  private void applyPierceBeforeDamage(Entity target, CallbackInfo ci) {
+    if (!(this.currentTarget instanceof LivingEntity livingTarget)) {
       return;
-    PlayerEntity player = (PlayerEntity) (Object) this;
+    }
 
+    PlayerEntity player = (PlayerEntity) (Object) this;
     ItemStack stack = player.getMainHandStack();
-    if (stack.isEmpty())
+
+    if (stack.isEmpty()) {
       return;
+    }
 
     AttributeModifiersComponent comp = stack.getOrDefault(
-        DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
-    if (comp.modifiers().isEmpty())
-      return;
+        DataComponentTypes.ATTRIBUTE_MODIFIERS,
+        AttributeModifiersComponent.DEFAULT);
 
-    // Идентификатор вашего кастомного атрибута (как строка)
-    // RegistryEntry<EntityAttribute> имеет getIdAsString() в 1.21.1
-    String pierceAttrIdStr = AttributesRegistry.ARMOR_PIERCE_ATTRIBUTE.getIdAsString();
-    if (pierceAttrIdStr == null)
+    if (comp.modifiers().isEmpty()) {
       return;
+    }
 
-    double armorPierce = comp.modifiers().stream()
-        .filter(m -> {
-          String idStr = m.attribute().getIdAsString();
-          return idStr != null && idStr.equals(pierceAttrIdStr);
-        })
-        .mapToDouble(m -> {
-          EntityAttributeModifier mod = m.modifier();
-          return mod.operation() == EntityAttributeModifier.Operation.ADD_VALUE
-              ? mod.value()
-              : 0.0;
-        })
-        .sum();
+    String pierceAttributeId = AttributesRegistry.ARMOR_PIERCE_ATTRIBUTE.getIdAsString();
 
-    if (armorPierce <= 0.0)
+    if (pierceAttributeId == null) {
       return;
+    }
 
     EntityAttributeInstance armorAttr = livingTarget.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
-    if (armorAttr == null)
+
+    if (armorAttr == null) {
       return;
+    }
+
+    double baseArmor = armorAttr.getBaseValue();
+    double currentArmor = armorAttr.getValue();
+
+    double armorPierce = comp.modifiers().stream()
+        .filter(
+            m -> {
+              String idStr = m.attribute().getIdAsString();
+              return idStr != null && idStr.equals(pierceAttributeId);
+            })
+        .mapToDouble(
+            m -> {
+              EntityAttributeModifier mod = m.modifier();
+
+              return switch (mod.operation()) {
+                case ADD_VALUE -> mod.value();
+                case ADD_MULTIPLIED_BASE -> baseArmor * mod.value();
+                case ADD_MULTIPLIED_TOTAL -> currentArmor * mod.value();
+              };
+            })
+        .sum();
+
+    if (armorPierce <= 0.0) {
+      return;
+    }
+
+    armorPierce = Math.min(armorPierce, currentArmor);
 
     EntityAttributeModifier existing = armorAttr.getModifier(TEMP_APPLY_ARMOR_PIERCE_ID);
+
     if (existing != null) {
       armorAttr.removeModifier(existing);
     }
@@ -86,39 +108,36 @@ public abstract class ArmorPierceAttribute {
         -armorPierce,
         EntityAttributeModifier.Operation.ADD_VALUE);
 
-    armorAttr.addPersistentModifier(minusArmor);
-    this.ap$applied = true;
+    armorAttr.addTemporaryModifier(minusArmor);
+    this.applied = true;
   }
 
   @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", shift = At.Shift.AFTER))
-  private void ap$removePierceAfterDamage(Entity target, CallbackInfo ci) {
-    if (!this.ap$applied)
-      return;
-    if (!(this.ap$currentTarget instanceof LivingEntity livingTarget))
-      return;
+  private void removePierceAfterDamage(Entity target, CallbackInfo ci) {
+    this.cleanup();
+  }
 
-    EntityAttributeInstance armorAttr = livingTarget.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
+  @Inject(method = "attack", at = @At("TAIL"))
+  private void clear(Entity target, CallbackInfo ci) {
+    this.cleanup();
+    this.currentTarget = null;
+  }
+
+  private void cleanup() {
+    if (!this.applied || !(this.currentTarget instanceof LivingEntity living)) {
+      return;
+    }
+
+    EntityAttributeInstance armorAttr = living.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
+
     if (armorAttr != null) {
       EntityAttributeModifier curr = armorAttr.getModifier(TEMP_APPLY_ARMOR_PIERCE_ID);
+
       if (curr != null) {
         armorAttr.removeModifier(curr);
       }
     }
-    this.ap$applied = false;
-  }
 
-  @Inject(method = "attack", at = @At("TAIL"))
-  private void ap$clear(Entity target, CallbackInfo ci) {
-    if (this.ap$applied && this.ap$currentTarget instanceof LivingEntity livingTarget) {
-      EntityAttributeInstance armorAttr = livingTarget.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
-      if (armorAttr != null) {
-        EntityAttributeModifier curr = armorAttr.getModifier(TEMP_APPLY_ARMOR_PIERCE_ID);
-        if (curr != null) {
-          armorAttr.removeModifier(curr);
-        }
-      }
-      this.ap$applied = false;
-    }
-    this.ap$currentTarget = null;
+    this.applied = false;
   }
 }

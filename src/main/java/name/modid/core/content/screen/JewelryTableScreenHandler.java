@@ -1,6 +1,13 @@
 package name.modid.core.content.screen;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
+import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.ExpansionCrystalItem;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.tools.ChiselItem;
@@ -23,7 +30,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 
 public class JewelryTableScreenHandler extends ScreenHandler implements InventoryChangedListener {
-  private static final float GEM_DELETE_EXTRACT_CHANCE = 0.8f;
+  private static final float GEM_DESTROY_EXTRACT_CHANCE = 0.8f;
   public static final int SLOT_ACTION = 0;
   public static final int SLOT_BASE = 1;
   public static final int SLOT_GEM = 2;
@@ -87,10 +94,12 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     if (tool.isEmpty())
       return ActionMode.NONE;
 
-    if (tool.getItem() instanceof ChiselItem && gemSlot.getItem() instanceof ExpansionCrystalItem)
+    if (tool.getItem() instanceof ChiselItem
+        && gemSlot.getItem() instanceof ExpansionCrystalItem)
       return ActionMode.EXPAND;
 
-    if (tool.getItem() instanceof JewelryHammerItem && gemSlot.getItem() instanceof GemstoneItem)
+    if (tool.getItem() instanceof JewelryHammerItem
+        && gemSlot.getItem() instanceof GemstoneItem)
       return ActionMode.INSERT;
 
     if (tool.getItem() instanceof JewelryPliersItem)
@@ -117,7 +126,9 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     ItemStack base = inventory.getStack(SLOT_BASE);
     ItemStack crystal = inventory.getStack(SLOT_GEM);
 
-    if (base.isEmpty() || crystal.isEmpty() || !(crystal.getItem() instanceof ExpansionCrystalItem)) {
+    if (base.isEmpty()
+        || crystal.isEmpty()
+        || !(crystal.getItem() instanceof ExpansionCrystalItem)) {
       inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
       return;
     }
@@ -145,62 +156,95 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
         || !(gem.getItem() instanceof GemstoneItem)
         || !GemstoneSlotHelper.isItemValid(base.getItem())) {
       inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+
       return;
     }
+
+    GemstoneItem gemItem = (GemstoneItem) gem.getItem();
+    GemstoneType gemType = gemItem.getType();
+    GemstoneQuality gemQuality = gemItem.getRarityType();
+
+    Map<GemstoneType, GemstoneQuality> g = Arrays.stream(GemstoneSlotHelper.getGemstones(base))
+        .collect(Collectors.toMap(
+            GemstoneComponent::gemstoneType,
+            GemstoneComponent::gemstoneQualityType,
+            (q1, q2) -> q1));
+
+    // Forbid inserting two equal gemstone types with unusual quality
+    if (gemQuality == GemstoneQuality.UNUSUAL) {
+      if (g.containsKey(gemType) && g.get(gemType) == GemstoneQuality.UNUSUAL) {
+        inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+        return;
+      }
+    }
+
     Integer emptySlot = GemstoneSlotHelper.getFirstEmptySlotIndex(base);
+
     if (emptySlot == null) {
       inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
       return;
     }
+
     ItemStack copy = base.copy();
     ItemStack modified = GemstoneSlotHelper.setGemstoneByIndex(copy, emptySlot, (GemstoneItem) gem.getItem());
+
     inventory.setStack(SLOT_RESULT, modified != null ? modified : ItemStack.EMPTY);
   }
 
   private void buildExtractResult() {
     ItemStack base = inventory.getStack(SLOT_BASE);
-    if (base.isEmpty() || !GemstoneSlotHelper.isItemValid(base.getItem())) {
+
+    if (base.isEmpty()
+        || !GemstoneSlotHelper.isItemValid(base.getItem())) {
       inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
       return;
     }
-    int idx = GemstoneSlotHelper.getLastFilledSlotIndex(base);
-    if (idx == -1) {
+
+    int index = GemstoneSlotHelper.getLastFilledSlotIndex(base);
+
+    if (index == -1) {
       inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
       return;
     }
-    ItemStack previewGem = GemstoneSlotHelper.makeGemItemFromSocket(base, idx);
+
+    ItemStack previewGem = GemstoneSlotHelper.makeGemItemFromSocket(base, index);
     inventory.setStack(SLOT_RESULT, previewGem);
   }
 
   public void finalizeTakeResult(PlayerEntity player) {
     ActionMode mode = getMode();
-    ItemStack actionTool = inventory.getStack(SLOT_ACTION);
     lastGemBroken = false;
 
     if (mode == ActionMode.INSERT) {
       ItemStack gem = inventory.getStack(SLOT_GEM);
+
       if (!gem.isEmpty()) {
         gem.decrement(1);
         inventory.setStack(SLOT_GEM, gem);
       }
+
       ItemStack base = inventory.getStack(SLOT_BASE);
+
       if (!base.isEmpty()) {
         base.decrement(1);
         inventory.setStack(SLOT_BASE, base.isEmpty() ? ItemStack.EMPTY : base);
       }
+
       damageActionTool(player, 1);
       playInsertSound(player);
     } else if (mode == ActionMode.EXTRACT) {
       ItemStack base = inventory.getStack(SLOT_BASE);
       int idx = GemstoneSlotHelper.getLastFilledSlotIndex(base);
+
       if (idx != -1) {
-        boolean broken = (player.getWorld().random.nextFloat() < GEM_DELETE_EXTRACT_CHANCE);
+        boolean broken = (player.getWorld().random.nextFloat() < GEM_DESTROY_EXTRACT_CHANCE);
         lastGemBroken = broken;
 
         GemstoneSlotHelper.clearGemstoneAtIndex(base, idx);
         inventory.setStack(SLOT_BASE, base);
         sendContentUpdates();
       }
+
       damageActionTool(player, 1);
       playExtractSound(player);
     } else if (mode == ActionMode.EXPAND) {
@@ -322,10 +366,11 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
         slot.setStack(ItemStack.EMPTY);
 
         playGemBrokenSound(player);
-
         finalizeTakeResult(player);
+
         this.updateOutputs();
         this.sendContentUpdates();
+
         slot.markDirty();
 
         return ItemStack.EMPTY;
@@ -339,22 +384,24 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
 
       this.updateOutputs();
       this.sendContentUpdates();
+
       slot.markDirty();
+
       return newStack;
     }
 
-    if (invSlot < this.inventory.size()) {
-      if (!this.insertItem(original, this.inventory.size(), this.slots.size(), true))
-        return ItemStack.EMPTY;
-    } else {
-      if (!this.insertItem(original, 0, this.inventory.size(), false))
-        return ItemStack.EMPTY;
+    if (invSlot < this.inventory.size()
+        && !this.insertItem(original, this.inventory.size(), this.slots.size(), true)) {
+      return ItemStack.EMPTY;
+    } else if (!this.insertItem(original, 0, this.inventory.size(), false)) {
+      return ItemStack.EMPTY;
     }
 
-    if (original.isEmpty())
+    if (original.isEmpty()) {
       slot.setStack(ItemStack.EMPTY);
-    else
+    } else {
       slot.markDirty();
+    }
 
     return newStack;
   }
