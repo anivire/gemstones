@@ -99,7 +99,10 @@ public class EffectHandler {
   public static class Melee implements ModifierHandler<ModifierConfig.HitEffectMeleeConfig> {
     @Override
     public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
+      boolean hasDamageContext = ctx.getBaseDamageTaken() > 0.0F;
+
       if (ctx.getOwner() instanceof PlayerEntity player
+          && !hasDamageContext
           && player.getAttackCooldownProgress(0.0F) < 1.0F) {
         ctx.setActionResult(ActionResult.PASS);
         return;
