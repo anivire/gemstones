@@ -13,6 +13,7 @@ import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.registries.GemstonesRegistry;
+import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
@@ -36,6 +37,10 @@ public class GemstoneSlotHelper {
   }
 
   public static boolean isItemValid(Item item) {
+    if (item instanceof AnimalArmorItem) {
+      return false;
+    }
+
     return item instanceof PickaxeItem || item instanceof BowItem || item instanceof ArmorItem
         || item instanceof SwordItem || item instanceof AxeItem || item instanceof ShovelItem
         || item instanceof CrossbowItem;
