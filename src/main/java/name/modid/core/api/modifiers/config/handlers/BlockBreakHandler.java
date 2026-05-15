@@ -93,8 +93,26 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+      float healthBefore = player.getHealth();
       player.heal(totalHealAmount);
-      // TODO: add particles and sound
+
+      if (player.getHealth() > healthBefore && ctx.getWorld() instanceof ServerWorld serverWorld) {
+        serverWorld.spawnParticles(ParticleTypes.HEART,
+            player.getX(),
+            player.getY() + 1.0,
+            player.getZ(),
+            4,
+            0.35,
+            0.4,
+            0.35,
+            0.02);
+        serverWorld.playSound(null,
+            player.getBlockPos(),
+            SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+            SoundCategory.PLAYERS,
+            0.45f,
+            1.35f);
+      }
     }
   }
 
@@ -185,6 +203,24 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, buffDuration,
           (int) totalMaxStacks - 1, false, false, true));
       player.setAbsorptionAmount(currentAbsorption + (float) healthPerProc);
+
+      if (player.getAbsorptionAmount() > currentAbsorption && ctx.getWorld() instanceof ServerWorld serverWorld) {
+        serverWorld.spawnParticles(ParticleTypes.TOTEM_OF_UNDYING,
+            player.getX(),
+            player.getY() + 1.0,
+            player.getZ(),
+            12,
+            0.45,
+            0.5,
+            0.45,
+            0.08);
+        serverWorld.playSound(null,
+            player.getBlockPos(),
+            SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
+            SoundCategory.PLAYERS,
+            0.45f,
+            1.45f);
+      }
     }
   }
 

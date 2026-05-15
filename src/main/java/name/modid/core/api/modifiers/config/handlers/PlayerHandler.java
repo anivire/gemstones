@@ -324,19 +324,15 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
 
   private void handleProjectileImmune(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (!(ctx.getOwner() instanceof LivingEntity owner)
-        || !(ctx.getTarget() instanceof LivingEntity target)
-        || ctx.getProjectile() == null
-        // I don't remember why i need this here
-        || !owner.getUuid().equals(target.getUuid())) {
+        || ctx.getProjectile() == null) {
       ctx.setIsHurtable(true);
       return;
     }
 
-    float healthPercent = target.getHealth() / target.getMaxHealth();
-    float capImmunePercent = (float) ModifierUtils.cappedProcChance(
-        modifiers.stream()
-            .map(m -> ((PlayerConfig) m.getConfig()).values().get(m.getRarityType()))
-            .toList());
+    float healthPercent = owner.getHealth() / owner.getMaxHealth();
+    float capImmunePercent = Math.min(1.0f, (float) modifiers.stream()
+        .mapToDouble(m -> Math.abs(((PlayerConfig) m.getConfig()).values().get(m.getRarityType())))
+        .sum());
 
     if (healthPercent < capImmunePercent) {
       ctx.setIsHurtable(false);

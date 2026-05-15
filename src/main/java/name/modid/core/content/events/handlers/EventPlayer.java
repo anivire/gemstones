@@ -18,7 +18,7 @@ import net.minecraft.server.world.ServerWorld;
 public class EventPlayer {
   public static boolean setupEvent(LivingEntity entity, DamageSource source, float amount) {
     if (!(entity.getWorld() instanceof ServerWorld serverWorld)
-        || !(source.getAttacker() instanceof ServerPlayerEntity serverPlayer)) {
+        || !(entity instanceof ServerPlayerEntity serverPlayer)) {
       return true;
     }
 

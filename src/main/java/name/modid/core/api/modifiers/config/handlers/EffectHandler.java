@@ -32,6 +32,27 @@ public class EffectHandler {
         || !StunnedEffect.isImmuneToStun(target);
   }
 
+  private static void applyHitEffect(
+      LivingEntity target,
+      RegistryEntry<StatusEffect> effect,
+      int durationSeconds,
+      int amplifier,
+      boolean stacking,
+      int maxStackCount) {
+    int appliedAmplifier = amplifier;
+
+    if (stacking) {
+      StatusEffectInstance current = target.getStatusEffect(effect);
+      int maxAmplifier = maxStackCount > 0 ? maxStackCount - 1 : amplifier;
+
+      appliedAmplifier = current == null
+          ? amplifier
+          : Math.min(current.getAmplifier() + 1, maxAmplifier);
+    }
+
+    target.addStatusEffect(new StatusEffectInstance(effect, durationSeconds * 20, appliedAmplifier));
+  }
+
   public static class Area implements ModifierHandler<ModifierConfig.AreaEffectConfig> {
     @Override
     public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
@@ -130,19 +151,23 @@ public class EffectHandler {
           List<Double> chances = new ArrayList<>();
           int maxAmplifier = -1;
           int maxDuration = 0;
+          boolean stacking = false;
+          int maxStackCount = 0;
 
           for (GemstoneModifier modifier : effectGroup) {
             HitEffectMeleeConfig config = (HitEffectMeleeConfig) modifier.getConfig();
             chances.add(config.chance().get(modifier.getRarityType()));
             maxAmplifier = Math.max(maxAmplifier, config.amplifier());
             maxDuration = Math.max(maxDuration, config.duration());
+            stacking = stacking || config.stacking();
+            maxStackCount = Math.max(maxStackCount, config.maxStacks());
           }
 
           double combinedChance = ModifierUtils.cappedProcChance(chances);
 
           if (canApplyEffect(effect, target)
               && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-            target.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier));
+            applyHitEffect(target, effect, maxDuration, maxAmplifier, stacking, maxStackCount);
           }
         }
 
@@ -165,19 +190,23 @@ public class EffectHandler {
           List<Double> chances = new ArrayList<>();
           int maxAmplifier = -1;
           int maxDuration = 0;
+          boolean stacking = false;
+          int maxStackCount = 0;
 
           for (GemstoneModifier modifier : effectGroup) {
             HitEffectProjectileConfig config = (HitEffectProjectileConfig) modifier.getConfig();
             chances.add(config.chance().get(modifier.getRarityType()));
             maxAmplifier = Math.max(maxAmplifier, config.amplifier());
             maxDuration = Math.max(maxDuration, config.duration());
+            stacking = stacking || config.stacking();
+            maxStackCount = Math.max(maxStackCount, config.maxStacks());
           }
 
           double combinedChance = ModifierUtils.cappedProcChance(chances);
 
           if (canApplyEffect(effect, target)
               && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-            target.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier));
+            applyHitEffect(target, effect, maxDuration, maxAmplifier, stacking, maxStackCount);
           }
         }
       }

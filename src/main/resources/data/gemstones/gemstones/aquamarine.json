@@ -3,7 +3,12 @@
   "modifiers": {
     "MELEE": {
       "type": "ON_HIT_EFFECT_MELEE",
-      "chance_levels": [0.08, 0.15, 0.25, 1.3],
+      "chance_levels": [
+        0.08,
+        0.15,
+        0.25,
+        1.3
+      ],
       "amplifier": 0,
       "effect_id": "gemstones:freezing",
       "duration": 11,
@@ -12,7 +17,12 @@
     },
     "RANGED": {
       "type": "ON_HIT_EFFECT_PROJECTILE",
-      "chance_levels": [0.16, 0.25, 0.3, 0.4],
+      "chance_levels": [
+        0.16,
+        0.25,
+        0.3,
+        0.4
+      ],
       "amplifier": 0,
       "effect_id": "gemstones:freezing",
       "duration": 16,
@@ -22,7 +32,12 @@
     "TOOLS": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:player.submerged_mining_speed",
-      "value_levels": [0.07, 0.15, 0.21, 0.28],
+      "value_levels": [
+        0.07,
+        0.15,
+        0.21,
+        0.28
+      ],
       "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "ARMOR": {
@@ -30,12 +45,23 @@
       "instances": [
         {
           "attribute_id": "minecraft:generic.water_movement_efficiency",
-          "value_levels": [0.10, 0.15, 0.20, 0.30],
+          "value_levels": [
+            0.10,
+            0.15,
+            0.20,
+            0.30
+          ],
           "operation": "ADD_MULTIPLIED_TOTAL"
-        },{
+        },
+        {
           "type": "ATTRIBUTE",
           "attribute_id": "minecraft:generic.oxygen_bonus",
-          "value_levels": [0.025, 0.055, 0.075, 0.1],
+          "value_levels": [
+            0.025,
+            0.055,
+            0.075,
+            0.1
+          ],
           "operation": "ADD_MULTIPLIED_TOTAL"
         }
       ]

@@ -69,23 +69,23 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
   private void handleHarvestMark(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getOwner() instanceof LivingEntity owner)
-        || !owner.hasStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT)) {
+    if (!(ctx.getTarget() instanceof LivingEntity target)
+        || !target.hasStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT)) {
       return;
     }
 
     final int MIN_ADDITIONAL_XP = 3;
     final int MAX_ADDITIONAL_XP = 5;
 
-    int stackCount = owner.getStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT).getAmplifier() + 1;
+    int stackCount = target.getStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT).getAmplifier() + 1;
     int exp = (int) (Math.random() * (MAX_ADDITIONAL_XP - MIN_ADDITIONAL_XP + 1) + MIN_ADDITIONAL_XP);
 
     for (int i = 0; i < stackCount; i++) {
       ctx.getWorld().spawnEntity(new ExperienceOrbEntity(
           ctx.getWorld(),
-          owner.getX(),
-          owner.getY(),
-          owner.getZ(),
+          target.getX(),
+          target.getY(),
+          target.getZ(),
           exp));
     }
 
@@ -94,7 +94,8 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
   private void handleBonusExpGain(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getTarget() instanceof LivingEntity target)) {
+    if (!(ctx.getOwner() instanceof LivingEntity owner)
+        || !(ctx.getTarget() instanceof LivingEntity target)) {
       return;
     }
 
@@ -105,13 +106,13 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
       return;
     }
 
-    int vanillaXp = target.getXpToDrop(ctx.getWorld(), null);
+    int vanillaXp = target.getXpToDrop(ctx.getWorld(), owner);
 
     if (vanillaXp <= 0) {
       return;
     }
 
-    float result = vanillaXp * (1.0f + bonusPercent);
+    float result = vanillaXp * bonusPercent;
     int xp = Math.max(0, Math.round(result));
 
     if (xp <= 0) {

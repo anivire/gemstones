@@ -3,7 +3,12 @@
   "modifiers": {
     "MELEE": {
       "type": "ON_HIT_EFFECT_MELEE",
-      "chance_levels": [0.1, 0.15, 0.2, 0.25],
+      "chance_levels": [
+        0.1,
+        0.15,
+        0.2,
+        0.25
+      ],
       "amplifier": 0,
       "effect_id": "gemstones:soul_burn",
       "duration": 11,
@@ -13,19 +18,39 @@
     "RANGED": {
       "type": "ATTRIBUTE",
       "attribute_id": "gemstones:arrow_damage",
-      "value_levels": [0.5, 1.0, 1.75, 2.15],
+      "value_levels": [
+        0.5,
+        1.0,
+        1.75,
+        2.15
+      ],
       "operation": "ADD_VALUE"
     },
     "TOOLS": {
       "type": "ON_BLOCK_BREAK",
-      "chance_levels": [0.06, 0.1, 0.145, 0.185],
-      "value_levels": [0.0, 0.0, 0.0, 0.0],
+      "chance_levels": [
+        0.06,
+        0.1,
+        0.145,
+        0.185
+      ],
+      "value_levels": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
       "event_type": "ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP"
     },
     "ARMOR": {
       "type": "ATTRIBUTE",
       "attribute_id": "gemstones:evasion",
-      "value_levels": [0.01, 0.02, 0.035, 0.05],
+      "value_levels": [
+        0.01,
+        0.02,
+        0.035,
+        0.05
+      ],
       "operation": "ADD_MULTIPLIED_TOTAL"
     }
   }

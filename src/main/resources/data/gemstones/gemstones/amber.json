@@ -3,7 +3,12 @@
   "modifiers": {
     "MELEE": {
       "type": "ON_HIT_EFFECT_MELEE",
-      "chance_levels": [0.05, 0.08, 0.14, 0.18],
+      "chance_levels": [
+        0.05,
+        0.08,
+        0.14,
+        0.18
+      ],
       "amplifier": 0,
       "effect_id": "gemstones:scarab",
       "duration": 11,
@@ -12,7 +17,12 @@
     },
     "RANGED": {
       "type": "ON_HIT_EFFECT_PROJECTILE",
-      "chance_levels": [0.08, 0.12, 0.16, 0.2],
+      "chance_levels": [
+        0.08,
+        0.12,
+        0.16,
+        0.2
+      ],
       "amplifier": 0,
       "effect_id": "gemstones:scarab",
       "duration": 16,
@@ -21,7 +31,12 @@
     },
     "TOOLS": {
       "type": "ON_HIT_EFFECT_MELEE",
-      "chance_levels": [0.1, 0.2, 0.3, 0.4],
+      "chance_levels": [
+        0.1,
+        0.2,
+        0.3,
+        0.4
+      ],
       "amplifier": 0,
       "effect_id": "gemstones:harvest_mark",
       "duration": 6,
@@ -31,7 +46,12 @@
     "ARMOR": {
       "type": "AREA_EFFECT",
       "effect_id": "gemstones:amber_blessing",
-      "radius_levels": [1.0, 1.5, 2.0, 2.5],
+      "radius_levels": [
+        1.0,
+        1.5,
+        2.0,
+        2.5
+      ],
       "amplifier": 0,
       "duration": 10,
       "not_me": false,

@@ -12,6 +12,7 @@ import name.modid.core.content.events.handlers.EventOnHitMelee;
 import name.modid.core.content.events.handlers.EventOnHitProjectile;
 import name.modid.core.content.events.handlers.EventOnMobDamage;
 import name.modid.core.content.events.handlers.EventOnPlayerDamage;
+import name.modid.core.content.events.handlers.EventOnPotionBrew;
 import name.modid.core.content.events.handlers.EventPlayer;
 import name.modid.core.content.events.handlers.EventProjectileEffect;
 import name.modid.core.content.events.handlers.PlayerRandomBuff;
@@ -37,6 +38,7 @@ public class EventsRegistry {
     CustomEvents.ON_FISHING.register(EventOnFishing::setupEvent);
     CustomEvents.ON_HIT_MELEE.register(EventOnHitMelee::setupEvent);
     CustomEvents.ON_HIT_PROJECTILE.register(EventOnHitProjectile::setupEvent);
+    CustomEvents.ON_POTION_BREW.register(EventOnPotionBrew::setupEvent);
 
     // Effect related (Melee, Ranged and Area)
     ServerTickEvents.END_SERVER_TICK.register(server -> {

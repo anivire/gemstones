@@ -4,12 +4,16 @@
     "MELEE": {
       "type": "ATTRIBUTE",
       "attribute_id": "gemstones:armor_pierce",
-      "value_levels": [10.00],
+      "value_levels": [
+        10.00
+      ],
       "operation": "ADD_VALUE"
     },
     "RANGED": {
       "type": "ON_HIT_EFFECT_PROJECTILE",
-      "chance_levels": [0.444],
+      "chance_levels": [
+        0.444
+      ],
       "amplifier": 0,
       "effect_id": "minecraft:levitation",
       "duration": 30,
@@ -18,14 +22,22 @@
     },
     "TOOLS": {
       "type": "ON_BLOCK_BREAK",
-      "chance_levels": [1.0],
-      "value_levels": [0.0],
+      "chance_levels": [
+        1.0
+      ],
+      "value_levels": [
+        0.0
+      ],
       "event_type": "ON_BLOCK_BREAK_MINER"
     },
     "ARMOR": {
       "type": "ON_PLAYER_DAMAGE",
-      "value_levels": [60.0],
-      "additional_value_levels": [6.0],
+      "value_levels": [
+        60.0
+      ],
+      "additional_value_levels": [
+        6.0
+      ],
       "event_type": "PLAYER_SAVE_LETHAL"
     }
   }

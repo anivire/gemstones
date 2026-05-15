@@ -4,25 +4,45 @@
     "MELEE": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:generic.attack_speed",
-      "value_levels": [0.05, 0.08, 0.15, 0.20],
+      "value_levels": [
+        0.05,
+        0.08,
+        0.15,
+        0.20
+      ],
       "operation": "ADD_MULTIPLIED_BASE"
     },
     "RANGED": {
       "type": "ATTRIBUTE",
       "attribute_id": "gemstones:pull_speed",
-      "value_levels": [0.1, 0.2, 0.3, 0.45],
+      "value_levels": [
+        0.1,
+        0.2,
+        0.3,
+        0.45
+      ],
       "operation": "ADD_MULTIPLIED_BASE"
     },
     "TOOLS": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:player.block_break_speed",
-      "value_levels": [0.08, 0.10, 0.15, 0.25],
+      "value_levels": [
+        0.08,
+        0.10,
+        0.15,
+        0.25
+      ],
       "operation": "ADD_MULTIPLIED_BASE"
     },
     "ARMOR": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:generic.movement_speed",
-      "value_levels": [0.05, 0.08, 0.12, 0.18],
+      "value_levels": [
+        0.05,
+        0.08,
+        0.12,
+        0.18
+      ],
       "operation": "ADD_MULTIPLIED_BASE"
     }
   }

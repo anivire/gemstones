@@ -1,28 +1,42 @@
 {
   "gemstone_type": "WITHER_BONE",
   "modifiers": {
-    "MELEE":{
+    "MELEE": {
       "type": "ON_HIT_MELEE",
-      "chance_levels": [1.25],
-      "additional_value_levels": [0.0],
+      "chance_levels": [
+        1.25
+      ],
+      "additional_value_levels": [
+        0.0
+      ],
       "event_type": "ON_HIT_MULTIPLY_DAMAGE_ARMORLESS"
     },
-    "RANGED":{
+    "RANGED": {
       "type": "ATTRIBUTE",
       "attribute_id": "gemstones:projectile_count",
-      "value_levels": [2.0],
+      "value_levels": [
+        2.0
+      ],
       "operation": "ADD_VALUE"
     },
-    "TOOLS":{
+    "TOOLS": {
       "type": "PLAYER",
-      "value_levels": [0.0],
-      "additional_value_levels": [0.0],
+      "value_levels": [
+        0.0
+      ],
+      "additional_value_levels": [
+        0.0
+      ],
       "event_type": "PLAYER_WITHER_GUARD"
     },
     "ARMOR": {
       "type": "PLAYER",
-      "value_levels": [-0.25],
-      "additional_value_levels": [0.0],
+      "value_levels": [
+        -0.25
+      ],
+      "additional_value_levels": [
+        0.0
+      ],
       "event_type": "PLAYER_PROJECTILE_IMMUNE"
     }
   }
