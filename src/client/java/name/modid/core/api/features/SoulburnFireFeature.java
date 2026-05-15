@@ -8,6 +8,7 @@ import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
@@ -18,8 +19,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 
-// TODO: fix me
 public class SoulburnFireFeature<T extends LivingEntity, M extends EntityModel<T>>
     extends FeatureRenderer<T, M> {
 
@@ -39,10 +40,34 @@ public class SoulburnFireFeature<T extends LivingEntity, M extends EntityModel<T
       return;
     }
 
-    float bodyYaw = MathHelper.lerp(tickDelta, entity.prevBodyYaw, entity.bodyYaw);
-    Quaternionf rotation = new Quaternionf().rotationY(-bodyYaw * ((float) Math.PI / 180F));
+    EntityRenderDispatcher dispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
+    Quaternionf rotation = MathHelper.rotateAround(MathHelper.Y_AXIS, dispatcher.getRotation(),
+        new Quaternionf());
 
+    matrices.push();
+    resetLivingFeatureTransforms(matrices, entity, tickDelta);
     renderSoulFire(matrices, vertexConsumers, entity, rotation);
+    matrices.pop();
+  }
+
+  private static void resetLivingFeatureTransforms(MatrixStack matrices,
+      LivingEntity entity,
+      float tickDelta) {
+    float bodyYaw = MathHelper.lerpAngleDegrees(tickDelta, entity.prevBodyYaw, entity.bodyYaw);
+
+    if (entity.hasVehicle() && entity.getVehicle() instanceof LivingEntity vehicle) {
+      bodyYaw = MathHelper.lerpAngleDegrees(tickDelta, vehicle.prevBodyYaw, vehicle.bodyYaw);
+    }
+
+    matrices.translate(0.0F, 1.501F, 0.0F);
+    matrices.scale(-1.0F, -1.0F, 1.0F);
+    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(bodyYaw - 180.0F));
+
+    float scale = entity.getScale();
+    if (scale != 1.0F) {
+      float inverseScale = 1.0F / scale;
+      matrices.scale(inverseScale, inverseScale, inverseScale);
+    }
   }
 
   private void renderSoulFire(MatrixStack matrices,
