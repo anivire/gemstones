@@ -35,7 +35,7 @@ public final class ItemsRegistry {
 
   public static final Item MOSSY_BOX = register("mossy_box",
       settings -> new MossyBox(settings),
-      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 64));
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 16));
 
   public static final Item DIAMOND_TIPPED_CHISEL = register("diamond_tipped_chisel",
       settings -> new ChiselItem(settings),

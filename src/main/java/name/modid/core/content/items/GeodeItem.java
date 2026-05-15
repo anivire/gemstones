@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -118,14 +119,26 @@ public class GeodeItem extends Item {
       return TypedActionResult.fail(geodeStack);
     }
 
-    world.playSound(null, user.getX(), user.getY(), user.getZ(),
-        SoundEvents.BLOCK_AMETHYST_CLUSTER_BREAK, SoundCategory.PLAYERS, 0.5F,
-        ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+    playOpenSound(world, user);
 
     user.dropItem(gemstoneStack, false);
 
     geodeStack.decrement(1);
     return TypedActionResult.success(geodeStack, true);
+  }
+
+  private void playOpenSound(World world, PlayerEntity user) {
+    SoundEvent stoneBreakSound = geodeId.contains("deepslate")
+        ? SoundEvents.BLOCK_DEEPSLATE_BREAK
+        : SoundEvents.BLOCK_STONE_BREAK;
+
+    world.playSound(null, user.getX(), user.getY(), user.getZ(),
+        stoneBreakSound, SoundCategory.PLAYERS, 0.65F,
+        0.75F + world.random.nextFloat() * 0.15F);
+
+    world.playSound(null, user.getX(), user.getY(), user.getZ(),
+        SoundEvents.BLOCK_AMETHYST_CLUSTER_BREAK, SoundCategory.PLAYERS, 0.55F,
+        ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 1.8F);
   }
 
   @Override

@@ -37,7 +37,9 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
   public static final int SLOT_RESULT = 3;
 
   private final Inventory inventory;
+  private final BlockPos pos;
   private boolean lastGemBroken = false;
+  private Boolean preparedExtractBreak = null;
 
   public JewelryTableScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
     this(syncId, playerInventory, playerInventory.player.getWorld().getBlockEntity(pos));
@@ -46,6 +48,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
   public JewelryTableScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity) {
     super(ScreenRegistry.JEWELRY_TABLE_SCREEN_HANDLER, syncId);
     this.inventory = (Inventory) blockEntity;
+    this.pos = blockEntity.getPos();
 
     checkSize(this.inventory, 4);
 
@@ -237,16 +240,21 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       int idx = GemstoneSlotHelper.getLastFilledSlotIndex(base);
 
       if (idx != -1) {
-        boolean broken = (player.getWorld().random.nextFloat() < GEM_DESTROY_EXTRACT_CHANCE);
+        boolean broken = getPreparedExtractBreak(player);
         lastGemBroken = broken;
 
         GemstoneSlotHelper.clearGemstoneAtIndex(base, idx);
         inventory.setStack(SLOT_BASE, base);
         sendContentUpdates();
+
+        if (broken) {
+          playGemBrokenSound(player);
+        } else {
+          playExtractSound(player);
+        }
       }
 
       damageActionTool(player, 1);
-      playExtractSound(player);
     } else if (mode == ActionMode.EXPAND) {
       ItemStack base = inventory.getStack(SLOT_BASE);
       ItemStack crystal = inventory.getStack(SLOT_GEM);
@@ -282,6 +290,31 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     return lastGemBroken;
   }
 
+  public boolean prepareExtractBreak(PlayerEntity player) {
+    if (getMode() != ActionMode.EXTRACT) {
+      return false;
+    }
+
+    if (preparedExtractBreak == null) {
+      preparedExtractBreak = player.getWorld().random.nextFloat() < GEM_DESTROY_EXTRACT_CHANCE;
+    }
+
+    return preparedExtractBreak;
+  }
+
+  public void clearPreparedExtractBreak() {
+    preparedExtractBreak = null;
+  }
+
+  private boolean getPreparedExtractBreak(PlayerEntity player) {
+    boolean broken = preparedExtractBreak != null
+        ? preparedExtractBreak
+        : player.getWorld().random.nextFloat() < GEM_DESTROY_EXTRACT_CHANCE;
+
+    preparedExtractBreak = null;
+    return broken;
+  }
+
   private void damageActionTool(PlayerEntity player, int amount) {
     ItemStack tool = inventory.getStack(SLOT_ACTION);
     if (tool.isEmpty())
@@ -310,26 +343,41 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
   private void playInsertSound(PlayerEntity player) {
     if (player.getWorld().isClient)
       return;
+
     var w = player.getWorld();
-    var pos = player.getBlockPos();
-    w.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1f, 1f);
-    w.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.6f, 1.2f);
+
+    w.playSound(null, pos, SoundEvents.BLOCK_VAULT_INSERT_ITEM, SoundCategory.BLOCKS, 0.55f, 1.35f);
+    w.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_CLUSTER_HIT, SoundCategory.BLOCKS, 0.55f, 0.75f);
   }
 
   private void playExpandSound(PlayerEntity player) {
     if (player.getWorld().isClient)
       return;
+
     var w = player.getWorld();
-    var pos = player.getBlockPos();
-    w.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1f, 1.2f);
+
+    w.playSound(null, pos, SoundEvents.BLOCK_SMITHING_TABLE_USE, SoundCategory.BLOCKS, 0.9f, 0.95f);
+    w.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_CLUSTER_HIT, SoundCategory.BLOCKS, 0.55f, 0.75f);
   }
 
   private void playExtractSound(PlayerEntity player) {
     if (player.getWorld().isClient)
       return;
+
     var w = player.getWorld();
-    var pos = player.getBlockPos();
-    w.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 0.8f, 1f);
+
+    w.playSound(null, pos, SoundEvents.ITEM_BUNDLE_REMOVE_ONE, SoundCategory.BLOCKS, 0.75f, 0.95f);
+    w.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_CLUSTER_HIT, SoundCategory.BLOCKS, 0.55f, 0.75f);
+  }
+
+  private void playGemBrokenSound(PlayerEntity player) {
+    if (player.getWorld().isClient)
+      return;
+
+    var world = player.getWorld();
+
+    world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1f, 0.8f);
+    world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.7f, 0.8f);
   }
 
   @Override
@@ -362,10 +410,9 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     newStack = original.copy();
 
     if (invSlot == SLOT_RESULT) {
-      if (getMode() == ActionMode.EXTRACT && wasLastGemBroken()) {
+      if (getMode() == ActionMode.EXTRACT && prepareExtractBreak(player)) {
         slot.setStack(ItemStack.EMPTY);
 
-        playGemBrokenSound(player);
         finalizeTakeResult(player);
 
         this.updateOutputs();
@@ -377,6 +424,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       }
 
       if (!this.insertItem(original, this.inventory.size(), this.slots.size(), true)) {
+        clearPreparedExtractBreak();
         return ItemStack.EMPTY;
       }
 
@@ -404,17 +452,6 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     }
 
     return newStack;
-  }
-
-  private void playGemBrokenSound(PlayerEntity player) {
-    if (player.getWorld().isClient)
-      return;
-
-    var world = player.getWorld();
-    var pos = player.getBlockPos();
-
-    world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1f, 0.7f);
-    world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.7f, 0.6f);
   }
 
   public Inventory getInventory() {
