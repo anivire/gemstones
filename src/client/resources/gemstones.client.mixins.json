@@ -6,7 +6,9 @@
     "ModelRenderer",
     "FeaturesRenderer",
     "BlockOutlineRenderer",
-    "SocketedItemsTooltip"
+    "SocketedItemsTooltip",
+    "WorldRendererAccessor",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

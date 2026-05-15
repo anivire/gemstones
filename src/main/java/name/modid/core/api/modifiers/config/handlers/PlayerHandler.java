@@ -13,8 +13,9 @@ import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.network.OreVisionPayload;
 import name.modid.core.utils.GetRandomBuff;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -23,7 +24,6 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -83,28 +83,40 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       return;
     }
 
-    int RADIUS = 12;
+    int RADIUS = 6;
     BlockPos ORIGIN_POS = player.getBlockPos();
 
-    var valuableOres = List.of(
-        net.minecraft.block.Blocks.DIAMOND_ORE,
-        net.minecraft.block.Blocks.DEEPSLATE_DIAMOND_ORE,
-        net.minecraft.block.Blocks.EMERALD_ORE,
-        net.minecraft.block.Blocks.DEEPSLATE_EMERALD_ORE,
-        net.minecraft.block.Blocks.ANCIENT_DEBRIS,
-        net.minecraft.block.Blocks.GOLD_ORE,
-        net.minecraft.block.Blocks.DEEPSLATE_GOLD_ORE,
-        net.minecraft.block.Blocks.NETHER_GOLD_ORE);
+    Map<Block, Integer> valuableOres = Map.ofEntries(
+        Map.entry(Blocks.DIAMOND_ORE, 0x2EE0FF),
+        Map.entry(Blocks.DEEPSLATE_DIAMOND_ORE, 0x2EE0FF),
+        Map.entry(Blocks.EMERALD_ORE, 0x2EFF35),
+        Map.entry(Blocks.DEEPSLATE_EMERALD_ORE, 0x2EFF35),
+        Map.entry(Blocks.ANCIENT_DEBRIS, 0xB06A4F),
+        Map.entry(Blocks.GOLD_ORE, 0xFFF52E),
+        Map.entry(Blocks.DEEPSLATE_GOLD_ORE, 0xFFF52E),
+        Map.entry(Blocks.NETHER_GOLD_ORE, 0xFFF52E),
+        Map.entry(Blocks.IRON_ORE, 0xFFD1BD),
+        Map.entry(Blocks.DEEPSLATE_IRON_ORE, 0xFFD1BD),
+        Map.entry(Blocks.COPPER_ORE, 0xEB5E34),
+        Map.entry(Blocks.DEEPSLATE_COPPER_ORE, 0xEB5E34),
+        Map.entry(Blocks.COAL_ORE, 0x505050),
+        Map.entry(Blocks.DEEPSLATE_COAL_ORE, 0x505050),
+        Map.entry(Blocks.REDSTONE_ORE, 0xFF2E2E),
+        Map.entry(Blocks.DEEPSLATE_REDSTONE_ORE, 0xFF2E2E),
+        Map.entry(Blocks.LAPIS_ORE, 0x312EFF),
+        Map.entry(Blocks.DEEPSLATE_LAPIS_ORE, 0x312EFF),
+        Map.entry(Blocks.NETHER_QUARTZ_ORE, 0xFFFFFF));
 
-    List<BlockPos> found = new ArrayList<>();
+    List<OreVisionPayload.HighlightedOre> found = new ArrayList<>();
 
     for (int dx = -RADIUS; dx <= RADIUS; dx++) {
       for (int dy = -RADIUS; dy <= RADIUS; dy++) {
         for (int dz = -RADIUS; dz <= RADIUS; dz++) {
           BlockPos pos = ORIGIN_POS.add(dx, dy, dz);
 
-          if (valuableOres.contains(serverWorld.getBlockState(pos).getBlock())) {
-            found.add(pos);
+          Integer color = valuableOres.get(serverWorld.getBlockState(pos).getBlock());
+          if (color != null) {
+            found.add(new OreVisionPayload.HighlightedOre(pos.toImmutable(), color));
           }
         }
       }
@@ -114,16 +126,10 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       return;
     }
 
-    PacketByteBuf buf = PacketByteBufs.create();
-    buf.writeVarInt(found.size());
-
-    for (BlockPos pos : found) {
-      buf.writeBlockPos(pos);
-    }
-
     ServerPlayNetworking.send(player, new OreVisionPayload(found));
   }
 
+  // TODO: structures pool
   private void handleIncreaseSpawnrate(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
