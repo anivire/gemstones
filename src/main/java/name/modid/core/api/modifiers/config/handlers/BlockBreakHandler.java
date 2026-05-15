@@ -42,7 +42,10 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
   private static final int FLAG_NOTIFY_LISTENERS = 1;
   private static final int FLAG_NEIGHBORS = 8;
   private static final int FLAG_FORCE_STATE = 16;
+  private static final int UPDATE_FLAGS = FLAG_NOTIFY_LISTENERS | FLAG_NEIGHBORS;
+  private static final int FORCE_UPDATE_FLAGS = UPDATE_FLAGS | FLAG_FORCE_STATE;
   private static final Set<Identifier> BLOCKED_ITEMS = new HashSet<>();
+  private static final ThreadLocal<Boolean> SUPPRESS_MINER = ThreadLocal.withInitial(() -> false);
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
@@ -59,7 +62,11 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
         case "ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP" -> handleAdditionalGoldDrop(group, ctx);
         case "ON_BLOCK_BREAK_EXTRA_HEALTH" -> handleExtraHealth(group, ctx);
         case "ON_BLOCK_BREAK_RANDOM_ITEM_DROP" -> handleRandomItemDrop(group, ctx);
-        case "ON_BLOCK_BREAK_MINER" -> handleMiner(group, ctx);
+        case "ON_BLOCK_BREAK_MINER" -> {
+          if (!SUPPRESS_MINER.get()) {
+            handleMiner(group, ctx);
+          }
+        }
         default -> {
         }
       }
@@ -108,7 +115,10 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)
         && ctx.getWorld() instanceof ServerWorld serverWorld) {
       BlockPos pos = ctx.getBlockPos();
-      serverWorld.setBlockState(pos, ctx.getBlockState(), Block.FORCE_STATE);
+      serverWorld.setBlockState(
+          pos,
+          ctx.getBlockState(),
+          FORCE_UPDATE_FLAGS);
 
       serverWorld.spawnParticles(ParticleTypes.CLOUD,
           pos.getX() + 0.5,
@@ -264,6 +274,8 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       for (int y = minY; y <= maxY; y++) {
         for (int z = minZ; z <= maxZ; z++) {
           m.set(x, y, z);
+          if (m.equals(targetPos))
+            continue;
           if (!world.isInBuildLimit(m))
             continue;
 
@@ -271,7 +283,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
           if (!canBreak(world, m, state))
             continue;
 
-          breakBlockForce(world, player, m, state);
+          breakBlockAsPlayer(world, player, m, state);
         }
       }
     }
@@ -288,18 +300,21 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     return hardness >= 0.0F;
   }
 
-  private void breakBlockForce(ServerWorld world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
-    world.breakBlock(pos, true, player);
+  private void breakBlockAsPlayer(ServerWorld world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
+    BlockPos immutablePos = pos.toImmutable();
+    boolean suppressMiner = SUPPRESS_MINER.get();
 
-    if (!world.getBlockState(pos).isAir()) {
-      world.setBlockState(
-          pos,
-          Blocks.AIR.getDefaultState(),
-          FLAG_NOTIFY_LISTENERS | FLAG_NEIGHBORS | FLAG_FORCE_STATE);
+    SUPPRESS_MINER.set(true);
+    try {
+      player.interactionManager.tryBreakBlock(immutablePos);
+    } finally {
+      SUPPRESS_MINER.set(suppressMiner);
     }
 
-    player.networkHandler.sendPacket(new BlockUpdateS2CPacket(world, pos));
-    world.updateNeighborsAlways(pos, Blocks.AIR);
+    player.networkHandler.sendPacket(new BlockUpdateS2CPacket(world, immutablePos));
+    world.updateListeners(immutablePos, state, world.getBlockState(immutablePos), UPDATE_FLAGS);
+    world.getChunkManager().markForUpdate(immutablePos);
+    world.updateNeighborsAlways(immutablePos, Blocks.AIR);
   }
 
   private Box getPlaneBoundsByFace(BlockPos center, Direction face) {
