@@ -15,6 +15,8 @@ import name.modid.core.api.modifiers.config.ModifierConfig.HitEffectProjectileCo
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.content.effects.StunnedEffect;
+import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -25,6 +27,11 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 
 public class EffectHandler {
+  private static boolean canApplyEffect(RegistryEntry<StatusEffect> effect, LivingEntity target) {
+    return !effect.equals(EffectsRegistry.STUNNED_EFFECT)
+        || !StunnedEffect.isImmuneToStun(target);
+  }
+
   public static class Area implements ModifierHandler<ModifierConfig.AreaEffectConfig> {
     @Override
     public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
@@ -70,6 +77,10 @@ public class EffectHandler {
               });
 
           for (LivingEntity entity : nearby) {
+            if (!canApplyEffect(effect, entity)) {
+              continue;
+            }
+
             entity.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier, false, true, true));
           }
 
@@ -129,7 +140,8 @@ public class EffectHandler {
 
           double combinedChance = ModifierUtils.cappedProcChance(chances);
 
-          if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+          if (canApplyEffect(effect, target)
+              && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
             target.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier));
           }
         }
@@ -163,7 +175,8 @@ public class EffectHandler {
 
           double combinedChance = ModifierUtils.cappedProcChance(chances);
 
-          if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
+          if (canApplyEffect(effect, target)
+              && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
             target.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier));
           }
         }
