@@ -58,7 +58,7 @@ public class JewelryTableBlockEntityRenderer implements BlockEntityRenderer<Jewe
 
     if (!stackRight.isEmpty()) {
       matrices.push();
-      matrices.translate(0.2f, 0, 0);
+      matrices.translate(0.2f, -0.001f, 0);
       matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90f));
       matrices.scale(0.5f, 0.5f, 0.5f);
       itemRenderer.renderItem(

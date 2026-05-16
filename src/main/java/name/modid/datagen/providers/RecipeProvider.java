@@ -28,7 +28,7 @@ public class RecipeProvider extends FabricRecipeProvider {
         .pattern("PP ")
         .pattern("PP ")
         .input('D', Items.DIAMOND)
-        .input('G', Items.GLASS)
+        .input('G', Items.RED_WOOL)
         .input('P', ItemTags.PLANKS)
         .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
         .offerTo(exporter);

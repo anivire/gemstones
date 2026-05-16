@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "gemstones:block/jewelry_table"
+    },
+    "facing=east": {
+      "model": "gemstones:block/jewelry_table",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "gemstones:block/jewelry_table",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gemstones:block/jewelry_table",
+      "y": 270
+    }
+  }
+}

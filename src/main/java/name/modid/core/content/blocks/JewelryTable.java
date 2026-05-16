@@ -5,26 +5,44 @@ import org.jetbrains.annotations.Nullable;
 import com.mojang.serialization.MapCodec;
 
 import name.modid.core.content.blocks.entity.JewelryTableBlockEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 @SuppressWarnings("unused")
 public class JewelryTable extends BlockWithEntity implements BlockEntityProvider {
   public static final MapCodec<JewelryTable> CODEC = JewelryTable.createCodec(JewelryTable::new);
+  public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
   protected JewelryTable(Settings settings) {
     super(settings);
+    setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
+  }
+
+  @Override
+  protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    builder.add(FACING);
+  }
+
+  @Override
+  public BlockState getPlacementState(ItemPlacementContext ctx) {
+    return getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
   }
 
   @Override
