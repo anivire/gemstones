@@ -72,6 +72,8 @@ public final class ItemsRegistry {
     all.add(DIAMOND_TIPPED_CHISEL);
     all.add(NETHERITE_TIPPED_CHISEL);
     all.add(JEWELRY_PLIERS);
+    all.add(JEWELRY_HAMMER);
+    all.add(EXPANSION_CRYSTAL);
     all.add(BlocksRegistry.JEWELRY_TABLE.asItem());
     return all;
   }

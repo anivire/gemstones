@@ -1,5 +1,5 @@
 {
-  "gemstone_type": "WITHER_BONE",
+  "gemstone_type": "WITHER_SHELL",
   "modifiers": {
     "MELEE": {
       "type": "ON_HIT_MELEE",
