@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "gemstones",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "name": "Gemstones",
   "description": "Add various Gemstones to your equipment, tools and weapons!",
   "authors": [
@@ -36,8 +36,5 @@
     "java": ">=21",
     "fabric-api": ">=0.100.7+1.21.1"
   },
-  "suggests": {},
-  "minecraft:font": [
-    "gemstones:gemstone"
-  ]
+  "suggests": {}
 }

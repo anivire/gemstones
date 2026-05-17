@@ -1,5 +1,6 @@
 package name.modid;
 
+import name.modid.core.api.ClientDatapackSyncHandler;
 import name.modid.core.api.ClientKeyHandler;
 import name.modid.core.api.OreHighlighter;
 import name.modid.core.api.entities.jeweleryTable.JewelryTableBlockEntityRenderer;
@@ -32,6 +33,7 @@ public class GemstonesClient implements ClientModInitializer {
         JewelryTableBlockEntityRenderer::new);
 
     ModelsRegistry.initialize();
+    ClientDatapackSyncHandler.initialize();
     ClientParticlesRegistry.initialize();
     ClientKeyHandler.initialize();
 

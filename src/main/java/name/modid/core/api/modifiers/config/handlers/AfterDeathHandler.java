@@ -49,19 +49,19 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
   private void handleDetonate(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getOwner() instanceof LivingEntity owner)
-        || !owner.hasStatusEffect(EffectsRegistry.DETONATE_EFFECT)) {
+    if (!(ctx.getTarget() instanceof LivingEntity target)
+        || !target.hasStatusEffect(EffectsRegistry.DETONATE_EFFECT)) {
       return;
     }
 
-    owner.getWorld().createExplosion(
-        owner,
+    target.getWorld().createExplosion(
+        target,
         null,
         null,
-        owner.getX(),
-        owner.getY(),
-        owner.getZ(),
-        0.5F + owner.getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(), false,
+        target.getX(),
+        target.getY(),
+        target.getZ(),
+        0.5F + target.getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(), false,
         World.ExplosionSourceType.MOB);
   }
 
