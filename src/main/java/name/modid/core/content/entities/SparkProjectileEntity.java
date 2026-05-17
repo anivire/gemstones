@@ -17,11 +17,19 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
 public class SparkProjectileEntity extends PersistentProjectileEntity {
   private static final int HOMING_DELAY = 10;
+  private static final int MAX_AGE = 20 * 10;
+  private static final double HOMING_ACCELERATION = 0.08;
+  private static final double AVOIDANCE_ACCELERATION = 0.12;
+  private static final double WALL_CHECK_DISTANCE = 0.8;
   private final float SPARK_DAMAGE = 3.0F;
 
   private final double maxSpeed;
@@ -29,8 +37,9 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
   public SparkProjectileEntity(EntityType<? extends SparkProjectileEntity> type, World world) {
     super(type, world);
     this.setNoGravity(true);
+    this.setNoClip(true);
     this.pickupType = PickupPermission.DISALLOWED;
-    this.maxSpeed = 0.4 + world.random.nextDouble() * 0.2;
+    this.maxSpeed = 0.22 + world.random.nextDouble() * 0.10;
   }
 
   public SparkProjectileEntity(World world, double x, double y, double z) {
@@ -51,7 +60,28 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
 
   @Override
   public void tick() {
+    this.inGround = false;
+    this.inGroundTime = 0;
+    this.setNoClip(true);
+
+    LivingEntity target = this.age >= HOMING_DELAY ? getHomingTarget() : null;
+    Vec3d velocity = this.getVelocity();
+
+    if (target != null) {
+      velocity = velocity.add(target.getEyePos().subtract(this.getPos()).normalize().multiply(HOMING_ACCELERATION));
+    }
+
+    velocity = slideAlongWall(velocity, target);
+
+    if (target != null && isPathBlocked(velocity)) {
+      velocity = velocity.add(getAvoidanceVector(target).multiply(AVOIDANCE_ACCELERATION));
+    }
+
+    this.setVelocity(clampVelocity(velocity));
     super.tick();
+    this.inGround = false;
+    this.inGroundTime = 0;
+    this.setNoClip(true);
 
     if (this.getWorld().isClient) {
       Vec3d vel = this.getVelocity();
@@ -74,31 +104,96 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
       }
     }
 
-    if (this.age >= HOMING_DELAY) {
-      LivingEntity target = this.getWorld().getClosestEntity(
-          LivingEntity.class,
-          TargetPredicate.createAttackable().ignoreVisibility()
-              .setPredicate(
-                  (entity) -> entity != this.getOwner() && !(entity instanceof PlayerEntity)),
-          null,
-          this.getX(), this.getY(), this.getZ(),
-          this.getBoundingBox().expand(10.0));
-
-      if (target != null) {
-        Vec3d toTarget = target.getEyePos().subtract(this.getPos()).normalize();
-        Vec3d vel = this.getVelocity().add(toTarget.multiply(0.2));
-
-        if (vel.lengthSquared() > maxSpeed * maxSpeed) {
-          this.setVelocity(vel.normalize().multiply(maxSpeed));
-        } else {
-          this.setVelocity(vel);
-        }
-      }
-    }
-
-    if (this.age > 100) {
+    if (this.age > MAX_AGE) {
       this.discard();
     }
+  }
+
+  private LivingEntity getHomingTarget() {
+    return this.getWorld().getClosestEntity(
+        LivingEntity.class,
+        TargetPredicate.createAttackable().ignoreVisibility()
+            .setPredicate(
+                (entity) -> entity != this.getOwner() && !(entity instanceof PlayerEntity)),
+        null,
+        this.getX(), this.getY(), this.getZ(),
+        this.getBoundingBox().expand(10.0));
+  }
+
+  private boolean isPathBlocked(Vec3d velocity) {
+    if (velocity.lengthSquared() < 1.0E-4) {
+      return false;
+    }
+
+    Vec3d nextPos = this.getPos().add(velocity.normalize().multiply(0.75));
+    BlockPos blockPos = BlockPos.ofFloored(nextPos);
+    return !this.getWorld().getBlockState(blockPos)
+        .getCollisionShape(this.getWorld(), blockPos)
+        .isEmpty();
+  }
+
+  private Vec3d slideAlongWall(Vec3d velocity, LivingEntity target) {
+    if (velocity.lengthSquared() < 1.0E-4) {
+      return velocity;
+    }
+
+    Vec3d start = this.getPos();
+    Vec3d end = start.add(velocity.normalize().multiply(Math.max(WALL_CHECK_DISTANCE, velocity.length() + 0.2)));
+    HitResult hit = this.getWorld().raycast(new RaycastContext(
+        start,
+        end,
+        RaycastContext.ShapeType.COLLIDER,
+        RaycastContext.FluidHandling.NONE,
+        this));
+
+    if (!(hit instanceof BlockHitResult blockHit)
+        || blockHit.getType() == HitResult.Type.MISS) {
+      return velocity;
+    }
+
+    Direction side = blockHit.getSide();
+    Vec3d normal = Vec3d.of(side.getVector());
+    Vec3d slide = velocity.subtract(normal.multiply(velocity.dotProduct(normal)));
+
+    if (slide.lengthSquared() < 1.0E-4 && target != null) {
+      Vec3d desired = target.getEyePos().subtract(this.getPos()).normalize();
+      slide = desired.subtract(normal.multiply(desired.dotProduct(normal))).multiply(velocity.length());
+    }
+
+    if (slide.lengthSquared() < 1.0E-4) {
+      slide = getFallbackSlideVector(side).multiply(velocity.length());
+    }
+
+    Vec3d nudgedPos = blockHit.getPos().add(normal.multiply(0.08));
+    this.setPosition(nudgedPos.x, nudgedPos.y, nudgedPos.z);
+    return slide.normalize().multiply(Math.max(0.08, velocity.length() * 0.9));
+  }
+
+  private Vec3d getFallbackSlideVector(Direction side) {
+    return switch (side.getAxis()) {
+      case X -> new Vec3d(0.0, 0.35, 1.0).normalize();
+      case Y -> new Vec3d(1.0, 0.0, 0.0);
+      case Z -> new Vec3d(1.0, 0.35, 0.0).normalize();
+    };
+  }
+
+  private Vec3d getAvoidanceVector(LivingEntity target) {
+    Vec3d toTarget = target.getEyePos().subtract(this.getPos()).normalize();
+    Vec3d sideways = new Vec3d(-toTarget.z, 0.0, toTarget.x).normalize();
+
+    if ((this.age / 20) % 2 == 0) {
+      sideways = sideways.multiply(-1.0);
+    }
+
+    return new Vec3d(sideways.x, 0.85, sideways.z).normalize();
+  }
+
+  private Vec3d clampVelocity(Vec3d velocity) {
+    if (velocity.lengthSquared() > maxSpeed * maxSpeed) {
+      return velocity.normalize().multiply(maxSpeed);
+    }
+
+    return velocity;
   }
 
   @Override
@@ -122,16 +217,9 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
 
   @Override
   protected void onBlockHit(BlockHitResult hit) {
-    super.onBlockHit(hit);
-    if (this.getWorld() instanceof ServerWorld serverWorld) {
-      serverWorld.spawnParticles(
-          ParticleTypes.FLAME,
-          this.getX(), this.getY(), this.getZ(),
-          10,
-          0.3, 0.3, 0.3,
-          0.05);
-      this.discard();
-    }
+    this.inGround = false;
+    this.inGroundTime = 0;
+    this.setNoClip(true);
   }
 
   @Override

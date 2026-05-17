@@ -61,8 +61,8 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
         target.getX(),
         target.getY(),
         target.getZ(),
-        0.5F + target.getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(), false,
-        World.ExplosionSourceType.MOB);
+        3.0F + target.getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(), false,
+        World.ExplosionSourceType.TNT);
   }
 
   // NOTE: don't capped

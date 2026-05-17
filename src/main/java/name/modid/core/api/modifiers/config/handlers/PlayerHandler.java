@@ -133,7 +133,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
   private void handleIncreaseSpawnrate(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    final int SPAWN_COOLDOWN = 7;
+    final int SPAWN_COOLDOWN = 12;
 
     if (!(ctx.getOwner() instanceof ServerPlayerEntity player)
         || !(ctx.getWorld() instanceof ServerWorld world)

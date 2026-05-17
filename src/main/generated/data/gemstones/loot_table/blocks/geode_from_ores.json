@@ -12,7 +12,7 @@
           "tag": "#gemstones:stone_ores"
         },
         {
-          "base_chance": 0.055,
+          "base_chance": 0.03,
           "condition": "gemstones:geode_chance"
         }
       ],
@@ -35,7 +35,7 @@
           "tag": "#gemstones:deepslate_ores"
         },
         {
-          "base_chance": 0.035,
+          "base_chance": 0.02,
           "condition": "gemstones:geode_chance"
         }
       ],

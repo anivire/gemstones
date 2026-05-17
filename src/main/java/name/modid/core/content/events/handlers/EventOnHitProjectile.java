@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.ModifierConfig.HitEffectProjectileConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.HitProjectileConfig;
+import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierContext.ContextBuilder;
 import name.modid.core.api.modifiers.config.ModifierManager;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
@@ -25,13 +27,6 @@ public class EventOnHitProjectile {
       return;
     }
 
-    List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
-        serverPlayer, HitProjectileConfig.class);
-
-    if (modifiers.isEmpty()) {
-      return;
-    }
-
     ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
         .withOwner(serverPlayer)
         .withProjectile(projectile)
@@ -42,6 +37,20 @@ public class EventOnHitProjectile {
       ctxBuilder.withTarget(living);
     }
 
-    ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctxBuilder.build());
+    ModifierContext ctx = ctxBuilder.build();
+
+    List<GemstoneModifier> hitModifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
+        serverPlayer, HitProjectileConfig.class);
+
+    if (!hitModifiers.isEmpty()) {
+      ModifierManager.applyModifiers(new ArrayList<>(hitModifiers), ctx);
+    }
+
+    List<GemstoneModifier> effectModifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
+        serverPlayer, HitEffectProjectileConfig.class);
+
+    if (!effectModifiers.isEmpty()) {
+      ModifierManager.applyModifiers(new ArrayList<>(effectModifiers), ctx);
+    }
   }
 }

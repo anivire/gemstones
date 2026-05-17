@@ -14,7 +14,6 @@ import name.modid.core.content.events.handlers.EventOnMobDamage;
 import name.modid.core.content.events.handlers.EventOnPlayerDamage;
 import name.modid.core.content.events.handlers.EventOnPotionBrew;
 import name.modid.core.content.events.handlers.EventPlayer;
-import name.modid.core.content.events.handlers.EventProjectileEffect;
 import name.modid.core.content.events.handlers.PlayerRandomBuff;
 import name.modid.core.content.events.loot.BlocksLootTable;
 import name.modid.core.content.events.loot.ChestsLootTable;
@@ -47,7 +46,6 @@ public class EventsRegistry {
       }
     });
     AttackEntityCallback.EVENT.register(EventMeleeEffect::setupEvent);
-    ServerLivingEntityEvents.AFTER_DAMAGE.register(EventProjectileEffect::setup);
     ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnMobDamage::setup);
     ServerLivingEntityEvents.AFTER_DAMAGE.register(EventOnPlayerDamage::setup);
 
