@@ -1,6 +1,7 @@
 package name.modid.core.network;
 
 import name.modid.core.utils.airJump.AirJumpLogic;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -9,6 +10,7 @@ public final class NetworkHandler {
   public static void initialize() {
     AirJumpPayload.registerCodecs();
     PayloadTypeRegistry.playS2C().register(OreVisionPayload.ID, OreVisionPayload.CODEC);
+    PayloadTypeRegistry.playS2C().register(DatapackSyncPayload.ID, DatapackSyncPayload.CODEC);
 
     ServerPlayNetworking.registerGlobalReceiver(
         AirJumpPayload.ID,
@@ -23,5 +25,11 @@ public final class NetworkHandler {
             }
           });
         });
+
+    ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
+      if (ServerPlayNetworking.canSend(player, DatapackSyncPayload.ID)) {
+        ServerPlayNetworking.send(player, DatapackSyncPayload.current());
+      }
+    });
   }
 }

@@ -5,8 +5,10 @@
   "client": [
     "ModelRenderer",
     "FeaturesRenderer",
-    "BlockOutlineRenderer",
-    "SocketedItemsTooltip"
+    "MultiMinerMiningFeedbackMixin",
+    "SocketedItemsTooltip",
+    "WorldRendererAccessor",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

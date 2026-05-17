@@ -3,7 +3,12 @@
   "modifiers": {
     "MELEE": {
       "type": "ON_HIT_EFFECT_MELEE",
-      "chance_levels": [0.08, 0.16, 0.24, 0.36],
+      "chance_levels": [
+        0.08,
+        0.16,
+        0.24,
+        0.36
+      ],
       "amplifier": 0,
       "effect_id": "gemstones:guardian_smite",
       "duration": 6,
@@ -12,19 +17,39 @@
     },
     "RANGED": {
       "type": "ON_HIT_PROJECTILE",
-      "chance_levels": [0.05, 0.10, 0.15, 0.25],
+      "chance_levels": [
+        0.05,
+        0.10,
+        0.15,
+        0.25
+      ],
       "event_type": "ON_HIT_LIGHTNING_BOLT"
     },
     "TOOLS": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:player.submerged_mining_speed",
-      "value_levels": [0.15, 0.20, 0.25, 0.30],
+      "value_levels": [
+        0.15,
+        0.20,
+        0.25,
+        0.30
+      ],
       "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "ARMOR": {
       "type": "ON_FISHING",
-      "value_levels": [0.03, 0.055, 0.1, 0.155],
-      "additional_value_levels": [0.0, 0.0, 0.0, 0.0],
+      "value_levels": [
+        0.03,
+        0.055,
+        0.1,
+        0.155
+      ],
+      "additional_value_levels": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
       "event_type": "ON_FISHING_INCREASE_MOSSY_BOX_DROP"
     }
   }

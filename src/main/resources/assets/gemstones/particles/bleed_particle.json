@@ -1,3 +1,7 @@
 {
-  "textures": ["gemstones:bleed_particle"]
+  "textures": [
+    "gemstones:bleed/bleed_01",
+    "gemstones:bleed/bleed_02",
+    "gemstones:bleed/bleed_03"
+  ]
 }

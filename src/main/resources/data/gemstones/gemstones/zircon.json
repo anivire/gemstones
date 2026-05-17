@@ -4,19 +4,34 @@
     "MELEE": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:player.entity_interaction_range",
-      "value_levels": [0.15, 0.20, 0.25, 0.35],
+      "value_levels": [
+        0.15,
+        0.20,
+        0.25,
+        0.35
+      ],
       "operation": "ADD_VALUE"
     },
     "RANGED": {
       "type": "ATTRIBUTE",
       "attribute_id": "gemstones:projectile_speed",
-      "value_levels": [0.06, 0.10, 0.15, 0.2],
+      "value_levels": [
+        0.06,
+        0.10,
+        0.15,
+        0.2
+      ],
       "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "TOOLS": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:player.block_interaction_range",
-      "value_levels": [0.5, 0.75, 1.25, 1.5],
+      "value_levels": [
+        0.5,
+        0.75,
+        1.25,
+        1.5
+      ],
       "operation": "ADD_VALUE"
     },
     "ARMOR": {
@@ -24,11 +39,22 @@
       "instances": [
         {
           "attribute_id": "minecraft:generic.jump_strength",
-          "value_levels": [0.025, 0.055, 0.075, 0.1],
+          "value_levels": [
+            0.025,
+            0.055,
+            0.075,
+            0.1
+          ],
           "operation": "ADD_VALUE"
-        },{
+        },
+        {
           "attribute_id": "minecraft:generic.step_height",
-          "value_levels": [0.15, 0.25, 0.4, 0.5],
+          "value_levels": [
+            0.15,
+            0.25,
+            0.4,
+            0.5
+          ],
           "operation": "ADD_VALUE"
         }
       ]

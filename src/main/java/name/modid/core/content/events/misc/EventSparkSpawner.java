@@ -27,7 +27,7 @@ public class EventSparkSpawner {
       double z = Math.sin(yaw) * Math.sin(pitch);
       Vec3d dir = new Vec3d(x, y, z).normalize();
 
-      shard.setVelocity(dir.multiply(0.4 + serverWorld.random.nextDouble() * 0.2));
+      shard.setVelocity(dir.multiply(0.22 + serverWorld.random.nextDouble() * 0.10));
       serverWorld.spawnEntity(shard);
     }
   }

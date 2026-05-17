@@ -44,11 +44,11 @@ public class SparkProjectileRenderer extends EntityRenderer<SparkProjectileEntit
 
     VertexConsumer mainVc = vertexConsumers.getBuffer(
         RenderLayer.getEntityCutoutNoCull(getTexture(entity)));
-    model.bb_main.render(matrices, mainVc, light, OverlayTexture.DEFAULT_UV, 0xFFFFFF);
+    model.bb_main.render(matrices, mainVc, light, OverlayTexture.DEFAULT_UV, 0xFFFFFFFF);
 
     VertexConsumer outlineVc = vertexConsumers.getBuffer(
         RenderLayer.getEyes(getTexture(entity)));
-    model.bb_outline.render(matrices, outlineVc, 0xF000F0, OverlayTexture.DEFAULT_UV, 0xEF791F);
+    model.bb_outline.render(matrices, outlineVc, 0xF000F0, OverlayTexture.DEFAULT_UV, 0xFFEF791F);
 
     matrices.pop();
 

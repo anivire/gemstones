@@ -34,11 +34,11 @@ public class GemstonesRegistry {
   private static final List<Item> OPAL_GEMSTONES = new ArrayList<>();
   private static final List<Item> JADE_GEMSTONES = new ArrayList<>();
   private static final List<Item> MALACHITE_GEMSTONES = new ArrayList<>();
-  private static final List<Item> SPAWNER_CORE_GEMSTONES = new ArrayList<>();
+  private static final List<Item> RESTLESS_FLAME_GEMSTONES = new ArrayList<>();
   private static final List<Item> AMBER_GEMSTONES = new ArrayList<>();
   private static final List<Item> PYRITE_GEMSTONES = new ArrayList<>();
   private static final List<Item> GARNET_GEMSTONES = new ArrayList<>();
-  private static final List<Item> WITHER_BONE = new ArrayList<>();
+  private static final List<Item> WITHER_SHELL = new ArrayList<>();
   private static final List<Item> POLYCHROME_CRYSTAL = new ArrayList<>();
   private static final List<Item> ONYX = new ArrayList<>();
   private static final List<Item> CRYSTALLIZED_EXPIRIENCE = new ArrayList<>();
@@ -111,9 +111,9 @@ public class GemstonesRegistry {
           settings -> new GemstoneItem(settings, GemstoneType.MALACHITE, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-      SPAWNER_CORE_GEMSTONES.add(ItemsRegistry.register(
-          "spawner_core_" + rarityName,
-          settings -> new GemstoneItem(settings, GemstoneType.SPAWNER_CORE, rarity),
+      RESTLESS_FLAME_GEMSTONES.add(ItemsRegistry.register(
+          "restless_flame_" + rarityName,
+          settings -> new GemstoneItem(settings, GemstoneType.RESTLESS_FLAME, rarity),
           new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       AMBER_GEMSTONES.add(ItemsRegistry.register(
@@ -137,9 +137,9 @@ public class GemstonesRegistry {
           new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
     }
 
-    WITHER_BONE.add(ItemsRegistry.register(
-        "wither_bone_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
-        settings -> new GemstoneItem(settings, GemstoneType.WITHER_BONE, GemstoneQuality.UNUSUAL),
+    WITHER_SHELL.add(ItemsRegistry.register(
+        "wither_shell_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
+        settings -> new GemstoneItem(settings, GemstoneType.WITHER_SHELL, GemstoneQuality.UNUSUAL),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
     ONYX.add(ItemsRegistry.register(
@@ -174,11 +174,11 @@ public class GemstonesRegistry {
     OPAL_GEMSTONES.forEach(entries::add);
     JADE_GEMSTONES.forEach(entries::add);
     MALACHITE_GEMSTONES.forEach(entries::add);
-    SPAWNER_CORE_GEMSTONES.forEach(entries::add);
+    RESTLESS_FLAME_GEMSTONES.forEach(entries::add);
     AMBER_GEMSTONES.forEach(entries::add);
     PYRITE_GEMSTONES.forEach(entries::add);
     GARNET_GEMSTONES.forEach(entries::add);
-    WITHER_BONE.forEach(entries::add);
+    WITHER_SHELL.forEach(entries::add);
     POLYCHROME_CRYSTAL.forEach(entries::add);
     ONYX.forEach(entries::add);
     CRYSTALLIZED_EXPIRIENCE.forEach(entries::add);
@@ -198,11 +198,11 @@ public class GemstonesRegistry {
     all.addAll(OPAL_GEMSTONES);
     all.addAll(JADE_GEMSTONES);
     all.addAll(MALACHITE_GEMSTONES);
-    all.addAll(SPAWNER_CORE_GEMSTONES);
+    all.addAll(RESTLESS_FLAME_GEMSTONES);
     all.addAll(AMBER_GEMSTONES);
     all.addAll(PYRITE_GEMSTONES);
     all.addAll(GARNET_GEMSTONES);
-    all.addAll(WITHER_BONE);
+    all.addAll(WITHER_SHELL);
     all.addAll(POLYCHROME_CRYSTAL);
     all.addAll(ONYX);
     all.addAll(CRYSTALLIZED_EXPIRIENCE);
@@ -252,7 +252,7 @@ public class GemstonesRegistry {
   }
 
   public static List<Item> getSpawnerCoreGemstones() {
-    return SPAWNER_CORE_GEMSTONES;
+    return RESTLESS_FLAME_GEMSTONES;
   }
 
   public static List<Item> getAmberGemstones() {
@@ -268,7 +268,7 @@ public class GemstonesRegistry {
   }
 
   public static List<Item> getWitherBoneGemstones() {
-    return WITHER_BONE;
+    return WITHER_SHELL;
   }
 
   public static List<Item> getPolychromeCrystalGemstones() {
@@ -303,11 +303,11 @@ public class GemstonesRegistry {
       case OPAL -> OPAL_GEMSTONES;
       case JADE -> JADE_GEMSTONES;
       case MALACHITE -> MALACHITE_GEMSTONES;
-      case SPAWNER_CORE -> SPAWNER_CORE_GEMSTONES;
+      case RESTLESS_FLAME -> RESTLESS_FLAME_GEMSTONES;
       case AMBER -> AMBER_GEMSTONES;
       case PYRITE -> PYRITE_GEMSTONES;
       case GARNET -> GARNET_GEMSTONES;
-      case WITHER_BONE -> WITHER_BONE;
+      case WITHER_SHELL -> WITHER_SHELL;
       case POLYCHROME_CRYSTAL -> POLYCHROME_CRYSTAL;
       case ONYX -> ONYX;
       case CRYSTALLIZED_EXPIRIENCE -> CRYSTALLIZED_EXPIRIENCE;

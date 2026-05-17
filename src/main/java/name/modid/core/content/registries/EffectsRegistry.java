@@ -10,7 +10,6 @@ import name.modid.core.content.effects.HarvestMarkEffect;
 import name.modid.core.content.effects.LethalWeaknessEffect;
 import name.modid.core.content.effects.LootTouchEffect;
 import name.modid.core.content.effects.PlagueEffect;
-import name.modid.core.content.effects.QuickSandsEffect;
 import name.modid.core.content.effects.ScarabEffect;
 import name.modid.core.content.effects.SoulBurnEffect;
 import name.modid.core.content.effects.SparklingEffect;
@@ -22,11 +21,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
 public class EffectsRegistry {
-  // public static final RegistryEntry<StatusEffect> EXP_THIRST_EFFECT =
-  // Registry.registerReference(
-  // Registries.STATUS_EFFECT,
-  // Identifier.of(Gemstones.MOD_ID, "exp_thirst"), new ExperienceThirstEffect());
-
   public static final RegistryEntry<StatusEffect> BLEEDING_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "bleeding"), new BleedingEffect());
 
@@ -34,9 +28,10 @@ public class EffectsRegistry {
       Registries.STATUS_EFFECT,
       Identifier.of(Gemstones.MOD_ID, "guardian_smite"), new GuardianSmiteEffect());
 
-  public static final RegistryEntry<StatusEffect> QUICK_SANDS_EFFECT = Registry.registerReference(
-      Registries.STATUS_EFFECT,
-      Identifier.of(Gemstones.MOD_ID, "quick_sands"), new QuickSandsEffect());
+  // public static final RegistryEntry<StatusEffect> QUICK_SANDS_EFFECT =
+  // Registry.registerReference(
+  // Registries.STATUS_EFFECT,
+  // Identifier.of(Gemstones.MOD_ID, "quick_sands"), new QuickSandsEffect());
 
   public static final RegistryEntry<StatusEffect> HARVEST_MARK_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT,

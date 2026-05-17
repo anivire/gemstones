@@ -4,7 +4,6 @@ import name.modid.core.utils.accessors.BrewingStandBlockEntityAccess;
 import net.minecraft.block.BrewingStandBlock;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -19,11 +18,8 @@ public class EventLastBrewer {
       return ActionResult.PASS;
     }
 
-    ItemStack ingredient = stand.getStack(3);
-    if (!ingredient.isEmpty()) {
-      ((BrewingStandBlockEntityAccess) (Object) stand)
-          .setLastBrewer(player.getUuid());
-    }
+    ((BrewingStandBlockEntityAccess) (Object) stand)
+        .setLastBrewer(player.getUuid());
 
     return ActionResult.PASS;
   }

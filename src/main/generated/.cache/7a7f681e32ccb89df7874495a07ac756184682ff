@@ -1,4 +1,4 @@
-// 1.21.1	2026-02-08T01:47:07.4359859	Gemstones/Recipes
+// 1.21.1	2026-05-17T23:53:40.9117424	Gemstones/Recipes
 b4ba21497dd3579f1d2caf3bc527b0c529c2092b data\gemstones\advancement\recipes\tools\jewelry_hammer.json
 76d184588a9077d605a32637888c8988cf41fa28 data\gemstones\recipe\jewelry_hammer.json
 4bbeeeff0615f76cfb6d02005f6e8d6e3aef1067 data\gemstones\advancement\recipes\tools\diamond_tipped_chisel.json
@@ -10,4 +10,4 @@ b4ba21497dd3579f1d2caf3bc527b0c529c2092b data\gemstones\advancement\recipes\tool
 fffeb0f4f269fcc5b28796ed5cba716b47906d65 data\gemstones\advancement\recipes\tools\expansion_crystal.json
 c2a4bead474855557b1b6475d73395f633e88ca2 data\gemstones\recipe\jewelry_pliers.json
 4fd14ce2dc197b6e344c48d78d0818f951240fc2 data\gemstones\recipe\expansion_crystal.json
-89f0189cfe253ebf4ed3f16f20f9c0a822775cd2 data\gemstones\recipe\jewelry_table.json
+fa1fa91c75156fc513e41bd1589a82b8aeb8b800 data\gemstones\recipe\jewelry_table.json

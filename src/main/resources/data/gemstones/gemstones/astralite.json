@@ -3,24 +3,24 @@
   "modifiers": {
     "MELEE": {
       "type": "ON_HIT_MELEE",
-      "chance_levels": [0.5],
+      "chance_levels": [
+        0.5
+      ],
       "event_type": "ON_HIT_MAGIC_STRIKE"
     },
     "RANGED": {
       "type": "ON_HIT_PROJECTILE",
-      "chance_levels": [1.0],
+      "chance_levels": [
+        1.0
+      ],
       "event_type": "HOMING_ARROW"
-    },
-    "TOOLS": {
-      "type": "ATTRIBUTE",
-      "attribute_id": "minecraft:generic.gravity",
-      "value_levels": [-0.666],
-      "operation": "ADD_MULTIPLIED_TOTAL"
     },
     "ARMOR": {
       "type": "ATTRIBUTE",
       "attribute_id": "gemstones:jump_count",
-      "value_levels": [1.0],
+      "value_levels": [
+        1.0
+      ],
       "operation": "ADD_VALUE"
     }
   }

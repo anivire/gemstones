@@ -29,7 +29,9 @@ public class EventOnPotionBrew {
       return;
     }
 
-    ContextBuilder ctxBuilder = new ContextBuilder(serverWorld).withInventory(inventory);
+    ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
+        .withOwner(serverPlayer)
+        .withInventory(inventory);
     ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctxBuilder.build());
   }
 }
