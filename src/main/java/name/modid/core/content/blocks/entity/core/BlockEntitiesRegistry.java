@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 public class BlockEntitiesRegistry {
   public static final BlockEntityType<JewelryTableBlockEntity> JEWELRY_TABLE_BLOCK_ENTITY = Registry.register(
       Registries.BLOCK_ENTITY_TYPE,
-      Identifier.of(Gemstones.MOD_ID, "jewelrt_table_block_entity"),
+      Identifier.of(Gemstones.MOD_ID, "jewelry_table_block_entity"),
       BlockEntityType.Builder.create(JewelryTableBlockEntity::new, BlocksRegistry.JEWELRY_TABLE).build(null));
 
   public static void initialize() {

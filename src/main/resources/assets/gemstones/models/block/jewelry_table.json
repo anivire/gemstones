@@ -1,11 +1,11 @@
 {
   "textures": {
-    "0": "gemstones:block/jewelry_table/jevelry_table_back",
-    "1": "gemstones:block/jewelry_table/jevelry_table_bottom",
-    "2": "gemstones:block/jewelry_table/jevelry_table_front",
-    "3": "gemstones:block/jewelry_table/jevelry_table_side",
-    "4": "gemstones:block/jewelry_table/jevelry_table_top",
-    "particle": "gemstones:block/jewelry_table/jevelry_table_back"
+    "0": "gemstones:block/jewelry_table/jewelry_table_back",
+    "1": "gemstones:block/jewelry_table/jewelry_table_bottom",
+    "2": "gemstones:block/jewelry_table/jewelry_table_front",
+    "3": "gemstones:block/jewelry_table/jewelry_table_side",
+    "4": "gemstones:block/jewelry_table/jewelry_table_top",
+    "particle": "gemstones:block/jewelry_table/jewelry_table_back"
   },
   "elements": [
     {
