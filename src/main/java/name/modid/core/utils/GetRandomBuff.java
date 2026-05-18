@@ -25,7 +25,6 @@ public class GetRandomBuff {
       EffectsRegistry.BLEEDING_EFFECT,
       EffectsRegistry.FREEZING_EFFECT,
       EffectsRegistry.GUARDIAN_SMITE_EFFECT,
-      EffectsRegistry.PLAGUE_EFFECT,
       EffectsRegistry.SCARAB_EFFECT,
       EffectsRegistry.SOUL_BURN_EFFECT,
       EffectsRegistry.STUNNED_EFFECT,

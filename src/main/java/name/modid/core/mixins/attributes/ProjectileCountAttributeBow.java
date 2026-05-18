@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.registries.AttributesRegistry;
+import name.modid.core.utils.HomingArrow;
 import name.modid.core.utils.accessors.HomingArrowAccessor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -111,6 +112,8 @@ public class ProjectileCountAttributeBow {
     float g = projectileCount == 1 ? 0.0F : 2.0F * SPREAD / (float) (projectileCount - 1);
     float h = (float) ((projectileCount - 1) % 2) * g / 2.0F;
     float dir = 1.0F;
+    boolean isHoming = !ModifierGatheringHelper.getModifiersByEventType(bowStack, EventType.HOMING_ARROW).isEmpty();
+    LivingEntity preferredTarget = isHoming ? HomingArrow.findPreferredTarget(world, shooter) : null;
 
     for (int j = 0; j < projectileCount; ++j) {
       float offset = h + dir * (float) ((j + 1) / 2) * g;
@@ -120,8 +123,9 @@ public class ProjectileCountAttributeBow {
           ? projectileStack.getItem()
           : Items.ARROW)).createArrow(world, projectileStack.copy(), shooter, bowStack);
 
-      if (!ModifierGatheringHelper.getModifiersByEventType(bowStack, EventType.HOMING_ARROW).isEmpty()) {
+      if (isHoming) {
         ((HomingArrowAccessor) entity).setHoming(true);
+        HomingArrow.setPreferredTarget(entity, preferredTarget);
       }
 
       entity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;

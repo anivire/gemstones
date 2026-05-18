@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import name.modid.core.api.features.SoulburnFireFeature;
 import name.modid.core.api.features.StunnedStarsFeature;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -27,6 +26,5 @@ public abstract class FeaturesRenderer<T extends LivingEntity, M extends EntityM
     FeatureRendererContext<T, M> context = (FeatureRendererContext<T, M>) (Object) this;
 
     this.invokeAddFeature(new StunnedStarsFeature<>(context));
-    this.invokeAddFeature(new SoulburnFireFeature<>(context));
   }
 }

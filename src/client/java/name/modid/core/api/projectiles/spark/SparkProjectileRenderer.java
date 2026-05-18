@@ -13,6 +13,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 
 public class SparkProjectileRenderer extends EntityRenderer<SparkProjectileEntity> {
+  private static final int OUTLINE_COLOR = 0xFFFFB62A;
+
   protected SparkProjectileModel model;
 
   public SparkProjectileRenderer(EntityRendererFactory.Context ctx) {
@@ -48,7 +50,7 @@ public class SparkProjectileRenderer extends EntityRenderer<SparkProjectileEntit
 
     VertexConsumer outlineVc = vertexConsumers.getBuffer(
         RenderLayer.getEyes(getTexture(entity)));
-    model.bb_outline.render(matrices, outlineVc, 0xF000F0, OverlayTexture.DEFAULT_UV, 0xFFEF791F);
+    model.bb_outline.render(matrices, outlineVc, 0xF000F0, OverlayTexture.DEFAULT_UV, OUTLINE_COLOR);
 
     matrices.pop();
 

@@ -22,7 +22,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.FluidTags;
@@ -133,7 +132,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
   private void handleIncreaseSpawnrate(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    final int SPAWN_COOLDOWN = 12;
+    final int SPAWN_COOLDOWN = 36;
 
     if (!(ctx.getOwner() instanceof ServerPlayerEntity player)
         || !(ctx.getWorld() instanceof ServerWorld world)
@@ -240,13 +239,13 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
             spawned = true;
             spawnedAny = true;
 
-            living.addStatusEffect(
-                new StatusEffectInstance(
-                    StatusEffects.GLOWING,
-                    5 * 20,
-                    0,
-                    false,
-                    false));
+            // living.addStatusEffect(
+            // new StatusEffectInstance(
+            // StatusEffects.GLOWING,
+            // 5 * 20,
+            // 0,
+            // false,
+            // false));
 
             world.spawnParticles(
                 ParticleTypes.LARGE_SMOKE,

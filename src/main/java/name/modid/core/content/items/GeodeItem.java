@@ -13,6 +13,7 @@ import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.datapack.geodes.GeodesConfig;
 import name.modid.datapack.geodes.GeodesRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -146,44 +147,46 @@ public class GeodeItem extends Item {
       TooltipContext context,
       List<Text> tooltip,
       TooltipType type) {
-
     tooltip.add(Text
         .translatable("tooltip.gemstones." + Registries.ITEM.getId(itemStack.getItem()).getPath() + ".info")
         .formatted(Formatting.WHITE));
-    tooltip.add(Text.empty());
-    tooltip.add(Text.translatable("tooltip.gemstones.geode.info").formatted(Formatting.GRAY));
 
-    GeodesConfig config = getConfig();
-    if (config != null && !config.gemstones.isEmpty()) {
+    if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+      tooltip.add(Text.empty());
+      tooltip.add(Text.translatable("tooltip.gemstones.geode.info").formatted(Formatting.GRAY));
 
-      float totalWeight = config.gemstones.values().stream().reduce(0f, Float::sum);
+      GeodesConfig config = getConfig();
+      if (config != null && !config.gemstones.isEmpty()) {
 
-      for (var entry : config.gemstones.entrySet()) {
-        GemstoneType t = entry.getKey();
-        float rawWeight = entry.getValue();
+        float totalWeight = config.gemstones.values().stream().reduce(0f, Float::sum);
 
-        Item gemItem = getItemFromType(t);
-        if (gemItem != null && totalWeight > 0f) {
-          ItemStack gemStack = new ItemStack(gemItem);
+        for (var entry : config.gemstones.entrySet()) {
+          GemstoneType t = entry.getKey();
+          float rawWeight = entry.getValue();
 
-          MutableText icon = Text.literal(t.getGemstoneLiteral())
-              .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
-              .formatted(Formatting.WHITE);
+          Item gemItem = getItemFromType(t);
+          if (gemItem != null && totalWeight > 0f) {
+            ItemStack gemStack = new ItemStack(gemItem);
 
-          MutableText name = Text.literal("")
-              .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
-              .append(gemStack.toHoverableText());
+            MutableText icon = Text.literal(t.getGemstoneLiteral())
+                .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
+                .formatted(Formatting.WHITE);
 
-          double percent = (rawWeight / totalWeight) * 100.0;
-          BigDecimal v = BigDecimal.valueOf(percent)
-              .setScale(2, RoundingMode.HALF_UP)
-              .stripTrailingZeros();
+            MutableText name = Text.literal("")
+                .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
+                .append(gemStack.toHoverableText());
 
-          MutableText chance = Text.literal(" " + v.toPlainString() + "%")
-              .formatted(Formatting.WHITE);
+            double percent = (rawWeight / totalWeight) * 100.0;
+            BigDecimal v = BigDecimal.valueOf(percent)
+                .setScale(2, RoundingMode.HALF_UP)
+                .stripTrailingZeros();
 
-          tooltip.add(Text.literal("∙ ").formatted(Formatting.DARK_GRAY)
-              .append(icon).append(Text.literal(" ")).append(name).append(chance));
+            MutableText chance = Text.literal(" " + v.toPlainString() + "%")
+                .formatted(Formatting.WHITE);
+
+            tooltip.add(Text.literal("∙ ").formatted(Formatting.DARK_GRAY)
+                .append(icon).append(Text.literal(" ")).append(name).append(chance));
+          }
         }
       }
     }

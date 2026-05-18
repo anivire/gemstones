@@ -2,77 +2,28 @@ package name.modid.core.api.features;
 
 import org.joml.Quaternionf;
 
-import name.modid.core.utils.accessors.SoulBurnEntityAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
 
-public class SoulburnFireFeature<T extends LivingEntity, M extends EntityModel<T>>
-    extends FeatureRenderer<T, M> {
-
+public final class SoulburnFireRenderer {
   private static final Identifier SOUL_FIRE_0_ID = Identifier.of("minecraft", "block/soul_fire_0");
   private static final Identifier SOUL_FIRE_1_ID = Identifier.of("minecraft", "block/soul_fire_1");
 
-  public SoulburnFireFeature(FeatureRendererContext<T, M> context) {
-    super(context);
+  private SoulburnFireRenderer() {
   }
 
-  @Override
-  public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
-      T entity, float limbAngle, float limbDistance, float tickDelta,
-      float animationProgress, float headYaw, float headPitch) {
-
-    if (!(entity instanceof SoulBurnEntityAccessor accessor) || !accessor.hasSoulBurnEffect()) {
-      return;
-    }
-
-    EntityRenderDispatcher dispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-    Quaternionf rotation = MathHelper.rotateAround(MathHelper.Y_AXIS, dispatcher.getRotation(),
-        new Quaternionf());
-
-    matrices.push();
-    resetLivingFeatureTransforms(matrices, entity, tickDelta);
-    renderSoulFire(matrices, vertexConsumers, entity, rotation);
-    matrices.pop();
-  }
-
-  private static void resetLivingFeatureTransforms(MatrixStack matrices,
-      LivingEntity entity,
-      float tickDelta) {
-    float bodyYaw = MathHelper.lerpAngleDegrees(tickDelta, entity.prevBodyYaw, entity.bodyYaw);
-
-    if (entity.hasVehicle() && entity.getVehicle() instanceof LivingEntity vehicle) {
-      bodyYaw = MathHelper.lerpAngleDegrees(tickDelta, vehicle.prevBodyYaw, vehicle.bodyYaw);
-    }
-
-    matrices.translate(0.0F, 1.501F, 0.0F);
-    matrices.scale(-1.0F, -1.0F, 1.0F);
-    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(bodyYaw - 180.0F));
-
-    float scale = entity.getScale();
-    if (scale != 1.0F) {
-      float inverseScale = 1.0F / scale;
-      matrices.scale(inverseScale, inverseScale, inverseScale);
-    }
-  }
-
-  private void renderSoulFire(MatrixStack matrices,
+  public static void render(MatrixStack matrices,
       VertexConsumerProvider vertexConsumers,
-      LivingEntity entity,
+      Entity entity,
       Quaternionf rotation) {
 
     @SuppressWarnings("deprecation")

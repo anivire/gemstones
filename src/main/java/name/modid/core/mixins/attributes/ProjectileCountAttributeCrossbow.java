@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.registries.AttributesRegistry;
+import name.modid.core.utils.HomingArrow;
 import name.modid.core.utils.accessors.HomingArrowAccessor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -120,6 +121,8 @@ public class ProjectileCountAttributeCrossbow {
     float g = projectileCount == 1 ? 0.0F : 2.0F * SPREAD / (float) (projectileCount - 1);
     float h = (float) ((projectileCount - 1) % 2) * g / 2.0F;
     float dir = 1.0F;
+    boolean isHoming = !ModifierGatheringHelper.getModifiersByEventType(crossbow, EventType.HOMING_ARROW).isEmpty();
+    LivingEntity preferredTarget = isHoming ? HomingArrow.findPreferredTarget(world, shooter) : null;
 
     for (int j = 0; j < projectileCount; ++j) {
       float offset = h + dir * (float) ((j + 1) / 2) * g;
@@ -136,8 +139,9 @@ public class ProjectileCountAttributeCrossbow {
             : Items.ARROW);
         PersistentProjectileEntity arrow = arrowItem.createArrow(world, projectileStack.copy(), shooter, crossbow);
 
-        if (!ModifierGatheringHelper.getModifiersByEventType(crossbow, EventType.HOMING_ARROW).isEmpty()) {
+        if (isHoming) {
           ((HomingArrowAccessor) arrow).setHoming(true);
+          HomingArrow.setPreferredTarget(arrow, preferredTarget);
         }
 
         arrow.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;

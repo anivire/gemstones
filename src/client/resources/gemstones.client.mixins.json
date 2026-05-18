@@ -6,6 +6,7 @@
     "ModelRenderer",
     "FeaturesRenderer",
     "MultiMinerMiningFeedbackMixin",
+    "SoulburnFireDispatcher",
     "SocketedItemsTooltip",
     "WorldRendererAccessor",
     "WorldRendererMixin"

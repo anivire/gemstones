@@ -1,5 +1,7 @@
 package name.modid.core.content.entities;
 
+import java.util.Optional;
+
 import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.content.registries.ParticlesRegistry;
 import net.minecraft.entity.Entity;
@@ -19,17 +21,19 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
 public class SparkProjectileEntity extends PersistentProjectileEntity {
-  private static final int HOMING_DELAY = 10;
+  private static final int HOMING_DELAY = 24;
   private static final int MAX_AGE = 20 * 10;
   private static final double HOMING_ACCELERATION = 0.08;
   private static final double AVOIDANCE_ACCELERATION = 0.12;
   private static final double WALL_CHECK_DISTANCE = 0.8;
+  private static final int FIRE_SECONDS = 3;
   private final float SPARK_DAMAGE = 3.0F;
 
   private final double maxSpeed;
@@ -37,7 +41,7 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
   public SparkProjectileEntity(EntityType<? extends SparkProjectileEntity> type, World world) {
     super(type, world);
     this.setNoGravity(true);
-    this.setNoClip(true);
+    this.setNoClip(false);
     this.pickupType = PickupPermission.DISALLOWED;
     this.maxSpeed = 0.22 + world.random.nextDouble() * 0.10;
   }
@@ -62,7 +66,8 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
   public void tick() {
     this.inGround = false;
     this.inGroundTime = 0;
-    this.setNoClip(true);
+    this.setNoClip(false);
+    Vec3d previousPos = this.getPos();
 
     LivingEntity target = this.age >= HOMING_DELAY ? getHomingTarget() : null;
     Vec3d velocity = this.getVelocity();
@@ -81,7 +86,11 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
     super.tick();
     this.inGround = false;
     this.inGroundTime = 0;
-    this.setNoClip(true);
+    this.setNoClip(false);
+
+    if (!this.getWorld().isClient && this.isAlive()) {
+      hitEntityAlongPath(previousPos, this.getPos());
+    }
 
     if (this.getWorld().isClient) {
       Vec3d vel = this.getVelocity();
@@ -196,6 +205,51 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
     return velocity;
   }
 
+  private void hitEntityAlongPath(Vec3d start, Vec3d end) {
+    Box sweepBox = new Box(start, end).expand(0.6);
+    Entity closestEntity = null;
+    Vec3d closestHitPos = null;
+    double closestDistance = Double.MAX_VALUE;
+
+    for (Entity entity : this.getWorld().getOtherEntities(this, sweepBox, this::canHitSparkTarget)) {
+      Box targetBox = entity.getBoundingBox().expand(0.3);
+      Vec3d hitPos = null;
+
+      if (targetBox.contains(start)) {
+        hitPos = start;
+      } else {
+        Optional<Vec3d> hit = targetBox.raycast(start, end);
+        if (hit.isPresent()) {
+          hitPos = hit.get();
+        }
+      }
+
+      if (hitPos == null) {
+        continue;
+      }
+
+      double distance = start.squaredDistanceTo(hitPos);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestEntity = entity;
+        closestHitPos = hitPos;
+      }
+    }
+
+    if (closestEntity != null) {
+      this.onEntityHit(new EntityHitResult(closestEntity, closestHitPos));
+    }
+  }
+
+  private boolean canHitSparkTarget(Entity entity) {
+    return entity instanceof LivingEntity
+        && entity.isAlive()
+        && !entity.isSpectator()
+        && entity.canHit()
+        && entity != this.getOwner()
+        && !(entity instanceof PlayerEntity);
+  }
+
   @Override
   protected void onEntityHit(EntityHitResult hit) {
     super.onEntityHit(hit);
@@ -211,6 +265,7 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
           0.05);
       living.timeUntilRegen = 0;
       living.damage(this.getDamageSources().magic(), SPARK_DAMAGE);
+      living.setOnFireFor(FIRE_SECONDS);
       this.discard();
     }
   }
@@ -219,7 +274,7 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
   protected void onBlockHit(BlockHitResult hit) {
     this.inGround = false;
     this.inGroundTime = 0;
-    this.setNoClip(true);
+    this.setNoClip(false);
   }
 
   @Override

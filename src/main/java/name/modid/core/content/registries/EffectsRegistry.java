@@ -9,7 +9,6 @@ import name.modid.core.content.effects.GuardianSmiteEffect;
 import name.modid.core.content.effects.HarvestMarkEffect;
 import name.modid.core.content.effects.LethalWeaknessEffect;
 import name.modid.core.content.effects.LootTouchEffect;
-import name.modid.core.content.effects.PlagueEffect;
 import name.modid.core.content.effects.ScarabEffect;
 import name.modid.core.content.effects.SoulBurnEffect;
 import name.modid.core.content.effects.SparklingEffect;
@@ -42,9 +41,6 @@ public class EffectsRegistry {
 
   public static final RegistryEntry<StatusEffect> DETONATE_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "detonate"), new DetonateEffect());
-
-  public static final RegistryEntry<StatusEffect> PLAGUE_EFFECT = Registry.registerReference(
-      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "plague"), new PlagueEffect());
 
   public static final RegistryEntry<StatusEffect> FREEZING_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "freezing"), new FreezingEffect());

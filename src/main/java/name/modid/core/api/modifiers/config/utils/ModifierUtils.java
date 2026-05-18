@@ -2,12 +2,14 @@ package name.modid.core.api.modifiers.config.utils;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
+import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -122,16 +124,24 @@ public class ModifierUtils {
       ServerPlayerEntity player,
       Function<ItemStack, List<T>> callback) {
     return Stream.of(
-        player.getEquippedStack(EquipmentSlot.HEAD),
-        player.getEquippedStack(EquipmentSlot.CHEST),
-        player.getEquippedStack(EquipmentSlot.LEGS),
-        player.getEquippedStack(EquipmentSlot.FEET),
-        player.getEquippedStack(EquipmentSlot.MAINHAND),
-        player.getEquippedStack(EquipmentSlot.OFFHAND))
+        EquipmentSlot.HEAD,
+        EquipmentSlot.CHEST,
+        EquipmentSlot.LEGS,
+        EquipmentSlot.FEET,
+        EquipmentSlot.MAINHAND,
+        EquipmentSlot.OFFHAND)
+        .map(slot -> Map.entry(slot, player.getEquippedStack(slot)))
+        .filter(entry -> isStackActiveInSlot(entry.getValue(), entry.getKey()))
+        .map(Map.Entry::getValue)
         .filter(stack -> !stack.isEmpty())
         .map(callback)
         .flatMap(List::stream)
         .toList();
+  }
+
+  private static boolean isStackActiveInSlot(ItemStack stack, EquipmentSlot slot) {
+    return !stack.isEmpty()
+        && ModifierHelper.getEquipmentSlot(stack.getItem()) == slot;
   }
 
   public static ItemStack getSmeltingResult(World world, ItemStack input) {

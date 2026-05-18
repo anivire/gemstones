@@ -22,7 +22,7 @@
       ],
       "amplifier": 0,
       "effect_id": "gemstones:sparkling",
-      "duration": 10,
+      "duration": 24,
       "is_stacking": false,
       "max_stack_count": 0
     },

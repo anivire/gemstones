@@ -1,6 +1,7 @@
 package name.modid.core.mixins.effects.witherGuard;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import name.modid.core.utils.witherGuard.WitherSkullOrbitFlag;
 import name.modid.core.utils.witherGuard.WitherSkullOwner;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -27,8 +28,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
 @Mixin(PlayerEntity.class)
@@ -45,6 +48,8 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
   private static final double ORBIT_RADIUS = 1.8;
   @Unique
   private static final int ATTACK_COOLDOWN_TICKS = 20;
+  @Unique
+  private static final double SKULL_SHOT_SPEED = 1.0;
   @Unique
   private int witherSkullCount = 0;
   @Unique
@@ -176,10 +181,21 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
     }
 
     Box box = new Box(getPos(), getPos()).expand(TARGET_RADIUS);
-    List<HostileEntity> targets = world.getEntitiesByClass(HostileEntity.class, box, HostileEntity::isAlive);
+    Vec3d searchStart = player.getEyePos();
+    List<LivingEntity> targets = world.getEntitiesByClass(
+        LivingEntity.class,
+        box,
+        target -> isValidWitherGuardTarget(world, player, searchStart, target));
 
     if (attackCooldown <= 0 && !targets.isEmpty() && !orbitingSkulls.isEmpty()) {
-      HostileEntity target = targets.get(0);
+      LivingEntity target = targets.stream()
+          .min(Comparator.comparingDouble(targetEntity -> targetEntity.squaredDistanceTo(player)))
+          .orElse(null);
+
+      if (target == null) {
+        updateOrbitingSkulls(world);
+        return;
+      }
 
       for (int i = 0; i < orbitingSkulls.size(); i++) {
         WitherSkullEntity skull = orbitingSkulls.get(i);
@@ -192,15 +208,17 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
         skullSpawnTicks.remove(i);
 
         Vec3d start = skull.getPos();
-        Vec3d targetPos = target.getPos().add(0, target.getHeight(), 0);
+        Vec3d targetPos = target.getPos().add(0, target.getStandingEyeHeight() * 0.5, 0);
         Vec3d dir = targetPos.subtract(start).normalize();
 
-        ((WitherSkullOrbitFlag) (Object) skull).setOrbiting(false);
+        WitherSkullOrbitFlag skullFlag = (WitherSkullOrbitFlag) (Object) skull;
+        skullFlag.setOrbiting(false);
+        skullFlag.setWitherGuardSkull(true);
         skull.noClip = false;
         skull.setInvulnerable(false);
         skull.setNoGravity(false);
         skull.setOwner(player);
-        skull.setVelocity(dir.multiply(1.2));
+        skull.setVelocity(dir.multiply(SKULL_SHOT_SPEED));
 
         world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME,
             start.x, start.y, start.z, 20, 0.4, 0.4, 0.4, 0.01);
@@ -245,7 +263,9 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
     skull.noClip = true;
     skull.setInvulnerable(true);
 
-    ((WitherSkullOrbitFlag) (Object) skull).setOrbiting(true);
+    WitherSkullOrbitFlag skullFlag = (WitherSkullOrbitFlag) (Object) skull;
+    skullFlag.setOrbiting(true);
+    skullFlag.setWitherGuardSkull(true);
 
     world.spawnEntity(skull);
     orbitingSkulls.add(skull);
@@ -278,5 +298,29 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
       skull.setNoGravity(true);
       skull.velocityDirty = true;
     }
+  }
+
+  @Unique
+  private boolean isValidWitherGuardTarget(ServerWorld world, PlayerEntity player, Vec3d start, LivingEntity target) {
+    return target.isAlive()
+        && !target.isSpectator()
+        && target.canHit()
+        && target != player
+        && target instanceof Monster
+        && canWitherGuardSee(world, start, target);
+  }
+
+  @Unique
+  private boolean canWitherGuardSee(ServerWorld world, Vec3d start, LivingEntity target) {
+    Vec3d targetPoint = target.getPos().add(0, target.getStandingEyeHeight() * 0.5, 0);
+    HitResult hit = world.raycast(new RaycastContext(
+        start,
+        targetPoint,
+        RaycastContext.ShapeType.COLLIDER,
+        RaycastContext.FluidHandling.NONE,
+        this));
+
+    return hit.getType() == HitResult.Type.MISS
+        || start.squaredDistanceTo(hit.getPos()) + 1.0 >= start.squaredDistanceTo(targetPoint);
   }
 }

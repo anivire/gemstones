@@ -7,12 +7,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.utils.HomingArrow;
 import name.modid.core.utils.accessors.HomingArrowAccessor;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
 @Mixin(BowItem.class)
@@ -26,10 +28,15 @@ public class MarkHomingArrowBow {
     }
 
     if (!ModifierGatheringHelper.getModifiersByEventType(stack, EventType.HOMING_ARROW).isEmpty()) {
+      LivingEntity preferredTarget = HomingArrow.findPreferredTarget((ServerWorld) world, player);
+
       world.getEntitiesByClass(PersistentProjectileEntity.class,
           player.getBoundingBox().expand(3.5),
           e -> e.getOwner() == player && e.age < 5)
-          .forEach(arrow -> ((HomingArrowAccessor) arrow).setHoming(true));
+          .forEach(arrow -> {
+            ((HomingArrowAccessor) arrow).setHoming(true);
+            HomingArrow.setPreferredTarget(arrow, preferredTarget);
+          });
     }
   }
 }

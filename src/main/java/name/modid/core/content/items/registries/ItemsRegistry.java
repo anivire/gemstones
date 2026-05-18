@@ -55,7 +55,7 @@ public final class ItemsRegistry {
 
   public static final Item EXPANSION_CRYSTAL = register("expansion_crystal",
       settings -> new ExpansionCrystalItem(settings),
-      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 8));
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 16));
 
   public static Item register(String path, Function<Item.Settings, Item> factory,
       Item.Settings settings) {
