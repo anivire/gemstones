@@ -1,4 +1,4 @@
-![Logo with bg](https://cdn.modrinth.com/data/cached_images/559c74b097de36a67ae5177faa1d37620d791c0e_0.webp)
+![Logo with bg](https://cdn.modrinth.com/data/cached_images/b49b49ce7edf9bbfffa78ce4bfe18d74278fc4d2_0.webp)
 
 ## Legendary Gemstones
 
@@ -9,7 +9,7 @@ owner unique bonuses.
 - 20 various Gemstones!
 - 50+ unique bonuses and effects!
 
-![Tools and gemstones](https://cdn.modrinth.com/data/cached_images/48ddd20675f570012367a8490a6397c0648d8abf.png)
+![Tools and gemstones](https://cdn.modrinth.com/data/cached_images/ef3c625697728b495672170dfef99511d6991cae_0.webp)
 
 ## Getting Started
 
