@@ -21,7 +21,7 @@
         0.24
       ],
       "amplifier": 0,
-      "effect_id": "gemstones:sparkling",
+      "effect_id": "gemstones:radiance",
       "duration": 24,
       "is_stacking": false,
       "max_stack_count": 0

@@ -72,7 +72,7 @@ public class StunnedEffect extends StatusEffect {
         entity.getBlockPos(),
         SoundEvents.BLOCK_ANVIL_LAND,
         SoundCategory.PLAYERS,
-        1.0F,
+        0.45F,
         0.8F);
   }
 }

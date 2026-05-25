@@ -55,15 +55,16 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
 
     int amplifier = 1;
     int duration = 0;
-    double healthThresholdBonus = 0.0;
+    double healthThreshold = 0.0;
 
     for (GemstoneModifier modifier : modifiers) {
       OnPlayerDamageConfig config = (OnPlayerDamageConfig) modifier.getConfig();
       duration += config.values().get(modifier.getRarityType());
-      healthThresholdBonus += config.additionalValues().get(modifier.getRarityType());
+      healthThreshold = Math.max(
+          healthThreshold,
+          config.additionalValues().get(modifier.getRarityType()));
     }
 
-    float healthThreshold = (float) (0.0 + healthThresholdBonus);
     int buffDurationTicks = Math.max(0, duration) * 20;
 
     if (buffDurationTicks <= 0
@@ -97,7 +98,7 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
 
     owner.addStatusEffect(new StatusEffectInstance(
         EffectsRegistry.LETHAL_WEAKNESS_EFFECT,
-        3 * 60 * 20,
+        5 * 60 * 20,
         0,
         false,
         true,

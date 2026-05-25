@@ -24,7 +24,7 @@ public abstract class OnFishing {
     FishingBobberEntity bobber = (FishingBobberEntity) (Object) this;
 
     if (!(bobber.getOwner() instanceof ServerPlayerEntity player)
-        || hookCountdown < 0) {
+        || hookCountdown <= 0) {
       return;
     }
 

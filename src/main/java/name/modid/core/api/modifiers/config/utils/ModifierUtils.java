@@ -17,6 +17,7 @@ import net.minecraft.component.type.AttributeModifiersComponent.Entry;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeType;
@@ -49,7 +50,6 @@ public class ModifierUtils {
         itemStack -> ModifierGatheringHelper.getModifiers(itemStack, configClass));
   }
 
-  // TODO: add operations
   public static double collectAttributeValuesFromArmor(LivingEntity entity, RegistryEntry<EntityAttribute> attribute) {
     double v = 0;
 
@@ -62,24 +62,13 @@ public class ModifierUtils {
         AttributeModifiersComponent modifiersComponent = itemStack
             .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
 
-        Entry modifierEntry = modifiersComponent.modifiers().stream()
-            .filter(x -> x.attribute() == attribute).findFirst()
-            .orElse(null);
-
-        if (modifierEntry != null) {
-          for (Entry e : modifiersComponent.modifiers()) {
-            if (e.attribute() == attribute) {
-              v += e.modifier().value();
-            }
-          }
-        }
+        v += getAttributeDelta(modifiersComponent, attribute, 1.0);
       }
     }
 
     return v;
   }
 
-  // TODO: add operations
   public static double collectAttributeValuesFromItem(LivingEntity entity, RegistryEntry<EntityAttribute> attribute) {
     double v = 0;
 
@@ -89,17 +78,7 @@ public class ModifierUtils {
         AttributeModifiersComponent modifiersComponent = itemStack
             .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
 
-        Entry modifierEntry = modifiersComponent.modifiers().stream()
-            .filter(x -> x.attribute() == attribute).findFirst()
-            .orElse(null);
-
-        if (modifierEntry != null) {
-          for (Entry e : modifiersComponent.modifiers()) {
-            if (e.attribute() == attribute) {
-              v += e.modifier().value();
-            }
-          }
-        }
+        v += getAttributeDelta(modifiersComponent, attribute, 1.0);
       }
     }
 
@@ -137,6 +116,46 @@ public class ModifierUtils {
         .map(callback)
         .flatMap(List::stream)
         .toList();
+  }
+
+  public static float getAttributeMultiplier(
+      AttributeModifiersComponent modifiersComponent,
+      RegistryEntry<EntityAttribute> attribute) {
+    return (float) Math.max(0.01, getAttributeValue(modifiersComponent, attribute, 1.0));
+  }
+
+  public static double getAttributeDelta(
+      AttributeModifiersComponent modifiersComponent,
+      RegistryEntry<EntityAttribute> attribute,
+      double baseValue) {
+    return getAttributeValue(modifiersComponent, attribute, baseValue) - baseValue;
+  }
+
+  public static double getAttributeValue(
+      AttributeModifiersComponent modifiersComponent,
+      RegistryEntry<EntityAttribute> attribute,
+      double baseValue) {
+    double value = baseValue;
+    double multipliedTotal = 1.0;
+
+    for (Entry e : modifiersComponent.modifiers()) {
+      if (!e.attribute().equals(attribute)) {
+        continue;
+      }
+
+      double modifierValue = e.modifier().value();
+      Operation operation = e.modifier().operation();
+
+      if (operation == Operation.ADD_VALUE) {
+        value += modifierValue;
+      } else if (operation == Operation.ADD_MULTIPLIED_BASE) {
+        value += baseValue * modifierValue;
+      } else if (operation == Operation.ADD_MULTIPLIED_TOTAL) {
+        multipliedTotal *= 1.0 + modifierValue;
+      }
+    }
+
+    return value * multipliedTotal;
   }
 
   private static boolean isStackActiveInSlot(ItemStack stack, EquipmentSlot slot) {

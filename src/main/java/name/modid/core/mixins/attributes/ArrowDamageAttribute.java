@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -18,23 +19,20 @@ public abstract class ArrowDamageAttribute {
   private float gemstones$applyBonus(float originalDamage) {
     PersistentProjectileEntity self = (PersistentProjectileEntity) (Object) this;
 
-    if (self.getOwner() != null) {
-      ItemStack stack = self.getOwner().getWeaponStack();
-      return originalDamage + getBonusFrom(stack);
-    }
-
-    return originalDamage;
+    return originalDamage + getBonusFrom(self.getWeaponStack());
   }
 
   private float getBonusFrom(ItemStack shotFrom) {
     if (shotFrom == null || shotFrom.isEmpty())
       return 0;
 
-    return (float) shotFrom.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS,
-        AttributeModifiersComponent.DEFAULT)
-        .modifiers().stream()
-        .filter(m -> m.attribute() == AttributesRegistry.ARROW_DAMAGE_ATTRIBUTE)
-        .mapToDouble(m -> m.modifier().value())
-        .sum();
+    AttributeModifiersComponent modifiers = shotFrom.getOrDefault(
+        DataComponentTypes.ATTRIBUTE_MODIFIERS,
+        AttributeModifiersComponent.DEFAULT);
+
+    return (float) ModifierUtils.getAttributeDelta(
+        modifiers,
+        AttributesRegistry.ARROW_DAMAGE_ATTRIBUTE,
+        1.0);
   }
 }

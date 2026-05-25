@@ -66,27 +66,45 @@ public class AttributeModifierHandler {
     for (Map.Entry<RegistryEntry<EntityAttribute>, List<GemstoneModifier>> entry : attributeToModifiers.entrySet()) {
       RegistryEntry<EntityAttribute> attribute = entry.getKey();
       List<GemstoneModifier> modifiers = entry.getValue();
-      GemstoneModifier mod = modifiers.get(0);
-
       float totalValue = 0f;
+      AttributeConfig firstConfig = null;
+      GemstoneModifier firstModifier = null;
       for (GemstoneModifier m : modifiers) {
         GemstoneQuality rarity = m.getRarityType();
         if (m.getConfig() instanceof AttributeConfig c) {
           totalValue += c.values().get(rarity);
+          if (firstConfig == null) {
+            firstConfig = c;
+            firstModifier = m;
+          }
+        } else if (m.getConfig() instanceof MultiplyAttributeConfig multi) {
+          for (AttributeConfig c : multi.instances()) {
+            if (c.attribute().equals(attribute)) {
+              totalValue += c.values().get(rarity);
+              if (firstConfig == null) {
+                firstConfig = c;
+                firstModifier = m;
+              }
+            }
+          }
         }
+      }
+
+      if (firstConfig == null || firstModifier == null) {
+        continue;
       }
 
       EquipmentSlot slot = ModifierHelper.getEquipmentSlot(item);
       Identifier modifierId = Identifier.of(Gemstones.MOD_ID,
           String.format("%s.%s.%s",
-              mod.getGemstoneType().toString().toLowerCase(),
-              mod.getItemCategory().toString().toLowerCase(),
+              firstModifier.getGemstoneType().toString().toLowerCase(),
+              firstModifier.getItemCategory().toString().toLowerCase(),
               slot.name().toLowerCase()));
 
       EntityAttributeModifier scaledGemstoneModifier = new EntityAttributeModifier(
           modifierId,
           (double) totalValue,
-          ((AttributeConfig) mod.getConfig()).operation());
+          firstConfig.operation());
 
       AttributeModifiersComponent.Entry newEntry = new AttributeModifiersComponent.Entry(
           attribute,

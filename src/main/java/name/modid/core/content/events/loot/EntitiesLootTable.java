@@ -20,7 +20,7 @@ public class EntitiesLootTable {
     if (path.equals("entities/elder_guardian")) {
       tableBuilder.pool(GemstoneLootHelper.gemstonePool(
           GemstonesRegistry.getSapphireGemstones(),
-          0.35f));
+          0.75f));
     }
 
     if (path.equals("entities/wither")) {

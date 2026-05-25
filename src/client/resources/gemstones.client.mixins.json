@@ -5,6 +5,7 @@
   "client": [
     "ModelRenderer",
     "FeaturesRenderer",
+    "BowPullSpeedHeldItemRenderer",
     "MultiMinerMiningFeedbackMixin",
     "SoulburnFireDispatcher",
     "SocketedItemsTooltip",

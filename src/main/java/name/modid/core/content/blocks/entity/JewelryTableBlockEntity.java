@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import name.modid.core.content.blocks.entity.core.BlockEntitiesRegistry;
 import name.modid.core.content.blocks.entity.core.ImplementedInventory;
 import name.modid.core.content.screen.JewelryTableScreenHandler;
+import net.minecraft.block.Block;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -34,6 +35,16 @@ public class JewelryTableBlockEntity extends BlockEntity
   @Override
   public DefaultedList<ItemStack> getItems() {
     return inventory;
+  }
+
+  @Override
+  public void markDirty() {
+    super.markDirty();
+
+    if (world != null && !world.isClient) {
+      BlockState state = getCachedState();
+      world.updateListeners(pos, state, state, Block.NOTIFY_LISTENERS);
+    }
   }
 
   @Override

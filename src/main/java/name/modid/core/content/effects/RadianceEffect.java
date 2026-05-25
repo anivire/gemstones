@@ -4,8 +4,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 
-public class SparklingEffect extends StatusEffect {
-  public SparklingEffect() {
+public class RadianceEffect extends StatusEffect {
+  public RadianceEffect() {
     super(StatusEffectCategory.BENEFICIAL, 0xFFD700);
   }
 

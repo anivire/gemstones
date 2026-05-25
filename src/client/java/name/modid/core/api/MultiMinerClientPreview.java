@@ -51,6 +51,10 @@ public final class MultiMinerClientPreview {
     return false;
   }
 
+  private static boolean isMultiMinerActive(PlayerEntity player) {
+    return hasMultiMiner(player) && !player.isSneaking();
+  }
+
   public static List<BlockPos> getBreakableBlocks(ClientWorld world, BlockPos center, Direction face,
       boolean includeCenter) {
     List<BlockPos> result = new ArrayList<>();
@@ -105,7 +109,7 @@ public final class MultiMinerClientPreview {
 
   public static void showMiningFeedback(ClientPlayerEntity player, ClientWorld world, BlockPos center,
       Direction face, int breakingStage) {
-    if (!hasMultiMiner(player)) {
+    if (!isMultiMinerActive(player)) {
       clearBreakingProgress(world);
       return;
     }
@@ -126,7 +130,7 @@ public final class MultiMinerClientPreview {
   }
 
   public static void updateTargetHighlights(ClientPlayerEntity player, ClientWorld world, HitResult hit) {
-    if (!hasMultiMiner(player) || !(hit instanceof BlockHitResult blockHit)) {
+    if (!isMultiMinerActive(player) || !(hit instanceof BlockHitResult blockHit)) {
       clearHighlights();
       return;
     }

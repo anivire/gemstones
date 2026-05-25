@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.component.DataComponentTypes;
@@ -25,15 +26,12 @@ public class ModelRenderer {
       AttributeModifiersComponent itemAttributeModifiers = stack.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS,
           AttributeModifiersComponent.DEFAULT);
 
-      float drawSpeedPercent = 0.0f;
-      for (AttributeModifiersComponent.Entry mod : itemAttributeModifiers.modifiers()) {
-        if (AttributesRegistry.PULL_SPEED_ATTRIBUTE == mod.attribute()) {
-          drawSpeedPercent += (float) mod.modifier().value();
-        }
-      }
+      float drawSpeedMultiplier = ModifierUtils.getAttributeMultiplier(
+          itemAttributeModifiers,
+          AttributesRegistry.PULL_SPEED_ATTRIBUTE);
 
       float useTicks = stack.getMaxUseTime(player) - player.getItemUseTimeLeft();
-      float adjustedTicks = useTicks * (1.0f + drawSpeedPercent);
+      float adjustedTicks = useTicks * drawSpeedMultiplier;
       float progress = adjustedTicks / BASE_PULL_TIME;
       progress = (progress * progress + progress * 2.0f) / 3.0f;
       if (progress > 1.0f) {

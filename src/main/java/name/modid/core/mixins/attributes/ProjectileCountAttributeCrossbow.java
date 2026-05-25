@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.registries.AttributesRegistry;
@@ -51,15 +52,12 @@ public class ProjectileCountAttributeCrossbow {
       return;
     }
 
-    AttributeModifiersComponent mods = player.getMainHandStack()
+    AttributeModifiersComponent mods = crossbow
         .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
-    int projectileCount = 1;
-
-    for (var entry : mods.modifiers()) {
-      if (AttributesRegistry.PROJECTILE_COUNT_ATTRIBUTE.equals(entry.attribute())) {
-        projectileCount += (int) entry.modifier().value();
-      }
-    }
+    int projectileCount = (int) Math.floor(ModifierUtils.getAttributeValue(
+        mods,
+        AttributesRegistry.PROJECTILE_COUNT_ATTRIBUTE,
+        1.0));
 
     int requestedCount = Math.max(1, projectileCount);
     if (requestedCount <= 1) {

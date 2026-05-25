@@ -43,13 +43,13 @@ public class BlocksLootTable {
         || path.equals("blocks/nether_gold_ore")) {
       tableBuilder.pool(GemstoneLootHelper.gemstonePool(
           GemstonesRegistry.getAmberGemstones(),
-          DEFAULT_GEMSTONE_DROP_CHANCE));
+          0.1f));
     }
 
     if (path.equals("blocks/nether_quartz_ore")) {
       tableBuilder.pool(GemstoneLootHelper.gemstonePool(
           GemstonesRegistry.getZirconGemstones(),
-          DEFAULT_GEMSTONE_DROP_CHANCE));
+          0.05f));
     }
   }
 }

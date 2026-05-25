@@ -290,6 +290,8 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       return;
     if (!(ctx.getOwner() instanceof ServerPlayerEntity player))
       return;
+    if (player.isSneaking())
+      return;
 
     BlockPos targetPos = ctx.getBlockPos();
     Direction face = computeHitFace(player, world, targetPos);

@@ -20,16 +20,16 @@ public class ChestsLootTable {
     if (path.equals("chests/jungle_temple")) {
       tableBuilder.pool(GemstoneLootHelper.gemstonePool(
           GemstonesRegistry.getJadeGemstones(),
-          0.3f));
+          1.0f));
     }
 
     if (path.equals("chests/bastion_treasure")) {
       tableBuilder.pool(GemstoneLootHelper.gemstonePool(
           GemstonesRegistry.getRubyGemstones(),
-          0.35f));
+          0.45f));
       tableBuilder.pool(GemstoneLootHelper.gemstonePool(
           GemstonesRegistry.getPyriteGemstones(),
-          0.45f));
+          0.5f));
     }
 
     if (path.equals("chests/desert_pyramid")) {
@@ -44,10 +44,10 @@ public class ChestsLootTable {
           0.35f));
       tableBuilder.pool(GemstoneLootHelper.unusualGemstonePool(
           GemstonesRegistry.getOnyxGemstones().get(0),
-          0.2f));
+          0.25f));
       tableBuilder.pool(GemstoneLootHelper.unusualGemstonePool(
           GemstonesRegistry.getAstraliteGemstones().get(0),
-          0.15f));
+          0.25f));
     }
 
     if (path.equals("chests/stronghold_library")) {

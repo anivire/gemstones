@@ -1,12 +1,14 @@
 package name.modid.core.content.events.misc;
 
+import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.component.type.AttributeModifiersComponent.Entry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 
 public class EventProjectileSpeed {
@@ -16,25 +18,20 @@ public class EventProjectileSpeed {
       return;
     }
 
-    AttributeModifiersComponent modifiersComponent = owner.getWeaponStack()
+    ItemStack weaponStack = projectile instanceof PersistentProjectileEntity persistentProjectile
+        ? persistentProjectile.getWeaponStack()
+        : owner.getWeaponStack();
+
+    if (weaponStack == null || weaponStack.isEmpty()) {
+      return;
+    }
+
+    AttributeModifiersComponent modifiersComponent = weaponStack
         .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
 
-    Entry modifierEntry = modifiersComponent.modifiers().stream()
-        .filter(x -> x.attribute() == AttributesRegistry.PROJECTILE_SPEED_ATTRIBUTE).findFirst()
-        .orElse(null);
-
-    if (modifierEntry != null) {
-      double totalValue = 0.0;
-
-      for (Entry e : modifiersComponent.modifiers()) {
-        if (e.attribute() == AttributesRegistry.PROJECTILE_SPEED_ATTRIBUTE) {
-          totalValue += e.modifier().value();
-        }
-      }
-
-      projectile.setVelocity(projectile.getVelocity().multiply(1.0 + totalValue));
-    } else {
-      projectile.setVelocity(projectile.getVelocity());
-    }
+    projectile.setVelocity(projectile.getVelocity().multiply(
+        ModifierUtils.getAttributeMultiplier(
+            modifiersComponent,
+            AttributesRegistry.PROJECTILE_SPEED_ATTRIBUTE)));
   }
 }

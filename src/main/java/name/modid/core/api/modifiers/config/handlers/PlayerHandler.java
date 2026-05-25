@@ -132,7 +132,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
   private void handleIncreaseSpawnrate(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    final int SPAWN_COOLDOWN = 36;
+    final int SPAWN_COOLDOWN = 20;
 
     if (!(ctx.getOwner() instanceof ServerPlayerEntity player)
         || !(ctx.getWorld() instanceof ServerWorld world)
@@ -249,6 +249,16 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
 
             world.spawnParticles(
                 ParticleTypes.LARGE_SMOKE,
+                entity.getX(),
+                entity.getY() + 1,
+                entity.getZ(),
+                20,
+                0.5,
+                0.5,
+                0.5,
+                0.02);
+            world.spawnParticles(
+                ParticleTypes.FLAME,
                 entity.getX(),
                 entity.getY() + 1,
                 entity.getZ(),

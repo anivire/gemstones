@@ -45,7 +45,7 @@
     },
     "ARMOR": {
       "type": "AREA_EFFECT",
-      "effect_id": "gemstones:amber_blessing",
+      "effect_id": "minecraft:resistance",
       "radius_levels": [
         1.0,
         1.5,

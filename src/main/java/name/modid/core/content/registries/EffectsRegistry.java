@@ -1,7 +1,6 @@
 package name.modid.core.content.registries;
 
 import name.modid.Gemstones;
-import name.modid.core.content.effects.AmberBlessingEffect;
 import name.modid.core.content.effects.BleedingEffect;
 import name.modid.core.content.effects.DetonateEffect;
 import name.modid.core.content.effects.FreezingEffect;
@@ -9,9 +8,9 @@ import name.modid.core.content.effects.GuardianSmiteEffect;
 import name.modid.core.content.effects.HarvestMarkEffect;
 import name.modid.core.content.effects.LethalWeaknessEffect;
 import name.modid.core.content.effects.LootTouchEffect;
+import name.modid.core.content.effects.RadianceEffect;
 import name.modid.core.content.effects.ScarabEffect;
 import name.modid.core.content.effects.SoulBurnEffect;
-import name.modid.core.content.effects.SparklingEffect;
 import name.modid.core.content.effects.StunnedEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
@@ -26,11 +25,6 @@ public class EffectsRegistry {
   public static final RegistryEntry<StatusEffect> GUARDIAN_SMITE_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT,
       Identifier.of(Gemstones.MOD_ID, "guardian_smite"), new GuardianSmiteEffect());
-
-  // public static final RegistryEntry<StatusEffect> QUICK_SANDS_EFFECT =
-  // Registry.registerReference(
-  // Registries.STATUS_EFFECT,
-  // Identifier.of(Gemstones.MOD_ID, "quick_sands"), new QuickSandsEffect());
 
   public static final RegistryEntry<StatusEffect> HARVEST_MARK_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT,
@@ -51,14 +45,11 @@ public class EffectsRegistry {
   public static final RegistryEntry<StatusEffect> SCARAB_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "scarab"), new ScarabEffect());
 
-  public static final RegistryEntry<StatusEffect> AMBER_BLESSING_EFFECT = Registry.registerReference(
-      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "amber_blessing"), new AmberBlessingEffect());
-
   public static final RegistryEntry<StatusEffect> SOUL_BURN_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "soul_burn"), new SoulBurnEffect());
 
-  public static final RegistryEntry<StatusEffect> SPARKLING_EFFECT = Registry.registerReference(
-      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "sparkling"), new SparklingEffect());
+  public static final RegistryEntry<StatusEffect> RADIANCE_EFFECT = Registry.registerReference(
+      Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "radiance"), new RadianceEffect());
 
   public static final RegistryEntry<StatusEffect> LETHAL_WEAKNESS_EFFECT = Registry.registerReference(
       Registries.STATUS_EFFECT, Identifier.of(Gemstones.MOD_ID, "lethal_weakness"), new LethalWeaknessEffect());

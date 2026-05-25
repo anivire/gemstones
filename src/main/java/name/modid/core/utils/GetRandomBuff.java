@@ -45,8 +45,7 @@ public class GetRandomBuff {
       StatusEffects.LUCK,
       StatusEffects.SLOW_FALLING,
       StatusEffects.DOLPHINS_GRACE,
-      StatusEffects.HERO_OF_THE_VILLAGE,
-      EffectsRegistry.AMBER_BLESSING_EFFECT);
+      StatusEffects.HERO_OF_THE_VILLAGE);
 
   private static StatusEffectInstance create(RegistryEntry<StatusEffect> effect, int buffDuration, int amplifier) {
     return new StatusEffectInstance(effect, buffDuration, amplifier, false, true, true);

@@ -6,7 +6,7 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 
 public class LethalWeaknessEffect extends StatusEffect {
   public LethalWeaknessEffect() {
-    super(StatusEffectCategory.HARMFUL, 0xFFD700);
+    super(StatusEffectCategory.HARMFUL, 0x7A2E8E);
   }
 
   @Override

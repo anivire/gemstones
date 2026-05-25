@@ -58,12 +58,6 @@ public abstract class ArmorPierceAttribute {
       return;
     }
 
-    String pierceAttributeId = AttributesRegistry.ARMOR_PIERCE_ATTRIBUTE.getIdAsString();
-
-    if (pierceAttributeId == null) {
-      return;
-    }
-
     EntityAttributeInstance armorAttr = livingTarget.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
 
     if (armorAttr == null) {
@@ -74,11 +68,7 @@ public abstract class ArmorPierceAttribute {
     double currentArmor = armorAttr.getValue();
 
     double armorPierce = comp.modifiers().stream()
-        .filter(
-            m -> {
-              String idStr = m.attribute().getIdAsString();
-              return idStr != null && idStr.equals(pierceAttributeId);
-            })
+        .filter(m -> m.attribute().equals(AttributesRegistry.ARMOR_PIERCE_ATTRIBUTE))
         .mapToDouble(
             m -> {
               EntityAttributeModifier mod = m.modifier();
