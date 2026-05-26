@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "gemstones:item/jewelry_table"
-  }
+  "parent": "gemstones:block/jewelry_table"
 }

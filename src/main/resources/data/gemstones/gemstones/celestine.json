@@ -5,10 +5,10 @@
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:generic.attack_speed",
       "value_levels": [
-        0.05,
-        0.08,
+        0.1,
         0.15,
-        0.20
+        0.2,
+        0.3
       ],
       "operation": "ADD_MULTIPLIED_BASE"
     },
@@ -27,10 +27,10 @@
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:player.block_break_speed",
       "value_levels": [
-        0.08,
-        0.10,
-        0.15,
-        0.25
+        0.12,
+        0.17,
+        0.25,
+        0.32
       ],
       "operation": "ADD_MULTIPLIED_BASE"
     },
@@ -38,10 +38,10 @@
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:generic.movement_speed",
       "value_levels": [
-        0.05,
-        0.08,
-        0.12,
-        0.18
+        0.1,
+        0.15,
+        0.2,
+        0.25
       ],
       "operation": "ADD_MULTIPLIED_BASE"
     }

@@ -4,30 +4,30 @@
     "MELEE": {
       "type": "ON_HIT_MELEE",
       "chance_levels": [
-        0.03,
-        0.055,
         0.1,
-        0.155
+        0.15,
+        0.2,
+        0.25
       ],
       "event_type": "ON_HIT_RANDOM_EFFECT"
     },
     "RANGED": {
       "type": "ON_HIT_PROJECTILE",
       "chance_levels": [
-        0.05,
-        0.085,
-        0.13,
-        0.175
+        0.15,
+        0.2,
+        0.25,
+        0.3
       ],
       "event_type": "ON_HIT_RANDOM_EFFECT"
     },
     "TOOLS": {
       "type": "ON_BLOCK_BREAK",
       "chance_levels": [
-        0.03,
-        0.055,
+        0.5,
         0.1,
-        0.155
+        0.15,
+        0.25
       ],
       "value_levels": [
         0.0,
@@ -46,10 +46,10 @@
         25.0
       ],
       "additional_value_levels": [
-        0.05,
-        0.07,
-        0.09,
-        0.11
+        0.15,
+        0.2,
+        0.25,
+        0.35
       ],
       "event_type": "PLAYER_RANDOM_EFFECT"
     }

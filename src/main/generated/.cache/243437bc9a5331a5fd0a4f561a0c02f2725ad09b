@@ -1,4 +1,4 @@
-// 1.21.1	2026-05-18T01:01:34.9469226	Gemstones/Model Definitions
+// 1.21.1	2026-05-26T18:43:14.6295199	Legendary Gemstones/Model Definitions
 767d4c8ef748eac9f7ceca9db3a3103392386e1a assets\gemstones\models\item\ruby_gemstone_polished.json
 615d0b2bc8dd2efb51e87ed4c88df1504f27fa42 assets\gemstones\models\item\amber_gemstone_flawless.json
 74ece4e752c7d79d4d654a50e8b977036c27a85c assets\gemstones\models\item\pyrite_gemstone_radiant.json
@@ -9,7 +9,7 @@ d8dc16d001ed6a783970d8a02f533d72560f04f1 assets\gemstones\models\item\obsidian_s
 6e9916bca01eba9cd1c98990950e9bb24de9a1cb assets\gemstones\models\item\zircon_gemstone_flawless.json
 1677a95c872c427462548ecb9d7da6cd9307d365 assets\gemstones\models\item\topaz_gemstone_radiant.json
 df691f35097cd340779ca5ed77f01f7e00fc9ad2 assets\gemstones\models\item\astralite_unusual.json
-edd066bb8242dcec81ac94877ca29f6ff4160d7e assets\gemstones\models\item\jewelry_table.json
+f2481dc5a6eba0bb47ee698b38e7bcc9b2741dcf assets\gemstones\models\item\jewelry_table.json
 47c4d1c52a91817ac4ead38f1bd6ac8092c3804d assets\gemstones\models\item\ender_scale_unusual.json
 c9095c9469fb17e6c0fab8ff054a4c79a90fd641 assets\gemstones\models\item\sapphire_gemstone_radiant.json
 36fe72fb85c1388f9660c58d4c95fa95b66342b6 assets\gemstones\models\item\aquamarine_gemstone_crude.json
@@ -63,8 +63,8 @@ c9095c9469fb17e6c0fab8ff054a4c79a90fd641 assets\gemstones\models\item\sapphire_g
 36fe72fb85c1388f9660c58d4c95fa95b66342b6 assets\gemstones\models\item\aquamarine_gemstone_polished.json
 767d4c8ef748eac9f7ceca9db3a3103392386e1a assets\gemstones\models\item\ruby_gemstone_crude.json
 6e9916bca01eba9cd1c98990950e9bb24de9a1cb assets\gemstones\models\item\zircon_gemstone_polished.json
-1677a95c872c427462548ecb9d7da6cd9307d365 assets\gemstones\models\item\topaz_gemstone_polished.json
 3ee5f4ab8ee3b3411830acb521a67300a7f7259b assets\gemstones\models\item\stone_geode.json
+1677a95c872c427462548ecb9d7da6cd9307d365 assets\gemstones\models\item\topaz_gemstone_polished.json
 29fd90a665f9994638833ce43904a659bce75fcb assets\gemstones\models\item\garnet_gemstone_polished.json
 74ece4e752c7d79d4d654a50e8b977036c27a85c assets\gemstones\models\item\pyrite_gemstone_flawless.json
 7bd7bc31a3b6e5716423ec000ca1618c2c425925 assets\gemstones\models\item\restless_flame_crude.json

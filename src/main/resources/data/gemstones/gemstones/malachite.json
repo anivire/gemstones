@@ -4,20 +4,20 @@
     "MELEE": {
       "type": "ON_FIRST_HIT",
       "value_levels": [
-        0.1,
         0.15,
+        0.2,
         0.25,
-        0.3
+        0.35
       ],
       "event_type": "ON_FIRST_HIT_ADDITIONAL_DAMAGE"
     },
     "RANGED": {
       "type": "ON_HIT_EFFECT_PROJECTILE",
       "chance_levels": [
-        0.06,
-        0.12,
-        0.18,
-        0.24
+        0.1,
+        0.15,
+        0.2,
+        0.25
       ],
       "amplifier": 0,
       "effect_id": "gemstones:detonate",
@@ -28,10 +28,10 @@
     "TOOLS": {
       "type": "ATTRIBUTE",
       "value_levels": [
-        0.03,
-        0.055,
-        0.1,
-        0.155
+        0.09,
+        0.14,
+        0.18,
+        0.25
       ],
       "attribute_id": "gemstones:geode_drop_chance",
       "operation": "ADD_MULTIPLIED_TOTAL"
@@ -42,10 +42,10 @@
         {
           "attribute_id": "minecraft:generic.fall_damage_multiplier",
           "value_levels": [
-            -0.10,
             -0.15,
-            -0.20,
-            -0.30
+            -0.2,
+            -0.25,
+            -0.35
           ],
           "operation": "ADD_MULTIPLIED_TOTAL"
         },
@@ -53,8 +53,8 @@
           "type": "ATTRIBUTE",
           "attribute_id": "minecraft:generic.knockback_resistance",
           "value_levels": [
-            0.10,
             0.15,
+            0.2,
             0.25,
             0.35
           ],

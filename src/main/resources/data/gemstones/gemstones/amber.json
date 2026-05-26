@@ -4,10 +4,10 @@
     "MELEE": {
       "type": "ON_HIT_EFFECT_MELEE",
       "chance_levels": [
-        0.05,
-        0.08,
-        0.14,
-        0.18
+        0.1,
+        0.15,
+        0.2,
+        0.25
       ],
       "amplifier": 0,
       "effect_id": "gemstones:scarab",
@@ -18,10 +18,10 @@
     "RANGED": {
       "type": "ON_HIT_EFFECT_PROJECTILE",
       "chance_levels": [
-        0.08,
         0.12,
-        0.16,
-        0.2
+        0.18,
+        0.25,
+        0.3
       ],
       "amplifier": 0,
       "effect_id": "gemstones:scarab",
