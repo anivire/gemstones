@@ -10,10 +10,10 @@
         0.3
       ],
       "amplifier": 0,
-      "effect_id": "minecraft:poison",
+      "effect_id": "gemstones:harvest_mark",
       "duration": 6,
-      "is_stacking": false,
-      "max_stack_count": 0
+      "is_stacking": true,
+      "max_stack_count": 10
     },
     "RANGED": {
       "type": "ON_HIT_EFFECT_PROJECTILE",
@@ -24,10 +24,10 @@
         0.45
       ],
       "amplifier": 0,
-      "effect_id": "minecraft:poison",
+      "effect_id": "gemstones:harvest_mark",
       "duration": 9,
-      "is_stacking": false,
-      "max_stack_count": 0
+      "is_stacking": true,
+      "max_stack_count": 10
     },
     "TOOLS": {
       "type": "ATTRIBUTE",

@@ -10,6 +10,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.OnFirstHitConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 
 public class OnFirstHitHandler implements ModifierHandler<ModifierConfig.OnFirstHitConfig> {
 
@@ -18,6 +19,12 @@ public class OnFirstHitHandler implements ModifierHandler<ModifierConfig.OnFirst
 
   private static final List<String> ORDER = List.of(
       "ON_FIRST_HIT_ADDITIONAL_DAMAGE");
+
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    return modifier.getItemCategory() == ModifierItemCategory.MELEE
+        || modifier.getItemCategory() == ModifierItemCategory.TOOLS;
+  }
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {

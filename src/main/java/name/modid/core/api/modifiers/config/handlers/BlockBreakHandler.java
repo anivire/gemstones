@@ -15,6 +15,7 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -46,6 +47,11 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
   private static final int FORCE_UPDATE_FLAGS = UPDATE_FLAGS | FLAG_FORCE_STATE;
   private static final Set<Identifier> BLOCKED_ITEMS = new HashSet<>();
   private static final ThreadLocal<Boolean> SUPPRESS_MINER = ThreadLocal.withInitial(() -> false);
+
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    return modifier.getItemCategory() == ModifierItemCategory.TOOLS;
+  }
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {

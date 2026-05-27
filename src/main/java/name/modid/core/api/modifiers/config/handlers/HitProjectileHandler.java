@@ -11,6 +11,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig.HitProjectileConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.content.entities.RainArrowEntity;
 import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.utils.GetRandomBuff;
@@ -54,6 +55,11 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       "ON_HIT_RANDOM_EFFECT",
       "ON_HIT_ARROW_RAIN",
       "ON_HIT_LIFE_STEAL");
+
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    return modifier.getItemCategory() == ModifierItemCategory.RANGED;
+  }
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {

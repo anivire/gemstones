@@ -11,6 +11,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig.OnPotionBrewConfig;
 import name.modid.core.api.modifiers.config.utils.PotionUtils;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
@@ -21,6 +22,11 @@ public class OnPotionBrewHandler implements ModifierHandler<ModifierConfig.OnPot
 
   private static final List<String> ORDER = List.of(
       "ON_POTION_BREW_INCREASE_DURATION");
+
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    return modifier.getItemCategory() == ModifierItemCategory.ARMOR;
+  }
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {

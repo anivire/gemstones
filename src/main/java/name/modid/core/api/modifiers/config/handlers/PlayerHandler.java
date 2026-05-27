@@ -11,6 +11,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig.PlayerConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.network.OreVisionPayload;
 import name.modid.core.utils.GetRandomBuff;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -54,6 +55,19 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       "PLAYER_PROJECTILE_IMMUNE",
       "PLAYER_TICK_INCREASE_MOB_SPAWNRATE",
       "PLAYER_TICK_ORE_VISION");
+
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    PlayerConfig config = (PlayerConfig) modifier.getConfig();
+    return switch (config.eventType().getName()) {
+      case "PLAYER_TICK_ORE_VISION" -> modifier.getItemCategory() == ModifierItemCategory.TOOLS;
+      case "PLAYER_RANDOM_EFFECT",
+          "PLAYER_WITHER_GUARD",
+          "PLAYER_PROJECTILE_IMMUNE",
+          "PLAYER_TICK_INCREASE_MOB_SPAWNRATE" -> modifier.getItemCategory() == ModifierItemCategory.ARMOR;
+      default -> false;
+    };
+  }
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
