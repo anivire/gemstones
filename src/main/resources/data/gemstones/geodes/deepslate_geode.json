@@ -3,16 +3,16 @@
   "gemstones": {
     "CELESTINE": 0.4,
     "JADE": 0.4,
-    "OPAL": 0.4,
-    "GARNET": 0.4,
-    "AQUAMARINE": 0.3,
-    "AMBER": 0.3,
+    "AQUAMARINE": 0.4,
+    "AMBER": 0.4,
+    "OPAL": 0.3,
+    "GARNET": 0.3,
     "TOPAZ": 0.2,
     "MALACHITE": 0.2
   },
   "qualities": {
-    "POLISHED": 0.3,
-    "FLAWLESS": 0.45,
+    "POLISHED": 0.4,
+    "FLAWLESS": 0.3,
     "RADIANT": 0.25
   }
 }

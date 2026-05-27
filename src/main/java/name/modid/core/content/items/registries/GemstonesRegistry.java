@@ -89,7 +89,7 @@ public class GemstonesRegistry {
 
       AQUAMARINE_GEMSTONES.add(ItemsRegistry.register("aquamarine_gemstone_" + rarityName,
           settings -> new GemstoneItem(settings, GemstoneType.AQUAMARINE, rarity),
-          new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+          new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       OBSIDIAN_SHARD_GEMSTONES.add(ItemsRegistry.register(
           "obsidian_shard_gemstone_" + rarityName,
@@ -99,7 +99,7 @@ public class GemstonesRegistry {
       OPAL_GEMSTONES.add(ItemsRegistry.register(
           "opal_gemstone_" + rarityName,
           settings -> new GemstoneItem(settings, GemstoneType.OPAL, rarity),
-          new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+          new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       JADE_GEMSTONES.add(ItemsRegistry.register(
           "jade_gemstone_" + rarityName,
@@ -119,7 +119,7 @@ public class GemstonesRegistry {
       AMBER_GEMSTONES.add(ItemsRegistry.register(
           "amber_gemstone_" + rarityName,
           settings -> new GemstoneItem(settings, GemstoneType.AMBER, rarity),
-          new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+          new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       PYRITE_GEMSTONES.add(ItemsRegistry.register(
           "pyrite_gemstone_" + rarityName,
@@ -129,7 +129,7 @@ public class GemstonesRegistry {
       GARNET_GEMSTONES.add(ItemsRegistry.register(
           "garnet_gemstone_" + rarityName,
           settings -> new GemstoneItem(settings, GemstoneType.GARNET, rarity),
-          new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+          new Item.Settings().rarity(Rarity.RARE).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
       POLYCHROME_CRYSTAL.add(ItemsRegistry.register(
           "polychrome_crystal_gemstone_" + rarityName,
