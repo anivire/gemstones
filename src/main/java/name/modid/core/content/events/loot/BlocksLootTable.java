@@ -27,7 +27,7 @@ public class BlocksLootTable {
 
   public static LootTable replace(RegistryKey<LootTable> key, LootTable original, LootTableSource source,
       WrapperLookup registries) {
-    if (!source.isBuiltin() || !key.getValue().getNamespace().equals("minecraft")) {
+    if (!source.isBuiltin() || !isMinecraftBlockLootTable(key)) {
       return null;
     }
 
@@ -44,7 +44,7 @@ public class BlocksLootTable {
 
   public static void setup(RegistryKey<LootTable> key, Builder tableBuilder, LootTableSource source,
       WrapperLookup registries) {
-    if (!key.getValue().getNamespace().equals("minecraft")) {
+    if (!isMinecraftBlockLootTable(key)) {
       return;
     }
 
@@ -74,7 +74,6 @@ public class BlocksLootTable {
 
   private static Builder obsidianShardReplacementTable(Item originalBlock) {
     var gemstones = GemstonesRegistry.getObsidianShardGemstones();
-    validateObsidianShardGemstones();
 
     return LootTable.builder()
         .pool(LootPool.builder()
@@ -87,11 +86,8 @@ public class BlocksLootTable {
             .with(ItemEntry.builder(gemstones.get(3)).weight(OBSIDIAN_SHARD_RADIANT_WEIGHT)));
   }
 
-  private static void validateObsidianShardGemstones() {
-    var gemstones = GemstonesRegistry.getObsidianShardGemstones();
-    if (gemstones.size() != 4) {
-      throw new IllegalStateException(
-          "Expected 4 obsidian shard gemstone qualities, got " + gemstones.size());
-    }
+  private static boolean isMinecraftBlockLootTable(RegistryKey<LootTable> key) {
+    Identifier id = key.getValue();
+    return id.getNamespace().equals("minecraft") && id.getPath().startsWith("blocks/");
   }
 }

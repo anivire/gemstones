@@ -5,6 +5,7 @@ import java.util.Map;
 
 import name.modid.Gemstones;
 import name.modid.datapack.geodes.GeodesDataLoader;
+import name.modid.datapack.items.ItemCompatibilityDataLoader;
 import name.modid.datapack.modifiers.ModifiersDataLoader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -13,7 +14,8 @@ import net.minecraft.util.Identifier;
 
 public record DatapackSyncPayload(
     Map<String, String> gemstoneConfigs,
-    Map<String, String> geodeConfigs) implements CustomPayload {
+    Map<String, String> geodeConfigs,
+    Map<String, String> itemCompatibilityConfigs) implements CustomPayload {
   private static final int MAX_CONFIG_LENGTH = 1_048_576;
 
   public static final Id<DatapackSyncPayload> ID = new Id<>(
@@ -22,12 +24,14 @@ public record DatapackSyncPayload(
   public static final PacketCodec<PacketByteBuf, DatapackSyncPayload> CODEC = PacketCodec.of((value, buf) -> {
     writeStringMap(buf, value.gemstoneConfigs);
     writeStringMap(buf, value.geodeConfigs);
-  }, buf -> new DatapackSyncPayload(readStringMap(buf), readStringMap(buf)));
+    writeStringMap(buf, value.itemCompatibilityConfigs);
+  }, buf -> new DatapackSyncPayload(readStringMap(buf), readStringMap(buf), readStringMap(buf)));
 
   public static DatapackSyncPayload current() {
     return new DatapackSyncPayload(
         ModifiersDataLoader.getLoadedConfigSources(),
-        GeodesDataLoader.getLoadedConfigSources());
+        GeodesDataLoader.getLoadedConfigSources(),
+        ItemCompatibilityDataLoader.getLoadedConfigSources());
   }
 
   private static void writeStringMap(PacketByteBuf buf, Map<String, String> values) {

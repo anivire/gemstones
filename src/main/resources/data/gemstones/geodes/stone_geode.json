@@ -1,5 +1,10 @@
 {
   "geode_id": "stone_geode",
+  "drop_chance": 0.03,
+  "ore_tags": [
+    "gemstones:stone_ores"
+  ],
+  "ores": [],
   "gemstones": {
     "CELESTINE": 0.5,
     "JADE": 0.5,

@@ -15,13 +15,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import name.modid.Gemstones;
+import name.modid.datapack.core.IdentifierTypeAdapter;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
 public class GeodesDataLoader implements SimpleSynchronousResourceReloadListener {
   private static final Logger LOGGER = Gemstones.LOGGER;
-  private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+  private static final Gson GSON = new GsonBuilder()
+      .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
+      .setPrettyPrinting()
+      .create();
 
   public static final Identifier ID = Identifier.of(Gemstones.MOD_ID, "geodes_data_config");
   private static Map<String, GeodesConfig> loadedGeodeConfigs = Collections.emptyMap();
@@ -79,6 +83,7 @@ public class GeodesDataLoader implements SimpleSynchronousResourceReloadListener
         GeodesConfig config = GSON.fromJson(fileContent, GeodesConfig.class);
 
         if (config != null && config.geodeId != null) {
+          config.normalize();
           newConfigs.put(config.geodeId, config);
           LOGGER.debug("Loaded geode config {}", config.geodeId);
         } else {

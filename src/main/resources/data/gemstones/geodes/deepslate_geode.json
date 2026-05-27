@@ -1,5 +1,10 @@
 {
   "geode_id": "deepslate_geode",
+  "drop_chance": 0.035,
+  "ore_tags": [
+    "gemstones:deepslate_ores"
+  ],
+  "ores": [],
   "gemstones": {
     "CELESTINE": 0.4,
     "JADE": 0.4,
