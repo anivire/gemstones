@@ -83,9 +83,14 @@ public class TooltipBuilder {
               ? InlineIcons.LOCKED.getSymbol()
               : gemstoneType.getGemstoneLiteral();
 
-      String fontPath = (gemstoneType != GemstoneType.EMPTY && gemstoneType != GemstoneType.LOCKED)
-          ? Icons.INLINE_GEMSTONE.getPath()
-          : Icons.INLINE.getPath();
+      String fontPath = (gemstoneType != GemstoneType.EMPTY && gemstoneType != GemstoneType.LOCKED
+          && gemstoneType != GemstoneType.UNDEFINED)
+              ? Icons.INLINE_GEMSTONE.getPath()
+              : Icons.INLINE.getPath();
+
+      if (gemstoneType == GemstoneType.UNDEFINED) {
+        symbol = InlineIcons.INFO.getSymbol();
+      }
 
       prefix = Text.literal(symbol)
           .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, fontPath)))

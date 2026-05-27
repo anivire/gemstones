@@ -23,7 +23,9 @@ import net.minecraft.item.ToolItem;
 public class ModifierHelper {
   public static Map<ModifierItemCategory, Map<GemstoneQuality, GemstoneModifier>> getGemstoneModifiers(
       GemstoneType gemstoneType, Item item) {
-    if (gemstoneType == GemstoneType.EMPTY || gemstoneType == GemstoneType.LOCKED) {
+    if (gemstoneType == GemstoneType.EMPTY
+        || gemstoneType == GemstoneType.LOCKED
+        || gemstoneType == GemstoneType.UNDEFINED) {
       return null;
     }
 
@@ -33,7 +35,9 @@ public class ModifierHelper {
 
   public static GemstoneModifier getGemstoneModifierForItem(
       GemstoneType gemstoneType, GemstoneQuality GemstoneQualityType, Item item) {
-    if (gemstoneType == GemstoneType.EMPTY || gemstoneType == GemstoneType.LOCKED) {
+    if (gemstoneType == GemstoneType.EMPTY
+        || gemstoneType == GemstoneType.LOCKED
+        || gemstoneType == GemstoneType.UNDEFINED) {
       return null;
     }
 

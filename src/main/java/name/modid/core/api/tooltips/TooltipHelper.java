@@ -74,6 +74,7 @@ public class TooltipHelper {
     return switch (gemType) {
       case EMPTY -> Formatting.DARK_GRAY;
       case LOCKED -> Formatting.RED;
+      case AMBER -> Formatting.RED;
       default -> Formatting.WHITE;
     };
   }
@@ -82,11 +83,16 @@ public class TooltipHelper {
     return switch (gemType) {
       case LOCKED -> "tooltip.gemstones.gemstone_type.locked";
       case EMPTY -> "tooltip.gemstones.gemstone_type.empty";
+      case UNDEFINED -> "tooltip.gemstones.gemstone_type.undefined";
       default -> "tooltip.gemstones.gemstone_type.undefined";
     };
   }
 
   private static Text getGemstoneSprite(GemstoneType gemstoneType) {
+    if (gemstoneType == GemstoneType.UNDEFINED) {
+      return safeTranslatable(gemstoneType.getTranslationString()).formatted(Formatting.RED);
+    }
+
     return Text.literal(gemstoneType.getGemstoneLiteral())
         .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.SOCKET.getPath())));
   }

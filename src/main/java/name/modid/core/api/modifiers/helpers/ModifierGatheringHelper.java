@@ -19,7 +19,8 @@ public class ModifierGatheringHelper {
     for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
       if (gem.gemstoneType() == null
           || gem.gemstoneType() == GemstoneType.LOCKED
-          || gem.gemstoneType() == GemstoneType.EMPTY) {
+          || gem.gemstoneType() == GemstoneType.EMPTY
+          || gem.gemstoneType() == GemstoneType.UNDEFINED) {
         continue;
       }
 
@@ -51,7 +52,8 @@ public class ModifierGatheringHelper {
     for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
       if (gem.gemstoneType() == null
           || gem.gemstoneType() == GemstoneType.LOCKED
-          || gem.gemstoneType() == GemstoneType.EMPTY) {
+          || gem.gemstoneType() == GemstoneType.EMPTY
+          || gem.gemstoneType() == GemstoneType.UNDEFINED) {
         continue;
       }
 
@@ -82,7 +84,8 @@ public class ModifierGatheringHelper {
     for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
       if (gem.gemstoneType() == null
           || gem.gemstoneType() == GemstoneType.LOCKED
-          || gem.gemstoneType() == GemstoneType.EMPTY) {
+          || gem.gemstoneType() == GemstoneType.EMPTY
+          || gem.gemstoneType() == GemstoneType.UNDEFINED) {
         continue;
       }
 
