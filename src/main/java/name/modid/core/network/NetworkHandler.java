@@ -1,5 +1,6 @@
 package name.modid.core.network;
 
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeRefreshHelper;
 import name.modid.core.utils.airJump.AirJumpLogic;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -26,7 +27,15 @@ public final class NetworkHandler {
           });
         });
 
+    ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
+      if (success) {
+        GemstoneAttributeRefreshHelper.refreshOnlinePlayers(server);
+      }
+    });
+
     ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
+      GemstoneAttributeRefreshHelper.refreshPlayer(player);
+
       if (ServerPlayNetworking.canSend(player, DatapackSyncPayload.ID)) {
         ServerPlayNetworking.send(player, DatapackSyncPayload.current());
       }

@@ -64,7 +64,8 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       case "PLAYER_RANDOM_EFFECT",
           "PLAYER_WITHER_GUARD",
           "PLAYER_PROJECTILE_IMMUNE",
-          "PLAYER_TICK_INCREASE_MOB_SPAWNRATE" -> modifier.getItemCategory() == ModifierItemCategory.ARMOR;
+          "PLAYER_TICK_INCREASE_MOB_SPAWNRATE" ->
+        modifier.getItemCategory() == ModifierItemCategory.ARMOR;
       default -> false;
     };
   }
@@ -249,17 +250,9 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
 
           Entity entity = entry.type.spawn(world, pos, SpawnReason.SPAWNER);
 
-          if (entity != null && entity instanceof LivingEntity living) {
+          if (entity != null && entity instanceof LivingEntity) {
             spawned = true;
             spawnedAny = true;
-
-            // living.addStatusEffect(
-            // new StatusEffectInstance(
-            // StatusEffects.GLOWING,
-            // 5 * 20,
-            // 0,
-            // false,
-            // false));
 
             world.spawnParticles(
                 ParticleTypes.LARGE_SMOKE,

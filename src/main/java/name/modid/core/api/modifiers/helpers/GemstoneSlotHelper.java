@@ -175,13 +175,23 @@ public class GemstoneSlotHelper {
   }
 
   public static void updateSocketsAttributes(ItemStack itemStack, Item item) {
-    if (isItemValid(item)) {
-      GemstoneComponent[] gemstones = getGemstones(itemStack);
-      if (gemstones != null) {
-        ArrayList<GemstoneModifier> modifiers = ModifierGatheringHelper.getAttributeModifiers(itemStack);
-        ModifierManager.applyAttributeModifiers(modifiers, itemStack);
-      }
+    if (itemStack == null || itemStack.isEmpty()) {
+      return;
     }
+
+    ArrayList<GemstoneModifier> modifiers = isItemValid(item)
+        ? ModifierGatheringHelper.getAttributeModifiers(itemStack)
+        : new ArrayList<>();
+
+    ModifierManager.applyAttributeModifiers(modifiers, itemStack);
+  }
+
+  public static void updateSocketsAttributes(ItemStack itemStack) {
+    if (itemStack == null || itemStack.isEmpty()) {
+      return;
+    }
+
+    updateSocketsAttributes(itemStack, itemStack.getItem());
   }
 
   public static int getFirstFilledSlotIndex(ItemStack stack) {
