@@ -11,6 +11,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig.OnFishingConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.content.items.registries.ItemsRegistry;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
@@ -24,6 +25,11 @@ public class OnFishingHandler implements ModifierHandler<ModifierConfig.OnFishin
 
   private static final List<String> ORDER = List.of(
       "ON_FISHING_INCREASE_MOSSY_BOX_DROP");
+
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    return modifier.getItemCategory() == ModifierItemCategory.ARMOR;
+  }
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {

@@ -48,7 +48,15 @@ public class ModifierManager {
       ModifierHandler<ModifierConfig> handler = ModifierHandlerRegistry.getHandler(config);
 
       if (handler != null) {
-        handler.apply(new ArrayList<>(modifierGroup), ctx);
+        ArrayList<GemstoneModifier> supportedModifiers = modifierGroup.stream()
+            .filter(handler::supports)
+            .collect(Collectors.toCollection(ArrayList::new));
+
+        if (supportedModifiers.isEmpty()) {
+          continue;
+        }
+
+        handler.apply(supportedModifiers, ctx);
 
         // Check if a handler has cancelled the event or set a failing result.
         // If so, we stop processing any further modifier groups.

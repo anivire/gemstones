@@ -30,18 +30,15 @@
       "max_stack_count": 0
     },
     "TOOLS": {
-      "type": "ON_HIT_EFFECT_MELEE",
-      "chance_levels": [
-        0.1,
-        0.2,
-        0.3,
-        0.4
+      "type": "ATTRIBUTE",
+      "attribute_id": "minecraft:generic.luck",
+      "value_levels": [
+        0.5,
+        1.0,
+        1.5,
+        2.0
       ],
-      "amplifier": 0,
-      "effect_id": "gemstones:harvest_mark",
-      "duration": 6,
-      "is_stacking": true,
-      "max_stack_count": 10
+      "operation": "ADD_VALUE"
     },
     "ARMOR": {
       "type": "AREA_EFFECT",

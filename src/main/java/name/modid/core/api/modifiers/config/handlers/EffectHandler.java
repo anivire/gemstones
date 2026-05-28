@@ -15,6 +15,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig.HitEffectProjectileCo
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.content.effects.StunnedEffect;
 import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.entity.LivingEntity;
@@ -130,6 +131,12 @@ public class EffectHandler {
 
   public static class Melee implements ModifierHandler<ModifierConfig.HitEffectMeleeConfig> {
     @Override
+    public boolean supports(GemstoneModifier modifier) {
+      return modifier.getItemCategory() == ModifierItemCategory.MELEE
+          || modifier.getItemCategory() == ModifierItemCategory.TOOLS;
+    }
+
+    @Override
     public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
       boolean hasDamageContext = ctx.getBaseDamageTaken() > 0.0F;
 
@@ -177,6 +184,11 @@ public class EffectHandler {
   }
 
   public static class Projectile implements ModifierHandler<ModifierConfig.HitEffectProjectileConfig> {
+    @Override
+    public boolean supports(GemstoneModifier modifier) {
+      return modifier.getItemCategory() == ModifierItemCategory.RANGED;
+    }
+
     @Override
     public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
       if (ctx.getTarget() instanceof LivingEntity target) {

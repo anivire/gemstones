@@ -2,11 +2,11 @@ package name.modid.datagen.providers;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.List;
 
 import name.modid.Gemstones;
 import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.items.registries.ItemsRegistry;
-import name.modid.core.content.loot.BlockInTagLootCondition;
 import name.modid.core.content.loot.GeodeDropChanceCondition;
 import name.modid.core.content.registries.TagsRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -48,20 +48,15 @@ public class BlockLootTableProvider extends SimpleFabricLootTableProvider {
                     .rolls(ConstantLootNumberProvider.create(1))
                     .conditionally(SurvivesExplosionLootCondition.builder())
                     .conditionally(
-                        BlockInTagLootCondition.builder(
-                            TagsRegistry.STONE_ORES))
-                    .conditionally(
-                        GeodeDropChanceCondition.builder(BASE_STONE_CHANCE))
+                        GeodeDropChanceCondition.builder("stone_geode", BASE_STONE_CHANCE, List.of(TagsRegistry.STONE_ORES)))
                     .with(ItemEntry.builder(ItemsRegistry.STONE_GEODE)))
             .pool(
                 LootPool.builder()
                     .rolls(ConstantLootNumberProvider.create(1))
                     .conditionally(SurvivesExplosionLootCondition.builder())
                     .conditionally(
-                        BlockInTagLootCondition.builder(
-                            TagsRegistry.DEEPSLATE_ORES))
-                    .conditionally(
-                        GeodeDropChanceCondition.builder(BASE_DEEPSLATE_CHANCE))
+                        GeodeDropChanceCondition.builder("deepslate_geode", BASE_DEEPSLATE_CHANCE,
+                            List.of(TagsRegistry.DEEPSLATE_ORES)))
                     .with(ItemEntry.builder(ItemsRegistry.DEEPSLATE_GEODE))));
   }
 
