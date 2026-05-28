@@ -65,9 +65,12 @@ public record GeodeDropChanceCondition(
       bonusChance = fromArmor + fromItem;
     }
 
-    double totalChance = getBaseChance() + bonusChance;
-    Random random = context.getRandom();
+    double baseChance = getBaseChance();
+    double totalChance = baseChance * (1.0 + bonusChance);
 
+    totalChance = Math.min(totalChance, 1.0);
+
+    Random random = context.getRandom();
     return random.nextDouble() < totalChance;
   }
 
