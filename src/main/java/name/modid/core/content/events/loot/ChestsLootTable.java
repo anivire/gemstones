@@ -53,7 +53,7 @@ public class ChestsLootTable {
     if (path.equals("chests/stronghold_library")) {
       tableBuilder.pool(GemstoneLootHelper.unusualGemstonePool(
           GemstonesRegistry
-              .getCrystallizedExpirienceGemstones()
+              .getCrystallizedExperienceGemstones()
               .get(0),
           0.1f));
     }

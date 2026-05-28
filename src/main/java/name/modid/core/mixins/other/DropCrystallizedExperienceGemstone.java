@@ -13,7 +13,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
 @Mixin(ExperienceBottleEntity.class)
-public abstract class DropCrystallizedExpirienceGemstone {
+public abstract class DropCrystallizedExperienceGemstone {
   private static final float DROP_CHANCE = 0.02f;
 
   @Inject(method = "onCollision", at = @At("TAIL"))
@@ -32,7 +32,7 @@ public abstract class DropCrystallizedExpirienceGemstone {
 
     ItemStack drop = new ItemStack(
         GemstonesRegistry
-            .getCrystallizedExpirienceGemstones()
+            .getCrystallizedExperienceGemstones()
             .get(0));
 
     Block.dropStack(world, pos, drop);

@@ -41,7 +41,7 @@ public class GemstonesRegistry {
   private static final List<Item> WITHER_SHELL = new ArrayList<>();
   private static final List<Item> POLYCHROME_CRYSTAL = new ArrayList<>();
   private static final List<Item> ONYX = new ArrayList<>();
-  private static final List<Item> CRYSTALLIZED_EXPIRIENCE = new ArrayList<>();
+  private static final List<Item> CRYSTALLIZED_EXPERIENCE = new ArrayList<>();
   private static final List<Item> ASTRALITE = new ArrayList<>();
   private static final List<Item> ENDER_SCALE = new ArrayList<>();
 
@@ -147,9 +147,9 @@ public class GemstonesRegistry {
         settings -> new GemstoneItem(settings, GemstoneType.ONYX, GemstoneQuality.UNUSUAL),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
-    CRYSTALLIZED_EXPIRIENCE.add(ItemsRegistry.register(
-        "crystallized_expirience_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
-        settings -> new GemstoneItem(settings, GemstoneType.CRYSTALLIZED_EXPIRIENCE, GemstoneQuality.UNUSUAL),
+    CRYSTALLIZED_EXPERIENCE.add(ItemsRegistry.register(
+        "crystallized_experience_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
+        settings -> new GemstoneItem(settings, GemstoneType.CRYSTALLIZED_EXPERIENCE, GemstoneQuality.UNUSUAL),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
     ASTRALITE.add(ItemsRegistry.register(
@@ -181,7 +181,7 @@ public class GemstonesRegistry {
     WITHER_SHELL.forEach(entries::add);
     POLYCHROME_CRYSTAL.forEach(entries::add);
     ONYX.forEach(entries::add);
-    CRYSTALLIZED_EXPIRIENCE.forEach(entries::add);
+    CRYSTALLIZED_EXPERIENCE.forEach(entries::add);
     ASTRALITE.forEach(entries::add);
     ENDER_SCALE.forEach(entries::add);
   }
@@ -205,7 +205,7 @@ public class GemstonesRegistry {
     all.addAll(WITHER_SHELL);
     all.addAll(POLYCHROME_CRYSTAL);
     all.addAll(ONYX);
-    all.addAll(CRYSTALLIZED_EXPIRIENCE);
+    all.addAll(CRYSTALLIZED_EXPERIENCE);
     all.addAll(ASTRALITE);
     all.addAll(ENDER_SCALE);
     return all;
@@ -279,8 +279,8 @@ public class GemstonesRegistry {
     return ONYX;
   }
 
-  public static List<Item> getCrystallizedExpirienceGemstones() {
-    return CRYSTALLIZED_EXPIRIENCE;
+  public static List<Item> getCrystallizedExperienceGemstones() {
+    return CRYSTALLIZED_EXPERIENCE;
   }
 
   public static List<Item> getAstraliteGemstones() {
@@ -310,7 +310,7 @@ public class GemstonesRegistry {
       case WITHER_SHELL -> WITHER_SHELL;
       case POLYCHROME_CRYSTAL -> POLYCHROME_CRYSTAL;
       case ONYX -> ONYX;
-      case CRYSTALLIZED_EXPIRIENCE -> CRYSTALLIZED_EXPIRIENCE;
+      case CRYSTALLIZED_EXPERIENCE -> CRYSTALLIZED_EXPERIENCE;
       case ASTRALITE -> ASTRALITE;
       case ENDER_SCALE -> ENDER_SCALE;
       default -> List.of();
