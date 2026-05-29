@@ -29,6 +29,9 @@
     "other.MarkHomingArrowCrossbow",
     "other.DropCrystallizedExperienceGemstone",
     "other.DropEnderScaleAfterDragonDeath",
+    "other.PreserveGemstonesOnSmithing",
+    "other.PreserveGemstonesOnGrindstone",
+    "other.PreserveGemstonesOnCrafting",
     "trackers.SoulBurnTracker",
     "trackers.HomingArrowTracker"
   ],

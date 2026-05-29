@@ -272,4 +272,12 @@ public class GemstoneSlotHelper {
 
     return -1;
   }
+
+  public static void copyGemstones(ItemStack source, ItemStack target) {
+    if (source == null || target == null || source.isEmpty() || target.isEmpty()) return;
+    GemstoneSlotsComponent gemstones = source.get(ComponentsRegistry.GEMSTONES);
+    if (gemstones != null && isItemValid(target.getItem())) {
+      target.set(ComponentsRegistry.GEMSTONES, gemstones);
+    }
+  }
 }
