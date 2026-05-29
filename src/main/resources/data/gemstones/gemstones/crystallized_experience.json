@@ -1,5 +1,5 @@
 {
-  "gemstone_type": "CRYSTALLIZED_EXPIRIENCE",
+  "gemstone_type": "CRYSTALLIZED_EXPERIENCE",
   "modifiers": {
     "MELEE": {
       "type": "ON_HIT_MELEE",

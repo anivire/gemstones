@@ -10,6 +10,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.OnPlayerDamageConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -23,6 +24,11 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
 
   private static final List<String> ORDER = List.of(
       "PLAYER_SAVE_LETHAL");
+
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    return modifier.getItemCategory() == ModifierItemCategory.ARMOR;
+  }
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {

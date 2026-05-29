@@ -8,12 +8,12 @@
           "condition": "minecraft:survives_explosion"
         },
         {
-          "condition": "gemstones:block_in_tag",
-          "tag": "#gemstones:stone_ores"
-        },
-        {
-          "base_chance": 0.03,
-          "condition": "gemstones:geode_chance"
+          "base_chance": 0.025,
+          "condition": "gemstones:geode_chance",
+          "fallback_ore_tags": [
+            "#gemstones:stone_ores"
+          ],
+          "geode_id": "stone_geode"
         }
       ],
       "entries": [
@@ -31,12 +31,12 @@
           "condition": "minecraft:survives_explosion"
         },
         {
-          "condition": "gemstones:block_in_tag",
-          "tag": "#gemstones:deepslate_ores"
-        },
-        {
-          "base_chance": 0.02,
-          "condition": "gemstones:geode_chance"
+          "base_chance": 0.035,
+          "condition": "gemstones:geode_chance",
+          "fallback_ore_tags": [
+            "#gemstones:deepslate_ores"
+          ],
+          "geode_id": "deepslate_geode"
         }
       ],
       "entries": [

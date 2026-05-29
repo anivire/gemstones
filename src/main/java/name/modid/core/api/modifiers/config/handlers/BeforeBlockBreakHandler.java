@@ -12,6 +12,7 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
@@ -29,6 +30,11 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 
 public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.BeforeBlockBreakConfig> {
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    return modifier.getItemCategory() == ModifierItemCategory.TOOLS;
+  }
+
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (modifiers.isEmpty())
@@ -56,6 +62,14 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
       return;
     }
 
+    ItemStack tool = owner.getMainHandStack();
+
+    Registry<Enchantment> enchRegistry = ctx.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+    RegistryEntry<Enchantment> silkTouchEntry = enchRegistry.getEntry(Enchantments.SILK_TOUCH).orElse(null);
+    if (silkTouchEntry != null && EnchantmentHelper.getLevel(silkTouchEntry, tool) > 0) {
+      return;
+    }
+
     List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
       BeforeBlockBreakConfig config = (BeforeBlockBreakConfig) modifier.getConfig();
@@ -66,19 +80,24 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
       List<ItemStack> drops = Block.getDroppedStacks(ctx.getBlockState(), ctx.getWorld(), ctx.getBlockPos(),
-          ctx.getWorld().getBlockEntity(ctx.getBlockPos()), owner, owner.getMainHandStack());
+          ctx.getWorld().getBlockEntity(ctx.getBlockPos()), owner, tool);
 
-      List<ItemStack> smeltableDrops = drops.stream().map(x -> ModifierUtils.getSmeltingResult(ctx.getWorld(), x))
-          .filter(x -> !x.isEmpty()).toList();
+      List<ItemStack> smeltedDrops = new ArrayList<>();
+      for (ItemStack drop : drops) {
+        ItemStack smelted = ModifierUtils.getSmeltingResult(ctx.getWorld(), drop);
+        if (!smelted.isEmpty()) {
+          smelted.setCount(smelted.getCount() * drop.getCount());
+          smeltedDrops.add(smelted);
+        }
+      }
 
-      if (!smeltableDrops.isEmpty()) {
-        for (ItemStack smelted : smeltableDrops) {
+      if (!smeltedDrops.isEmpty()) {
+        for (ItemStack smelted : smeltedDrops) {
           Block.dropStack(ctx.getWorld(), ctx.getBlockPos(), smelted.copy());
         }
 
         ctx.getWorld().setBlockState(ctx.getBlockPos(), Blocks.AIR.getDefaultState(), 3);
 
-        ItemStack tool = owner.getMainHandStack();
         if (tool.isDamageable()) {
           tool.damage(1, owner, EquipmentSlot.MAINHAND);
         }

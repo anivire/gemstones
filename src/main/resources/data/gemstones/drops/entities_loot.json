@@ -1,0 +1,16 @@
+{
+  "entities_loot": [
+    {
+      "loot_tables": ["minecraft:entities/elder_guardian"],
+      "pools": [
+        { "gemstone_type": "SAPPHIRE", "chance": 0.75 }
+      ]
+    },
+    {
+      "loot_tables": ["minecraft:entities/wither"],
+      "pools": [
+        { "gemstone_type": "WITHER_SHELL", "chance": 1.0, "unusual": true }
+      ]
+    }
+  ]
+}

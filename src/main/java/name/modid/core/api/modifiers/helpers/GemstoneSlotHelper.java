@@ -13,16 +13,8 @@ import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.registries.GemstonesRegistry;
-import net.minecraft.item.AnimalArmorItem;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.ShovelItem;
-import net.minecraft.item.SwordItem;
 
 public class GemstoneSlotHelper {
   public static final int MAX_SLOTS = 5;
@@ -37,13 +29,7 @@ public class GemstoneSlotHelper {
   }
 
   public static boolean isItemValid(Item item) {
-    if (item instanceof AnimalArmorItem) {
-      return false;
-    }
-
-    return item instanceof PickaxeItem || item instanceof BowItem || item instanceof ArmorItem
-        || item instanceof SwordItem || item instanceof AxeItem || item instanceof ShovelItem
-        || item instanceof CrossbowItem;
+    return ModifierHelper.getItemCategory(item).isPresent();
   }
 
   public static boolean isGemstonesExists(ItemStack itemStack) {
@@ -189,13 +175,23 @@ public class GemstoneSlotHelper {
   }
 
   public static void updateSocketsAttributes(ItemStack itemStack, Item item) {
-    if (isItemValid(item)) {
-      GemstoneComponent[] gemstones = getGemstones(itemStack);
-      if (gemstones != null) {
-        ArrayList<GemstoneModifier> modifiers = ModifierGatheringHelper.getAttributeModifiers(itemStack);
-        ModifierManager.applyAttributeModifiers(modifiers, itemStack);
-      }
+    if (itemStack == null || itemStack.isEmpty()) {
+      return;
     }
+
+    ArrayList<GemstoneModifier> modifiers = isItemValid(item)
+        ? ModifierGatheringHelper.getAttributeModifiers(itemStack)
+        : new ArrayList<>();
+
+    ModifierManager.applyAttributeModifiers(modifiers, itemStack);
+  }
+
+  public static void updateSocketsAttributes(ItemStack itemStack) {
+    if (itemStack == null || itemStack.isEmpty()) {
+      return;
+    }
+
+    updateSocketsAttributes(itemStack, itemStack.getItem());
   }
 
   public static int getFirstFilledSlotIndex(ItemStack stack) {
@@ -275,5 +271,13 @@ public class GemstoneSlotHelper {
     }
 
     return -1;
+  }
+
+  public static void copyGemstones(ItemStack source, ItemStack target) {
+    if (source == null || target == null || source.isEmpty() || target.isEmpty()) return;
+    GemstoneSlotsComponent gemstones = source.get(ComponentsRegistry.GEMSTONES);
+    if (gemstones != null && isItemValid(target.getItem())) {
+      target.set(ComponentsRegistry.GEMSTONES, gemstones);
+    }
   }
 }

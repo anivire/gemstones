@@ -4,10 +4,10 @@
     "MELEE": {
       "type": "ON_HIT_EFFECT_MELEE",
       "chance_levels": [
-        0.02,
-        0.035,
-        0.04,
-        0.055
+        0.06,
+        0.095,
+        0.14,
+        0.18
       ],
       "amplifier": 0,
       "effect_id": "gemstones:loot_touch",

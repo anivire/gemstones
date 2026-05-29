@@ -10,6 +10,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.AfterDeathConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.LivingEntity;
@@ -25,6 +26,11 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
       "AFTER_DEATH_DETONATE",
       "AFTER_DEATH_HARVEST_MARK",
       "AFTER_DEATH_ADDITIONAL_EXP_GAIN");
+
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    return modifier.getItemCategory() == ModifierItemCategory.ARMOR;
+  }
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {

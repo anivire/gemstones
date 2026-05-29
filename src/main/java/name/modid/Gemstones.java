@@ -17,7 +17,7 @@ import name.modid.core.content.registries.ParticlesRegistry;
 import name.modid.core.content.registries.TagsRegistry;
 import name.modid.core.content.screen.ScreenRegistry;
 import name.modid.core.network.NetworkHandler;
-import name.modid.datagen.RecourceHandler;
+import name.modid.datagen.ResourceHandler;
 import net.fabricmc.api.ModInitializer;
 
 public class Gemstones implements ModInitializer {
@@ -29,7 +29,7 @@ public class Gemstones implements ModInitializer {
   public void onInitialize() {
     LOGGER.info("Initializing Gemstones");
 
-    RecourceHandler.initialize();
+    ResourceHandler.initialize();
     NetworkHandler.initialize();
 
     TagsRegistry.initialize();

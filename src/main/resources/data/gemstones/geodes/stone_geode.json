@@ -1,5 +1,10 @@
 {
   "geode_id": "stone_geode",
+  "drop_chance": 0.03,
+  "ore_tags": [
+    "gemstones:stone_ores"
+  ],
+  "ores": [],
   "gemstones": {
     "CELESTINE": 0.5,
     "JADE": 0.5,
@@ -11,8 +16,8 @@
     "MALACHITE": 0.1
   },
   "qualities": {
-    "CRUDE": 0.5,
+    "CRUDE": 0.6,
     "POLISHED": 0.3,
-    "FLAWLESS": 0.2
+    "FLAWLESS": 0.1
   }
 }

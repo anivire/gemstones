@@ -1,0 +1,13 @@
+{
+  "gemstones_drop_quality": {
+    "CRUDE": 0.60,
+    "POLISHED": 0.25,
+    "FLAWLESS": 0.10,
+    "RADIANT": 0.05
+  },
+  "touch_drops": [
+    "minecraft:chests/simple_dungeon",
+    "minecraft:chests/shipwreck_supply",
+    "minecraft:chests/abandoned_mineshaft"
+  ]
+}

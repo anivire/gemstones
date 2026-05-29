@@ -11,6 +11,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig.HitMeleeConfig;
 import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.utils.GetRandomBuff;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -37,6 +38,12 @@ public class HitMeleeHandler
       "ON_HIT_LIFE_STEAL",
       "ON_HIT_RANDOM_EFFECT",
       "ON_HIT_ENDER_JUDGEMENT");
+
+  @Override
+  public boolean supports(GemstoneModifier modifier) {
+    return modifier.getItemCategory() == ModifierItemCategory.MELEE
+        || modifier.getItemCategory() == ModifierItemCategory.TOOLS;
+  }
 
   @Override
   public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {

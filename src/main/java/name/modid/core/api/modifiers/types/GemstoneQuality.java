@@ -16,7 +16,8 @@ public enum GemstoneQuality {
   private final String fontLiteral;
   private final String translationString;
   private final Formatting qualityColor;
-  public static final Codec<GemstoneQuality> CODEC = Codec.STRING.xmap(GemstoneQuality::valueOf, GemstoneQuality::name);
+  public static final Codec<GemstoneQuality> CODEC = Codec.STRING.xmap(GemstoneQuality::fromSerializedName,
+      GemstoneQuality::name);
 
   GemstoneQuality(Integer value, String fontLiteral, String translationString, Formatting qualityColor) {
     this.value = value;
@@ -39,5 +40,13 @@ public enum GemstoneQuality {
 
   public Formatting getQualityTextcolor() {
     return qualityColor;
+  }
+
+  private static GemstoneQuality fromSerializedName(String name) {
+    try {
+      return GemstoneQuality.valueOf(name);
+    } catch (IllegalArgumentException e) {
+      return NONE;
+    }
   }
 }
