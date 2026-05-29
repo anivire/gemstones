@@ -16,8 +16,8 @@
     "MALACHITE": 0.2
   },
   "qualities": {
-    "POLISHED": 0.65,
+    "POLISHED": 0.6,
     "FLAWLESS": 0.3,
-    "RADIANT": 0.05
+    "RADIANT": 0.1
   }
 }
