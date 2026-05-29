@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import name.modid.Gemstones;
+import name.modid.datapack.drops.DropsDataLoader;
 import name.modid.datapack.geodes.GeodesDataLoader;
 import name.modid.datapack.items.ItemCompatibilityDataLoader;
 import name.modid.datapack.modifiers.ModifiersDataLoader;
@@ -15,7 +16,8 @@ import net.minecraft.util.Identifier;
 public record DatapackSyncPayload(
     Map<String, String> gemstoneConfigs,
     Map<String, String> geodeConfigs,
-    Map<String, String> itemCompatibilityConfigs) implements CustomPayload {
+    Map<String, String> itemCompatibilityConfigs,
+    Map<String, String> dropsConfigs) implements CustomPayload {
   private static final int MAX_CONFIG_LENGTH = 1_048_576;
 
   public static final Id<DatapackSyncPayload> ID = new Id<>(
@@ -25,13 +27,15 @@ public record DatapackSyncPayload(
     writeStringMap(buf, value.gemstoneConfigs);
     writeStringMap(buf, value.geodeConfigs);
     writeStringMap(buf, value.itemCompatibilityConfigs);
-  }, buf -> new DatapackSyncPayload(readStringMap(buf), readStringMap(buf), readStringMap(buf)));
+    writeStringMap(buf, value.dropsConfigs);
+  }, buf -> new DatapackSyncPayload(readStringMap(buf), readStringMap(buf), readStringMap(buf), readStringMap(buf)));
 
   public static DatapackSyncPayload current() {
     return new DatapackSyncPayload(
         ModifiersDataLoader.getLoadedConfigSources(),
         GeodesDataLoader.getLoadedConfigSources(),
-        ItemCompatibilityDataLoader.getLoadedConfigSources());
+        ItemCompatibilityDataLoader.getLoadedConfigSources(),
+        DropsDataLoader.getLoadedConfigSources());
   }
 
   private static void writeStringMap(PacketByteBuf buf, Map<String, String> values) {

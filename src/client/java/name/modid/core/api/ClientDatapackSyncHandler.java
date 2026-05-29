@@ -2,6 +2,7 @@ package name.modid.core.api;
 
 import name.modid.core.api.modifiers.helpers.GemstoneAttributeRefreshHelper;
 import name.modid.core.network.DatapackSyncPayload;
+import name.modid.datapack.drops.DropsDataLoader;
 import name.modid.datapack.geodes.GeodesDataLoader;
 import name.modid.datapack.items.ItemCompatibilityDataLoader;
 import name.modid.datapack.modifiers.ModifiersDataLoader;
@@ -18,6 +19,7 @@ public final class ClientDatapackSyncHandler {
         ModifiersDataLoader.applySyncedConfigs(payload.gemstoneConfigs());
         GeodesDataLoader.applySyncedConfigs(payload.geodeConfigs());
         ItemCompatibilityDataLoader.applySyncedConfigs(payload.itemCompatibilityConfigs());
+        DropsDataLoader.applySyncedConfigs(payload.dropsConfigs());
 
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player != null) {

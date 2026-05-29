@@ -1,12 +1,15 @@
 package name.modid.core.content.events.loot;
 
-import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.datagen.GemstoneLootHelper;
+import name.modid.datapack.drops.DropsConfig;
+import name.modid.datapack.drops.DropsRegistry;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
+import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTable.Builder;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper.WrapperLookup;
+import net.minecraft.util.Identifier;
 
 public class ChestsLootTable {
   public static void setup(RegistryKey<LootTable> key, Builder tableBuilder, LootTableSource source,
@@ -15,71 +18,21 @@ public class ChestsLootTable {
       return;
     }
 
-    String path = key.getValue().getPath();
+    Identifier id = key.getValue();
+    String fullPath = id.getNamespace() + ":" + id.getPath();
 
-    if (path.equals("chests/jungle_temple")) {
-      tableBuilder.pool(GemstoneLootHelper.gemstonePool(
-          GemstonesRegistry.getJadeGemstones(),
-          1.0f));
-    }
-
-    if (path.equals("chests/bastion_treasure")) {
-      tableBuilder.pool(GemstoneLootHelper.gemstonePool(
-          GemstonesRegistry.getRubyGemstones(),
-          0.45f));
-      tableBuilder.pool(GemstoneLootHelper.gemstonePool(
-          GemstonesRegistry.getPyriteGemstones(),
-          0.5f));
-    }
-
-    if (path.equals("chests/desert_pyramid")) {
-      tableBuilder.pool(GemstoneLootHelper.gemstonePool(
-          GemstonesRegistry.getTopazGemstones(),
-          0.4f));
-    }
-
-    if (path.equals("chests/end_city_treasure")) {
-      tableBuilder.pool(GemstoneLootHelper.gemstonePool(
-          GemstonesRegistry.getPolychromeCrystalGemstones(),
-          0.35f));
-      tableBuilder.pool(GemstoneLootHelper.unusualGemstonePool(
-          GemstonesRegistry.getOnyxGemstones().get(0),
-          0.25f));
-      tableBuilder.pool(GemstoneLootHelper.unusualGemstonePool(
-          GemstonesRegistry.getAstraliteGemstones().get(0),
-          0.25f));
-    }
-
-    if (path.equals("chests/stronghold_library")) {
-      tableBuilder.pool(GemstoneLootHelper.unusualGemstonePool(
-          GemstonesRegistry
-              .getCrystallizedExperienceGemstones()
-              .get(0),
-          0.1f));
-    }
-
-    if (path.equals("chests/trial_chambers/reward")) {
-      tableBuilder.pool(GemstoneLootHelper.gemstonePool(
-          GemstonesRegistry.getSpawnerCoreGemstones(),
-          0.4f));
-    }
-
-    if (path.equals("chests/trial_chambers/supply")) {
-      tableBuilder.pool(GemstoneLootHelper.gemstonePool(
-          GemstonesRegistry.getSpawnerCoreGemstones(),
-          0.2f));
-    }
-
-    if (path.equals("chests/trial_chambers/entrance")) {
-      tableBuilder.pool(GemstoneLootHelper.gemstonePool(
-          GemstonesRegistry.getSpawnerCoreGemstones(),
-          0.15f));
-    }
-
-    if (path.equals("chests/simple_dungeon")) {
-      tableBuilder.pool(GemstoneLootHelper.gemstonePool(
-          GemstonesRegistry.getSpawnerCoreGemstones(),
-          0.1f));
+    for (DropsConfig.LootTableDrop drop : DropsRegistry.getStructuresLoot()) {
+      for (String lootTable : drop.getLootTables()) {
+        if (lootTable.equals(fullPath)) {
+          for (DropsConfig.PoolEntry pool : drop.getPools()) {
+            LootPool.Builder builder = GemstoneLootHelper.createPool(
+                pool.getGemstoneType(), pool.getChance());
+            if (builder != null) {
+              tableBuilder.pool(builder);
+            }
+          }
+        }
+      }
     }
   }
 }

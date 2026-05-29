@@ -72,9 +72,8 @@ public class EventsRegistry {
     UseBlockCallback.EVENT.register(EventLastBrewer::setup);
     ServerLivingEntityEvents.AFTER_DEATH.register(EventSparkSpawner::setup);
 
-    LootTableEvents.REPLACE.register(BlocksLootTable::replace);
-    LootTableEvents.MODIFY.register(EntitiesLootTable::setup);
     LootTableEvents.MODIFY.register(BlocksLootTable::setup);
+    LootTableEvents.MODIFY.register(EntitiesLootTable::setup);
     LootTableEvents.MODIFY.register(ChestsLootTable::setup);
   }
 }

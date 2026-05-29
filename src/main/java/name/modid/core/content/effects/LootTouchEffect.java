@@ -1,9 +1,9 @@
 package name.modid.core.content.effects;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import name.modid.datapack.drops.DropsRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -11,21 +11,15 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTables;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 public class LootTouchEffect extends StatusEffect {
-  ArrayList<RegistryKey<LootTable>> lootTables = new ArrayList<>(
-      Arrays.asList(
-          LootTables.SIMPLE_DUNGEON_CHEST,
-          LootTables.SHIPWRECK_SUPPLY_CHEST,
-          LootTables.ABANDONED_MINESHAFT_CHEST));
-
   public LootTouchEffect() {
     super(StatusEffectCategory.BENEFICIAL, 0x00ff00);
   }
@@ -44,9 +38,13 @@ public class LootTouchEffect extends StatusEffect {
   public void onEntityRemoval(LivingEntity entity, int amplifier, Entity.RemovalReason reason) {
     if (reason == Entity.RemovalReason.KILLED && !entity.getWorld().isClient()) {
       ServerWorld world = (ServerWorld) entity.getWorld();
-      RegistryKey<LootTable> randomKey = lootTables.get(
-          world.getRandom().nextInt(lootTables.size()));
+      List<Identifier> tableIds = DropsRegistry.getLootTouchTables();
+      if (tableIds.isEmpty())
+        return;
 
+      Identifier randomId = tableIds.get(world.getRandom().nextInt(tableIds.size()));
+      RegistryKey<LootTable> randomKey = RegistryKey.of(
+          net.minecraft.registry.RegistryKeys.LOOT_TABLE, randomId);
       LootTable lootTable = world.getServer()
           .getReloadableRegistries()
           .getLootTable(randomKey);
@@ -57,9 +55,11 @@ public class LootTouchEffect extends StatusEffect {
 
       LootContextParameterSet lootContext = builder.build(LootContextTypes.CHEST);
       List<ItemStack> loot = lootTable.generateLoot(lootContext);
+      Collections.shuffle(loot);
 
-      for (ItemStack stack : loot) {
-        Block.dropStack(world, entity.getBlockPos(), stack);
+      int count = Math.min(2 + world.random.nextInt(3), loot.size());
+      for (int i = 0; i < count; i++) {
+        Block.dropStack(world, entity.getBlockPos(), loot.get(i));
       }
     }
   }
