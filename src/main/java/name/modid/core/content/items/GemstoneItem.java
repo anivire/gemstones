@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import name.modid.Gemstones;
+import name.modid.core.api.components.ComponentsRegistry;
+import name.modid.core.api.components.PolishingComponent;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
@@ -84,6 +86,19 @@ public class GemstoneItem extends Item {
 
       tooltip.add(Text.empty());
       tooltip.add(iconInfo.append(actionStart));
+    }
+
+    PolishingComponent polishing = stack.get(ComponentsRegistry.POLISHING);
+    if (polishing != null) {
+      int totalStages = gemstoneItem.getRarityType().getPolishStages();
+      int currentStage = Math.min(polishing.completedStages() + 1, totalStages);
+      int stagePercent = polishing.stageDuration() <= 0
+          ? 0
+          : polishing.ticksInStage() * 100 / polishing.stageDuration();
+
+      tooltip.add(Text.empty());
+      tooltip.add(Text.literal("Polishing: " + currentStage + " / " + totalStages + " (" + stagePercent + "%)")
+          .formatted(Formatting.GOLD));
     }
   }
 }

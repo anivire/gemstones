@@ -376,8 +376,8 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
 
     var world = player.getWorld();
 
-    world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1f, 0.8f);
-    world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.7f, 0.8f);
+    world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK,
+        SoundCategory.BLOCKS, 0.9f, 0.8f + world.random.nextFloat() * 0.2f);
   }
 
   @Override

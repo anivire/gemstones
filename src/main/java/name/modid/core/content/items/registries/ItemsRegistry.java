@@ -12,6 +12,7 @@ import name.modid.core.content.items.MossyBox;
 import name.modid.core.content.items.tools.ChiselItem;
 import name.modid.core.content.items.tools.JewelryHammerItem;
 import name.modid.core.content.items.tools.JewelryPliersItem;
+import name.modid.core.content.items.tools.JewelryFileItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
@@ -49,6 +50,10 @@ public final class ItemsRegistry {
       settings -> new JewelryPliersItem(settings),
       new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1).maxDamage(75));
 
+  public static final Item JEWELRY_FILE = register("jewelry_file",
+      settings -> new JewelryFileItem(settings),
+      new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1).maxDamage(55));
+
   public static final Item JEWELRY_HAMMER = register("jewelry_hammer",
       settings -> new JewelryHammerItem(settings),
       new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 1).maxDamage(75));
@@ -71,6 +76,7 @@ public final class ItemsRegistry {
     all.add(MOSSY_BOX);
     all.add(DIAMOND_TIPPED_CHISEL);
     all.add(NETHERITE_TIPPED_CHISEL);
+    all.add(JEWELRY_FILE);
     all.add(JEWELRY_PLIERS);
     all.add(JEWELRY_HAMMER);
     all.add(EXPANSION_CRYSTAL);
@@ -91,6 +97,7 @@ public final class ItemsRegistry {
           entries.add(MOSSY_BOX);
           entries.add(DIAMOND_TIPPED_CHISEL);
           entries.add(NETHERITE_TIPPED_CHISEL);
+          entries.add(JEWELRY_FILE);
           entries.add(JEWELRY_PLIERS);
           entries.add(JEWELRY_HAMMER);
           entries.add(EXPANSION_CRYSTAL);
