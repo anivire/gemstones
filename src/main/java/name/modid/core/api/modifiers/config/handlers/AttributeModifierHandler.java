@@ -116,11 +116,24 @@ public class AttributeModifierHandler {
 
     List<AttributeModifiersComponent.Entry> finalModifiers = new ArrayList<>(combinedModifiersMap.values());
     if (finalModifiers.isEmpty()) {
-      itemStack.remove(DataComponentTypes.ATTRIBUTE_MODIFIERS);
+      if (hasGemstoneAttributeModifiers(itemStack)) {
+        itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+      }
       return;
     }
 
     AttributeModifiersComponent finalComponent = new AttributeModifiersComponent(finalModifiers, true);
     itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, finalComponent);
+  }
+
+  public static boolean hasGemstoneAttributeModifiers(ItemStack itemStack) {
+    AttributeModifiersComponent component = itemStack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
+    if (component == null) {
+      return false;
+    }
+
+    return component.modifiers().stream()
+        .anyMatch(e -> e.modifier().id() != null
+            && e.modifier().id().getNamespace().equalsIgnoreCase(Gemstones.MOD_ID));
   }
 }
