@@ -23,6 +23,9 @@ public final class GemstoneAttributeRefreshHelper {
   private static void refreshInventory(Inventory inventory) {
     for (int i = 0; i < inventory.size(); i++) {
       ItemStack stack = inventory.getStack(i);
+      if (!GemstoneSlotHelper.shouldRefreshAttributes(stack)) {
+        continue;
+      }
       GemstoneSlotHelper.updateSocketsAttributes(stack);
     }
   }

@@ -13,6 +13,7 @@ import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.registries.GemstonesRegistry;
+import name.modid.core.api.modifiers.config.handlers.AttributeModifierHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -150,32 +151,49 @@ public class GemstoneSlotHelper {
   }
 
   public static void initializeSockets(ItemStack itemStack, Item item) {
-    if (isItemValid(item)) {
-      GemstoneSlotsComponent currentSlots = itemStack.get(ComponentsRegistry.GEMSTONES);
-      if (currentSlots == null || currentSlots.gemstones().length != MAX_SLOTS) {
-        GemstoneComponent[] gemstones = new GemstoneComponent[MAX_SLOTS];
+    if (!shouldInitializeSockets(itemStack, item)) {
+      return;
+    }
 
-        int freeSlots = 1 + new Random().nextInt(2);
+    GemstoneComponent[] gemstones = new GemstoneComponent[MAX_SLOTS];
+    int freeSlots = 1 + new Random().nextInt(2);
 
-        for (int i = 0; i < MAX_SLOTS; i++) {
-          if (freeSlots != 0) {
-            gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY,
-                GemstoneQuality.NONE);
-            freeSlots--;
-          } else {
-            gemstones[i] = new GemstoneComponent(GemstoneType.LOCKED,
-                GemstoneQuality.NONE);
-          }
-        }
-
-        itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlotsComponent(gemstones));
-        updateSocketsAttributes(itemStack, item);
+    for (int i = 0; i < MAX_SLOTS; i++) {
+      if (freeSlots != 0) {
+        gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY,
+            GemstoneQuality.NONE);
+        freeSlots--;
+      } else {
+        gemstones[i] = new GemstoneComponent(GemstoneType.LOCKED,
+            GemstoneQuality.NONE);
       }
     }
+
+    itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlotsComponent(gemstones));
+    updateSocketsAttributes(itemStack, item);
+  }
+
+  public static void initializeSocketsIfEligible(ItemStack itemStack, Item item) {
+    if (shouldInitializeSockets(itemStack, item)) {
+      initializeSockets(itemStack, item);
+    }
+  }
+
+  public static boolean shouldInitializeSockets(ItemStack itemStack, Item item) {
+    if (itemStack == null || itemStack.isEmpty() || !isItemValid(item)) {
+      return false;
+    }
+
+    GemstoneSlotsComponent currentSlots = itemStack.get(ComponentsRegistry.GEMSTONES);
+    return currentSlots == null || currentSlots.gemstones().length != MAX_SLOTS;
   }
 
   public static void updateSocketsAttributes(ItemStack itemStack, Item item) {
     if (itemStack == null || itemStack.isEmpty()) {
+      return;
+    }
+
+    if (!shouldRefreshAttributes(itemStack)) {
       return;
     }
 
@@ -192,6 +210,16 @@ public class GemstoneSlotHelper {
     }
 
     updateSocketsAttributes(itemStack, itemStack.getItem());
+  }
+
+  public static boolean shouldRefreshAttributes(ItemStack itemStack) {
+    if (itemStack == null || itemStack.isEmpty()) {
+      return false;
+    }
+
+    return isItemValid(itemStack.getItem())
+        || isGemstonesExists(itemStack)
+        || AttributeModifierHandler.hasGemstoneAttributeModifiers(itemStack);
   }
 
   public static int getFirstFilledSlotIndex(ItemStack stack) {
