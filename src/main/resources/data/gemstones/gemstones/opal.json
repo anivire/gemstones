@@ -7,20 +7,20 @@
         {
           "attribute_id": "minecraft:generic.attack_damage",
           "value_levels": [
+            0.8,
             1.0,
             1.4,
-            1.8,
-            2.2
+            1.8
           ],
           "operation": "ADD_VALUE"
         },
         {
           "attribute_id": "minecraft:generic.attack_speed",
           "value_levels": [
-            -0.15,
-            -0.2,
-            -0.28,
-            -0.35
+            -0.1,
+            -0.12,
+            -0.145,
+            -0.185
           ],
           "operation": "ADD_MULTIPLIED_TOTAL"
         }
@@ -42,10 +42,10 @@
         {
           "attribute_id": "gemstones:pull_speed",
           "value_levels": [
-            -0.09,
             -0.1,
-            -0.18,
-            -0.25
+            -0.12,
+            -0.145,
+            -0.185
           ],
           "operation": "ADD_MULTIPLIED_TOTAL"
         }
@@ -68,9 +68,9 @@
           "attribute_id": "minecraft:player.block_interaction_range",
           "value_levels": [
             -0.1,
-            -0.15,
-            -0.20,
-            -0.25
+            -0.12,
+            -0.145,
+            -0.185
           ],
           "operation": "ADD_VALUE"
         }
@@ -83,16 +83,16 @@
           "attribute_id": "minecraft:generic.attack_damage",
           "value_levels": [
             0.5,
-            0.5,
+            0.7,
             1.0,
-            1.0
+            1.2
           ],
           "operation": "ADD_VALUE"
         },
         {
           "attribute_id": "minecraft:generic.max_health",
           "value_levels": [
-            -2.0,
+            -1.0,
             -1.0,
             -2.0,
             -2.0
