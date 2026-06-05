@@ -35,6 +35,7 @@ public class TooltipHelper {
   }
 
   public enum InlineIcons {
+    INFO_INDENT("\uE000"),
     HALF_HEART("\uE001"),
     BLEEDING("\uE002"),
     GUARDIAN_SMITE("\uE003"),

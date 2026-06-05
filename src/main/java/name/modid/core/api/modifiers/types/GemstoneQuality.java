@@ -42,6 +42,34 @@ public enum GemstoneQuality {
     return qualityColor;
   }
 
+  public GemstoneQuality next() {
+    return switch (this) {
+      case CRUDE -> POLISHED;
+      case POLISHED -> FLAWLESS;
+      case FLAWLESS -> RADIANT;
+      case RADIANT -> UNUSUAL;
+      default -> null;
+    };
+  }
+
+  public int getPolishStages() {
+    return switch (this) {
+      case CRUDE -> 3;
+      case POLISHED -> 5;
+      case FLAWLESS -> 7;
+      default -> 0;
+    };
+  }
+
+  public float getBreakChance() {
+    return switch (this) {
+      case CRUDE -> 0.1f;
+      case POLISHED -> 0.15f;
+      case FLAWLESS -> 0.2f;
+      default -> 0f;
+    };
+  }
+
   private static GemstoneQuality fromSerializedName(String name) {
     try {
       return GemstoneQuality.valueOf(name);

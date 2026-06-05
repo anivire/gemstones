@@ -1,7 +1,6 @@
 package name.modid.core.content.items.tools;
 
 import java.util.List;
-import java.util.random.RandomGenerator;
 
 import name.modid.Gemstones;
 import name.modid.core.api.tooltips.TooltipHelper.Icons;
@@ -16,14 +15,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class JewelryPliersItem extends Item implements ConsumableTool {
-  private static final RandomGenerator RNG = RandomGenerator.getDefault();
-
   public JewelryPliersItem(Settings settings) {
     super(settings);
-  }
-
-  public boolean rollBreakGem() {
-    return RNG.nextFloat() < 0.8f;
   }
 
   @Override

@@ -10,7 +10,8 @@
     "SoulburnFireDispatcher",
     "SocketedItemsTooltip",
     "WorldRendererAccessor",
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "JewelryFileRenderMixin"
   ],
   "injectors": {
     "defaultRequire": 1
