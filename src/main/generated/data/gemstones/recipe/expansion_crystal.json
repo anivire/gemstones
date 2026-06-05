@@ -1,17 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "equipment",
-  "key": {
-    "D": {
-      "item": "minecraft:diamond"
-    },
-    "S": {
+  "ingredients": [
+    {
       "item": "minecraft:amethyst_shard"
+    },
+    {
+      "item": "minecraft:amethyst_shard"
+    },
+    {
+      "item": "minecraft:amethyst_shard"
+    },
+    {
+      "item": "minecraft:diamond"
     }
-  },
-  "pattern": [
-    "SS ",
-    "DS "
   ],
   "result": {
     "count": 1,

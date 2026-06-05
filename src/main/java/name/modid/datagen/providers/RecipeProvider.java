@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
@@ -73,11 +74,19 @@ public class RecipeProvider extends FabricRecipeProvider {
         .criterion(hasItem(Items.GOLD_INGOT), conditionsFromItem(Items.GOLD_INGOT))
         .offerTo(exporter);
 
-    ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ItemsRegistry.EXPANSION_CRYSTAL)
-        .pattern("SS ")
-        .pattern("DS ")
-        .input('S', Items.AMETHYST_SHARD)
+    ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ItemsRegistry.JEWELRY_FILE)
+        .pattern("  D")
+        .pattern(" I ")
+        .pattern("S  ")
         .input('D', Items.DIAMOND)
+        .input('I', Items.IRON_INGOT)
+        .input('S', Items.STICK)
+        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
+        .offerTo(exporter);
+
+    ShapelessRecipeJsonBuilder.create(RecipeCategory.TOOLS, ItemsRegistry.EXPANSION_CRYSTAL)
+        .input(Items.AMETHYST_SHARD, 3)
+        .input(Items.DIAMOND)
         .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
         .offerTo(exporter);
   }

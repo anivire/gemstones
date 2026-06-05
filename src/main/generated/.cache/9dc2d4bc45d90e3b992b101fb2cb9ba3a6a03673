@@ -1,13 +1,15 @@
-// 1.21.1	2026-05-30T13:35:05.2210296	Legendary Gemstones/Recipes
+// 1.21.1	2026-06-06T00:57:19.0943828	Legendary Gemstones/Recipes
 b4ba21497dd3579f1d2caf3bc527b0c529c2092b data\gemstones\advancement\recipes\tools\jewelry_hammer.json
 76d184588a9077d605a32637888c8988cf41fa28 data\gemstones\recipe\jewelry_hammer.json
-4bbeeeff0615f76cfb6d02005f6e8d6e3aef1067 data\gemstones\advancement\recipes\tools\diamond_tipped_chisel.json
 957938551a7f31182962aec1858dd6ca57abd8c5 data\gemstones\recipe\netherite_tipped_chisel.json
+4bbeeeff0615f76cfb6d02005f6e8d6e3aef1067 data\gemstones\advancement\recipes\tools\diamond_tipped_chisel.json
 0fd97c30dc3d164e920e1aa69089fac6f6ace138 data\gemstones\recipe\diamond_tipped_chisel.json
 32aed881d55521291b454b35b787621ae7b40cc1 data\gemstones\advancement\recipes\tools\jewelry_pliers.json
 0cffe93aef7fb814702da533aa917e3274ac7b9a data\gemstones\advancement\recipes\tools\netherite_tipped_chisel.json
 3c68d0ebdd9f03916bea35e6ccebb9d55e51d0f8 data\gemstones\advancement\recipes\building_blocks\jewelry_table.json
+22f6792a6e11db19733c2c2c5cecba27c89d2e2c data\gemstones\recipe\jewelry_file.json
 fffeb0f4f269fcc5b28796ed5cba716b47906d65 data\gemstones\advancement\recipes\tools\expansion_crystal.json
 c2a4bead474855557b1b6475d73395f633e88ca2 data\gemstones\recipe\jewelry_pliers.json
-4fd14ce2dc197b6e344c48d78d0818f951240fc2 data\gemstones\recipe\expansion_crystal.json
+c11f92d52d9fdfdff6eb91a5389c2651faf603e8 data\gemstones\recipe\expansion_crystal.json
 fa1fa91c75156fc513e41bd1589a82b8aeb8b800 data\gemstones\recipe\jewelry_table.json
+e033691229edb44f03bc8f8a310570c15168972b data\gemstones\advancement\recipes\tools\jewelry_file.json
