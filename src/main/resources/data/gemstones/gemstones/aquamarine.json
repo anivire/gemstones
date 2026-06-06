@@ -44,7 +44,7 @@
       "type": "MULTIPLY_ATTRIBUTE",
       "instances": [
         {
-          "attribute_id": "minecraft:generic.water_movement_efficiency",
+          "attribute_id": "gemstones:swim_speed",
           "value_levels": [
             0.1,
             0.15,

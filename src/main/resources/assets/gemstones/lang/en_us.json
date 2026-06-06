@@ -109,6 +109,7 @@
   "attribute.name.generic.jump_count": "Jump Count",
   "attribute.name.generic.geode_drop_chance": "Geode Drop Chance",
   "attribute.name.generic.invulnerability_frames": "Invulnerability Time",
+  "attribute.name.generic.swim_speed": "Swim Speed",
   "entity.gemstones.spark": "Spark",
   "item.gemstones.expansion_crystal": "Expansion Crystal",
   "item.gemstones.diamond_tipped_chisel": "Diamond Tipped Chisel",
