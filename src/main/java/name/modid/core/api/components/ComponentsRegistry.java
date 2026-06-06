@@ -33,6 +33,11 @@ public class ComponentsRegistry {
       Registries.DATA_COMPONENT_TYPE, Identifier.of(Gemstones.MOD_ID, "explosion_immune"),
       ComponentType.<Boolean>builder().codec(Codec.BOOL).packetCodec(BOOLEAN_PACKET_CODEC).build());
 
+  // used to store original potion type for proper potion strength/time upgrade
+  public static final ComponentType<Identifier> ORIGINAL_POTION = Registry.register(
+      Registries.DATA_COMPONENT_TYPE, Identifier.of(Gemstones.MOD_ID, "original_potion"),
+      ComponentType.<Identifier>builder().codec(Identifier.CODEC).build());
+
   public static void initialize() {
     Gemstones.LOGGER.info("Registering {} components", Gemstones.MOD_ID);
   }

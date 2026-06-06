@@ -26,6 +26,7 @@
     "modifiers.OnFishing",
     "modifiers.OnHitProjectile",
     "modifiers.OnHitMelee",
+    "modifiers.BrewCustomDurationPotions",
     "other.MarkHomingArrowBow",
     "other.MarkHomingArrowCrossbow",
     "other.DropCrystallizedExperienceGemstone",
