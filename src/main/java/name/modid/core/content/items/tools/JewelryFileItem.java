@@ -253,18 +253,21 @@ public class JewelryFileItem extends Item implements ConsumableTool {
   }
 
   private void spawnGemParticles(World world, PlayerEntity player, ItemStack gem) {
-    if (player.age % 4 != 0)
+    if (player.age % 2 != 0)
       return;
 
-    Vec3d center = player.getEyePos().add(player.getRotationVector().multiply(0.45));
-    world.addParticle(
-        new ItemStackParticleEffect(ParticleTypes.ITEM, gem),
-        center.x + (world.random.nextDouble() - 0.5) * 0.18,
-        center.y - 0.12 + world.random.nextDouble() * 0.12,
-        center.z + (world.random.nextDouble() - 0.5) * 0.18,
-        (world.random.nextDouble() - 0.5) * 0.025,
-        0.01 + world.random.nextDouble() * 0.02,
-        (world.random.nextDouble() - 0.5) * 0.025);
+    Vec3d center = player.getBoundingBox().getCenter().add(player.getRotationVector().multiply(0.28));
+
+    for (int i = 0; i < 3; i++) {
+      world.addParticle(
+          new ItemStackParticleEffect(ParticleTypes.ITEM, gem),
+          center.x + (world.random.nextDouble() - 0.5) * 0.28,
+          center.y + world.random.nextDouble() * 0.5,
+          center.z + (world.random.nextDouble() - 0.5) * 0.28,
+          (world.random.nextDouble() - 0.5) * 0.035,
+          0.015 + world.random.nextDouble() * 0.025,
+          (world.random.nextDouble() - 0.5) * 0.035);
+    }
   }
 
   private void spawnSuccessEffects(World world, PlayerEntity player) {

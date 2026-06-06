@@ -12,6 +12,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
@@ -22,10 +23,23 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.BlockPos;
+import name.modid.core.content.items.ExpansionCrystalItem;
+import name.modid.core.content.items.GemstoneItem;
+import name.modid.core.content.items.tools.ChiselItem;
+import name.modid.core.content.items.tools.JewelryHammerItem;
+import name.modid.core.content.items.tools.JewelryPliersItem;
+import name.modid.core.content.screen.slots.ToolSlot;
 
 public class JewelryTableBlockEntity extends BlockEntity
     implements ImplementedInventory, ExtendedScreenHandlerFactory<BlockPos> {
+  private static final int[] AUTOMATION_INPUT_SLOTS = {
+      JewelryTableScreenHandler.SLOT_ACTION,
+      JewelryTableScreenHandler.SLOT_BASE,
+      JewelryTableScreenHandler.SLOT_GEM
+  };
+
   private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
 
   public JewelryTableBlockEntity(BlockPos pos, BlockState state) {
@@ -35,6 +49,41 @@ public class JewelryTableBlockEntity extends BlockEntity
   @Override
   public DefaultedList<ItemStack> getItems() {
     return inventory;
+  }
+
+  @Override
+  public int[] getAvailableSlots(Direction side) {
+    return AUTOMATION_INPUT_SLOTS;
+  }
+
+  @Override
+  public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
+    return canAutomationInsert(slot, stack);
+  }
+
+  @Override
+  public boolean canExtract(int slot, ItemStack stack, Direction side) {
+    return slot != JewelryTableScreenHandler.SLOT_RESULT;
+  }
+
+  public static boolean canAutomationInsert(int slot, ItemStack stack) {
+    if (stack.isEmpty()) {
+      return false;
+    }
+
+    return canAutomationInsertItem(slot, stack.getItem());
+  }
+
+  static boolean canAutomationInsertItem(int slot, @Nullable Item item) {
+    return switch (slot) {
+      case JewelryTableScreenHandler.SLOT_ACTION -> item instanceof ChiselItem
+          || item instanceof JewelryPliersItem
+          || item instanceof JewelryHammerItem;
+      case JewelryTableScreenHandler.SLOT_BASE -> item != null && ToolSlot.isItemValid(item);
+      case JewelryTableScreenHandler.SLOT_GEM -> item instanceof GemstoneItem
+          || item instanceof ExpansionCrystalItem;
+      default -> false;
+    };
   }
 
   @Override
