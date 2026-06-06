@@ -29,6 +29,10 @@ public class ComponentsRegistry {
       Registries.DATA_COMPONENT_TYPE, Identifier.of(Gemstones.MOD_ID, "polishing_use_lock"),
       ComponentType.<Boolean>builder().codec(Codec.BOOL).packetCodec(BOOLEAN_PACKET_CODEC).build());
 
+  public static final ComponentType<Boolean> EXPLOSION_IMMUNE = Registry.register(
+      Registries.DATA_COMPONENT_TYPE, Identifier.of(Gemstones.MOD_ID, "explosion_immune"),
+      ComponentType.<Boolean>builder().codec(Codec.BOOL).packetCodec(BOOLEAN_PACKET_CODEC).build());
+
   public static void initialize() {
     Gemstones.LOGGER.info("Registering {} components", Gemstones.MOD_ID);
   }

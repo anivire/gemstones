@@ -66,6 +66,8 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
       thirdArg = TooltipHelper.buildSecondsText(builder, seconds, null);
     } else if (type == EventType.PLAYER_TICK_ORE_VISION) {
       firstArg = secondArg;
+    } else if (type == EventType.ITEM_EXPLOSION_IMMUNE) {
+      firstArg = secondArg;
     } else {
       firstArg = valueText;
     }
