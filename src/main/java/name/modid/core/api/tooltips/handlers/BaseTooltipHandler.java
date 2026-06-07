@@ -3,6 +3,7 @@ package name.modid.core.api.tooltips.handlers;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
+import name.modid.core.utils.tooltip.BoostedValueFormatter;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -45,7 +46,7 @@ public abstract class BaseTooltipHandler<T extends ModifierConfig> implements To
       double baseAdjusted = Math.abs(adjustValue(typedBaseConfig, baseRaw));
       double boostedAdjusted = Math.abs(adjustValue(config, raw));
 
-      if (Double.compare(baseAdjusted, boostedAdjusted) != 0) {
+      if (BoostedValueFormatter.isBoosted(baseAdjusted, boostedAdjusted)) {
         String boostedFormatted = builder.formatValue(boostedAdjusted, getPostfix(config));
         valueText.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
             .append(builder.getArrowPrefix(raw > 0, Formatting.LIGHT_PURPLE))

@@ -1,7 +1,5 @@
 package name.modid.core.api.tooltips;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Map;
 
 import name.modid.Gemstones;
@@ -14,6 +12,7 @@ import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.api.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.utils.tooltip.BoostedValueFormatter;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -128,8 +127,7 @@ public class TooltipBuilder {
   }
 
   public String formatValue(double value, String postfix) {
-    BigDecimal v = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
-    return postfix.isBlank() ? v.toPlainString() : v.toPlainString() + postfix;
+    return BoostedValueFormatter.format(value, postfix);
   }
 
   public MutableText getArrowPrefix(boolean isPositive) {
