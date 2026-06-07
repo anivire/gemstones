@@ -1,6 +1,5 @@
 package name.modid.core.utils.geode;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -13,25 +12,24 @@ public final class GeodeQualitySelector {
 
   public static Map<GemstoneQuality, Float> eligibleQualities(
       GemstoneType gemstoneType,
-      Map<GemstoneQuality, Float> configuredQualities) {
-    if (gemstoneType != GemstoneType.POLYCHROME_CRYSTAL) {
+      Map<GemstoneQuality, Float> configuredQualities,
+      Map<GemstoneType, Map<GemstoneQuality, Float>> qualityOverrides) {
+    if (qualityOverrides == null) {
       return configuredQualities;
     }
 
-    Map<GemstoneQuality, Float> eligible = new LinkedHashMap<>();
-
-    // drop only two qualities
-    putIfPresent(eligible, configuredQualities, GemstoneQuality.CRUDE);
-    putIfPresent(eligible, configuredQualities, GemstoneQuality.POLISHED);
-
-    return eligible.isEmpty() ? configuredQualities : eligible;
+    Map<GemstoneQuality, Float> overrideQualities = qualityOverrides.get(gemstoneType);
+    return overrideQualities == null || overrideQualities.isEmpty()
+        ? configuredQualities
+        : overrideQualities;
   }
 
   public static GemstoneQuality select(
       GemstoneType gemstoneType,
       Map<GemstoneQuality, Float> configuredQualities,
+      Map<GemstoneType, Map<GemstoneQuality, Float>> qualityOverrides,
       Random random) {
-    Map<GemstoneQuality, Float> qualities = eligibleQualities(gemstoneType, configuredQualities);
+    Map<GemstoneQuality, Float> qualities = eligibleQualities(gemstoneType, configuredQualities, qualityOverrides);
     float totalRarityChance = qualities.values().stream().reduce(0f, Float::sum);
     float randRarity = random.nextFloat() * totalRarityChance;
 
@@ -51,15 +49,5 @@ public final class GeodeQualitySelector {
     }
 
     return selectedRarity;
-  }
-
-  private static void putIfPresent(
-      Map<GemstoneQuality, Float> target,
-      Map<GemstoneQuality, Float> source,
-      GemstoneQuality quality) {
-    Float weight = source.get(quality);
-    if (weight != null) {
-      target.put(quality, weight);
-    }
   }
 }
