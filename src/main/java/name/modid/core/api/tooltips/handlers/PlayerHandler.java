@@ -6,6 +6,8 @@ import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import name.modid.core.api.tooltips.TooltipHelper;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.utils.oreVision.OreVisionRadius;
+import name.modid.core.utils.witherGuard.WitherGuardSkullLimit;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -25,11 +27,27 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
 
   @Override
   protected double adjustValue(ModifierConfig.PlayerConfig cfg, double value) {
+    if (cfg.eventType() == EventType.PLAYER_WITHER_GUARD) {
+      return WitherGuardSkullLimit.fromValue(value);
+    }
+
+    if (cfg.eventType() == EventType.PLAYER_TICK_ORE_VISION) {
+      return OreVisionRadius.fromValue(value);
+    }
+
     return value * 100;
   }
 
   @Override
   protected String getPostfix(ModifierConfig.PlayerConfig cfg) {
+    if (cfg.eventType() == EventType.PLAYER_WITHER_GUARD) {
+      return "";
+    }
+
+    if (cfg.eventType() == EventType.PLAYER_TICK_ORE_VISION) {
+      return "";
+    }
+
     return "%";
   }
 
@@ -45,6 +63,7 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
 
     if (type == EventType.PLAYER_WITHER_GUARD) {
       firstArg = secondArg;
+      secondArg = valueText;
     } else if (type == EventType.PLAYER_PROJECTILE_IMMUNE) {
       firstArg = valueText.copy()
           .append(Text.literal(" "))
@@ -66,6 +85,7 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
       thirdArg = TooltipHelper.buildSecondsText(builder, seconds, null);
     } else if (type == EventType.PLAYER_TICK_ORE_VISION) {
       firstArg = secondArg;
+      secondArg = valueText;
     } else if (type == EventType.ITEM_EXPLOSION_IMMUNE) {
       firstArg = secondArg;
     } else {

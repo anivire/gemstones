@@ -7,6 +7,8 @@ import java.util.Map;
 
 import name.modid.core.api.ColoredBlockHighlighter.HighlightedBlock;
 import name.modid.core.api.modifiers.config.ModifierConfig.BlockBreakConfig;
+import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.handlers.BlockBreakHandler;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import net.minecraft.block.BlockState;
@@ -55,7 +57,31 @@ public final class MultiMinerClientPreview {
     return hasMultiMiner(player) && !player.isSneaking();
   }
 
+  private static int getMultiMinerRadius(PlayerEntity player) {
+    double radius = 1.0;
+    for (EquipmentSlot slot : EquipmentSlot.values()) {
+      ItemStack stack = player.getEquippedStack(slot);
+      if (stack.isEmpty()) {
+        continue;
+      }
+
+      for (GemstoneModifier modifier : ModifierGatheringHelper.getModifiers(stack, BlockBreakConfig.class)) {
+        if (modifier.getConfig() instanceof BlockBreakConfig config
+            && config.eventType() == EventType.ON_BLOCK_BREAK_MINER) {
+          radius = Math.max(radius, config.additionalValues().get(modifier.getRarityType()));
+        }
+      }
+    }
+
+    return BlockBreakHandler.getMinerRadius(radius);
+  }
+
   public static List<BlockPos> getBreakableBlocks(ClientWorld world, BlockPos center, Direction face,
+      boolean includeCenter) {
+    return getBreakableBlocks(world, center, face, 1, includeCenter);
+  }
+
+  public static List<BlockPos> getBreakableBlocks(ClientWorld world, BlockPos center, Direction face, int radius,
       boolean includeCenter) {
     List<BlockPos> result = new ArrayList<>();
 
@@ -68,22 +94,22 @@ public final class MultiMinerClientPreview {
 
     switch (face.getAxis()) {
       case Y -> {
-        minX = center.getX() - 1;
-        maxX = center.getX() + 1;
-        minZ = center.getZ() - 1;
-        maxZ = center.getZ() + 1;
+        minX = center.getX() - radius;
+        maxX = center.getX() + radius;
+        minZ = center.getZ() - radius;
+        maxZ = center.getZ() + radius;
       }
       case X -> {
-        minY = center.getY() - 1;
-        maxY = center.getY() + 1;
-        minZ = center.getZ() - 1;
-        maxZ = center.getZ() + 1;
+        minY = center.getY() - radius;
+        maxY = center.getY() + radius;
+        minZ = center.getZ() - radius;
+        maxZ = center.getZ() + radius;
       }
       case Z -> {
-        minX = center.getX() - 1;
-        maxX = center.getX() + 1;
-        minY = center.getY() - 1;
-        maxY = center.getY() + 1;
+        minX = center.getX() - radius;
+        maxX = center.getX() + radius;
+        minY = center.getY() - radius;
+        maxY = center.getY() + radius;
       }
     }
 
@@ -114,7 +140,7 @@ public final class MultiMinerClientPreview {
       return;
     }
 
-    List<BlockPos> blocks = getBreakableBlocks(world, center, face, false);
+    List<BlockPos> blocks = getBreakableBlocks(world, center, face, getMultiMinerRadius(player), false);
     for (int i = 0; i < blocks.size(); i++) {
       BlockPos pos = blocks.get(i);
       BlockState state = world.getBlockState(pos);
@@ -135,7 +161,12 @@ public final class MultiMinerClientPreview {
       return;
     }
 
-    List<BlockPos> blocks = getBreakableBlocks(world, blockHit.getBlockPos(), blockHit.getSide(), true);
+    List<BlockPos> blocks = getBreakableBlocks(
+        world,
+        blockHit.getBlockPos(),
+        blockHit.getSide(),
+        getMultiMinerRadius(player),
+        true);
 
     ACTIVE_HIGHLIGHTS.clear();
     for (BlockPos pos : blocks) {

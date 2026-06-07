@@ -10,6 +10,7 @@ import name.modid.Gemstones;
 import name.modid.core.api.components.ComponentsRegistry;
 import name.modid.core.api.components.PolishingComponent;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
+import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
@@ -50,8 +51,11 @@ public class GemstoneItem extends Item {
     GemstoneType gemstoneType = gemstoneItem.getType();
     Map<ModifierItemCategory, Map<GemstoneQuality, GemstoneModifier>> gemstoneModifiers = new LinkedHashMap<>(
         ModifierHelper.getGemstoneModifiers(gemstoneType, stack.getItem()));
+    boolean isBoosterGemstone = gemstoneModifiers.values().stream()
+        .flatMap(rarityMap -> rarityMap.values().stream())
+        .anyMatch(modifier -> modifier.getConfig() instanceof ModifierConfig.BoosterConfig);
 
-    tooltip.add(TooltipHelper.getGemstoneQualitySprite(gemstoneItem.getRarityType()));
+    tooltip.add(TooltipHelper.getGemstoneQualitySprite(gemstoneItem.getRarityType(), isBoosterGemstone));
 
     if (!gemstoneModifiers.isEmpty()) {
       tooltip.add(Text.empty());
@@ -59,6 +63,7 @@ public class GemstoneItem extends Item {
     }
 
     List<ModifierItemCategory> modifierOrder = Arrays.asList(
+        ModifierItemCategory.ALL,
         ModifierItemCategory.MELEE,
         ModifierItemCategory.RANGED,
         ModifierItemCategory.TOOLS,
@@ -86,6 +91,26 @@ public class GemstoneItem extends Item {
 
       tooltip.add(Text.empty());
       tooltip.add(iconInfo.append(actionStart));
+    }
+
+    if (isBoosterGemstone) {
+      MutableText iconInfo = Text.literal(InlineIcons.INFO.getSymbol())
+          .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
+          .formatted(Formatting.WHITE);
+      MutableText actionStart = Text
+          .translatable("tooltip.gemstones.booster_quality_warning")
+          .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+          .formatted(Formatting.GRAY);
+      MutableText infoIndent = Text.literal(InlineIcons.INFO_INDENT.getSymbol())
+          .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())));
+      MutableText boostedValues = Text
+          .translatable("tooltip.gemstones.booster_quality_values")
+          .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
+          .formatted(Formatting.GRAY);
+
+      tooltip.add(Text.empty());
+      tooltip.add(iconInfo.append(actionStart));
+      tooltip.add(infoIndent.append(boostedValues));
     }
 
     PolishingComponent polishing = stack.get(ComponentsRegistry.POLISHING);

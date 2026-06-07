@@ -5,6 +5,7 @@ import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import net.minecraft.text.MutableText;
+import org.jetbrains.annotations.Nullable;
 
 public class GemstoneModifier {
   private final GemstoneType gemstoneType;
@@ -41,6 +42,15 @@ public class GemstoneModifier {
 
   public MutableText getTooltipText(GemstoneQuality quality, Boolean isItemTooltip) {
     return new TooltipBuilder(gemstoneType, itemCategory, quality, this)
+        .withItemTooltip(isItemTooltip)
+        .build();
+  }
+
+  public MutableText getTooltipText(
+      GemstoneQuality quality,
+      Boolean isItemTooltip,
+      @Nullable GemstoneModifier baseModifier) {
+    return new TooltipBuilder(gemstoneType, itemCategory, quality, this, baseModifier)
         .withItemTooltip(isItemTooltip)
         .build();
   }

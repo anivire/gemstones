@@ -103,6 +103,15 @@ public class TooltipHelper {
         .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.QUALITY.getPath()))).formatted(Formatting.WHITE);
   }
 
+  public static MutableText getGemstoneQualitySprite(GemstoneQuality rarityType, boolean booster) {
+    MutableText text = Text.empty();
+    if (booster) {
+      text.append(getGemstoneQualitySprite(GemstoneQuality.BOOSTER));
+    }
+
+    return text.append(getGemstoneQualitySprite(rarityType));
+  }
+
   public static Text getGemstoneSocketedRow(GemstoneComponent[] gemstones) {
     MutableText row = Text.empty();
     for (GemstoneComponent slot : gemstones) {

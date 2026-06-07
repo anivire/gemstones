@@ -44,6 +44,15 @@
       "chars": [
         "\uE005"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/quality/booster.png",
+      "height": 10,
+      "ascent": 8,
+      "chars": [
+        "\uE006"
+      ]
     }
   ]
 }

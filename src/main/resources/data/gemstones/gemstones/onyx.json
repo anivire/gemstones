@@ -26,7 +26,7 @@
         1.0
       ],
       "value_levels": [
-        0.0
+        1.0
       ],
       "event_type": "ON_BLOCK_BREAK_MINER"
     },

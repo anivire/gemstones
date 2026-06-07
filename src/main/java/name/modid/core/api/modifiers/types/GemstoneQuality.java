@@ -10,7 +10,8 @@ public enum GemstoneQuality {
   POLISHED(1, "\uE002", "item.gemstones.quality.polished", Formatting.BLUE),
   FLAWLESS(2, "\uE003", "item.gemstones.quality.flawless", Formatting.LIGHT_PURPLE),
   RADIANT(3, "\uE004", "item.gemstones.quality.radiant", Formatting.GOLD),
-  UNUSUAL(4, "\uE005", "item.gemstones.quality.unusual", Formatting.GREEN);
+  UNUSUAL(4, "\uE005", "item.gemstones.quality.unusual", Formatting.GREEN),
+  BOOSTER(5, "\uE006", "item.gemstones.quality.booster", Formatting.RED);
 
   private final Integer value;
   private final String fontLiteral;

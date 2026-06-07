@@ -34,4 +34,13 @@ public class LevelValues {
   public Stream<Double> stream() {
     return values.stream();
   }
+
+  public LevelValues scaled(double multiplier) {
+    ArrayList<Double> scaledValues = new ArrayList<>();
+    for (Double value : values) {
+      scaledValues.add(value * multiplier);
+    }
+
+    return new LevelValues(scaledValues);
+  }
 }

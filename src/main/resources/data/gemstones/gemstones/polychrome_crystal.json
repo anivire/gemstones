@@ -1,57 +1,14 @@
 {
   "gemstone_type": "POLYCHROME_CRYSTAL",
   "modifiers": {
-    "MELEE": {
-      "type": "ON_HIT_MELEE",
-      "chance_levels": [
-        0.1,
-        0.15,
-        0.2,
-        0.25
-      ],
-      "event_type": "ON_HIT_RANDOM_EFFECT"
-    },
-    "RANGED": {
-      "type": "ON_HIT_PROJECTILE",
-      "chance_levels": [
-        0.15,
-        0.2,
-        0.25,
-        0.3
-      ],
-      "event_type": "ON_HIT_RANDOM_EFFECT"
-    },
-    "TOOLS": {
-      "type": "ON_BLOCK_BREAK",
-      "chance_levels": [
-        0.5,
-        0.1,
-        0.15,
-        0.25
-      ],
+    "ALL": {
+      "type": "BOOSTER",
       "value_levels": [
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "event_type": "ON_BLOCK_BREAK_RANDOM_ITEM_DROP"
-    },
-    "ARMOR": {
-      "type": "PLAYER",
-      "value_levels": [
-        10.0,
-        15.0,
-        20.0,
-        25.0
-      ],
-      "additional_value_levels": [
         0.15,
-        0.2,
         0.25,
-        0.35
-      ],
-      "event_type": "PLAYER_RANDOM_EFFECT"
+        0.35,
+        0.55
+      ]
     }
   }
 }

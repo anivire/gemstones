@@ -64,6 +64,9 @@ public class ModifierHelper {
     }
 
     Map<GemstoneQuality, GemstoneModifier> rarityMap = modifiers.get(category.get());
+    if (rarityMap == null) {
+      rarityMap = modifiers.get(ModifierItemCategory.ALL);
+    }
 
     if (rarityMap == null)
       return null;

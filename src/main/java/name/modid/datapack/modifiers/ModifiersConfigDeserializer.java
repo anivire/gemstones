@@ -114,6 +114,11 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
         yield new ModifierConfig.AreaEffectConfig(radius, amplifier, duration, notMe, onlyPlayers, effectEntry);
       }
 
+      case BOOSTER -> {
+        LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);
+        yield new ModifierConfig.BoosterConfig(values);
+      }
+
       case ON_BLOCK_BREAK -> {
         LevelValues chance = context.deserialize(obj.get("chance_levels"), LevelValues.class);
         LevelValues values = context.deserialize(obj.get("value_levels"), LevelValues.class);

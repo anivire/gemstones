@@ -71,9 +71,23 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
               secondArg)
           .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
     } else if (e == EventType.ON_HIT_EXP_ADDITIONAL_DAMAGE) {
+      LevelValues baseAdditionalValues = getBaseAdditionalValues();
+      int levelOffset = additionalValues.get(rarityType).intValue();
       MutableText levelsNumberText = Text.literal(
-          String.valueOf(additionalValues.get(rarityType).intValue()))
+          String.valueOf(baseAdditionalValues == null
+              ? levelOffset
+              : baseAdditionalValues.get(rarityType).intValue()))
           .formatted(Formatting.GREEN);
+
+      if (baseAdditionalValues != null) {
+        int baseLevelOffset = baseAdditionalValues.get(rarityType).intValue();
+        if (baseLevelOffset != levelOffset) {
+          levelsNumberText.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
+              .append(builder.getArrowPrefix(baseLevelOffset > levelOffset, Formatting.LIGHT_PURPLE))
+              .append(Text.literal(String.valueOf(levelOffset)).formatted(Formatting.LIGHT_PURPLE))
+              .append(Text.literal(")").formatted(Formatting.DARK_GRAY));
+        }
+      }
 
       MutableText levelsWordText = Text.translatable(
           EventType.ON_HIT_EXP_ADDITIONAL_DAMAGE.getTranslationKey())
@@ -94,5 +108,22 @@ public class OnHitHandler<T extends ModifierConfig> extends BaseTooltipHandler<T
               secondArg)
           .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
     }
+  }
+
+  private LevelValues getBaseAdditionalValues() {
+    ModifierConfig baseConfig = builder.getBaseConfig();
+    if (baseConfig == null || baseConfig.getClass() != config.getClass()) {
+      return null;
+    }
+
+    if (baseConfig instanceof ModifierConfig.HitMeleeConfig melee) {
+      return melee.additionalValues();
+    }
+
+    if (baseConfig instanceof ModifierConfig.HitProjectileConfig projectile) {
+      return projectile.additionalValues();
+    }
+
+    return null;
   }
 }
