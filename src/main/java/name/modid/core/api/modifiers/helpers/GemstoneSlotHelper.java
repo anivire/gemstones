@@ -14,11 +14,13 @@ import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.core.api.modifiers.config.handlers.AttributeModifierHandler;
+import name.modid.datapack.sockets.SocketSettingsConfig;
+import name.modid.datapack.sockets.SocketSettingsDataLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class GemstoneSlotHelper {
-  public static final int MAX_SLOTS = 5;
+  public static final int MAX_SLOTS = SocketSettingsConfig.DEFAULT_MAX_SLOTS;
 
   public static ArrayList<GemstoneComponent> contains(ItemStack itemStack, GemstoneType gemstoneType) {
     ArrayList<GemstoneComponent> gemstones = itemStack.get(ComponentsRegistry.GEMSTONES) != null
@@ -47,7 +49,12 @@ public class GemstoneSlotHelper {
     }
 
     GemstoneSlotsComponent slots = itemStack.get(ComponentsRegistry.GEMSTONES);
-    return slots != null ? slots.gemstones() : new GemstoneComponent[0];
+    if (slots == null || slots.gemstones() == null) {
+      return new GemstoneComponent[0];
+    }
+
+    GemstoneComponent[] gemstones = slots.gemstones();
+    return Arrays.copyOf(gemstones, Math.min(gemstones.length, getMaxSlots()));
   }
 
   public static boolean canAddNewSlot(ItemStack stack) {
@@ -66,16 +73,18 @@ public class GemstoneSlotHelper {
 
     GemstoneComponent[] arr = slots.gemstones();
     if (arr == null || arr.length == 0) {
-      return true;
+      return getMaxSlots() > 0;
     }
 
-    for (GemstoneComponent g : arr) {
+    int maxSlots = getMaxSlots();
+    for (int i = 0; i < Math.min(arr.length, maxSlots); i++) {
+      GemstoneComponent g = arr[i];
       if (g != null && g.gemstoneType() == GemstoneType.LOCKED) {
         return true;
       }
     }
 
-    if (arr.length < MAX_SLOTS) {
+    if (arr.length < maxSlots) {
       return true;
     }
 
@@ -96,8 +105,9 @@ public class GemstoneSlotHelper {
       return itemStack;
 
     GemstoneComponent[] arr = Arrays.copyOf(slots.gemstones(), slots.gemstones().length);
+    int maxSlots = getMaxSlots();
 
-    for (int i = 0; i < arr.length; i++) {
+    for (int i = 0; i < Math.min(arr.length, maxSlots); i++) {
       GemstoneComponent g = arr[i];
       if (g != null && g.gemstoneType() == GemstoneType.LOCKED) {
         arr[i] = new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE);
@@ -105,6 +115,14 @@ public class GemstoneSlotHelper {
         updateSocketsAttributes(itemStack, itemStack.getItem());
         return itemStack;
       }
+    }
+
+    if (arr.length < maxSlots) {
+      GemstoneComponent[] expanded = Arrays.copyOf(arr, arr.length + 1);
+      expanded[arr.length] = new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE);
+      itemStack.set(ComponentsRegistry.GEMSTONES, new GemstoneSlotsComponent(expanded));
+      updateSocketsAttributes(itemStack, itemStack.getItem());
+      return itemStack;
     }
 
     return itemStack;
@@ -121,7 +139,8 @@ public class GemstoneSlotHelper {
       return null;
     }
 
-    for (int i = 0; i < gemstones.length; i++) {
+    int maxSlots = getMaxSlots();
+    for (int i = 0; i < Math.min(gemstones.length, maxSlots); i++) {
       GemstoneComponent gemstone = gemstones[i];
       if (gemstone != null && gemstone.gemstoneType() == GemstoneType.EMPTY) {
         return i;
@@ -133,7 +152,8 @@ public class GemstoneSlotHelper {
 
   public static ItemStack setGemstoneByIndex(ItemStack itemStack, int index, GemstoneItem gemstone) {
     GemstoneSlotsComponent sourceGemstoneSlots = getGemstonesSlot(itemStack);
-    if (sourceGemstoneSlots == null || index < 0 || index >= MAX_SLOTS) {
+    if (sourceGemstoneSlots == null || sourceGemstoneSlots.gemstones() == null || index < 0 || index >= getMaxSlots()
+        || index >= sourceGemstoneSlots.gemstones().length) {
       return null;
     }
 
@@ -155,10 +175,11 @@ public class GemstoneSlotHelper {
       return;
     }
 
-    GemstoneComponent[] gemstones = new GemstoneComponent[MAX_SLOTS];
-    int freeSlots = 1 + new Random().nextInt(2);
+    int maxSlots = getMaxSlots();
+    GemstoneComponent[] gemstones = new GemstoneComponent[maxSlots];
+    int freeSlots = Math.min(maxSlots, 1 + new Random().nextInt(2));
 
-    for (int i = 0; i < MAX_SLOTS; i++) {
+    for (int i = 0; i < maxSlots; i++) {
       if (freeSlots != 0) {
         gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY,
             GemstoneQuality.NONE);
@@ -185,7 +206,11 @@ public class GemstoneSlotHelper {
     }
 
     GemstoneSlotsComponent currentSlots = itemStack.get(ComponentsRegistry.GEMSTONES);
-    return currentSlots == null || currentSlots.gemstones().length != MAX_SLOTS;
+    return currentSlots == null || currentSlots.gemstones() == null;
+  }
+
+  public static int getMaxSlots() {
+    return SocketSettingsDataLoader.getMaxSlots();
   }
 
   public static void updateSocketsAttributes(ItemStack itemStack, Item item) {

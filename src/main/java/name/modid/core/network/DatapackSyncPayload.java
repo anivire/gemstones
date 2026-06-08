@@ -8,6 +8,7 @@ import name.modid.datapack.drops.DropsDataLoader;
 import name.modid.datapack.geodes.GeodesDataLoader;
 import name.modid.datapack.items.ItemCompatibilityDataLoader;
 import name.modid.datapack.modifiers.ModifiersDataLoader;
+import name.modid.datapack.sockets.SocketSettingsDataLoader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
@@ -17,7 +18,8 @@ public record DatapackSyncPayload(
     Map<String, String> gemstoneConfigs,
     Map<String, String> geodeConfigs,
     Map<String, String> itemCompatibilityConfigs,
-    Map<String, String> dropsConfigs) implements CustomPayload {
+    Map<String, String> dropsConfigs,
+    Map<String, String> socketSettingsConfigs) implements CustomPayload {
   private static final int MAX_CONFIG_LENGTH = 1_048_576;
 
   public static final Id<DatapackSyncPayload> ID = new Id<>(
@@ -28,14 +30,17 @@ public record DatapackSyncPayload(
     writeStringMap(buf, value.geodeConfigs);
     writeStringMap(buf, value.itemCompatibilityConfigs);
     writeStringMap(buf, value.dropsConfigs);
-  }, buf -> new DatapackSyncPayload(readStringMap(buf), readStringMap(buf), readStringMap(buf), readStringMap(buf)));
+    writeStringMap(buf, value.socketSettingsConfigs);
+  }, buf -> new DatapackSyncPayload(readStringMap(buf), readStringMap(buf), readStringMap(buf), readStringMap(buf),
+      readStringMap(buf)));
 
   public static DatapackSyncPayload current() {
     return new DatapackSyncPayload(
         ModifiersDataLoader.getLoadedConfigSources(),
         GeodesDataLoader.getLoadedConfigSources(),
         ItemCompatibilityDataLoader.getLoadedConfigSources(),
-        DropsDataLoader.getLoadedConfigSources());
+        DropsDataLoader.getLoadedConfigSources(),
+        SocketSettingsDataLoader.getLoadedConfigSources());
   }
 
   private static void writeStringMap(PacketByteBuf buf, Map<String, String> values) {
