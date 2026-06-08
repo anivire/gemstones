@@ -1,7 +1,5 @@
 package name.modid.core.api.tooltips;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Map;
 
 import name.modid.Gemstones;
@@ -14,6 +12,7 @@ import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.api.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.utils.tooltip.BoostedValueFormatter;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -27,6 +26,7 @@ public class TooltipBuilder {
   private final ModifierItemCategory itemCategory;
   private final GemstoneQuality rarityType;
   private final ModifierConfig config;
+  private final ModifierConfig baseConfig;
   private final ModifierCategoryType categoryType;
 
   private final TooltipHandlerRegistry registry;
@@ -38,10 +38,20 @@ public class TooltipBuilder {
       ModifierItemCategory itemCategory,
       GemstoneQuality rarityType,
       GemstoneModifier modifier) {
+    this(gemstoneType, itemCategory, rarityType, modifier, null);
+  }
+
+  public TooltipBuilder(
+      GemstoneType gemstoneType,
+      ModifierItemCategory itemCategory,
+      GemstoneQuality rarityType,
+      GemstoneModifier modifier,
+      GemstoneModifier baseModifier) {
     this.gemstoneType = gemstoneType;
     this.itemCategory = itemCategory;
     this.rarityType = rarityType;
     this.config = modifier.getConfig();
+    this.baseConfig = baseModifier == null ? null : baseModifier.getConfig();
     this.categoryType = resolveCategory(config);
     this.registry = new TooltipHandlerRegistry(this, config, rarityType);
   }
@@ -62,7 +72,8 @@ public class TooltipBuilder {
       Map.entry(ModifierConfig.PlayerConfig.class, ModifierCategoryType.PLAYER),
       Map.entry(ModifierConfig.AfterDeathConfig.class, ModifierCategoryType.ON_DEATH),
       Map.entry(ModifierConfig.OnPotionBrewConfig.class, ModifierCategoryType.ON_POTION_BREW),
-      Map.entry(ModifierConfig.OnFishingConfig.class, ModifierCategoryType.ON_FISHING));
+      Map.entry(ModifierConfig.OnFishingConfig.class, ModifierCategoryType.ON_FISHING),
+      Map.entry(ModifierConfig.BoosterConfig.class, ModifierCategoryType.BOOSTER));
 
   private ModifierCategoryType resolveCategory(ModifierConfig config) {
     return CONFIG_TYPE_MAP.getOrDefault(config.getClass(), ModifierCategoryType.UNDEFINED);
@@ -111,15 +122,22 @@ public class TooltipBuilder {
             .styled(style -> style.withFont(Style.DEFAULT_FONT_ID)));
   }
 
+  public ModifierConfig getBaseConfig() {
+    return baseConfig;
+  }
+
   public String formatValue(double value, String postfix) {
-    BigDecimal v = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
-    return postfix.isBlank() ? v.toPlainString() : v.toPlainString() + postfix;
+    return BoostedValueFormatter.format(value, postfix);
   }
 
   public MutableText getArrowPrefix(boolean isPositive) {
+    return getArrowPrefix(isPositive, isPositive ? Formatting.GREEN : Formatting.RED);
+  }
+
+  public MutableText getArrowPrefix(boolean isPositive, Formatting formatting) {
     return Text.literal(isPositive ? InlineIcons.ARROW_UP.getSymbol() : InlineIcons.ARROW_DOWN.getSymbol())
         .styled(style -> style.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-        .formatted(isPositive ? Formatting.GREEN : Formatting.RED);
+        .formatted(formatting);
   }
 
   public String getTranslationKeyByModifier(ModifierCategoryType category) {

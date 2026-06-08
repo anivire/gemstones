@@ -10,7 +10,8 @@ public enum GemstoneQuality {
   POLISHED(1, "\uE002", "item.gemstones.quality.polished", Formatting.BLUE),
   FLAWLESS(2, "\uE003", "item.gemstones.quality.flawless", Formatting.LIGHT_PURPLE),
   RADIANT(3, "\uE004", "item.gemstones.quality.radiant", Formatting.GOLD),
-  UNUSUAL(4, "\uE005", "item.gemstones.quality.unusual", Formatting.GREEN);
+  UNUSUAL(4, "\uE005", "item.gemstones.quality.unusual", Formatting.GREEN),
+  BOOSTER(5, "\uE006", "item.gemstones.quality.booster", Formatting.RED);
 
   private final Integer value;
   private final String fontLiteral;
@@ -40,6 +41,34 @@ public enum GemstoneQuality {
 
   public Formatting getQualityTextcolor() {
     return qualityColor;
+  }
+
+  public GemstoneQuality next() {
+    return switch (this) {
+      case CRUDE -> POLISHED;
+      case POLISHED -> FLAWLESS;
+      case FLAWLESS -> RADIANT;
+      case RADIANT -> UNUSUAL;
+      default -> null;
+    };
+  }
+
+  public int getPolishStages() {
+    return switch (this) {
+      case CRUDE -> 3;
+      case POLISHED -> 5;
+      case FLAWLESS -> 7;
+      default -> 0;
+    };
+  }
+
+  public float getBreakChance() {
+    return switch (this) {
+      case CRUDE -> 0.1f;
+      case POLISHED -> 0.15f;
+      case FLAWLESS -> 0.2f;
+      default -> 0f;
+    };
   }
 
   private static GemstoneQuality fromSerializedName(String name) {

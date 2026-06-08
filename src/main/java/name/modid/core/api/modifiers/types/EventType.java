@@ -98,6 +98,9 @@ public final class EventType {
   public static final EventType HOMING_ARROW = register("HOMING_ARROW",
       "tooltip.gemstones.event_name.homing");
 
+  public static final EventType ITEM_EXPLOSION_IMMUNE = register("ITEM_EXPLOSION_IMMUNE",
+      "tooltip.gemstones.event_name.item_explosion_immune");
+
   private EventType(String name, String translationKey) {
     this.name = name;
     this.translationKey = translationKey;

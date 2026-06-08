@@ -11,6 +11,7 @@ import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import name.modid.core.content.items.registries.GemstonesRegistry;
+import name.modid.core.utils.geode.GeodeQualitySelector;
 import name.modid.datapack.geodes.GeodesConfig;
 import name.modid.datapack.geodes.GeodesRegistry;
 import net.fabricmc.loader.api.FabricLoader;
@@ -69,23 +70,11 @@ public class GeodeItem extends Item {
       selectedType = config.gemstones.keySet().iterator().next();
     }
 
-    // Randomed gemstone rarity
-    float totalRarityChance = config.qualities.values().stream().reduce(0f, Float::sum);
-    float randRarity = random.nextFloat() * totalRarityChance;
-
-    GemstoneQuality selectedRarity = null;
-    float cumulativeRarity = 0f;
-    for (var entry : config.qualities.entrySet()) {
-      cumulativeRarity += entry.getValue();
-      if (randRarity <= cumulativeRarity) {
-        selectedRarity = entry.getKey();
-        break;
-      }
-    }
-
-    if (selectedRarity == null) {
-      selectedRarity = config.qualities.keySet().iterator().next();
-    }
+    GemstoneQuality selectedRarity = GeodeQualitySelector.select(
+        selectedType,
+        config.qualities,
+        config.qualityOverrides,
+        random);
 
     List<Item> candidates = GemstonesRegistry.getGemstonesByType(selectedType);
     int index = selectedRarity.getValue();

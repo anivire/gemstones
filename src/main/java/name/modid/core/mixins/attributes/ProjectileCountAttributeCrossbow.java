@@ -77,12 +77,13 @@ public class ProjectileCountAttributeCrossbow {
 
     List<ItemStack> projectiles = charged.getProjectiles();
     ItemStack projectileStack = projectiles.get(0).copy();
+    int totalProjectileCount = requestedCount + Math.max(0, projectiles.size() - 1);
 
     var enchants = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
     boolean hasInfinity = enchants.getEntry(Enchantments.INFINITY)
         .map(e -> EnchantmentHelper.getLevel(e, crossbow) > 0).orElse(false);
 
-    multishoot((ServerWorld) world, player, crossbow, projectileStack, requestedCount, speed, divergence);
+    multishoot((ServerWorld) world, player, crossbow, projectileStack, totalProjectileCount, speed, divergence);
 
     if (!player.isCreative() && !hasInfinity) {
       projectileStack.decrement(1);

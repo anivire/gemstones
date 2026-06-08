@@ -15,8 +15,10 @@ import net.minecraft.item.ItemStack;
 public class ModifierGatheringHelper {
   public static ArrayList<GemstoneModifier> getAttributeModifiers(ItemStack itemStack) {
     ArrayList<GemstoneModifier> modifiers = new ArrayList<>();
+    GemstoneComponent[] gemstones = GemstoneSlotHelper.getGemstones(itemStack);
 
-    for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
+    for (int i = 0; i < gemstones.length; i++) {
+      GemstoneComponent gem = gemstones[i];
       if (gem.gemstoneType() == null
           || gem.gemstoneType() == GemstoneType.LOCKED
           || gem.gemstoneType() == GemstoneType.EMPTY
@@ -35,6 +37,12 @@ public class ModifierGatheringHelper {
             + " item=" + itemStack.getItem());
         continue;
       }
+
+      if (BoostHelper.isBooster(modifier)) {
+        continue;
+      }
+
+      modifier = BoostHelper.applyBoost(gemstones, i, itemStack.getItem(), modifier);
 
       if (modifier.getConfig() instanceof AttributeConfig
           || modifier.getConfig() instanceof MultiplyAttributeConfig) {
@@ -49,7 +57,10 @@ public class ModifierGatheringHelper {
   public static <T extends GemstoneModifier> ArrayList<T> getModifiers(ItemStack itemStack,
       Class<?> wantedClass) {
     ArrayList<T> result = new ArrayList<>();
-    for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
+    GemstoneComponent[] gemstones = GemstoneSlotHelper.getGemstones(itemStack);
+
+    for (int i = 0; i < gemstones.length; i++) {
+      GemstoneComponent gem = gemstones[i];
       if (gem.gemstoneType() == null
           || gem.gemstoneType() == GemstoneType.LOCKED
           || gem.gemstoneType() == GemstoneType.EMPTY
@@ -68,6 +79,8 @@ public class ModifierGatheringHelper {
             + " item=" + itemStack.getItem());
         continue;
       }
+
+      modifier = BoostHelper.applyBoost(gemstones, i, itemStack.getItem(), modifier);
 
       if (wantedClass.isInstance(modifier.getConfig())) {
         result.add((T) modifier);
@@ -81,7 +94,10 @@ public class ModifierGatheringHelper {
       ItemStack itemStack,
       EventType wantedEventType) {
     ArrayList<T> result = new ArrayList<>();
-    for (GemstoneComponent gem : GemstoneSlotHelper.getGemstones(itemStack)) {
+    GemstoneComponent[] gemstones = GemstoneSlotHelper.getGemstones(itemStack);
+
+    for (int i = 0; i < gemstones.length; i++) {
+      GemstoneComponent gem = gemstones[i];
       if (gem.gemstoneType() == null
           || gem.gemstoneType() == GemstoneType.LOCKED
           || gem.gemstoneType() == GemstoneType.EMPTY
@@ -100,6 +116,8 @@ public class ModifierGatheringHelper {
             + " item=" + itemStack.getItem());
         continue;
       }
+
+      modifier = BoostHelper.applyBoost(gemstones, i, itemStack.getItem(), modifier);
 
       ModifierConfig config = modifier.getConfig();
       if (config instanceof ModifierConfig.Events eventConfig

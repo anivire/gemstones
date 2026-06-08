@@ -12,7 +12,8 @@ import net.minecraft.registry.entry.RegistryEntry;
 public sealed interface ModifierConfig extends ModifierConfigBase permits
     ModifierConfig.Attributes,
     ModifierConfig.Effects,
-    ModifierConfig.Events {
+    ModifierConfig.Events,
+    ModifierConfig.BoosterConfig {
 
   sealed interface Attributes extends ModifierConfig permits AttributeConfig, MultiplyAttributeConfig {
   }
@@ -133,5 +134,9 @@ public sealed interface ModifierConfig extends ModifierConfigBase permits
       LevelValues values,
       LevelValues additionalValues,
       EventType eventType) implements Events {
+  }
+
+  record BoosterConfig(
+      LevelValues values) implements ModifierConfig {
   }
 }

@@ -19,6 +19,8 @@ public class GeodesConfig {
   public List<Identifier> ores = List.of();
   public Map<GemstoneType, Float> gemstones;
   public Map<GemstoneQuality, Float> qualities;
+  @SerializedName("quality_overrides")
+  public Map<GemstoneType, Map<GemstoneQuality, Float>> qualityOverrides = Map.of();
 
   public void normalize() {
     if (oreTags == null) {
@@ -26,6 +28,9 @@ public class GeodesConfig {
     }
     if (ores == null) {
       ores = List.of();
+    }
+    if (qualityOverrides == null) {
+      qualityOverrides = Map.of();
     }
   }
 }

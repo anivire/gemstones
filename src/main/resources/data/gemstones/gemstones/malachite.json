@@ -7,7 +7,7 @@
         0.15,
         0.2,
         0.25,
-        0.35
+        0.3
       ],
       "event_type": "ON_FIRST_HIT_ADDITIONAL_DAMAGE"
     },
@@ -28,10 +28,10 @@
     "TOOLS": {
       "type": "ATTRIBUTE",
       "value_levels": [
-        0.09,
-        0.14,
-        0.18,
-        0.25
+        0.01,
+        0.02,
+        0.04,
+        0.05
       ],
       "attribute_id": "gemstones:geode_drop_chance",
       "operation": "ADD_MULTIPLIED_TOTAL"
@@ -40,12 +40,12 @@
       "type": "MULTIPLY_ATTRIBUTE",
       "instances": [
         {
-          "attribute_id": "minecraft:generic.fall_damage_multiplier",
+          "attribute_id": "minecraft:generic.safe_fall_distance",
           "value_levels": [
-            -0.15,
-            -0.2,
-            -0.25,
-            -0.35
+            0.15,
+            0.2,
+            0.25,
+            0.35
           ],
           "operation": "ADD_MULTIPLIED_TOTAL"
         },

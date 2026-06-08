@@ -1,6 +1,7 @@
 package name.modid.core.api.tooltips.handlers;
 
 import name.modid.core.api.modifiers.config.ModifierConfig;
+import name.modid.core.api.modifiers.config.handlers.BlockBreakHandler;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
@@ -14,16 +15,28 @@ public class OnBlockBreakHandler extends BaseTooltipHandler<ModifierConfig.Block
 
   @Override
   protected double extractValue(ModifierConfig.BlockBreakConfig cfg) {
+    if (cfg.eventType() == EventType.ON_BLOCK_BREAK_MINER) {
+      return cfg.additionalValues().get(rarityType);
+    }
+
     return cfg.values().get(rarityType);
   }
 
   @Override
   protected double adjustValue(ModifierConfig.BlockBreakConfig cfg, double value) {
+    if (cfg.eventType() == EventType.ON_BLOCK_BREAK_MINER) {
+      return BlockBreakHandler.getMinerRadius(value) * 2 + 1;
+    }
+
     return value * 100;
   }
 
   @Override
   protected String getPostfix(ModifierConfig.BlockBreakConfig cfg) {
+    if (cfg.eventType() == EventType.ON_BLOCK_BREAK_MINER) {
+      return "";
+    }
+
     return "%";
   }
 
@@ -32,7 +45,8 @@ public class OnBlockBreakHandler extends BaseTooltipHandler<ModifierConfig.Block
     if (cfg.eventType() == EventType.ON_BLOCK_BREAK_MINER) {
       return Text.translatable(
           builder.getTranslationKeyByEvent(cfg.eventType()),
-          builder.getEventText(cfg.eventType()))
+          builder.getEventText(cfg.eventType()),
+          valueText)
           .formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
     } else {
       return Text.translatable(

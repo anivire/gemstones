@@ -6,18 +6,25 @@
   ],
   "ores": [],
   "gemstones": {
-    "CELESTINE": 0.5,
-    "JADE": 0.5,
-    "AQUAMARINE": 0.5,
-    "AMBER": 0.4,
-    "OPAL": 0.3,
-    "GARNET": 0.3,
-    "TOPAZ": 0.2,
-    "MALACHITE": 0.1
+    "CELESTINE": 0.1,
+    "JADE": 0.1,
+    "AQUAMARINE": 0.1,
+    "AMBER": 0.1,
+    "OPAL": 0.1,
+    "GARNET": 0.1,
+    "TOPAZ": 0.1,
+    "MALACHITE": 0.06,
+    "POLYCHROME_CRYSTAL": 0.015
   },
   "qualities": {
     "CRUDE": 0.6,
     "POLISHED": 0.3,
     "FLAWLESS": 0.1
+  },
+  "quality_overrides": {
+    "POLYCHROME_CRYSTAL": {
+      "CRUDE": 0.7,
+      "POLISHED": 0.3
+    }
   }
 }

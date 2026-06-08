@@ -1,6 +1,12 @@
 {
   "providers": [
     {
+      "type": "space",
+      "advances": {
+        "\uE000": 13
+      }
+    },
+    {
       "type": "bitmap",
       "file": "gemstones:gui/icons/half_heart_icon.png",
       "height": 10,
@@ -44,8 +50,7 @@
       "chars": [
         "\uE005"
       ]
-    }
-    ,
+    },
     {
       "type": "bitmap",
       "file": "gemstones:gui/icons/arrow_icon.png",

@@ -42,10 +42,21 @@ public class ModelProvider extends FabricModelProvider {
       String path = Registries.ITEM.getId(item).getPath();
       String baseName = path.replaceAll("_(crude|polished|flawless|radiant|unusual)$", "");
 
-      Models.GENERATED.upload(
+      // fix for tools rotation
+      var model = isHandheldTool(item) ? Models.HANDHELD : Models.GENERATED;
+
+      model.upload(
           ModelIds.getItemModelId(item),
           TextureMap.layer0(Identifier.of(Gemstones.MOD_ID, "item/" + baseName)),
           itemModelGenerator.writer);
     }
+  }
+
+  private boolean isHandheldTool(Item item) {
+    return item == ItemsRegistry.DIAMOND_TIPPED_CHISEL
+        || item == ItemsRegistry.NETHERITE_TIPPED_CHISEL
+        || item == ItemsRegistry.JEWELRY_FILE
+        || item == ItemsRegistry.JEWELRY_PLIERS
+        || item == ItemsRegistry.JEWELRY_HAMMER;
   }
 }

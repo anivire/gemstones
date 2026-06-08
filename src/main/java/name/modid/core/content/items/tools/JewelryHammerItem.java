@@ -1,7 +1,6 @@
 package name.modid.core.content.items.tools;
 
 import java.util.List;
-import java.util.random.RandomGenerator;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -9,14 +8,8 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 
 public class JewelryHammerItem extends Item implements ConsumableTool {
-  private static final RandomGenerator RNG = RandomGenerator.getDefault();
-
   public JewelryHammerItem(Settings settings) {
     super(settings);
-  }
-
-  public boolean rollBreakGem() {
-    return RNG.nextFloat() < 0.8f;
   }
 
   @Override

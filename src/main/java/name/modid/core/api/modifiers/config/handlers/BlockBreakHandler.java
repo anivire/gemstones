@@ -304,7 +304,8 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     if (face == null)
       return;
 
-    Box bounds = getPlaneBoundsByFace(targetPos, face);
+    int radius = getMinerRadius(modifiers);
+    Box bounds = getPlaneBoundsByFace(targetPos, face, radius);
 
     BlockPos.Mutable m = new BlockPos.Mutable();
     int minX = MathHelper.floor(bounds.minX);
@@ -361,15 +362,29 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     world.updateNeighborsAlways(immutablePos, Blocks.AIR);
   }
 
-  private Box getPlaneBoundsByFace(BlockPos center, Direction face) {
+  private int getMinerRadius(List<GemstoneModifier> modifiers) {
+    double radius = 1.0;
+    for (GemstoneModifier modifier : modifiers) {
+      BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
+      radius = Math.max(radius, config.additionalValues().get(modifier.getRarityType()));
+    }
+
+    return getMinerRadius(radius);
+  }
+
+  public static int getMinerRadius(double radius) {
+    return Math.max(1, Math.round((float) radius));
+  }
+
+  private Box getPlaneBoundsByFace(BlockPos center, Direction face, int radius) {
     int cx = center.getX();
     int cy = center.getY();
     int cz = center.getZ();
 
     return switch (face.getAxis()) {
-      case Y -> new Box(cx - 1, cy, cz - 1, cx + 1, cy, cz + 1);
-      case X -> new Box(cx, cy - 1, cz - 1, cx, cy + 1, cz + 1);
-      case Z -> new Box(cx - 1, cy - 1, cz, cx + 1, cy + 1, cz);
+      case Y -> new Box(cx - radius, cy, cz - radius, cx + radius, cy, cz + radius);
+      case X -> new Box(cx, cy - radius, cz - radius, cx, cy + radius, cz + radius);
+      case Z -> new Box(cx - radius, cy - radius, cz, cx + radius, cy + radius, cz);
     };
   }
 

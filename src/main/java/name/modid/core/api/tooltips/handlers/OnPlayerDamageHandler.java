@@ -6,7 +6,10 @@ import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import name.modid.core.api.tooltips.TooltipHelper;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.utils.tooltip.BoostedValueFormatter;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class OnPlayerDamageHandler extends BaseTooltipHandler<ModifierConfig.OnPlayerDamageConfig> {
 
@@ -42,11 +45,9 @@ public class OnPlayerDamageHandler extends BaseTooltipHandler<ModifierConfig.OnP
     MutableText thirdArg = builder.getEventText(type);
 
     if (type == EventType.PLAYER_SAVE_LETHAL) {
-      double hpThreshold = cfg.additionalValues().get(rarityType);
       double seconds = cfg.values().get(rarityType);
 
-      firstArg = TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
-          builder.formatValue(hpThreshold, " Health"));
+      firstArg = buildSaveLethalThresholdText(cfg);
       secondArg = builder.getEventText(type);
       thirdArg = TooltipHelper.buildSecondsText(builder, seconds, null);
     } else {
@@ -58,5 +59,27 @@ public class OnPlayerDamageHandler extends BaseTooltipHandler<ModifierConfig.OnP
         firstArg,
         secondArg,
         thirdArg).formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+  }
+
+  private MutableText buildSaveLethalThresholdText(ModifierConfig.OnPlayerDamageConfig cfg) {
+    double boostedThreshold = cfg.additionalValues().get(rarityType);
+    double displayThreshold = boostedThreshold;
+
+    ModifierConfig baseConfig = builder.getBaseConfig();
+    if (baseConfig instanceof ModifierConfig.OnPlayerDamageConfig baseDamageConfig
+        && baseDamageConfig.eventType() == EventType.PLAYER_SAVE_LETHAL) {
+      displayThreshold = baseDamageConfig.additionalValues().get(rarityType);
+    }
+
+    MutableText thresholdText = TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
+        builder.formatValue(displayThreshold, " Health"));
+
+    if (BoostedValueFormatter.isBoosted(displayThreshold, boostedThreshold)) {
+      thresholdText.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
+          .append(Text.literal(builder.formatValue(boostedThreshold, " Health")).formatted(Formatting.LIGHT_PURPLE))
+          .append(Text.literal(")").formatted(Formatting.DARK_GRAY));
+    }
+
+    return thresholdText;
   }
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import name.modid.Gemstones;
+import name.modid.core.api.components.ComponentsRegistry;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.GemstoneItem;
@@ -140,7 +141,9 @@ public class GemstonesRegistry {
     WITHER_SHELL.add(ItemsRegistry.register(
         "wither_shell_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
         settings -> new GemstoneItem(settings, GemstoneType.WITHER_SHELL, GemstoneQuality.UNUSUAL),
-        new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+        new Item.Settings().rarity(Rarity.EPIC)
+            .component(DataComponentTypes.MAX_STACK_SIZE, 1)
+            .component(ComponentsRegistry.EXPLOSION_IMMUNE, true)));
 
     ONYX.add(ItemsRegistry.register(
         "onyx_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),

@@ -35,6 +35,7 @@ public class TooltipHelper {
   }
 
   public enum InlineIcons {
+    INFO_INDENT("\uE000"),
     HALF_HEART("\uE001"),
     BLEEDING("\uE002"),
     GUARDIAN_SMITE("\uE003"),
@@ -100,6 +101,15 @@ public class TooltipHelper {
   public static MutableText getGemstoneQualitySprite(GemstoneQuality rarityType) {
     return Text.literal(rarityType.getRarityLiteral())
         .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.QUALITY.getPath()))).formatted(Formatting.WHITE);
+  }
+
+  public static MutableText getGemstoneQualitySprite(GemstoneQuality rarityType, boolean booster) {
+    MutableText text = Text.empty();
+    if (booster) {
+      text.append(getGemstoneQualitySprite(GemstoneQuality.BOOSTER));
+    }
+
+    return text.append(getGemstoneQualitySprite(rarityType));
   }
 
   public static Text getGemstoneSocketedRow(GemstoneComponent[] gemstones) {

@@ -4,6 +4,7 @@ import name.modid.datapack.drops.DropsDataLoader;
 import name.modid.datapack.geodes.GeodesDataLoader;
 import name.modid.datapack.items.ItemCompatibilityDataLoader;
 import name.modid.datapack.modifiers.ModifiersDataLoader;
+import name.modid.datapack.sockets.SocketSettingsDataLoader;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
 
@@ -13,5 +14,6 @@ public class ResourceHandler {
     ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new GeodesDataLoader());
     ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ItemCompatibilityDataLoader());
     ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DropsDataLoader());
+    ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SocketSettingsDataLoader());
   }
 }

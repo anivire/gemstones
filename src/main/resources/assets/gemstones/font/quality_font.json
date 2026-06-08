@@ -3,7 +3,7 @@
     {
       "type": "bitmap",
       "file": "gemstones:gui/quality/crude.png",
-      "height": 9,
+      "height": 10,
       "ascent": 8,
       "chars": [
         "\uE001"
@@ -12,7 +12,7 @@
     {
       "type": "bitmap",
       "file": "gemstones:gui/quality/polished.png",
-      "height": 9,
+      "height": 10,
       "ascent": 8,
       "chars": [
         "\uE002"
@@ -21,7 +21,7 @@
     {
       "type": "bitmap",
       "file": "gemstones:gui/quality/flawless.png",
-      "height": 9,
+      "height": 10,
       "ascent": 8,
       "chars": [
         "\uE003"
@@ -30,7 +30,7 @@
     {
       "type": "bitmap",
       "file": "gemstones:gui/quality/radiant.png",
-      "height": 9,
+      "height": 10,
       "ascent": 8,
       "chars": [
         "\uE004"
@@ -39,10 +39,19 @@
     {
       "type": "bitmap",
       "file": "gemstones:gui/quality/unusual.png",
-      "height": 9,
+      "height": 10,
       "ascent": 8,
       "chars": [
         "\uE005"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/quality/booster.png",
+      "height": 10,
+      "ascent": 8,
+      "chars": [
+        "\uE006"
       ]
     }
   ]

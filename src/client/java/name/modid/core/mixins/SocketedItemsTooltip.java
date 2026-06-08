@@ -16,6 +16,7 @@ import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
+import name.modid.core.api.modifiers.helpers.BoostHelper;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.tooltips.TooltipHelper;
@@ -116,6 +117,9 @@ public class SocketedItemsTooltip {
       }
 
       GemstoneModifier modifier = ModifierHelper.getGemstoneModifierForItem(type, quality, item.getItem());
+      GemstoneModifier boostedModifier = modifier == null
+          ? null
+          : BoostHelper.applyBoost(gemstones, i, item.getItem(), modifier);
 
       if (isShiftPressed) {
         List<Item> gemstonesByType = GemstonesRegistry.getGemstonesByType(type);
@@ -142,8 +146,11 @@ public class SocketedItemsTooltip {
             .append(" ")
             .append(q));
       } else {
-        if (modifier != null) {
-          rows.add(modifier.getTooltipText(quality, false));
+        if (boostedModifier != null) {
+          rows.add(boostedModifier.getTooltipText(
+              quality,
+              false,
+              boostedModifier == modifier ? null : modifier));
         } else {
           rows.add(TooltipHelper.makeRow(
               type.getGemstoneLiteral(),

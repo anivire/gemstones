@@ -14,6 +14,7 @@ import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.network.OreVisionPayload;
 import name.modid.core.utils.GetRandomBuff;
+import name.modid.core.utils.oreVision.OreVisionRadius;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -97,7 +98,7 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
       return;
     }
 
-    int RADIUS = 6;
+    int radius = getOreVisionRadius(modifiers);
     BlockPos ORIGIN_POS = player.getBlockPos();
 
     Map<Block, Integer> valuableOres = Map.ofEntries(
@@ -123,9 +124,9 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
 
     List<OreVisionPayload.HighlightedOre> found = new ArrayList<>();
 
-    for (int dx = -RADIUS; dx <= RADIUS; dx++) {
-      for (int dy = -RADIUS; dy <= RADIUS; dy++) {
-        for (int dz = -RADIUS; dz <= RADIUS; dz++) {
+    for (int dx = -radius; dx <= radius; dx++) {
+      for (int dy = -radius; dy <= radius; dy++) {
+        for (int dz = -radius; dz <= radius; dz++) {
           BlockPos pos = ORIGIN_POS.add(dx, dy, dz);
 
           Integer color = valuableOres.get(serverWorld.getBlockState(pos).getBlock());
@@ -141,6 +142,16 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     }
 
     ServerPlayNetworking.send(player, new OreVisionPayload(found));
+  }
+
+  private int getOreVisionRadius(List<GemstoneModifier> modifiers) {
+    double radius = 0.0;
+    for (GemstoneModifier modifier : modifiers) {
+      PlayerConfig config = (PlayerConfig) modifier.getConfig();
+      radius = Math.max(radius, config.values().get(modifier.getRarityType()));
+    }
+
+    return OreVisionRadius.fromValue(radius);
   }
 
   // TODO: structures pool

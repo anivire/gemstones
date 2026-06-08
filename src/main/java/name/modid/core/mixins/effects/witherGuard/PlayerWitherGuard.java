@@ -18,6 +18,7 @@ import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.utils.witherGuard.WitherSkullOrbitFlag;
 import name.modid.core.utils.witherGuard.WitherSkullOwner;
+import name.modid.core.utils.witherGuard.WitherGuardSkullLimit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
@@ -36,8 +37,6 @@ import net.minecraft.world.World;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerWitherGuard extends LivingEntity implements WitherSkullOwner {
-  @Unique
-  private static final int MAX_SKULLS = 3;
   @Unique
   private static final int RECHARGE_TICKS = 5 * 20;
   @Unique
@@ -130,13 +129,8 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
         serverPlayer,
         armorPiece -> ModifierGatheringHelper.getModifiers(armorPiece, PlayerConfig.class));
 
-    boolean hasWitherGuard = modifiers.stream()
-        .anyMatch(mod -> {
-          if (mod.getConfig() instanceof PlayerConfig config) {
-            return config.eventType() == EventType.PLAYER_WITHER_GUARD;
-          }
-          return false;
-        });
+    int maxSkulls = getMaxWitherGuardSkulls(modifiers);
+    boolean hasWitherGuard = maxSkulls > 0;
 
     if (!hasWitherGuard) {
       if (!orbitingSkulls.isEmpty()) {
@@ -157,7 +151,8 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
     }
 
     if (!hadValidItemLastTick && orbitingSkulls.isEmpty() && witherSkullCount > 0) {
-      for (int i = 0; i < witherSkullCount; i++) {
+      int restoredSkulls = Math.min(witherSkullCount, maxSkulls);
+      for (int i = 0; i < restoredSkulls; i++) {
         spawnWitherSkull(world);
       }
 
@@ -171,9 +166,10 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
     }
 
     hadValidItemLastTick = true;
+    discardExtraWitherSkulls(maxSkulls);
 
     witherSkullCount = orbitingSkulls.size();
-    if (witherSkullCount < MAX_SKULLS) {
+    if (witherSkullCount < maxSkulls) {
       if (--witherSkullRechargeTimer <= 0) {
         spawnWitherSkull(world);
         witherSkullRechargeTimer = RECHARGE_TICKS;
@@ -234,6 +230,31 @@ public abstract class PlayerWitherGuard extends LivingEntity implements WitherSk
     }
 
     updateOrbitingSkulls(world);
+  }
+
+  @Unique
+  private void discardExtraWitherSkulls(int maxSkulls) {
+    while (orbitingSkulls.size() > maxSkulls) {
+      int index = orbitingSkulls.size() - 1;
+      WitherSkullEntity skull = orbitingSkulls.remove(index);
+      skullSpawnTicks.remove(index);
+      if (skull != null && skull.isAlive()) {
+        skull.discard();
+      }
+    }
+  }
+
+  @Unique
+  private int getMaxWitherGuardSkulls(List<GemstoneModifier> modifiers) {
+    double maxSkulls = 0.0;
+    for (GemstoneModifier modifier : modifiers) {
+      if (modifier.getConfig() instanceof PlayerConfig config
+          && config.eventType() == EventType.PLAYER_WITHER_GUARD) {
+        maxSkulls = Math.max(maxSkulls, config.values().get(modifier.getRarityType()));
+      }
+    }
+
+    return maxSkulls <= 0.0 ? 0 : WitherGuardSkullLimit.fromValue(maxSkulls);
   }
 
   @Inject(method = "remove", at = @At("HEAD"))

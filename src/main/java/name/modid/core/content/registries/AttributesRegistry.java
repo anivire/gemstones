@@ -21,6 +21,7 @@ public class AttributesRegistry {
   public static RegistryEntry<EntityAttribute> MAGIC_PIERCE_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> GEODE_DROP_CHANCE_ATTRIBUTE;
   public static RegistryEntry<EntityAttribute> INVULNERABILITY_FRAMES_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> SWIM_SPEED_ATTRIBUTE;
 
   public static final EntityAttribute PULL_SPEED = new ClampedEntityAttribute("attribute.name.generic.pull_speed", 1.0,
       0.1, 1024.0)
@@ -65,6 +66,10 @@ public class AttributesRegistry {
   public static final EntityAttribute INVULNERABILITY_FRAMES = new ClampedEntityAttribute(
       "attribute.name.generic.invulnerability_frames", 1.0, 0.0, 32.0)
       .setTracked(false);
+
+  public static final EntityAttribute SWIM_SPEED = new ClampedEntityAttribute(
+      "attribute.name.generic.swim_speed", 1.0, 0.0, 1024.0)
+      .setTracked(true);
 
   public static void initialize() {
     PULL_SPEED_ATTRIBUTE = Registry.registerReference(
@@ -120,5 +125,10 @@ public class AttributesRegistry {
         Registries.ATTRIBUTE,
         Identifier.of(Gemstones.MOD_ID, "invulnerability_frames"),
         INVULNERABILITY_FRAMES);
+
+    SWIM_SPEED_ATTRIBUTE = Registry.registerReference(
+        Registries.ATTRIBUTE,
+        Identifier.of(Gemstones.MOD_ID, "swim_speed"),
+        SWIM_SPEED);
   }
 }

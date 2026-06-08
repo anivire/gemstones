@@ -22,7 +22,7 @@
     "TOOLS": {
       "type": "PLAYER",
       "value_levels": [
-        0.0
+        3.0
       ],
       "additional_value_levels": [
         0.0
