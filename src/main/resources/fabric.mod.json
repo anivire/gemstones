@@ -24,6 +24,9 @@
     "client": [
       "name.modid.GemstonesClient"
     ],
+    "rei_client": [
+      "name.modid.compat.rei.GemstonesReiPlugin"
+    ],
     "fabric-datagen": [
       "name.modid.datagen.DataGenerator"
     ]
@@ -40,5 +43,8 @@
     "minecraft": "1.21.1",
     "java": ">=21",
     "fabric-api": ">=0.100.7+1.21.1"
+  },
+  "suggests": {
+    "roughlyenoughitems": "*"
   }
 }

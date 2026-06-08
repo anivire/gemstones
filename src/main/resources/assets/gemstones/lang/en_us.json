@@ -243,5 +243,11 @@
   "item.gemstones.polychrome_crystal_gemstone_flawless": "Polychrome Gemstone",
   "item.gemstones.polychrome_crystal_gemstone_radiant": "Polychrome Gemstone",
   "item.gemstones.gemstone_name.polychrome_crystal": "Polychrome Gemstone",
-  "block.gemstones.jewelry_table": "Jewelry Table"
+  "block.gemstones.jewelry_table": "Jewelry Table",
+  "container.gemstones.jewelry_table": "Jewelry Table",
+  "rei.gemstones.jewelry_table.insert": "Socket Gemstone",
+  "rei.gemstones.jewelry_table.extract": "Extract Gemstone",
+  "rei.gemstones.jewelry_table.expand": "Expand Socket",
+  "rei.gemstones.jewelry_table.extract.warning": "80% chance to destroy the gemstone",
+  "rei.gemstones.jewelry_table.extract.short_warning": "80% destroy chance"
 }
