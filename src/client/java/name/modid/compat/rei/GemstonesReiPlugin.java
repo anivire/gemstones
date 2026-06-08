@@ -24,7 +24,6 @@ import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.core.content.items.registries.ItemsRegistry;
-import name.modid.datapack.items.ItemCompatibilityDataLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -52,8 +51,6 @@ public class GemstonesReiPlugin implements REIClientPlugin {
 
   @Override
   public void registerDisplays(DisplayRegistry registry) {
-    ItemCompatibilityDataLoader.loadBuiltinConfigs();
-
     insertDisplays().forEach(registry::add);
     extractDisplays().forEach(registry::add);
     expandDisplays().forEach(registry::add);
