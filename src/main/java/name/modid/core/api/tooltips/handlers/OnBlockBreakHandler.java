@@ -14,7 +14,7 @@ public class OnBlockBreakHandler extends BaseTooltipHandler<ModifierConfig.Block
   }
 
   @Override
-  protected double extractValue(ModifierConfig.BlockBreakConfig cfg) {
+  protected double removeValue(ModifierConfig.BlockBreakConfig cfg) {
     if (cfg.eventType() == EventType.ON_BLOCK_BREAK_MINER) {
       return cfg.additionalValues().get(rarityType);
     }

@@ -22,7 +22,7 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
   }
 
   @Override
-  protected double extractValue(ModifierConfig.MultiplyAttributeConfig cfg) {
+  protected double removeValue(ModifierConfig.MultiplyAttributeConfig cfg) {
     return 0;
   }
 

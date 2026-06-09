@@ -115,7 +115,7 @@ public class JewelryTableBlockEntity extends BlockEntity
 
   @Override
   public Text getDisplayName() {
-    return Text.empty();
+    return Text.translatable("container.gemstones.jewelry_table");
   }
 
   @Override

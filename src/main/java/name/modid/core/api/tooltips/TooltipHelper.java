@@ -183,7 +183,7 @@ public class TooltipHelper {
       double seconds,
       @Nullable Formatting color) {
     Formatting actualColor = color != null ? color : Formatting.GREEN;
-    return Text.literal(builder.formatValue(seconds, " second"))
+    return Text.literal(builder.formatValue(seconds, Text.translatable("tooltip.gemstones.unit.second").getString()))
         .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
         .formatted(actualColor);
   }
@@ -193,7 +193,7 @@ public class TooltipHelper {
       double blocks,
       @Nullable Formatting color) {
     Formatting actualColor = color != null ? color : Formatting.GREEN;
-    return Text.literal(builder.formatValue(blocks, " block"))
+    return Text.literal(builder.formatValue(blocks, Text.translatable("tooltip.gemstones.unit.block").getString()))
         .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
         .formatted(actualColor);
   }

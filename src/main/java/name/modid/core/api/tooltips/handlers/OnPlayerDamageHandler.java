@@ -20,7 +20,7 @@ public class OnPlayerDamageHandler extends BaseTooltipHandler<ModifierConfig.OnP
   }
 
   @Override
-  protected double extractValue(ModifierConfig.OnPlayerDamageConfig cfg) {
+  protected double removeValue(ModifierConfig.OnPlayerDamageConfig cfg) {
     return cfg.values().get(rarityType);
   }
 

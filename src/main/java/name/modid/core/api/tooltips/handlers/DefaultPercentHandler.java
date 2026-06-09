@@ -12,7 +12,7 @@ public class DefaultPercentHandler<T extends ModifierConfig.Events> extends Base
   }
 
   @Override
-  protected double extractValue(T cfg) {
+  protected double removeValue(T cfg) {
     return cfg.values().get(rarityType);
   }
 

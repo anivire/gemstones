@@ -21,13 +21,13 @@ public class ResultSlot extends Slot {
 
   @Override
   public void onTakeItem(PlayerEntity player, ItemStack taken) {
-    boolean extractBreaks = handler.prepareExtractBreak(player);
+    boolean removeBreaks = handler.prepareRemoveBreak(player);
 
     super.onTakeItem(player, taken);
 
     handler.finalizeTakeResult(player);
 
-    if (extractBreaks) {
+    if (removeBreaks) {
       taken.setCount(0);
     }
 

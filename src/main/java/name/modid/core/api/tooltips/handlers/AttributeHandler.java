@@ -16,7 +16,7 @@ public class AttributeHandler extends BaseTooltipHandler<ModifierConfig.Attribut
   }
 
   @Override
-  protected double extractValue(ModifierConfig.AttributeConfig cfg) {
+  protected double removeValue(ModifierConfig.AttributeConfig cfg) {
     return cfg.values().get(rarityType);
   }
 

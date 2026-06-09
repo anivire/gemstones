@@ -22,14 +22,14 @@ public abstract class BaseTooltipHandler<T extends ModifierConfig> implements To
 
   @Override
   public MutableText buildTooltip() {
-    double raw = extractValue(config);
+    double raw = removeValue(config);
     ModifierConfig baseConfig = builder.getBaseConfig();
     double displayRaw = raw;
     T typedBaseConfig = null;
 
     if (baseConfig != null && baseConfig.getClass() == config.getClass()) {
       typedBaseConfig = (T) baseConfig;
-      displayRaw = extractValue(typedBaseConfig);
+      displayRaw = removeValue(typedBaseConfig);
     }
 
     boolean isPositive = displayRaw > 0;
@@ -42,7 +42,7 @@ public abstract class BaseTooltipHandler<T extends ModifierConfig> implements To
         .append(Text.literal(formatted).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
 
     if (typedBaseConfig != null) {
-      double baseRaw = extractValue(typedBaseConfig);
+      double baseRaw = removeValue(typedBaseConfig);
       double baseAdjusted = Math.abs(adjustValue(typedBaseConfig, baseRaw));
       double boostedAdjusted = Math.abs(adjustValue(config, raw));
 
@@ -58,7 +58,7 @@ public abstract class BaseTooltipHandler<T extends ModifierConfig> implements To
     return buildText(config, valueText, isPositive);
   }
 
-  protected abstract double extractValue(T cfg);
+  protected abstract double removeValue(T cfg);
 
   protected double adjustValue(T cfg, double value) {
     return value;
