@@ -14,6 +14,7 @@ repositories {
   maven { url "https://api.modrinth.com/maven" }
   maven { url "https://maven.shedaniel.me" }
   maven { url "https://maven.architectury.dev" }
+  maven { url "https://maven.terraformersmc.com/releases" }
 }
 
 fabricApi {
@@ -64,6 +65,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
   modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
+  modCompileOnly "dev.emi:emi-fabric:${project.emi_version}"
+
   modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 }
 

@@ -248,6 +248,9 @@
   "rei.gemstones.jewelry_table.insert": "Socket Gemstone",
   "rei.gemstones.jewelry_table.extract": "Extract Gemstone",
   "rei.gemstones.jewelry_table.expand": "Expand Socket",
-  "rei.gemstones.jewelry_table.extract.warning": "80% chance to destroy the gemstone",
-  "rei.gemstones.jewelry_table.extract.short_warning": "80% destroy chance"
+  "rei.gemstones.jewelry_table.extract.short_warning": "80% destroy chance",
+  "emi.category.gemstones.jewelry_table_insert": "Socket Gemstone",
+  "emi.category.gemstones.jewelry_table_extract": "Extract Gemstone",
+  "emi.category.gemstones.jewelry_table_expand": "Expand Socket",
+  "emi.gemstones.jewelry_table.extract.short_warning": "80% destroy chance"
 }

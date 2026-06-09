@@ -1,7 +1,6 @@
 package name.modid.compat.rei;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import me.shedaniel.math.Rectangle;
@@ -13,20 +12,14 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import name.modid.Gemstones;
-import name.modid.core.api.components.ComponentsRegistry;
-import name.modid.core.api.components.GemstoneComponent;
-import name.modid.core.api.components.GemstoneSlotsComponent;
+import name.modid.compat.JewelryTableRecipeExamples;
 import name.modid.core.api.entities.jeweleryTable.JewelryTableScreen;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
-import name.modid.core.api.modifiers.types.GemstoneQuality;
-import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.items.GemstoneItem;
-import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.core.content.items.registries.ItemsRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -64,15 +57,15 @@ public class GemstonesReiPlugin implements REIClientPlugin {
 
   private static List<JewelryTableReiDisplay> insertDisplays() {
     List<JewelryTableReiDisplay> displays = new ArrayList<>();
-    List<Item> socketableItems = allSocketableItems();
+    List<Item> socketableItems = JewelryTableRecipeExamples.allSocketableItems();
 
-    for (ItemStack gem : allGemstoneStacks()) {
+    for (ItemStack gem : JewelryTableRecipeExamples.allGemstoneStacks()) {
       List<ItemStack> bases = socketableItems.stream()
-          .map(GemstonesReiPlugin::baseWithEmptySocket)
+          .map(JewelryTableRecipeExamples::baseWithEmptySocket)
           .toList();
       List<ItemStack> results = socketableItems.stream()
           .map(item -> {
-            ItemStack result = baseWithEmptySocket(item);
+            ItemStack result = JewelryTableRecipeExamples.baseWithEmptySocket(item);
             if (gem.getItem() instanceof GemstoneItem gemstone) {
               GemstoneSlotHelper.setGemstoneByIndex(result, 0, gemstone);
             }
@@ -97,14 +90,14 @@ public class GemstonesReiPlugin implements REIClientPlugin {
 
   private static List<JewelryTableReiDisplay> extractDisplays() {
     List<JewelryTableReiDisplay> displays = new ArrayList<>();
-    List<Item> socketableItems = allSocketableItems();
+    List<Item> socketableItems = JewelryTableRecipeExamples.allSocketableItems();
 
-    for (ItemStack gem : allGemstoneStacks()) {
+    for (ItemStack gem : JewelryTableRecipeExamples.allGemstoneStacks()) {
       displays.add(new JewelryTableReiDisplay(EXTRACT,
           List.of(
               ingredient(ItemsRegistry.JEWELRY_PLIERS),
               ingredient(socketableItems.stream()
-                  .map(item -> baseWithSocketedGem(item, gem))
+                  .map(item -> JewelryTableRecipeExamples.baseWithSocketedGem(item, gem))
                   .toList())),
           List.of(ingredient(gem)),
           true));
@@ -114,16 +107,12 @@ public class GemstonesReiPlugin implements REIClientPlugin {
   }
 
   private static List<JewelryTableReiDisplay> expandDisplays() {
-    List<Item> socketableItems = allSocketableItems();
+    List<Item> socketableItems = JewelryTableRecipeExamples.allSocketableItems();
     List<ItemStack> bases = socketableItems.stream()
-        .map(GemstonesReiPlugin::baseWithLockedSocket)
+        .map(JewelryTableRecipeExamples::baseWithLockedSocket)
         .toList();
     List<ItemStack> results = socketableItems.stream()
-        .map(item -> {
-          ItemStack result = baseWithLockedSocket(item);
-          GemstoneSlotHelper.addNewGemSlot(result);
-          return result;
-        })
+        .map(JewelryTableRecipeExamples::baseWithExpandedSocket)
         .toList();
     EntryIngredient baseIngredient = ingredient(bases);
     EntryIngredient resultIngredient = ingredient(results);
@@ -138,51 +127,6 @@ public class GemstonesReiPlugin implements REIClientPlugin {
             ingredient(ItemsRegistry.EXPANSION_CRYSTAL)),
         List.of(resultIngredient),
         false));
-  }
-
-  private static List<Item> allSocketableItems() {
-    return Registries.ITEM.stream()
-        .filter(GemstoneSlotHelper::isItemValid)
-        .sorted(Comparator.comparing(item -> Registries.ITEM.getId(item).toString()))
-        .toList();
-  }
-
-  private static List<ItemStack> allGemstoneStacks() {
-    return GemstonesRegistry.getAllGemstones().stream()
-        .map(ItemStack::new)
-        .toList();
-  }
-
-  private static ItemStack baseWithEmptySocket(Item item) {
-    ItemStack stack = new ItemStack(item);
-    stack.set(ComponentsRegistry.GEMSTONES,
-        new GemstoneSlotsComponent(new GemstoneComponent[] {
-            new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE),
-            new GemstoneComponent(GemstoneType.LOCKED, GemstoneQuality.NONE)
-        }));
-    return stack;
-  }
-
-  private static ItemStack baseWithLockedSocket(Item item) {
-    ItemStack stack = new ItemStack(item);
-    stack.set(ComponentsRegistry.GEMSTONES,
-        new GemstoneSlotsComponent(new GemstoneComponent[] {
-            new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE),
-            new GemstoneComponent(GemstoneType.LOCKED, GemstoneQuality.NONE)
-        }));
-    return stack;
-  }
-
-  private static ItemStack baseWithSocketedGem(Item item, ItemStack gem) {
-    ItemStack stack = new ItemStack(item);
-    if (gem.getItem() instanceof GemstoneItem gemstone) {
-      stack.set(ComponentsRegistry.GEMSTONES,
-          new GemstoneSlotsComponent(new GemstoneComponent[] {
-              new GemstoneComponent(gemstone.getType(), gemstone.getRarityType()),
-              new GemstoneComponent(GemstoneType.EMPTY, GemstoneQuality.NONE)
-          }));
-    }
-    return stack;
   }
 
   private static EntryIngredient ingredient(Item item) {
