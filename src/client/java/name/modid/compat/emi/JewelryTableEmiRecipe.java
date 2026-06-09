@@ -18,15 +18,15 @@ public class JewelryTableEmiRecipe implements EmiRecipe {
     private final EmiRecipeCategory category;
     private final List<EmiIngredient> inputs;
     private final List<EmiStack> outputs;
-    private final boolean riskyExtraction;
+    private final boolean riskyRemoval;
 
     public JewelryTableEmiRecipe(Identifier id, EmiRecipeCategory category,
-            List<EmiIngredient> inputs, List<EmiStack> outputs, boolean riskyExtraction) {
+            List<EmiIngredient> inputs, List<EmiStack> outputs, boolean riskyRemoval) {
         this.id = id;
         this.category = category;
         this.inputs = inputs;
         this.outputs = outputs;
-        this.riskyExtraction = riskyExtraction;
+        this.riskyRemoval = riskyRemoval;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class JewelryTableEmiRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return riskyExtraction ? 52 : 36;
+        return riskyRemoval ? 52 : 36;
     }
 
     @Override
@@ -69,9 +69,9 @@ public class JewelryTableEmiRecipe implements EmiRecipe {
         int outputX = arrowX + 28;
         widgets.add(new SlotWidget(outputs.get(0), outputX, 5).large(true).recipeContext(this));
 
-        if (riskyExtraction) {
+        if (riskyRemoval) {
             widgets.addText(
-                    Text.translatable("emi.gemstones.jewelry_table.extract.short_warning"),
+                    Text.translatable("emi.gemstones.jewelry_table.remove.short_warning"),
                     getDisplayWidth() / 2, 38, 0xFF5555, false)
                     .horizontalAlign(TextWidget.Alignment.CENTER);
         }

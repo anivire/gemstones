@@ -20,12 +20,12 @@ public class GemstonesEmiPlugin implements EmiPlugin {
     @Override
     public void register(EmiRegistry registry) {
         registry.addCategory(JewelryTableEmiRecipeCategory.INSERT);
-        registry.addCategory(JewelryTableEmiRecipeCategory.EXTRACT);
+        registry.addCategory(JewelryTableEmiRecipeCategory.REMOVE);
         registry.addCategory(JewelryTableEmiRecipeCategory.EXPAND);
 
         EmiStack workstation = EmiStack.of(BlocksRegistry.JEWELRY_TABLE);
         registry.addWorkstation(JewelryTableEmiRecipeCategory.INSERT, workstation);
-        registry.addWorkstation(JewelryTableEmiRecipeCategory.EXTRACT, workstation);
+        registry.addWorkstation(JewelryTableEmiRecipeCategory.REMOVE, workstation);
         registry.addWorkstation(JewelryTableEmiRecipeCategory.EXPAND, workstation);
 
         List<Item> socketableItems = JewelryTableRecipeExamples.allSocketableItems();
@@ -60,8 +60,8 @@ public class GemstonesEmiPlugin implements EmiPlugin {
 
         for (ItemStack gem : JewelryTableRecipeExamples.allGemstoneStacks()) {
             registry.addRecipe(new JewelryTableEmiRecipe(
-                    Identifier.of("gemstones", "/extract/" + idCounter),
-                    JewelryTableEmiRecipeCategory.EXTRACT,
+                    Identifier.of("gemstones", "/remove/" + idCounter),
+                    JewelryTableEmiRecipeCategory.REMOVE,
                     List.of(
                             EmiIngredient.of(List.of(EmiStack.of(ItemsRegistry.JEWELRY_PLIERS))),
                             EmiIngredient.of(socketableItems.stream()

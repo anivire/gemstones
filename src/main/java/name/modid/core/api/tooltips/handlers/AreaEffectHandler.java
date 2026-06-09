@@ -15,7 +15,7 @@ public class AreaEffectHandler extends BaseTooltipHandler<ModifierConfig.AreaEff
   }
 
   @Override
-  protected double extractValue(ModifierConfig.AreaEffectConfig cfg) {
+  protected double removeValue(ModifierConfig.AreaEffectConfig cfg) {
     return cfg.radiusLevels().get(rarityType);
   }
 

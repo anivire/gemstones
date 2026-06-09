@@ -19,7 +19,7 @@ gemstones can also be found in structures such as piglin bastions in the Nether,
 strongholds, End cities, and other loot chests.
 
 Use the **Jewelry Table** and different gemstone tools to unlock new sockets,
-insert upgrades, or extract gems back out.
+insert upgrades, or remove gems back out.
 
 For other information go to mod [Wiki](https://gemstones.anivire.xyz/).
 

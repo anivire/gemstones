@@ -22,7 +22,7 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
   }
 
   @Override
-  protected double extractValue(ModifierConfig.PlayerConfig cfg) {
+  protected double removeValue(ModifierConfig.PlayerConfig cfg) {
     return cfg.values().get(rarityType);
   }
 

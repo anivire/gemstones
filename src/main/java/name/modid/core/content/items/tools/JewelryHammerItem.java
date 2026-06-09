@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class JewelryHammerItem extends Item implements ConsumableTool {
   public JewelryHammerItem(Settings settings) {
@@ -20,6 +21,7 @@ public class JewelryHammerItem extends Item implements ConsumableTool {
   @Override
   public void appendTooltip(ItemStack itemStack, TooltipContext context, List<Text> tooltip,
       TooltipType type) {
-    tooltip.add(Text.translatable("item.gemstones.jewelry_hammer.info"));
+    tooltip.add(Text.translatable("item.gemstones.jewelry_hammer.info",
+        Text.translatable("item.gemstones.jewelry_hammer.info_inserting").formatted(Formatting.GOLD)));
   }
 }

@@ -12,13 +12,13 @@ public class OnPotionBrewHandler extends BaseTooltipHandler<ModifierConfig.OnPot
   }
 
   @Override
-  protected double extractValue(ModifierConfig.OnPotionBrewConfig cfg) {
+  protected double removeValue(ModifierConfig.OnPotionBrewConfig cfg) {
     return cfg.values().get(rarityType);
   }
 
   @Override
   protected String getPostfix(ModifierConfig.OnPotionBrewConfig cfg) {
-    return " second";
+    return Text.translatable("tooltip.gemstones.unit.second").getString();
   }
 
   @Override

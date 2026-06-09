@@ -26,33 +26,33 @@ import net.minecraft.util.Identifier;
 public class GemstonesReiPlugin implements REIClientPlugin {
   public static final CategoryIdentifier<JewelryTableReiDisplay> INSERT = CategoryIdentifier
       .of(Identifier.of(Gemstones.MOD_ID, "jewelry_table_insert"));
-  public static final CategoryIdentifier<JewelryTableReiDisplay> EXTRACT = CategoryIdentifier
-      .of(Identifier.of(Gemstones.MOD_ID, "jewelry_table_extract"));
+  public static final CategoryIdentifier<JewelryTableReiDisplay> REMOVE = CategoryIdentifier
+      .of(Identifier.of(Gemstones.MOD_ID, "jewelry_table_remove"));
   public static final CategoryIdentifier<JewelryTableReiDisplay> EXPAND = CategoryIdentifier
       .of(Identifier.of(Gemstones.MOD_ID, "jewelry_table_expand"));
 
   @Override
   public void registerCategories(CategoryRegistry registry) {
     registry.add(new JewelryTableReiCategory(INSERT, Text.translatable("rei.gemstones.jewelry_table.insert")));
-    registry.add(new JewelryTableReiCategory(EXTRACT, Text.translatable("rei.gemstones.jewelry_table.extract")));
+    registry.add(new JewelryTableReiCategory(REMOVE, Text.translatable("rei.gemstones.jewelry_table.remove")));
     registry.add(new JewelryTableReiCategory(EXPAND, Text.translatable("rei.gemstones.jewelry_table.expand")));
 
     registry.addWorkstations(INSERT, EntryStacks.of(BlocksRegistry.JEWELRY_TABLE));
-    registry.addWorkstations(EXTRACT, EntryStacks.of(BlocksRegistry.JEWELRY_TABLE));
+    registry.addWorkstations(REMOVE, EntryStacks.of(BlocksRegistry.JEWELRY_TABLE));
     registry.addWorkstations(EXPAND, EntryStacks.of(BlocksRegistry.JEWELRY_TABLE));
   }
 
   @Override
   public void registerDisplays(DisplayRegistry registry) {
     insertDisplays().forEach(registry::add);
-    extractDisplays().forEach(registry::add);
+    removeDisplays().forEach(registry::add);
     expandDisplays().forEach(registry::add);
   }
 
   @Override
   public void registerScreens(ScreenRegistry registry) {
     registry.registerContainerClickArea(new Rectangle(92, 32, 28, 24), JewelryTableScreen.class,
-        INSERT, EXTRACT, EXPAND);
+        INSERT, REMOVE, EXPAND);
   }
 
   private static List<JewelryTableReiDisplay> insertDisplays() {
@@ -88,12 +88,12 @@ public class GemstonesReiPlugin implements REIClientPlugin {
     return displays;
   }
 
-  private static List<JewelryTableReiDisplay> extractDisplays() {
+  private static List<JewelryTableReiDisplay> removeDisplays() {
     List<JewelryTableReiDisplay> displays = new ArrayList<>();
     List<Item> socketableItems = JewelryTableRecipeExamples.allSocketableItems();
 
     for (ItemStack gem : JewelryTableRecipeExamples.allGemstoneStacks()) {
-      displays.add(new JewelryTableReiDisplay(EXTRACT,
+      displays.add(new JewelryTableReiDisplay(REMOVE,
           List.of(
               ingredient(ItemsRegistry.JEWELRY_PLIERS),
               ingredient(socketableItems.stream()

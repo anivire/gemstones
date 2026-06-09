@@ -59,9 +59,9 @@ public class JewelryTableReiCategory implements DisplayCategory<JewelryTableReiD
         .entries(display.getOutputEntries().get(0))
         .markOutput());
 
-    if (display.isRiskyExtraction()) {
+    if (display.isRiskyRemoval()) {
       widgets.add(Widgets.createLabel(new Point(bounds.x + bounds.width / 2, bounds.y + 49),
-          Text.translatable("rei.gemstones.jewelry_table.extract.short_warning"))
+          Text.translatable("rei.gemstones.jewelry_table.remove.short_warning"))
           .centered()
           .noShadow()
           .color(0xFF5555));
