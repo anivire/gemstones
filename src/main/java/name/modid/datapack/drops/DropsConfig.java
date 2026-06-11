@@ -117,7 +117,7 @@ public class DropsConfig {
     @SerializedName("gemstone_type")
     public GemstoneType gemstoneType;
     public float chance;
-    public boolean unusual;
+    public boolean mythic;
 
     public GemstoneType getGemstoneType() {
       return gemstoneType;
@@ -127,8 +127,8 @@ public class DropsConfig {
       return chance;
     }
 
-    public boolean isUnusual() {
-      return unusual;
+    public boolean isMythic() {
+      return mythic;
     }
   }
 
@@ -169,7 +169,7 @@ public class DropsConfig {
     public int minCount = 1;
     @SerializedName("max_count")
     public int maxCount = 1;
-    public boolean unusual;
+    public boolean mythic;
 
     public String getTrigger() {
       return trigger;
@@ -195,8 +195,8 @@ public class DropsConfig {
       return maxCount;
     }
 
-    public boolean isUnusual() {
-      return unusual;
+    public boolean isMythic() {
+      return mythic;
     }
   }
 }

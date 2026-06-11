@@ -16,7 +16,7 @@ import name.modid.core.api.tooltips.handlers.OnHitHandler;
 import name.modid.core.api.tooltips.handlers.OnPlayerDamageHandler;
 import name.modid.core.api.tooltips.handlers.OnPotionBrewHandler;
 import name.modid.core.api.tooltips.handlers.PlayerHandler;
-import name.modid.core.api.tooltips.handlers.BoosterHandler;
+import name.modid.core.api.tooltips.handlers.AmplifierHandler;
 import name.modid.core.api.tooltips.handlers.TooltipHandler;
 import name.modid.core.api.tooltips.handlers.UndefinedHandler;
 
@@ -70,8 +70,8 @@ public final class TooltipHandlerRegistry {
     handlers.put(ModifierCategoryType.AREA_EFFECT,
         new AreaEffectHandler(builder, config, rarityType));
 
-    handlers.put(ModifierCategoryType.BOOSTER,
-        new BoosterHandler(builder, config, rarityType));
+    handlers.put(ModifierCategoryType.AMPLIFIER,
+        new AmplifierHandler(builder, config, rarityType));
 
     handlers.put(ModifierCategoryType.UNDEFINED, new UndefinedHandler());
   }

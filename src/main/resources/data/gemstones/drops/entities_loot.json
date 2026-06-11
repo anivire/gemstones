@@ -9,7 +9,7 @@
     {
       "loot_tables": ["minecraft:entities/wither"],
       "pools": [
-        { "gemstone_type": "WITHER_SHELL", "chance": 1.0, "unusual": true }
+        { "gemstone_type": "WITHER_SHELL", "chance": 1.0, "mythic": true }
       ]
     }
   ]

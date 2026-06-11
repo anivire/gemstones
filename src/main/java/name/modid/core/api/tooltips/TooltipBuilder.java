@@ -73,7 +73,7 @@ public class TooltipBuilder {
       Map.entry(ModifierConfig.AfterDeathConfig.class, ModifierCategoryType.ON_DEATH),
       Map.entry(ModifierConfig.OnPotionBrewConfig.class, ModifierCategoryType.ON_POTION_BREW),
       Map.entry(ModifierConfig.OnFishingConfig.class, ModifierCategoryType.ON_FISHING),
-      Map.entry(ModifierConfig.BoosterConfig.class, ModifierCategoryType.BOOSTER));
+      Map.entry(ModifierConfig.AmplifierConfig.class, ModifierCategoryType.AMPLIFIER));
 
   private ModifierCategoryType resolveCategory(ModifierConfig config) {
     return CONFIG_TYPE_MAP.getOrDefault(config.getClass(), ModifierCategoryType.UNDEFINED);

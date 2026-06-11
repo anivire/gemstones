@@ -13,7 +13,7 @@ public sealed interface ModifierConfig extends ModifierConfigBase permits
     ModifierConfig.Attributes,
     ModifierConfig.Effects,
     ModifierConfig.Events,
-    ModifierConfig.BoosterConfig {
+    ModifierConfig.AmplifierConfig {
 
   sealed interface Attributes extends ModifierConfig permits AttributeConfig, MultiplyAttributeConfig {
   }
@@ -136,7 +136,7 @@ public sealed interface ModifierConfig extends ModifierConfigBase permits
       EventType eventType) implements Events {
   }
 
-  record BoosterConfig(
+  record AmplifierConfig(
       LevelValues values) implements ModifierConfig {
   }
 }

@@ -5,26 +5,29 @@ import com.mojang.serialization.Codec;
 import net.minecraft.util.Formatting;
 
 public enum GemstoneQuality {
-  NONE(-1, "\uE000", "item.gemstones.quality.none", Formatting.WHITE),
-  CRUDE(0, "\uE001", "item.gemstones.quality.crude", Formatting.GRAY),
-  POLISHED(1, "\uE002", "item.gemstones.quality.polished", Formatting.BLUE),
-  FLAWLESS(2, "\uE003", "item.gemstones.quality.flawless", Formatting.LIGHT_PURPLE),
-  RADIANT(3, "\uE004", "item.gemstones.quality.radiant", Formatting.GOLD),
-  UNUSUAL(4, "\uE005", "item.gemstones.quality.unusual", Formatting.GREEN),
-  BOOSTER(5, "\uE006", "item.gemstones.quality.booster", Formatting.RED);
+  NONE(-1, "\uE000", "item.gemstones.quality.none", Formatting.WHITE, 0xFFFFFF),
+  CRUDE(0, "\uE004", "item.gemstones.quality.crude", Formatting.GRAY, 0x4d4d4d),
+  POLISHED(1, "\uE004", "item.gemstones.quality.polished", Formatting.BLUE, 0x5454fc),
+  FLAWLESS(2, "\uE004", "item.gemstones.quality.flawless", Formatting.LIGHT_PURPLE, 0xfc4dff),
+  RADIANT(3, "\uE004", "item.gemstones.quality.radiant", Formatting.GOLD, 0xff8214),
+  MYTHIC(4, "\uE005", "item.gemstones.quality.mythic", Formatting.DARK_PURPLE, 0x6000d6),
+  AMPLIFIER(5, "\uE006", "item.gemstones.quality.amplifier", Formatting.RED, 0xe6254e);
 
   private final Integer value;
   private final String fontLiteral;
   private final String translationString;
   private final Formatting qualityColor;
+  private final int qualityHexColor;
   public static final Codec<GemstoneQuality> CODEC = Codec.STRING.xmap(GemstoneQuality::fromSerializedName,
       GemstoneQuality::name);
 
-  GemstoneQuality(Integer value, String fontLiteral, String translationString, Formatting qualityColor) {
+  GemstoneQuality(Integer value, String fontLiteral, String translationString, Formatting qualityColor,
+      int qualityHexColor) {
     this.value = value;
     this.fontLiteral = fontLiteral;
     this.translationString = translationString;
     this.qualityColor = qualityColor;
+    this.qualityHexColor = qualityHexColor;
   }
 
   public Integer getValue() {
@@ -39,8 +42,16 @@ public enum GemstoneQuality {
     return translationString;
   }
 
+  public String getPathName() {
+    return name().toLowerCase();
+  }
+
   public Formatting getQualityTextcolor() {
     return qualityColor;
+  }
+
+  public int getQualityHexColor() {
+    return qualityHexColor;
   }
 
   public GemstoneQuality next() {
@@ -48,7 +59,7 @@ public enum GemstoneQuality {
       case CRUDE -> POLISHED;
       case POLISHED -> FLAWLESS;
       case FLAWLESS -> RADIANT;
-      case RADIANT -> UNUSUAL;
+      case RADIANT -> MYTHIC;
       default -> null;
     };
   }

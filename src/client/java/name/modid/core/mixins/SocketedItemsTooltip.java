@@ -22,6 +22,7 @@ import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.tooltips.TooltipHelper;
 import name.modid.core.api.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -124,7 +125,7 @@ public class SocketedItemsTooltip {
       if (isShiftPressed) {
         List<Item> gemstonesByType = GemstonesRegistry.getGemstonesByType(type);
         Optional<Item> found = gemstonesByType.stream()
-            .filter(x -> x.getName().toString().contains(quality.name().toLowerCase()))
+            .filter(x -> x instanceof GemstoneItem gemstone && gemstone.getRarityType() == quality)
             .findFirst();
         MutableText icon = Text.literal(type.getGemstoneLiteral())
             .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))

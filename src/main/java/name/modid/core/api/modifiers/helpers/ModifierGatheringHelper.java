@@ -38,7 +38,7 @@ public class ModifierGatheringHelper {
         continue;
       }
 
-      if (BoostHelper.isBooster(modifier)) {
+      if (BoostHelper.isAmplifier(modifier)) {
         continue;
       }
 

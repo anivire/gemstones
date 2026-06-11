@@ -66,7 +66,7 @@ public class GemstonesRegistry {
 
     // Default rarities
     for (GemstoneQuality rarity : rarities) {
-      String rarityName = rarity.toString().toLowerCase();
+      String rarityName = rarity.getPathName();
 
       RUBY_GEMSTONES.add(ItemsRegistry.register("ruby_gemstone_" + rarityName,
           settings -> new GemstoneItem(settings, GemstoneType.RUBY, rarity),
@@ -139,30 +139,30 @@ public class GemstonesRegistry {
     }
 
     WITHER_SHELL.add(ItemsRegistry.register(
-        "wither_shell_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
-        settings -> new GemstoneItem(settings, GemstoneType.WITHER_SHELL, GemstoneQuality.UNUSUAL),
+        "wither_shell_" + GemstoneQuality.MYTHIC.getPathName(),
+        settings -> new GemstoneItem(settings, GemstoneType.WITHER_SHELL, GemstoneQuality.MYTHIC),
         new Item.Settings().rarity(Rarity.EPIC)
             .component(DataComponentTypes.MAX_STACK_SIZE, 1)
             .component(ComponentsRegistry.EXPLOSION_IMMUNE, true)));
 
     ONYX.add(ItemsRegistry.register(
-        "onyx_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
-        settings -> new GemstoneItem(settings, GemstoneType.ONYX, GemstoneQuality.UNUSUAL),
+        "onyx_" + GemstoneQuality.MYTHIC.getPathName(),
+        settings -> new GemstoneItem(settings, GemstoneType.ONYX, GemstoneQuality.MYTHIC),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
     CRYSTALLIZED_EXPERIENCE.add(ItemsRegistry.register(
-        "crystallized_experience_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
-        settings -> new GemstoneItem(settings, GemstoneType.CRYSTALLIZED_EXPERIENCE, GemstoneQuality.UNUSUAL),
+        "crystallized_experience_" + GemstoneQuality.MYTHIC.getPathName(),
+        settings -> new GemstoneItem(settings, GemstoneType.CRYSTALLIZED_EXPERIENCE, GemstoneQuality.MYTHIC),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
     ASTRALITE.add(ItemsRegistry.register(
-        "astralite_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
-        settings -> new GemstoneItem(settings, GemstoneType.ASTRALITE, GemstoneQuality.UNUSUAL),
+        "astralite_" + GemstoneQuality.MYTHIC.getPathName(),
+        settings -> new GemstoneItem(settings, GemstoneType.ASTRALITE, GemstoneQuality.MYTHIC),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
 
     ENDER_SCALE.add(ItemsRegistry.register(
-        "ender_scale_" + GemstoneQuality.UNUSUAL.toString().toLowerCase(),
-        settings -> new GemstoneItem(settings, GemstoneType.ENDER_SCALE, GemstoneQuality.UNUSUAL),
+        "ender_scale_" + GemstoneQuality.MYTHIC.getPathName(),
+        settings -> new GemstoneItem(settings, GemstoneType.ENDER_SCALE, GemstoneQuality.MYTHIC),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
   }
 

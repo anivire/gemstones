@@ -15,7 +15,7 @@ public enum ModifierCategoryType {
   ON_BLOCK_BREAK,
   ON_BEFORE_BLOCK_BREAK,
   AREA_EFFECT,
-  BOOSTER,
+  AMPLIFIER,
   ON_FISHING,
   PLAYER,
   UNDEFINED,

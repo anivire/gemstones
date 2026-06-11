@@ -15,7 +15,7 @@ public class LevelValues {
       return 0.0;
     }
 
-    if (quality == GemstoneQuality.UNUSUAL) {
+    if (quality == GemstoneQuality.MYTHIC) {
       return values.get(0);
     }
 

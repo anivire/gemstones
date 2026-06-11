@@ -20,7 +20,7 @@ import name.modid.core.api.modifiers.config.ModifierConfig.OnMobDamageConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.OnPlayerDamageConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.OnPotionBrewConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.PlayerConfig;
-import name.modid.core.api.modifiers.config.ModifierConfig.BoosterConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.AmplifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.AfterDeathConfig;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.LevelValues;
@@ -49,12 +49,12 @@ public final class BoostHelper {
         boostedConfig);
   }
 
-  public static boolean isBooster(GemstoneModifier modifier) {
-    return modifier.getConfig() instanceof BoosterConfig;
+  public static boolean isAmplifier(GemstoneModifier modifier) {
+    return modifier.getConfig() instanceof AmplifierConfig;
   }
 
   private static double getSlotMultiplier(GemstoneComponent[] gemstones, int slotIndex, Item item) {
-    if (slotIndex <= 0 || slotIndex >= gemstones.length || !isBoosterGemstone(gemstones[slotIndex - 1])) {
+    if (slotIndex <= 0 || slotIndex >= gemstones.length || !isAmplifierGemstone(gemstones[slotIndex - 1])) {
       return 1.0;
     }
 
@@ -62,21 +62,21 @@ public final class BoostHelper {
   }
 
   private static double getEffectiveBoost(GemstoneComponent[] gemstones, int slotIndex, Item item) {
-    GemstoneModifier modifier = getBoosterModifier(gemstones[slotIndex], item);
-    if (!(modifier != null && modifier.getConfig() instanceof BoosterConfig boosterConfig)) {
+    GemstoneModifier modifier = getAmplifierModifier(gemstones[slotIndex], item);
+    if (!(modifier != null && modifier.getConfig() instanceof AmplifierConfig amplifierConfig)) {
       return 0.0;
     }
 
-    double boost = boosterConfig.values().get(modifier.getRarityType());
-    if (slotIndex > 0 && isBoosterGemstone(gemstones[slotIndex - 1])) {
+    double boost = amplifierConfig.values().get(modifier.getRarityType());
+    if (slotIndex > 0 && isAmplifierGemstone(gemstones[slotIndex - 1])) {
       boost *= getSlotMultiplier(gemstones, slotIndex, item);
     }
 
     return boost;
   }
 
-  private static GemstoneModifier getBoosterModifier(GemstoneComponent gemstone, Item item) {
-    if (!isBoosterGemstone(gemstone)) {
+  private static GemstoneModifier getAmplifierModifier(GemstoneComponent gemstone, Item item) {
+    if (!isAmplifierGemstone(gemstone)) {
       return null;
     }
 
@@ -86,7 +86,7 @@ public final class BoostHelper {
         item);
   }
 
-  private static boolean isBoosterGemstone(GemstoneComponent gemstone) {
+  private static boolean isAmplifierGemstone(GemstoneComponent gemstone) {
     return gemstone != null && gemstone.gemstoneType() == GemstoneType.POLYCHROME_CRYSTAL;
   }
 
@@ -179,8 +179,8 @@ public final class BoostHelper {
           scale(fishing.additionalValues(), multiplier), fishing.eventType());
     }
 
-    if (config instanceof BoosterConfig booster) {
-      return new BoosterConfig(scale(booster.values(), multiplier));
+    if (config instanceof AmplifierConfig amplifier) {
+      return new AmplifierConfig(scale(amplifier.values(), multiplier));
     }
 
     return config;

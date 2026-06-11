@@ -120,9 +120,9 @@ public final class EventType {
     }
 
     String upper = raw.toUpperCase(Locale.ROOT);
-    EventType byLegacyName = BY_NAME.get(upper);
-    if (byLegacyName != null) {
-      return byLegacyName;
+    EventType byName = BY_NAME.get(upper);
+    if (byName != null) {
+      return byName;
     }
 
     Identifier id = raw.contains(":")

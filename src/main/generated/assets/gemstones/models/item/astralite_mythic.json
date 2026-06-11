@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "gemstones:item/onyx"
+    "layer0": "gemstones:item/astralite"
   }
 }

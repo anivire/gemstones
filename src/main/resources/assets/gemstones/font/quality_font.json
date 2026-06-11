@@ -2,56 +2,11 @@
   "providers": [
     {
       "type": "bitmap",
-      "file": "gemstones:gui/quality/crude.png",
-      "height": 10,
-      "ascent": 8,
+      "file": "gemstones:gui/quality/qualities_icons.png",
+      "height": 6,
+      "ascent": 6,
       "chars": [
-        "\uE001"
-      ]
-    },
-    {
-      "type": "bitmap",
-      "file": "gemstones:gui/quality/polished.png",
-      "height": 10,
-      "ascent": 8,
-      "chars": [
-        "\uE002"
-      ]
-    },
-    {
-      "type": "bitmap",
-      "file": "gemstones:gui/quality/flawless.png",
-      "height": 10,
-      "ascent": 8,
-      "chars": [
-        "\uE003"
-      ]
-    },
-    {
-      "type": "bitmap",
-      "file": "gemstones:gui/quality/radiant.png",
-      "height": 10,
-      "ascent": 8,
-      "chars": [
-        "\uE004"
-      ]
-    },
-    {
-      "type": "bitmap",
-      "file": "gemstones:gui/quality/unusual.png",
-      "height": 10,
-      "ascent": 8,
-      "chars": [
-        "\uE005"
-      ]
-    },
-    {
-      "type": "bitmap",
-      "file": "gemstones:gui/quality/booster.png",
-      "height": 10,
-      "ascent": 8,
-      "chars": [
-        "\uE006"
+        "\uE001\uE002\uE003\uE004\uE005\uE006"
       ]
     }
   ]

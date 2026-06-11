@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "gemstones:item/astralite"
+    "layer0": "gemstones:item/ender_scale"
   }
 }

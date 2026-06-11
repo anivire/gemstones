@@ -49,12 +49,12 @@
         {
           "gemstone_type": "ONYX",
           "chance": 0.25,
-          "unusual": true
+          "mythic": true
         },
         {
           "gemstone_type": "ASTRALITE",
           "chance": 0.25,
-          "unusual": true
+          "mythic": true
         }
       ]
     },
@@ -66,7 +66,7 @@
         {
           "gemstone_type": "CRYSTALLIZED_EXPERIENCE",
           "chance": 0.05,
-          "unusual": true
+          "mythic": true
         }
       ]
     },

@@ -2,7 +2,7 @@
   "gemstone_type": "POLYCHROME_CRYSTAL",
   "modifiers": {
     "ALL": {
-      "type": "BOOSTER",
+      "type": "AMPLIFIER",
       "value_levels": [
         0.15,
         0.25,

@@ -173,9 +173,9 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
             GemstoneComponent::gemstoneQualityType,
             (q1, q2) -> q1));
 
-    // Forbid inserting two equal gemstone types with unusual quality
-    if (gemQuality == GemstoneQuality.UNUSUAL) {
-      if (g.containsKey(gemType) && g.get(gemType) == GemstoneQuality.UNUSUAL) {
+    // Forbid inserting two equal gemstone types with mythic quality
+    if (gemQuality == GemstoneQuality.MYTHIC) {
+      if (g.containsKey(gemType) && g.get(gemType) == GemstoneQuality.MYTHIC) {
         inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
         return;
       }
