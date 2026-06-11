@@ -72,11 +72,12 @@ public class OnPlayerDamageHandler extends BaseTooltipHandler<ModifierConfig.OnP
     }
 
     MutableText thresholdText = TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
-        builder.formatValue(displayThreshold, " Health"));
+        TooltipHelper.formatHealth(builder, displayThreshold));
 
     if (BoostedValueFormatter.isBoosted(displayThreshold, boostedThreshold)) {
       thresholdText.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
-          .append(Text.literal(builder.formatValue(boostedThreshold, " Health")).formatted(Formatting.LIGHT_PURPLE))
+          .append(Text.literal(TooltipHelper.formatHealth(builder, boostedThreshold))
+              .formatted(Formatting.LIGHT_PURPLE))
           .append(Text.literal(")").formatted(Formatting.DARK_GRAY));
     }
 

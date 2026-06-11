@@ -62,22 +62,6 @@ public class SocketedItemsTooltip {
       tooltip.add(Text.translatable("tooltip.gemstones.category_name").formatted(Formatting.GRAY));
       tooltip.addAll(getItemGemstoneBonusesRows(gemstones, itemStack));
 
-      // MutableText iconInfo = Text.literal(InlineIcons.SHIFT.getSymbol())
-      // .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID,
-      // Icons.INLINE.getPath())))
-      // .formatted(Formatting.WHITE);
-      // MutableText arrowInfo = Text.literal(" > ")
-      // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-      // .formatted(Formatting.DARK_GRAY);
-      // MutableText actionInfo = Text.literal("Hold Shift to see ")
-      // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-      // .formatted(Formatting.YELLOW);
-      // MutableText keywordInfo = Text.literal("Gemstones Additional Info")
-      // .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-      // .formatted(Formatting.GOLD);
-
-      // tooltip.addLast(Text.empty());
-      // tooltip.addLast(iconInfo.append(arrowInfo).append(actionInfo).append(keywordInfo));
     }
   }
 
@@ -133,7 +117,8 @@ public class SocketedItemsTooltip {
         MutableText name = Text.literal("")
             .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
             .append(found.map(f -> f.getDefaultStack().toHoverableText())
-                .orElse(Text.literal("Undefined").formatted(Formatting.RED)));
+                .orElse(TooltipHelper.safeTranslatable("tooltip.gemstones.gemstone.undefined")
+                    .formatted(Formatting.RED)));
         MutableText q = Text.translatable(quality.getTranslationString())
             .formatted(quality.getQualityTextcolor() == null
                 ? Formatting.WHITE
@@ -156,7 +141,7 @@ public class SocketedItemsTooltip {
           rows.add(TooltipHelper.makeRow(
               type.getGemstoneLiteral(),
               Icons.INLINE_GEMSTONE,
-              Text.literal("Undefined modifier")
+              TooltipHelper.safeTranslatable("tooltip.gemstones.modifier.undefined")
                   .formatted(Formatting.RED)
                   .styled(s -> s.withFont(Style.DEFAULT_FONT_ID)),
               Optional.of(true)));

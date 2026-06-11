@@ -139,7 +139,6 @@ public class TooltipHelper {
         .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
         .formatted(Formatting.WHITE);
 
-    // TODO: translatable text
     MutableText t = Text.literal(" " + text)
         .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
         .formatted(Formatting.RED);
@@ -182,5 +181,9 @@ public class TooltipHelper {
     return Text.literal(builder.formatValue(blocks, Text.translatable("tooltip.gemstones.unit.block").getString()))
         .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
         .formatted(actualColor);
+  }
+
+  public static String formatHealth(TooltipBuilder builder, double health) {
+    return builder.formatValue(health, Text.translatable("tooltip.gemstones.unit.health").getString());
   }
 }

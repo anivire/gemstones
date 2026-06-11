@@ -130,7 +130,10 @@ public class GemstoneItem extends Item {
           : polishing.ticksInStage() * 100 / polishing.stageDuration();
 
       tooltip.add(Text.empty());
-      tooltip.add(Text.literal("Polishing: " + currentStage + " / " + totalStages + " (" + stagePercent + "%)")
+      tooltip.add(Text.translatable("tooltip.gemstones.polishing.progress",
+          currentStage,
+          totalStages,
+          stagePercent)
           .formatted(Formatting.GOLD));
     }
   }

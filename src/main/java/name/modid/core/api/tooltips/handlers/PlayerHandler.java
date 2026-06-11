@@ -68,7 +68,8 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
     } else if (type == EventType.PLAYER_PROJECTILE_IMMUNE) {
       firstArg = valueText.copy()
           .append(Text.literal(" "))
-          .append(TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART, "Health"));
+          .append(TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
+              Text.translatable("tooltip.gemstones.unit.health").getString().trim()));
     } else if (type == EventType.PLAYER_RANDOM_EFFECT) {
       double chance = cfg.additionalValues().get(rarityType);
       double seconds = cfg.values().get(rarityType);
@@ -109,11 +110,12 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
     }
 
     MutableText thresholdText = TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
-        builder.formatValue(displayThreshold, " Health"));
+        TooltipHelper.formatHealth(builder, displayThreshold));
 
     if (BoostedValueFormatter.isBoosted(displayThreshold, boostedThreshold)) {
       thresholdText.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
-          .append(Text.literal(builder.formatValue(boostedThreshold, " Health")).formatted(Formatting.LIGHT_PURPLE))
+          .append(Text.literal(TooltipHelper.formatHealth(builder, boostedThreshold))
+              .formatted(Formatting.LIGHT_PURPLE))
           .append(Text.literal(")").formatted(Formatting.DARK_GRAY));
     }
 
