@@ -1,0 +1,40 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "CC-BY-4.0"
+
+[[mods]]
+modId = "gemstones"
+version = "${version}"
+displayName = "Legendary Gemstones"
+description = "Add various gemstones to your equipment, tools and weapons!"
+authors = "anivire, 8o1y*ra, YoukaiDrawing"
+logoFile = "assets/gemstones/icon.png"
+displayURL = "https://gemstones.anivire.xyz/"
+issueTrackerURL = "https://github.com/anivire/gemstones/issues"
+
+[[mixins]]
+config = "gemstones.mixins.json"
+
+[[mixins]]
+config = "gemstones.client.mixins.json"
+
+[[dependencies.gemstones]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.gemstones]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,1.21.2)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.gemstones]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0.0,)"
+ordering = "AFTER"
+side = "BOTH"

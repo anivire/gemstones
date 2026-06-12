@@ -1,0 +1,38 @@
+architectury {
+	common(rootProject.enabled_platforms.split(','))
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDir 'src/main/generated'
+			srcDir 'src/main/resources'
+		}
+	}
+}
+
+loom {
+	if (sourceSets.findByName('client') == null) {
+		splitEnvironmentSourceSets()
+	}
+
+	mods {
+		'gemstones' {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+dependencies {
+	modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+	modApi "dev.architectury:architectury:${rootProject.architectury_api_version}"
+}
+
+tasks.processResources {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+sourcesJar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
