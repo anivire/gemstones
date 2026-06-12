@@ -156,7 +156,11 @@ public final class MultiMinerClientPreview {
   }
 
   public static void updateTargetHighlights(ClientPlayerEntity player, ClientWorld world, HitResult hit) {
-    if (!isMultiMinerActive(player) || !(hit instanceof BlockHitResult blockHit)) {
+    if (!isMultiMinerActive(player)
+        || hit == null
+        || hit.getType() != HitResult.Type.BLOCK
+        || !(hit instanceof BlockHitResult blockHit)
+        || !player.canInteractWithBlockAt(blockHit.getBlockPos(), 0.0)) {
       clearHighlights();
       return;
     }
