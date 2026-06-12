@@ -31,10 +31,19 @@ dependencies {
 
 processResources {
 	inputs.property 'version', project.version
+	inputs.property 'minecraft_version', rootProject.minecraft_version
+	inputs.property 'loader_version', rootProject.loader_version
+	inputs.property 'fabric_version', rootProject.fabric_version
+	inputs.property 'architectury_api_version', rootProject.architectury_api_version
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
 	filesMatching('fabric.mod.json') {
-		expand 'version': project.version
+		expand(
+				'version': project.version,
+				'minecraft_version': rootProject.minecraft_version,
+				'loader_version': rootProject.loader_version,
+				'fabric_version': rootProject.fabric_version,
+				'architectury_api_version': rootProject.architectury_api_version)
 	}
 }
 

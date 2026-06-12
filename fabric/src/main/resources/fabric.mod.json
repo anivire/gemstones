@@ -42,10 +42,11 @@
     }
   ],
   "depends": {
-    "fabricloader": ">=0.16.7",
-    "minecraft": "1.21.1",
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}",
     "java": ">=21",
-    "fabric-api": ">=0.100.7+1.21.1"
+    "fabric-api": ">=${fabric_version}",
+    "architectury": ">=${architectury_api_version}"
   },
   "suggests": {
     "roughlyenoughitems": "*",

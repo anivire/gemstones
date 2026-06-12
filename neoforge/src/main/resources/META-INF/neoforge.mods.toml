@@ -21,20 +21,32 @@ config = "gemstones.client.mixins.json"
 [[dependencies.gemstones]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1,)"
+versionRange = "[${neoforge_version},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.gemstones]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.1,1.21.2)"
+versionRange = "[${minecraft_version},1.21.2)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.gemstones]]
 modId = "architectury"
 type = "required"
-versionRange = "[13.0.0,)"
+versionRange = "[${architectury_api_version},)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.gemstones]]
+modId = "roughlyenoughitems"
+type = "optional"
+ordering = "AFTER"
+side = "CLIENT"
+
+[[dependencies.gemstones]]
+modId = "emi"
+type = "optional"
+ordering = "AFTER"
+side = "CLIENT"

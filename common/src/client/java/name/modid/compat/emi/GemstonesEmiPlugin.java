@@ -2,6 +2,7 @@ package name.modid.compat.emi;
 
 import java.util.List;
 
+import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -16,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
+@EmiEntrypoint
 public class GemstonesEmiPlugin implements EmiPlugin {
 
     @Override
