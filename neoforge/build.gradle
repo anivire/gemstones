@@ -7,6 +7,10 @@ architectury {
 	neoForge()
 }
 
+base {
+	archivesName = "neoforge-${rootProject.archives_base_name}"
+}
+
 configurations {
 	common
 	shadowCommon
