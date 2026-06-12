@@ -7,6 +7,7 @@ import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
+import me.shedaniel.rei.api.client.registry.entry.EntryRegistry;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -17,6 +18,7 @@ import name.modid.core.api.entities.jeweleryTable.JewelryTableScreen;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.items.GemstoneItem;
+import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.core.content.items.registries.ItemsRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,6 +49,13 @@ public class GemstonesReiPlugin implements REIClientPlugin {
     insertDisplays().forEach(registry::add);
     removeDisplays().forEach(registry::add);
     expandDisplays().forEach(registry::add);
+  }
+
+  @Override
+  public void registerEntries(EntryRegistry registry) {
+    GemstonesRegistry.getLegacyGemstones().stream()
+        .map(EntryStacks::of)
+        .forEach(registry::removeEntry);
   }
 
   @Override

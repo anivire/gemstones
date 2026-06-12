@@ -32,7 +32,7 @@ public final class GemstoneLootHelper {
       pool.with(ItemEntry.builder(gemstones.get(0))
           .weight(Math.max(1, Math.round(quality.getOrDefault(GemstoneQuality.CRUDE, 0f) * 100))));
       pool.with(ItemEntry.builder(gemstones.get(1))
-          .weight(Math.max(1, Math.round(quality.getOrDefault(GemstoneQuality.POLISHED, 0f) * 100))));
+          .weight(Math.max(1, Math.round(quality.getOrDefault(GemstoneQuality.REFINED, 0f) * 100))));
       pool.with(ItemEntry.builder(gemstones.get(2))
           .weight(Math.max(1, Math.round(quality.getOrDefault(GemstoneQuality.FLAWLESS, 0f) * 100))));
       pool.with(ItemEntry.builder(gemstones.get(3))

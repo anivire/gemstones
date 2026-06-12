@@ -45,6 +45,7 @@ public class GemstonesRegistry {
   private static final List<Item> CRYSTALLIZED_EXPERIENCE = new ArrayList<>();
   private static final List<Item> ASTRALITE = new ArrayList<>();
   private static final List<Item> ENDER_SCALE = new ArrayList<>();
+  private static final List<Item> LEGACY_GEMSTONES = new ArrayList<>();
 
   public static final RegistryKey<ItemGroup> GEMSTONES_ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP,
       Identifier.of(Gemstones.MOD_ID, "item_group"));
@@ -61,7 +62,7 @@ public class GemstonesRegistry {
   }
 
   public static void register() {
-    List<GemstoneQuality> rarities = Arrays.asList(GemstoneQuality.CRUDE, GemstoneQuality.POLISHED,
+    List<GemstoneQuality> rarities = Arrays.asList(GemstoneQuality.CRUDE, GemstoneQuality.REFINED,
         GemstoneQuality.FLAWLESS, GemstoneQuality.RADIANT);
 
     // Default rarities
@@ -164,6 +165,42 @@ public class GemstonesRegistry {
         "ender_scale_" + GemstoneQuality.MYTHIC.getPathName(),
         settings -> new GemstoneItem(settings, GemstoneType.ENDER_SCALE, GemstoneQuality.MYTHIC),
         new Item.Settings().rarity(Rarity.EPIC).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
+
+    // Support for legacy gemstones, will be removed in next updates
+    registerLegacyGemstone("ruby_gemstone_polished", GemstoneType.RUBY, GemstoneQuality.REFINED, Rarity.EPIC);
+    registerLegacyGemstone("celestine_gemstone_polished", GemstoneType.CELESTINE, GemstoneQuality.REFINED,
+        Rarity.UNCOMMON);
+    registerLegacyGemstone("topaz_gemstone_polished", GemstoneType.TOPAZ, GemstoneQuality.REFINED, Rarity.RARE);
+    registerLegacyGemstone("sapphire_gemstone_polished", GemstoneType.SAPPHIRE, GemstoneQuality.REFINED, Rarity.RARE);
+    registerLegacyGemstone("zircon_gemstone_polished", GemstoneType.ZIRCON, GemstoneQuality.REFINED, Rarity.RARE);
+    registerLegacyGemstone("aquamarine_gemstone_polished", GemstoneType.AQUAMARINE, GemstoneQuality.REFINED,
+        Rarity.UNCOMMON);
+    registerLegacyGemstone("obsidian_shard_gemstone_polished", GemstoneType.OBSIDIAN_SHARD, GemstoneQuality.REFINED,
+        Rarity.UNCOMMON);
+    registerLegacyGemstone("opal_gemstone_polished", GemstoneType.OPAL, GemstoneQuality.REFINED, Rarity.RARE);
+    registerLegacyGemstone("jade_gemstone_polished", GemstoneType.JADE, GemstoneQuality.REFINED, Rarity.UNCOMMON);
+    registerLegacyGemstone("malachite_gemstone_polished", GemstoneType.MALACHITE, GemstoneQuality.REFINED,
+        Rarity.RARE);
+    registerLegacyGemstone("restless_flame_polished", GemstoneType.RESTLESS_FLAME, GemstoneQuality.REFINED,
+        Rarity.RARE);
+    registerLegacyGemstone("amber_gemstone_polished", GemstoneType.AMBER, GemstoneQuality.REFINED, Rarity.UNCOMMON);
+    registerLegacyGemstone("pyrite_gemstone_polished", GemstoneType.PYRITE, GemstoneQuality.REFINED, Rarity.RARE);
+    registerLegacyGemstone("garnet_gemstone_polished", GemstoneType.GARNET, GemstoneQuality.REFINED, Rarity.RARE);
+    registerLegacyGemstone("polychrome_crystal_gemstone_polished", GemstoneType.POLYCHROME_CRYSTAL,
+        GemstoneQuality.REFINED, Rarity.EPIC);
+
+    registerLegacyGemstone("wither_shell_unusual", GemstoneType.WITHER_SHELL, GemstoneQuality.MYTHIC, Rarity.EPIC);
+    registerLegacyGemstone("onyx_unusual", GemstoneType.ONYX, GemstoneQuality.MYTHIC, Rarity.EPIC);
+    registerLegacyGemstone("crystallized_experience_unusual", GemstoneType.CRYSTALLIZED_EXPERIENCE,
+        GemstoneQuality.MYTHIC, Rarity.EPIC);
+    registerLegacyGemstone("astralite_unusual", GemstoneType.ASTRALITE, GemstoneQuality.MYTHIC, Rarity.EPIC);
+    registerLegacyGemstone("ender_scale_unusual", GemstoneType.ENDER_SCALE, GemstoneQuality.MYTHIC, Rarity.EPIC);
+  }
+
+  private static void registerLegacyGemstone(String path, GemstoneType type, GemstoneQuality quality, Rarity rarity) {
+    LEGACY_GEMSTONES.add(ItemsRegistry.register(path,
+        settings -> new GemstoneItem(settings, type, quality),
+        new Item.Settings().rarity(rarity).component(DataComponentTypes.MAX_STACK_SIZE, 1)));
   }
 
   public static void addGemstonesToItemGroup(FabricItemGroupEntries entries) {
@@ -212,6 +249,10 @@ public class GemstonesRegistry {
     all.addAll(ASTRALITE);
     all.addAll(ENDER_SCALE);
     return all;
+  }
+
+  public static List<Item> getLegacyGemstones() {
+    return LEGACY_GEMSTONES;
   }
 
   public static List<Item> getRubyGemstones() {

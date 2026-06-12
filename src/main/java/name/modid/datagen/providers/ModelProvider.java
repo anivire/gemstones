@@ -40,7 +40,7 @@ public class ModelProvider extends FabricModelProvider {
       }
 
       String path = Registries.ITEM.getId(item).getPath();
-      String baseName = path.replaceAll("_(crude|polished|flawless|radiant|mythic|amplifier)$", "");
+      String baseName = path.replaceAll("_(crude|refined|polished|flawless|radiant|mythic|unusual|amplifier)$", "");
 
       // fix for tools rotation
       var model = isHandheldTool(item) ? Models.HANDHELD : Models.GENERATED;

@@ -17,14 +17,14 @@
     "POLYCHROME_CRYSTAL": 0.01
   },
   "qualities": {
-    "POLISHED": 0.6,
+    "REFINED": 0.6,
     "FLAWLESS": 0.3,
     "RADIANT": 0.1
   },
   "quality_overrides": {
     "POLYCHROME_CRYSTAL": {
       "CRUDE": 0.7,
-      "POLISHED": 0.3
+      "REFINED": 0.3
     }
   }
 }

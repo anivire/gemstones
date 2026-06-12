@@ -83,8 +83,8 @@ public class DropsConfig {
     // Placeholder values
     @SerializedName("CRUDE")
     public float crude = 0.60f;
-    @SerializedName("POLISHED")
-    public float polished = 0.25f;
+    @SerializedName(value = "REFINED", alternate = "POLISHED")
+    public float refined = 0.25f;
     @SerializedName("FLAWLESS")
     public float flawless = 0.10f;
     @SerializedName("RADIANT")
@@ -93,7 +93,7 @@ public class DropsConfig {
     public Map<GemstoneQuality, Float> toMap() {
       return Map.of(
           GemstoneQuality.CRUDE, crude,
-          GemstoneQuality.POLISHED, polished,
+          GemstoneQuality.REFINED, refined,
           GemstoneQuality.FLAWLESS, flawless,
           GemstoneQuality.RADIANT, radiant);
     }

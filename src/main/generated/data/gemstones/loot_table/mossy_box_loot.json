@@ -218,7 +218,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "gemstones:celestine_gemstone_polished"
+          "name": "gemstones:celestine_gemstone_refined"
         },
         {
           "type": "minecraft:item",
@@ -226,7 +226,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "gemstones:aquamarine_gemstone_polished"
+          "name": "gemstones:aquamarine_gemstone_refined"
         },
         {
           "type": "minecraft:item",
@@ -234,7 +234,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "gemstones:zircon_gemstone_polished"
+          "name": "gemstones:zircon_gemstone_refined"
         },
         {
           "type": "minecraft:item",

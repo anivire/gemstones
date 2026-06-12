@@ -71,6 +71,7 @@ public final class ItemsRegistry {
   public static List<Item> getAllItems() {
     List<Item> all = new ArrayList<>();
     all.addAll(GemstonesRegistry.getAllGemstones());
+    all.addAll(GemstonesRegistry.getLegacyGemstones());
     all.add(STONE_GEODE);
     all.add(DEEPSLATE_GEODE);
     all.add(MOSSY_BOX);

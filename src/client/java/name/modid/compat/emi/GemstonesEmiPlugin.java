@@ -10,6 +10,7 @@ import name.modid.compat.JewelryTableRecipeExamples;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.items.GemstoneItem;
+import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.core.content.items.registries.ItemsRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +28,9 @@ public class GemstonesEmiPlugin implements EmiPlugin {
         registry.addWorkstation(JewelryTableEmiRecipeCategory.INSERT, workstation);
         registry.addWorkstation(JewelryTableEmiRecipeCategory.REMOVE, workstation);
         registry.addWorkstation(JewelryTableEmiRecipeCategory.EXPAND, workstation);
+        GemstonesRegistry.getLegacyGemstones().stream()
+                .map(EmiStack::of)
+                .forEach(registry::removeEmiStacks);
 
         List<Item> socketableItems = JewelryTableRecipeExamples.allSocketableItems();
 
