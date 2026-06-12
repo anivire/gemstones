@@ -35,7 +35,7 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
 
     ModifierCategoryType type;
     try {
-      type = ModifierCategoryType.valueOf(obj.get("type").getAsString());
+      type = parseModifierType(obj.get("type").getAsString());
     } catch (Exception e) {
       type = ModifierCategoryType.UNDEFINED;
     }
@@ -198,6 +198,13 @@ public class ModifiersConfigDeserializer implements JsonDeserializer<ModifierCon
     Operation operation = Operation.valueOf(obj.get("operation").getAsString());
 
     return new ModifierConfig.AttributeConfig(values, operation, attrEntry);
+  }
+
+  private ModifierCategoryType parseModifierType(String name) {
+    return switch (name.toUpperCase()) {
+      case "BOOSTER" -> ModifierCategoryType.AMPLIFIER;
+      default -> ModifierCategoryType.valueOf(name.toUpperCase());
+    };
   }
 
   private EventType deserializeEvent(JsonObject obj) {
