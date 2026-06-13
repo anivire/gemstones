@@ -36,6 +36,10 @@ public abstract class DropEnderScaleAfterDragonDeath {
     if (config == null)
       return;
 
+    if (!shouldDrop(config, world.random.nextFloat())) {
+      return;
+    }
+
     enderScaleDropped = true;
 
     Item dropItem = resolveItem(config);
@@ -44,6 +48,17 @@ public abstract class DropEnderScaleAfterDragonDeath {
 
     int count = config.getMinCount() + world.random.nextInt(config.getMaxCount() - config.getMinCount() + 1);
     Block.dropStack(world, self.getBlockPos(), new ItemStack(dropItem, count));
+  }
+
+  private static boolean shouldDrop(DropsConfig.SpecialDrop config, float roll) {
+    float chance = config.getChance();
+    if (chance <= 0.0f) {
+      return false;
+    }
+    if (chance >= 1.0f) {
+      return true;
+    }
+    return roll < chance;
   }
 
   private static Item resolveItem(DropsConfig.SpecialDrop config) {

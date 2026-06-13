@@ -24,16 +24,14 @@ import net.minecraft.util.Identifier;
 public class BlocksLootTable {
   public static void setup(RegistryKey<LootTable> key, LootEvent.LootTableModificationContext context,
       boolean builtin) {
-    if (!isMinecraftBlockLootTable(key)) {
-      return;
+    if (isMinecraftBlockLootTable(key)) {
+      context.addPool(LootPool.builder()
+          .with(LootTableEntry.builder(RegistryKey.of(
+              RegistryKeys.LOOT_TABLE,
+              Identifier.of(
+                  Gemstones.MOD_ID,
+                  "blocks/geode_from_ores")))));
     }
-
-    context.addPool(LootPool.builder()
-        .with(LootTableEntry.builder(RegistryKey.of(
-            RegistryKeys.LOOT_TABLE,
-            Identifier.of(
-                Gemstones.MOD_ID,
-                "blocks/geode_from_ores")))));
 
     Identifier id = key.getValue();
     String fullPath = id.getNamespace() + ":" + id.getPath();

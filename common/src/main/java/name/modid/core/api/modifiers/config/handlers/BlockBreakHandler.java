@@ -16,6 +16,7 @@ import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
+import name.modid.core.content.registries.TagsRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -126,6 +127,9 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       ModifierContext ctx) {
     if (ctx.getBlockPos() == null)
       return;
+    if (!ctx.getBlockState().isIn(TagsRegistry.ALL_ORES)) {
+      return;
+    }
 
     List<Double> chances = new ArrayList<>();
     for (GemstoneModifier modifier : modifiers) {
