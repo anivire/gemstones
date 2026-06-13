@@ -8,7 +8,6 @@
     "BowPullSpeedHeldItemRenderer",
     "MultiMinerMiningFeedbackMixin",
     "GemstoneItemTooltipDataMixin",
-    "GemstoneQualityTooltipOrderMixin",
     "QualityTooltipComponentMixin",
     "SoulburnFireDispatcher",
     "SocketedItemsTooltip",
