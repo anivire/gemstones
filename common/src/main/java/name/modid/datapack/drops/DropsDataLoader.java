@@ -1,10 +1,12 @@
 package name.modid.datapack.drops;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -27,8 +29,15 @@ public class DropsDataLoader implements SynchronousResourceReloader {
       .create();
 
   public static final Identifier ID = Identifier.of(Gemstones.MOD_ID, "drops_data_config");
-  private static DropsConfig loadedConfig = new DropsConfig();
-  private static Map<String, String> loadedConfigSources = Collections.emptyMap();
+  private static final List<String> BUNDLED_CONFIG_PATHS = List.of(
+      "data/gemstones/drops/settings.json",
+      "data/gemstones/drops/structures_loot.json",
+      "data/gemstones/drops/entities_loot.json",
+      "data/gemstones/drops/block_drops.json",
+      "data/gemstones/drops/special_drops.json");
+  private static final LoadedSources BUNDLED_CONFIG = loadBundledConfigSources();
+  private static DropsConfig loadedConfig = BUNDLED_CONFIG.config();
+  private static Map<String, String> loadedConfigSources = BUNDLED_CONFIG.sources();
 
   @Override
   public void reload(ResourceManager manager) {
@@ -91,6 +100,31 @@ public class DropsDataLoader implements SynchronousResourceReloader {
 
     merged.seal();
     return merged;
+  }
+
+  private static LoadedSources loadBundledConfigSources() {
+    Map<String, String> sources = new LinkedHashMap<>();
+
+    for (String path : BUNDLED_CONFIG_PATHS) {
+      try (var stream = DropsDataLoader.class.getClassLoader().getResourceAsStream(path)) {
+        if (stream == null) {
+          LOGGER.warn("Bundled drops config {} was not found on classpath.", path);
+          continue;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+          sources.put(Gemstones.MOD_ID + ":" + path.substring("data/gemstones/".length()),
+              reader.lines().collect(Collectors.joining(System.lineSeparator())));
+        }
+      } catch (IOException e) {
+        LOGGER.error("Error loading bundled drops config {}: {}", path, e.getMessage());
+      }
+    }
+
+    return new LoadedSources(parseConfigs(sources), Collections.unmodifiableMap(sources));
+  }
+
+  private record LoadedSources(DropsConfig config, Map<String, String> sources) {
   }
 
 }
