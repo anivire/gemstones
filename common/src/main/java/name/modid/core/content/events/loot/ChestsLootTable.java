@@ -12,10 +12,6 @@ import net.minecraft.util.Identifier;
 public class ChestsLootTable {
   public static void setup(RegistryKey<LootTable> key, LootEvent.LootTableModificationContext context,
       boolean builtin) {
-    if (!key.getValue().getNamespace().equals("minecraft")) {
-      return;
-    }
-
     Identifier id = key.getValue();
     String fullPath = id.getNamespace() + ":" + id.getPath();
 
