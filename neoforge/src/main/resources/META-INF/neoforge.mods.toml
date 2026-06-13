@@ -7,7 +7,15 @@ modId = "gemstones"
 version = "${version}"
 displayName = "Legendary Gemstones"
 description = "Add various gemstones to your equipment, tools and weapons!"
-authors = "anivire, 8o1y*ra, YoukaiDrawing"
+authors = '''
+anivire, 
+8o1y*ra, 
+YoukaiDrawing
+'''
+credits = '''
+Agentur - Deutsch translation
+SomeoneElse - Spanish translation
+'''
 logoFile = "assets/gemstones/icon.png"
 displayURL = "https://gemstones.anivire.xyz/"
 issueTrackerURL = "https://github.com/anivire/gemstones/issues"
