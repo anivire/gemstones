@@ -13,8 +13,8 @@ anivire,
 YoukaiDrawing
 '''
 credits = '''
-Agentur - Deutsch translation
-SomeoneElse - Spanish translation
+Agentur, Deutsch translation,
+unije, Russian translation
 '''
 logoFile = "assets/gemstones/icon.png"
 displayURL = "https://gemstones.anivire.xyz/"
