@@ -33,5 +33,7 @@ public class EventProjectileSpeed {
         ModifierUtils.getAttributeMultiplier(
             modifiersComponent,
             AttributesRegistry.PROJECTILE_SPEED_ATTRIBUTE)));
+
+    projectile.velocityDirty = true;
   }
 }

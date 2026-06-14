@@ -7,10 +7,10 @@ import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.LootEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.event.events.common.TickEvent;
+import name.modid.core.api.modifiers.config.handlers.BlockBreakHandler;
 import name.modid.core.content.events.CustomEvents;
 import name.modid.core.content.events.handlers.EventAfterDeath;
 import name.modid.core.content.events.handlers.EventAreaEffect;
-import name.modid.core.content.events.handlers.EventMeleeEffect;
 import name.modid.core.content.events.handlers.EventOnBeforeBlockBreak;
 import name.modid.core.content.events.handlers.EventOnBlockBreak;
 import name.modid.core.content.events.handlers.EventOnFirstHit;
@@ -44,15 +44,20 @@ public class EventsRegistry {
 
     // Effect related (Melee, Ranged and Area)
     TickEvent.SERVER_POST.register(server -> {
+      BlockBreakHandler.tickPendingRegenerations();
       for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
         EventAreaEffect.setupEvent(player);
       }
     });
-    PlayerEvent.ATTACK_ENTITY.register((player, world, target, hand, hitResult) ->
-        toEventResult(EventMeleeEffect.setupEvent(player, world, hand, target, hitResult)));
     EntityEvent.LIVING_HURT.register((entity, source, amount) -> {
+      if (!EventPlayer.setupEvent(entity, source, amount)) {
+        return EventResult.interruptFalse();
+      }
+
       EventOnMobDamage.setup(entity, source, amount, amount, false);
-      EventOnPlayerDamage.setup(entity, source, amount, amount, false);
+      if (!EventOnPlayerDamage.setup(entity, source, amount, amount, false)) {
+        return EventResult.interruptFalse();
+      }
       return EventResult.pass();
     });
 
@@ -82,10 +87,6 @@ public class EventsRegistry {
         EventPlayer.setupEventEndTick(serverPlayer);
       }
     });
-    EntityEvent.LIVING_HURT.register((entity, source, amount) ->
-        EventPlayer.setupEvent(entity, source, amount)
-            ? EventResult.pass()
-            : EventResult.interruptFalse());
     PlayerEvent.PLAYER_JOIN.register(NetworkHandler::sendDatapackSync);
 
     // Other

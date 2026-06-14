@@ -16,7 +16,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
 public class EventOnPlayerDamage {
-  public static void setup(
+  public static boolean setup(
       LivingEntity targetEntity,
       DamageSource source,
       float baseDamageTaken,
@@ -24,14 +24,14 @@ public class EventOnPlayerDamage {
       boolean blocked) {
     if (!(targetEntity instanceof ServerPlayerEntity serverPlayer)
         || !(targetEntity.getWorld() instanceof ServerWorld serverWorld)) {
-      return;
+      return true;
     }
 
     List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
         serverPlayer, OnPlayerDamageConfig.class);
 
     if (modifiers.isEmpty()) {
-      return;
+      return true;
     }
 
     ModifierContext.ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
@@ -45,5 +45,6 @@ public class EventOnPlayerDamage {
 
     ModifierContext ctx = ctxBuilder.build();
     ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctx);
+    return ctx.getIsHurtable();
   }
 }

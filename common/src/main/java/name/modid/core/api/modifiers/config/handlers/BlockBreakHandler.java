@@ -40,13 +40,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBreakConfig> {
-  private static final int FLAG_NOTIFY_LISTENERS = 1;
-  private static final int FLAG_NEIGHBORS = 8;
-  private static final int FLAG_FORCE_STATE = 16;
-  private static final int UPDATE_FLAGS = FLAG_NOTIFY_LISTENERS | FLAG_NEIGHBORS;
-  private static final int FORCE_UPDATE_FLAGS = UPDATE_FLAGS | FLAG_FORCE_STATE;
+  private static final int UPDATE_FLAGS = Block.NOTIFY_ALL;
   private static final Set<Identifier> BLOCKED_ITEMS = new HashSet<>();
   private static final ThreadLocal<Boolean> SUPPRESS_MINER = ThreadLocal.withInitial(() -> false);
+  private static final List<PendingRegeneration> PENDING_REGENERATIONS = new ArrayList<>();
+
+  private record PendingRegeneration(ServerWorld world, BlockPos pos, BlockState state, int ticksRemaining) {
+  }
 
   @Override
   public boolean supports(GemstoneModifier modifier) {
@@ -141,20 +141,46 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)
         && ctx.getWorld() instanceof ServerWorld serverWorld) {
-      BlockPos pos = ctx.getBlockPos();
-      serverWorld.setBlockState(
-          pos,
+      PENDING_REGENERATIONS.add(new PendingRegeneration(
+          serverWorld,
+          ctx.getBlockPos().toImmutable(),
           ctx.getBlockState(),
-          FORCE_UPDATE_FLAGS);
-
-      serverWorld.spawnParticles(ParticleTypes.CLOUD,
-          pos.getX() + 0.5,
-          pos.getY() + 0.5,
-          pos.getZ() + 0.5,
-          20, 0.3, 0.3, 0.3, 0.2);
-      serverWorld.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
-          SoundCategory.BLOCKS, 1.0f, 1.0f);
+          1));
     }
+  }
+
+  public static void tickPendingRegenerations() {
+    List<PendingRegeneration> remaining = new ArrayList<>();
+    for (PendingRegeneration regeneration : PENDING_REGENERATIONS) {
+      if (regeneration.ticksRemaining() > 0) {
+        remaining.add(new PendingRegeneration(
+            regeneration.world(),
+            regeneration.pos(),
+            regeneration.state(),
+            regeneration.ticksRemaining() - 1));
+        continue;
+      }
+
+      restoreBlock(regeneration.world(), regeneration.pos(), regeneration.state());
+    }
+    PENDING_REGENERATIONS.clear();
+    PENDING_REGENERATIONS.addAll(remaining);
+  }
+
+  private static void restoreBlock(ServerWorld world, BlockPos pos, BlockState state) {
+    if (!world.getBlockState(pos).isAir()) {
+      return;
+    }
+
+    world.setBlockState(pos, state, UPDATE_FLAGS);
+    world.getChunkManager().markForUpdate(pos);
+    world.spawnParticles(ParticleTypes.CLOUD,
+        pos.getX() + 0.5,
+        pos.getY() + 0.5,
+        pos.getZ() + 0.5,
+        20, 0.3, 0.3, 0.3, 0.2);
+    world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
+        SoundCategory.BLOCKS, 1.0f, 1.0f);
   }
 
   private void handleAdditionalGoldDrop(
