@@ -32,10 +32,10 @@ public class ScarabEffect extends StatusEffect {
   public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
     World world = entity.getWorld();
 
-    if (!world.isClient && world.getTime() % 6 == 0) {
+    if (world instanceof ServerWorld serverWorld && world.getTime() % 6 == 0) {
       ScarabParticleInstance particleEffect = new ScarabParticleInstance(entity.getId());
 
-      ((ServerWorld) world).spawnParticles(
+      serverWorld.spawnParticles(
           particleEffect,
           entity.getX(),
           entity.getY() + entity.getHeight() * 0.5,

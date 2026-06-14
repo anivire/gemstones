@@ -11,7 +11,6 @@ import name.modid.core.api.OreHighlighter;
 import name.modid.core.api.entities.jeweleryTable.JewelryTableBlockEntityRenderer;
 import name.modid.core.api.entities.jeweleryTable.JewelryTableScreen;
 import name.modid.core.api.models.ModelsRegistry;
-import name.modid.core.api.particles.ClientParticlesRegistry;
 import name.modid.core.api.projectiles.spark.SparkProjectileModel;
 import name.modid.core.api.projectiles.spark.SparkProjectileRenderer;
 import name.modid.core.content.blocks.entity.core.BlockEntitiesRegistry;
@@ -47,7 +46,6 @@ public class GemstonesClient {
 
     ModelsRegistry.initialize();
     ClientDatapackSyncHandler.initialize();
-    ClientParticlesRegistry.initialize();
     ClientKeyHandler.initialize();
   }
 }
