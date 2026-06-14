@@ -16,7 +16,16 @@ configurations {
 	shadowCommon
 	compileClasspath.extendsFrom common
 	runtimeClasspath.extendsFrom common
-	developmentNeoForge.extendsFrom common
+}
+
+loom {
+	mods {
+		'gemstones' {
+			sourceSet project(':common').sourceSets.main
+			sourceSet project(':common').sourceSets.client
+			sourceSet sourceSets.main
+		}
+	}
 }
 
 dependencies {
