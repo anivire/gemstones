@@ -187,6 +187,7 @@ public class HomingArrow {
     }
 
     arrow.setVelocity(newDirection.multiply(currentSpeed));
+    arrow.velocityDirty = true;
   }
 
   private static void addHomingParticle(ServerWorld world, PersistentProjectileEntity arrow) {
