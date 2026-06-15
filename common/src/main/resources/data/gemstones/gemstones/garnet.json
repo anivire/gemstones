@@ -11,7 +11,7 @@
       ],
       "amplifier": 0,
       "effect_id": "gemstones:bleeding",
-      "duration": 6,
+      "duration": 12,
       "is_stacking": true,
       "max_stack_count": 5
     },
