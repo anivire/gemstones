@@ -1,0 +1,60 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "CC-BY-4.0"
+
+[[mods]]
+modId = "gemstones"
+version = "${version}"
+displayName = "Legendary Gemstones"
+description = "Add various gemstones to your equipment, tools and weapons!"
+authors = '''
+anivire, 
+8o1y*ra, 
+YoukaiDrawing
+'''
+credits = '''
+Agentur, Deutsch translation,
+unije, Russian translation
+'''
+logoFile = "assets/gemstones/icon.png"
+displayURL = "https://gemstones.anivire.xyz/"
+issueTrackerURL = "https://github.com/anivire/gemstones/issues"
+
+[[mixins]]
+config = "gemstones.mixins.json"
+
+[[mixins]]
+config = "gemstones.client.mixins.json"
+
+[[dependencies.gemstones]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neoforge_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.gemstones]]
+modId = "minecraft"
+type = "required"
+versionRange = "[${minecraft_version},1.21.2)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.gemstones]]
+modId = "architectury"
+type = "required"
+versionRange = "[${architectury_api_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.gemstones]]
+modId = "roughlyenoughitems"
+type = "optional"
+ordering = "AFTER"
+side = "CLIENT"
+
+[[dependencies.gemstones]]
+modId = "emi"
+type = "optional"
+ordering = "AFTER"
+side = "CLIENT"

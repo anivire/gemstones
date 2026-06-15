@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "gemstones:gui/quality/qualities_icons.png",
+      "height": 6,
+      "ascent": 6,
+      "chars": [
+        "\uE001\uE002\uE003\uE004\uE005\uE006"
+      ]
+    }
+  ]
+}

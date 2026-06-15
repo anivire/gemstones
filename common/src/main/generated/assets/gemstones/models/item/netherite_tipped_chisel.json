@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "gemstones:item/netherite_tipped_chisel"
+  }
+}

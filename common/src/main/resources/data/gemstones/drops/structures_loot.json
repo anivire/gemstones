@@ -1,0 +1,118 @@
+{
+  "structures_loot": [
+    {
+      "loot_tables": [
+        "minecraft:chests/jungle_temple"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "JADE",
+          "chance": 1.0
+        }
+      ]
+    },
+    {
+      "loot_tables": [
+        "minecraft:chests/bastion_treasure"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "RUBY",
+          "chance": 0.45
+        },
+        {
+          "gemstone_type": "PYRITE",
+          "chance": 0.5
+        }
+      ]
+    },
+    {
+      "loot_tables": [
+        "minecraft:chests/desert_pyramid"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "TOPAZ",
+          "chance": 0.4
+        }
+      ]
+    },
+    {
+      "loot_tables": [
+        "minecraft:chests/end_city_treasure"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "POLYCHROME_CRYSTAL",
+          "chance": 0.35
+        },
+        {
+          "gemstone_type": "ONYX",
+          "chance": 0.25,
+          "mythic": true
+        },
+        {
+          "gemstone_type": "ASTRALITE",
+          "chance": 0.25,
+          "mythic": true
+        }
+      ]
+    },
+    {
+      "loot_tables": [
+        "minecraft:chests/stronghold_library"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "CRYSTALLIZED_EXPERIENCE",
+          "chance": 0.05,
+          "mythic": true
+        }
+      ]
+    },
+    {
+      "loot_tables": [
+        "minecraft:chests/trial_chambers/reward"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "RESTLESS_FLAME",
+          "chance": 0.4
+        }
+      ]
+    },
+    {
+      "loot_tables": [
+        "minecraft:chests/trial_chambers/supply"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "RESTLESS_FLAME",
+          "chance": 0.2
+        }
+      ]
+    },
+    {
+      "loot_tables": [
+        "minecraft:chests/trial_chambers/entrance"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "RESTLESS_FLAME",
+          "chance": 0.15
+        }
+      ]
+    },
+    {
+      "loot_tables": [
+        "minecraft:chests/simple_dungeon"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "RESTLESS_FLAME",
+          "chance": 0.1
+        }
+      ]
+    }
+  ]
+}

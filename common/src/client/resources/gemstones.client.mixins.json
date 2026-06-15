@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "package": "name.modid.core.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ModelRenderer",
+    "FeaturesRenderer",
+    "BowPullSpeedHeldItemRenderer",
+    "MultiMinerMiningFeedbackMixin",
+    "GemstoneItemTooltipDataMixin",
+    "QualityTooltipComponentMixin",
+    "SoulburnFireDispatcher",
+    "SocketedItemsTooltip",
+    "WorldRendererAccessor",
+    "WorldRendererMixin",
+    "JewelryFileRenderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

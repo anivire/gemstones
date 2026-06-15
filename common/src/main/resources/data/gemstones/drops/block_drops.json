@@ -1,0 +1,52 @@
+{
+  "block_drops": {
+    "minecraft:blocks/obsidian": {
+      "entries": [
+        {
+          "gemstone_type": "OBSIDIAN_SHARD",
+          "chance": 0.1
+        }
+      ]
+    },
+    "minecraft:blocks/crying_obsidian": {
+      "entries": [
+        {
+          "gemstone_type": "OBSIDIAN_SHARD",
+          "chance": 0.15
+        }
+      ]
+    },
+    "minecraft:blocks/gold_ore": {
+      "entries": [
+        {
+          "gemstone_type": "AMBER",
+          "chance": 0.01
+        }
+      ]
+    },
+    "minecraft:blocks/deepslate_gold_ore": {
+      "entries": [
+        {
+          "gemstone_type": "AMBER",
+          "chance": 0.03
+        }
+      ]
+    },
+    "minecraft:blocks/nether_gold_ore": {
+      "entries": [
+        {
+          "gemstone_type": "AMBER",
+          "chance": 0.03
+        }
+      ]
+    },
+    "minecraft:blocks/nether_quartz_ore": {
+      "entries": [
+        {
+          "gemstone_type": "ZIRCON",
+          "chance": 0.03
+        }
+      ]
+    }
+  }
+}

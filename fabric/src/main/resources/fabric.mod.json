@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "gemstones",
+  "version": "${version}",
+  "name": "Legendary Gemstones",
+  "description": "Add various gemstones to your equipment, tools and weapons!",
+  "authors": [
+    "anivire",
+    "8o1y*ra",
+    "YoukaiDrawing"
+  ],
+  "contributors": [
+    "Agentur, Deutsch translation",
+    "unije, Russian translation"
+  ],
+  "contact": {
+    "homepage": "https://gemstones.anivire.xyz/",
+    "sources": "https://github.com/anivire/gemstones",
+    "issues": "https://github.com/anivire/gemstones/issues"
+  },
+  "license": "CC-BY-4.0",
+  "icon": "assets/gemstones/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "name.modid.fabric.GemstonesFabric"
+    ],
+    "client": [
+      "name.modid.fabric.GemstonesFabricClient"
+    ],
+    "rei_client": [
+      "name.modid.compat.rei.GemstonesReiPlugin"
+    ],
+    "emi": [
+      "name.modid.compat.emi.GemstonesEmiPlugin"
+    ],
+    "fabric-datagen": [
+      "name.modid.datagen.DataGenerator"
+    ]
+  },
+  "mixins": [
+    "gemstones.mixins.json",
+    {
+      "config": "gemstones.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}",
+    "java": ">=21",
+    "fabric-api": ">=${fabric_version}",
+    "architectury": ">=${architectury_api_version}"
+  },
+  "suggests": {
+    "roughlyenoughitems": "*",
+    "emi": "*"
+  }
+}
