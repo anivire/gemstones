@@ -4,7 +4,7 @@
       "entries": [
         {
           "gemstone_type": "OBSIDIAN_SHARD",
-          "chance": 0.10
+          "chance": 0.1
         }
       ]
     },
@@ -20,7 +20,7 @@
       "entries": [
         {
           "gemstone_type": "AMBER",
-          "chance": 0.03
+          "chance": 0.01
         }
       ]
     },
@@ -28,7 +28,7 @@
       "entries": [
         {
           "gemstone_type": "AMBER",
-          "chance": 0.05
+          "chance": 0.03
         }
       ]
     },
@@ -44,7 +44,7 @@
       "entries": [
         {
           "gemstone_type": "ZIRCON",
-          "chance": 0.1
+          "chance": 0.03
         }
       ]
     }
