@@ -1,7 +1,6 @@
 package name.modid.core.content.effects;
 
 import name.modid.Gemstones;
-import name.modid.core.content.registries.EffectsRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -38,13 +37,10 @@ public class SoulBurnEffect extends StatusEffect {
   public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
     World world = entity.getWorld();
 
-    if (canApplyUpdateEffect(entity.getStatusEffect(EffectsRegistry.SOUL_BURN_EFFECT).getDuration(),
-        amplifier)) {
-      float damage = 1.0f + (amplifier * 0.5f);
-      DamageSource damageSource = world.getDamageSources().onFire();
-      entity.damage(damageSource, damage);
-      entity.playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F);
-    }
+    float damage = 1.0f + (amplifier * 0.5f);
+    DamageSource damageSource = world.getDamageSources().onFire();
+    entity.damage(damageSource, damage);
+    entity.playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F);
 
     if (!world.isClient && world.getRandom().nextInt(2) == 0) {
       ServerWorld serverWorld = (ServerWorld) world;

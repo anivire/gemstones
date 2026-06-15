@@ -120,13 +120,27 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     return getMode();
   }
 
+  public boolean canTakeResult() {
+    return getMode() != ActionMode.NONE && !inventory.getStack(SLOT_RESULT).isEmpty();
+  }
+
   public void updateOutputs() {
     ActionMode mode = getMode();
     switch (mode) {
       case INSERT -> buildInsertResult();
       case REMOVE -> buildRemoveResult();
       case EXPAND -> buildExpandResult();
-      default -> inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      default -> setResult(ItemStack.EMPTY);
+    }
+  }
+
+  private void setResult(ItemStack stack) {
+    inventory.setStack(SLOT_RESULT, stack);
+
+    if (SLOT_RESULT >= 0 && SLOT_RESULT < this.slots.size()) {
+      Slot resultSlot = this.slots.get(SLOT_RESULT);
+      resultSlot.setStack(stack);
+      resultSlot.markDirty();
     }
   }
 
@@ -137,22 +151,22 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     if (base.isEmpty()
         || crystal.isEmpty()
         || !(crystal.getItem() instanceof ExpansionCrystalItem)) {
-      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      setResult(ItemStack.EMPTY);
       return;
     }
 
     if (!GemstoneSlotHelper.isItemValid(base.getItem())) {
-      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      setResult(ItemStack.EMPTY);
       return;
     }
 
     if (!GemstoneSlotHelper.canAddNewSlot(base)) {
-      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      setResult(ItemStack.EMPTY);
       return;
     }
 
     ItemStack result = GemstoneSlotHelper.addNewGemSlot(base.copy());
-    inventory.setStack(SLOT_RESULT, result);
+    setResult(result);
   }
 
   private void buildInsertResult() {
@@ -163,7 +177,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
         || gem.isEmpty()
         || !(gem.getItem() instanceof GemstoneItem)
         || !GemstoneSlotHelper.isItemValid(base.getItem())) {
-      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      setResult(ItemStack.EMPTY);
 
       return;
     }
@@ -181,7 +195,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     // Forbid inserting two equal gemstone types with mythic quality
     if (gemQuality == GemstoneQuality.MYTHIC) {
       if (g.containsKey(gemType) && g.get(gemType) == GemstoneQuality.MYTHIC) {
-        inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+        setResult(ItemStack.EMPTY);
         return;
       }
     }
@@ -189,14 +203,14 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     Integer emptySlot = GemstoneSlotHelper.getFirstEmptySlotIndex(base);
 
     if (emptySlot == null) {
-      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      setResult(ItemStack.EMPTY);
       return;
     }
 
     ItemStack copy = base.copy();
     ItemStack modified = GemstoneSlotHelper.setGemstoneByIndex(copy, emptySlot, (GemstoneItem) gem.getItem());
 
-    inventory.setStack(SLOT_RESULT, modified != null ? modified : ItemStack.EMPTY);
+    setResult(modified != null ? modified : ItemStack.EMPTY);
   }
 
   private void buildRemoveResult() {
@@ -204,19 +218,19 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
 
     if (base.isEmpty()
         || !GemstoneSlotHelper.isItemValid(base.getItem())) {
-      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      setResult(ItemStack.EMPTY);
       return;
     }
 
     int index = GemstoneSlotHelper.getLastFilledSlotIndex(base);
 
     if (index == -1) {
-      inventory.setStack(SLOT_RESULT, ItemStack.EMPTY);
+      setResult(ItemStack.EMPTY);
       return;
     }
 
     ItemStack previewGem = GemstoneSlotHelper.makeGemItemFromSocket(base, index);
-    inventory.setStack(SLOT_RESULT, previewGem);
+    setResult(previewGem);
   }
 
   public void finalizeTakeResult(PlayerEntity player) {
@@ -267,7 +281,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       if (!base.isEmpty() && !crystal.isEmpty() && GemstoneSlotHelper.canAddNewSlot(base)) {
         ItemStack modified = GemstoneSlotHelper.addNewGemSlot(base.copy());
 
-        inventory.setStack(SLOT_RESULT, modified);
+        setResult(modified);
 
         base.decrement(1);
         if (base.isEmpty()) {
@@ -415,6 +429,15 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     newStack = original.copy();
 
     if (invSlot == SLOT_RESULT) {
+      updateOutputs();
+      if (!canTakeResult()) {
+        sendContentUpdates();
+        return ItemStack.EMPTY;
+      }
+
+      original = slot.getStack();
+      newStack = original.copy();
+
       if (getMode() == ActionMode.REMOVE && prepareRemoveBreak(player)) {
         slot.setStack(ItemStack.EMPTY);
 
@@ -443,18 +466,23 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       return newStack;
     }
 
-    if (invSlot < this.inventory.size()
-        && !this.insertItem(original, this.inventory.size(), this.slots.size(), true)) {
-      return ItemStack.EMPTY;
-    } else if (!this.insertItem(original, 0, this.inventory.size(), false)) {
-      return ItemStack.EMPTY;
+    if (invSlot < this.inventory.size()) {
+      if (!this.insertItem(original, this.inventory.size(), this.slots.size(), true)) {
+        return ItemStack.EMPTY;
+      }
+    } else {
+      if (!this.insertItem(original, 0, this.inventory.size(), false)) {
+        return ItemStack.EMPTY;
+      }
     }
 
     if (original.isEmpty()) {
       slot.setStack(ItemStack.EMPTY);
-    } else {
-      slot.markDirty();
     }
+
+    slot.markDirty();
+    updateOutputs();
+    sendContentUpdates();
 
     return newStack;
   }

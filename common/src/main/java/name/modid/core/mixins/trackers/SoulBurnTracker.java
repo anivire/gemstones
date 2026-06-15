@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import name.modid.core.content.effects.SoulBurnEffect;
 import name.modid.core.content.registries.EffectsRegistry;
 import name.modid.core.utils.accessors.SoulBurnEntityAccessor;
 import net.minecraft.entity.LivingEntity;
@@ -28,7 +29,7 @@ public class SoulBurnTracker implements SoulBurnEntityAccessor {
   @Inject(method = "tick", at = @At("TAIL"))
   private void updateSoulBurnState(CallbackInfo ci) {
     LivingEntity self = (LivingEntity) (Object) this;
-    boolean hasSoulBurn = self.hasStatusEffect(EffectsRegistry.SOUL_BURN_EFFECT);
+    boolean hasSoulBurn = hasSoulBurnStatusEffect(self);
 
     if (!self.getWorld().isClient) {
       self.getDataTracker().set(HAS_SOUL_BURN, hasSoulBurn);
@@ -45,6 +46,13 @@ public class SoulBurnTracker implements SoulBurnEntityAccessor {
 
   public boolean hasSoulBurnEffect() {
     LivingEntity self = (LivingEntity) (Object) this;
-    return self.getDataTracker().get(HAS_SOUL_BURN);
+    return hasSoulBurnStatusEffect(self)
+        || self.getDataTracker().get(HAS_SOUL_BURN);
+  }
+
+  private boolean hasSoulBurnStatusEffect(LivingEntity self) {
+    return self.hasStatusEffect(EffectsRegistry.SOUL_BURN_EFFECT)
+        || self.getStatusEffects().stream()
+            .anyMatch(effect -> effect.getEffectType().value() instanceof SoulBurnEffect);
   }
 }
