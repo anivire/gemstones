@@ -113,6 +113,17 @@
           "chance": 0.1
         }
       ]
+    },
+    {
+      "loot_tables": [
+        "minecraft:chests/buried_treasure"
+      ],
+      "pools": [
+        {
+          "gemstone_type": "SAPPHIRE",
+          "chance": 0.5
+        }
+      ]
     }
   ]
 }

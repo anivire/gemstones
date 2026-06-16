@@ -14,7 +14,7 @@
     "RANGED": {
       "type": "ON_HIT_PROJECTILE",
       "chance_levels": [
-        0.35
+        0.5
       ],
       "event_type": "ON_HIT_ARROW_RAIN"
     },

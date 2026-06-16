@@ -1,9 +1,14 @@
 package name.modid.core.content.registries;
 
+import java.util.Optional;
+
 import name.modid.Gemstones;
 import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 
@@ -60,32 +65,76 @@ public class AttributesRegistry {
       "attribute.name.generic.swim_speed", 1.0, 0.0, 1024.0)
       .setTracked(true);
 
-  public static RegistryEntry<EntityAttribute> PULL_SPEED_ATTRIBUTE = ATTRIBUTES.register("pull_speed", () -> PULL_SPEED);
-  public static RegistryEntry<EntityAttribute> CRIT_DAMAGE_ATTRIBUTE = ATTRIBUTES.register("crit_damage",
+  private static final RegistrySupplier<EntityAttribute> PULL_SPEED_SUPPLIER = ATTRIBUTES.register("pull_speed",
+      () -> PULL_SPEED);
+  private static final RegistrySupplier<EntityAttribute> CRIT_DAMAGE_SUPPLIER = ATTRIBUTES.register("crit_damage",
       () -> CRIT_DAMAGE);
-  public static RegistryEntry<EntityAttribute> MAX_DURABILITY_ATTRIBUTE = ATTRIBUTES.register("max_durability",
+  private static final RegistrySupplier<EntityAttribute> MAX_DURABILITY_SUPPLIER = ATTRIBUTES.register("max_durability",
       () -> MAX_DURABILITY);
-  public static RegistryEntry<EntityAttribute> EVASION_ATTRIBUTE = ATTRIBUTES.register("evasion", () -> EVASION);
-  public static RegistryEntry<EntityAttribute> PROJECTILE_SPEED_ATTRIBUTE = ATTRIBUTES.register("projectile_speed",
+  private static final RegistrySupplier<EntityAttribute> EVASION_SUPPLIER = ATTRIBUTES.register("evasion",
+      () -> EVASION);
+  private static final RegistrySupplier<EntityAttribute> PROJECTILE_SPEED_SUPPLIER = ATTRIBUTES.register(
+      "projectile_speed",
       () -> PROJECTILE_SPEED);
-  public static RegistryEntry<EntityAttribute> ARROW_DAMAGE_ATTRIBUTE = ATTRIBUTES.register("arrow_damage",
+  private static final RegistrySupplier<EntityAttribute> ARROW_DAMAGE_SUPPLIER = ATTRIBUTES.register("arrow_damage",
       () -> ARROW_DAMAGE);
-  public static RegistryEntry<EntityAttribute> PROJECTILE_COUNT_ATTRIBUTE = ATTRIBUTES.register("projectile_count",
+  private static final RegistrySupplier<EntityAttribute> PROJECTILE_COUNT_SUPPLIER = ATTRIBUTES.register(
+      "projectile_count",
       () -> PROJECTILE_COUNT);
-  public static RegistryEntry<EntityAttribute> ARMOR_PIERCE_ATTRIBUTE = ATTRIBUTES.register("armor_pierce",
+  private static final RegistrySupplier<EntityAttribute> ARMOR_PIERCE_SUPPLIER = ATTRIBUTES.register("armor_pierce",
       () -> ARMOR_PIERCE);
-  public static RegistryEntry<EntityAttribute> JUMP_COUNT_ATTRIBUTE = ATTRIBUTES.register("jump_count",
+  private static final RegistrySupplier<EntityAttribute> JUMP_COUNT_SUPPLIER = ATTRIBUTES.register("jump_count",
       () -> JUMP_COUNT);
-  public static RegistryEntry<EntityAttribute> MAGIC_PIERCE_ATTRIBUTE;
-  public static RegistryEntry<EntityAttribute> GEODE_DROP_CHANCE_ATTRIBUTE = ATTRIBUTES.register("geode_drop_chance",
+  private static final RegistrySupplier<EntityAttribute> GEODE_DROP_CHANCE_SUPPLIER = ATTRIBUTES.register(
+      "geode_drop_chance",
       () -> GEODE_DROP_CHANCE);
-  public static RegistryEntry<EntityAttribute> INVULNERABILITY_FRAMES_ATTRIBUTE = ATTRIBUTES.register(
+  private static final RegistrySupplier<EntityAttribute> INVULNERABILITY_FRAMES_SUPPLIER = ATTRIBUTES.register(
       "invulnerability_frames",
       () -> INVULNERABILITY_FRAMES);
-  public static RegistryEntry<EntityAttribute> SWIM_SPEED_ATTRIBUTE = ATTRIBUTES.register("swim_speed",
+  private static final RegistrySupplier<EntityAttribute> SWIM_SPEED_SUPPLIER = ATTRIBUTES.register("swim_speed",
       () -> SWIM_SPEED);
+
+  public static RegistryEntry<EntityAttribute> PULL_SPEED_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> CRIT_DAMAGE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> MAX_DURABILITY_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> EVASION_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> PROJECTILE_SPEED_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> ARROW_DAMAGE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> PROJECTILE_COUNT_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> ARMOR_PIERCE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> JUMP_COUNT_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> MAGIC_PIERCE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> GEODE_DROP_CHANCE_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> INVULNERABILITY_FRAMES_ATTRIBUTE;
+  public static RegistryEntry<EntityAttribute> SWIM_SPEED_ATTRIBUTE;
 
   public static void initialize() {
     ATTRIBUTES.register();
+
+    PULL_SPEED_ATTRIBUTE = resolveEntry(PULL_SPEED_SUPPLIER);
+    CRIT_DAMAGE_ATTRIBUTE = resolveEntry(CRIT_DAMAGE_SUPPLIER);
+    MAX_DURABILITY_ATTRIBUTE = resolveEntry(MAX_DURABILITY_SUPPLIER);
+    EVASION_ATTRIBUTE = resolveEntry(EVASION_SUPPLIER);
+    PROJECTILE_SPEED_ATTRIBUTE = resolveEntry(PROJECTILE_SPEED_SUPPLIER);
+    ARROW_DAMAGE_ATTRIBUTE = resolveEntry(ARROW_DAMAGE_SUPPLIER);
+    PROJECTILE_COUNT_ATTRIBUTE = resolveEntry(PROJECTILE_COUNT_SUPPLIER);
+    ARMOR_PIERCE_ATTRIBUTE = resolveEntry(ARMOR_PIERCE_SUPPLIER);
+    JUMP_COUNT_ATTRIBUTE = resolveEntry(JUMP_COUNT_SUPPLIER);
+    GEODE_DROP_CHANCE_ATTRIBUTE = resolveEntry(GEODE_DROP_CHANCE_SUPPLIER);
+    INVULNERABILITY_FRAMES_ATTRIBUTE = resolveEntry(INVULNERABILITY_FRAMES_SUPPLIER);
+    SWIM_SPEED_ATTRIBUTE = resolveEntry(SWIM_SPEED_SUPPLIER);
+  }
+
+  private static RegistryEntry<EntityAttribute> resolveEntry(RegistrySupplier<EntityAttribute> supplier) {
+    EntityAttribute attribute = supplier.get();
+    Optional<RegistryKey<EntityAttribute>> optKey = Registries.ATTRIBUTE.getKey(attribute);
+    if (optKey.isPresent()) {
+      Optional<RegistryEntry.Reference<EntityAttribute>> optEntry = Registries.ATTRIBUTE.getEntry(optKey.get());
+      if (optEntry.isPresent()) {
+        return optEntry.get();
+      }
+    }
+    Gemstones.LOGGER.warn("Failed to resolve proper RegistryEntry for attribute, falling back to supplier");
+    return supplier;
   }
 }

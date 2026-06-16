@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.joml.Vector3f;
-
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.AreaEffectConfig;
@@ -22,9 +20,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 
 public class EffectHandler {
@@ -104,25 +100,6 @@ public class EffectHandler {
             }
 
             entity.addStatusEffect(new StatusEffectInstance(effect, maxDuration * 20, maxAmplifier, false, true, true));
-          }
-
-          if (owner.getWorld().getRandom().nextInt(3) == 0
-              && owner.getWorld() instanceof ServerWorld serverWorld) {
-            int color = effect.value().getColor();
-            float r = ((color >> 16) & 0xFF) / 255.0f;
-            float g = ((color >> 8) & 0xFF) / 255.0f;
-            float b = (color & 0xFF) / 255.0f;
-            DustParticleEffect particle = new DustParticleEffect(new Vector3f(r, g, b), 1.0f);
-
-            for (int i = 0; i < 8 + totalRadius * 2; i++) {
-              double angle = serverWorld.getRandom().nextDouble() * Math.PI * 2;
-              double dist = serverWorld.getRandom().nextDouble() * totalRadius;
-              double x = owner.getX() + Math.cos(angle) * dist;
-              double y = owner.getY() + 0.5 + serverWorld.getRandom().nextDouble() * (totalRadius * 2)
-                  - totalRadius;
-              double z = owner.getZ() + Math.sin(angle) * dist;
-              serverWorld.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0);
-            }
           }
         }
       }
