@@ -2,6 +2,7 @@
   "required": true,
   "package": "name.modid.core.mixins",
   "compatibilityLevel": "JAVA_21",
+  "refmap": "client-gemstones-common-refmap.json",
   "client": [
     "ModelRenderer",
     "FeaturesRenderer",
