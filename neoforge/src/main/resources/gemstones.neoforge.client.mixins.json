@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "package": "name.modid.core.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "gemstones.neoforge.client-refmap.json",
+  "client": [
+    "ModelRenderer",
+    "FeaturesRenderer",
+    "BowPullSpeedHeldItemRenderer",
+    "MultiMinerMiningFeedbackMixin",
+    "GemstoneItemTooltipDataMixin",
+    "QualityTooltipComponentMixin",
+    "SoulburnFireDispatcher",
+    "SoulFireOverlayMixin",
+    "SocketedItemsTooltip",
+    "WorldRendererAccessor",
+    "WorldRendererMixin",
+    "JewelryFileRenderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

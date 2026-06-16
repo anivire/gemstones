@@ -2,7 +2,7 @@
   "required": true,
   "package": "name.modid.core.mixins",
   "compatibilityLevel": "JAVA_21",
-  "refmap": "gemstones-common-refmap.json",
+  "refmap": "gemstones.fabric-refmap.json",
   "mixins": [
     "attributes.BowPullSpeedAttribute",
     "attributes.CrossbowPullSpeedAttrbute",

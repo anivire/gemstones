@@ -1,14 +1,10 @@
 package name.modid.core.content.registries;
 
-import java.util.Optional;
-
 import name.modid.Gemstones;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 
@@ -111,30 +107,17 @@ public class AttributesRegistry {
   public static void initialize() {
     ATTRIBUTES.register();
 
-    PULL_SPEED_ATTRIBUTE = resolveEntry(PULL_SPEED_SUPPLIER);
-    CRIT_DAMAGE_ATTRIBUTE = resolveEntry(CRIT_DAMAGE_SUPPLIER);
-    MAX_DURABILITY_ATTRIBUTE = resolveEntry(MAX_DURABILITY_SUPPLIER);
-    EVASION_ATTRIBUTE = resolveEntry(EVASION_SUPPLIER);
-    PROJECTILE_SPEED_ATTRIBUTE = resolveEntry(PROJECTILE_SPEED_SUPPLIER);
-    ARROW_DAMAGE_ATTRIBUTE = resolveEntry(ARROW_DAMAGE_SUPPLIER);
-    PROJECTILE_COUNT_ATTRIBUTE = resolveEntry(PROJECTILE_COUNT_SUPPLIER);
-    ARMOR_PIERCE_ATTRIBUTE = resolveEntry(ARMOR_PIERCE_SUPPLIER);
-    JUMP_COUNT_ATTRIBUTE = resolveEntry(JUMP_COUNT_SUPPLIER);
-    GEODE_DROP_CHANCE_ATTRIBUTE = resolveEntry(GEODE_DROP_CHANCE_SUPPLIER);
-    INVULNERABILITY_FRAMES_ATTRIBUTE = resolveEntry(INVULNERABILITY_FRAMES_SUPPLIER);
-    SWIM_SPEED_ATTRIBUTE = resolveEntry(SWIM_SPEED_SUPPLIER);
-  }
-
-  private static RegistryEntry<EntityAttribute> resolveEntry(RegistrySupplier<EntityAttribute> supplier) {
-    EntityAttribute attribute = supplier.get();
-    Optional<RegistryKey<EntityAttribute>> optKey = Registries.ATTRIBUTE.getKey(attribute);
-    if (optKey.isPresent()) {
-      Optional<RegistryEntry.Reference<EntityAttribute>> optEntry = Registries.ATTRIBUTE.getEntry(optKey.get());
-      if (optEntry.isPresent()) {
-        return optEntry.get();
-      }
-    }
-    Gemstones.LOGGER.warn("Failed to resolve proper RegistryEntry for attribute, falling back to supplier");
-    return supplier;
+    PULL_SPEED_ATTRIBUTE = PULL_SPEED_SUPPLIER;
+    CRIT_DAMAGE_ATTRIBUTE = CRIT_DAMAGE_SUPPLIER;
+    MAX_DURABILITY_ATTRIBUTE = MAX_DURABILITY_SUPPLIER;
+    EVASION_ATTRIBUTE = EVASION_SUPPLIER;
+    PROJECTILE_SPEED_ATTRIBUTE = PROJECTILE_SPEED_SUPPLIER;
+    ARROW_DAMAGE_ATTRIBUTE = ARROW_DAMAGE_SUPPLIER;
+    PROJECTILE_COUNT_ATTRIBUTE = PROJECTILE_COUNT_SUPPLIER;
+    ARMOR_PIERCE_ATTRIBUTE = ARMOR_PIERCE_SUPPLIER;
+    JUMP_COUNT_ATTRIBUTE = JUMP_COUNT_SUPPLIER;
+    GEODE_DROP_CHANCE_ATTRIBUTE = GEODE_DROP_CHANCE_SUPPLIER;
+    INVULNERABILITY_FRAMES_ATTRIBUTE = INVULNERABILITY_FRAMES_SUPPLIER;
+    SWIM_SPEED_ATTRIBUTE = SWIM_SPEED_SUPPLIER;
   }
 }

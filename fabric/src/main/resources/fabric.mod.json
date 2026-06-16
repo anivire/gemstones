@@ -39,9 +39,9 @@
     ]
   },
   "mixins": [
-    "gemstones.mixins.json",
+    "gemstones.fabric.mixins.json",
     {
-      "config": "gemstones.client.mixins.json",
+      "config": "gemstones.fabric.client.mixins.json",
       "environment": "client"
     }
   ],

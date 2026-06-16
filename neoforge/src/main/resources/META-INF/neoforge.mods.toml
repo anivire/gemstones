@@ -21,10 +21,10 @@ displayURL = "https://gemstones.anivire.xyz/"
 issueTrackerURL = "https://github.com/anivire/gemstones/issues"
 
 [[mixins]]
-config = "gemstones.mixins.json"
+config = "gemstones.neoforge.mixins.json"
 
 [[mixins]]
-config = "gemstones.client.mixins.json"
+config = "gemstones.neoforge.client.mixins.json"
 
 [[dependencies.gemstones]]
 modId = "neoforge"
