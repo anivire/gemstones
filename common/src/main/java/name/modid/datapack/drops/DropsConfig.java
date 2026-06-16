@@ -230,22 +230,15 @@ public class DropsConfig {
 
   public static class MossyBoxEntry {
     public Identifier item;
-    @SerializedName("gemstone_type")
-    public GemstoneType gemstoneType;
     public int weight = 1;
     @SerializedName("min_count")
     public int minCount = 1;
     @SerializedName("max_count")
     public int maxCount = 1;
     public float damage = -1.0f;
-    public boolean mythic;
 
     public Identifier getItem() {
       return item;
-    }
-
-    public GemstoneType getGemstoneType() {
-      return gemstoneType;
     }
 
     public int getWeight() {
@@ -262,10 +255,6 @@ public class DropsConfig {
 
     public float getDamage() {
       return damage;
-    }
-
-    public boolean isMythic() {
-      return mythic;
     }
   }
 }

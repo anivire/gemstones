@@ -99,6 +99,8 @@ public class MossyBox extends Item {
   }
 
   private static ItemStack createDrop(DropsConfig.MossyBoxEntry entry, Random random) {
+    if (entry.getItem() == null) return null;
+
     Item item = Registries.ITEM.get(entry.getItem());
     if (item == Items.AIR)
       return null;
