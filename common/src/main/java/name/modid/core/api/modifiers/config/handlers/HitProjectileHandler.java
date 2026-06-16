@@ -245,7 +245,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
         RainArrowEntity arrow = EntitiesRegistry.RAIN_ARROW.create(world);
 
         if (arrow == null) {
-          return;
+          continue;
         }
 
         arrow.refreshPositionAndAngles(spawnX, spawnY, spawnZ, 0, 0);

@@ -80,6 +80,10 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
 
     ctx.setIsHurtable(false);
 
+    if (owner.getWorld() == null) {
+      return;
+    }
+
     owner.getWorld().playSound(
         null,
         owner.getBlockPos(),
