@@ -34,7 +34,8 @@ public class DropsDataLoader implements SynchronousResourceReloader {
       "data/gemstones/drops/structures_loot.json",
       "data/gemstones/drops/entities_loot.json",
       "data/gemstones/drops/block_drops.json",
-      "data/gemstones/drops/special_drops.json");
+      "data/gemstones/drops/special_drops.json",
+      "data/gemstones/drops/mossy_box_loot.json");
   private static final LoadedSources BUNDLED_CONFIG = loadBundledConfigSources();
   private static DropsConfig loadedConfig = BUNDLED_CONFIG.config();
   private static Map<String, String> loadedConfigSources = BUNDLED_CONFIG.sources();

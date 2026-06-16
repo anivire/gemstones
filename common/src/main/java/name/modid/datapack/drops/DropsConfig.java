@@ -22,6 +22,8 @@ public class DropsConfig {
   private Map<String, BlockDropEntry> blockDrops;
   @SerializedName("special_drops")
   private List<SpecialDrop> specialDrops;
+  @SerializedName("mossy_box_loot")
+  private List<MossyBoxPool> mossyBoxLoot;
 
   public QualityConfig getQuality() {
     return quality != null ? quality : new QualityConfig();
@@ -47,6 +49,10 @@ public class DropsConfig {
     return specialDrops != null ? specialDrops : List.of();
   }
 
+  public List<MossyBoxPool> getMossyBoxLoot() {
+    return mossyBoxLoot != null ? mossyBoxLoot : List.of();
+  }
+
   void merge(DropsConfig other) {
     if (other.quality != null)
       quality = other.quality;
@@ -58,10 +64,10 @@ public class DropsConfig {
       entitiesLoot = other.entitiesLoot;
     if (other.blockDrops != null)
       blockDrops = other.blockDrops;
-    if (other.blockDrops != null)
-      blockDrops = other.blockDrops;
     if (other.specialDrops != null)
       specialDrops = other.specialDrops;
+    if (other.mossyBoxLoot != null)
+      mossyBoxLoot = other.mossyBoxLoot;
   }
 
   void seal() {
@@ -77,6 +83,8 @@ public class DropsConfig {
       blockDrops = Map.of();
     if (specialDrops == null)
       specialDrops = List.of();
+    if (mossyBoxLoot == null)
+      mossyBoxLoot = List.of();
   }
 
   public static class QualityConfig {
@@ -193,6 +201,67 @@ public class DropsConfig {
 
     public int getMaxCount() {
       return maxCount;
+    }
+
+    public boolean isMythic() {
+      return mythic;
+    }
+  }
+
+  public static class MossyBoxPool {
+    @SerializedName("min_rolls")
+    public float minRolls = 1.0f;
+    @SerializedName("max_rolls")
+    public float maxRolls = 1.0f;
+    public List<MossyBoxEntry> entries;
+
+    public float getMinRolls() {
+      return minRolls;
+    }
+
+    public float getMaxRolls() {
+      return maxRolls;
+    }
+
+    public List<MossyBoxEntry> getEntries() {
+      return entries != null ? entries : List.of();
+    }
+  }
+
+  public static class MossyBoxEntry {
+    public Identifier item;
+    @SerializedName("gemstone_type")
+    public GemstoneType gemstoneType;
+    public int weight = 1;
+    @SerializedName("min_count")
+    public int minCount = 1;
+    @SerializedName("max_count")
+    public int maxCount = 1;
+    public float damage = -1.0f;
+    public boolean mythic;
+
+    public Identifier getItem() {
+      return item;
+    }
+
+    public GemstoneType getGemstoneType() {
+      return gemstoneType;
+    }
+
+    public int getWeight() {
+      return weight;
+    }
+
+    public int getMinCount() {
+      return minCount;
+    }
+
+    public int getMaxCount() {
+      return maxCount;
+    }
+
+    public float getDamage() {
+      return damage;
     }
 
     public boolean isMythic() {

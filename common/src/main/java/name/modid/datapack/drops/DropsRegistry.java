@@ -43,6 +43,10 @@ public class DropsRegistry {
         .orElse(null);
   }
 
+  public static List<DropsConfig.MossyBoxPool> getMossyBoxLoot() {
+    return getConfig().getMossyBoxLoot();
+  }
+
   public static void clearCache() {
     CACHED.clear();
   }
