@@ -360,6 +360,7 @@ public class GemstoneSlotHelper {
     GemstoneSlotsComponent gemstones = source.get(type);
     if (gemstones != null && isItemValid(target.getItem())) {
       target.set(type, gemstones);
+      updateSocketsAttributes(target, target.getItem());
     }
   }
 }

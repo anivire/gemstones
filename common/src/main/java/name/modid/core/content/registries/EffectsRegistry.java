@@ -1,7 +1,5 @@
 package name.modid.core.content.registries;
 
-import java.util.Optional;
-
 import name.modid.Gemstones;
 import name.modid.core.content.effects.BleedingEffect;
 import name.modid.core.content.effects.DetonateEffect;
@@ -17,8 +15,6 @@ import name.modid.core.content.effects.StunnedEffect;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 
@@ -79,29 +75,16 @@ public class EffectsRegistry {
     Gemstones.LOGGER.info("Registering mod effects for {}", Gemstones.MOD_ID);
     EFFECTS.register();
 
-    BLEEDING_EFFECT = resolveEntry(BLEEDING_SUPPLIER);
-    GUARDIAN_SMITE_EFFECT = resolveEntry(GUARDIAN_SMITE_SUPPLIER);
-    HARVEST_MARK_EFFECT = resolveEntry(HARVEST_MARK_SUPPLIER);
-    STUNNED_EFFECT = resolveEntry(STUNNED_SUPPLIER);
-    DETONATE_EFFECT = resolveEntry(DETONATE_SUPPLIER);
-    FREEZING_EFFECT = resolveEntry(FREEZING_SUPPLIER);
-    LOOT_TOUCH_EFFECT = resolveEntry(LOOT_TOUCH_SUPPLIER);
-    SCARAB_EFFECT = resolveEntry(SCARAB_SUPPLIER);
-    SOUL_BURN_EFFECT = resolveEntry(SOUL_BURN_SUPPLIER);
-    RADIANCE_EFFECT = resolveEntry(RADIANCE_SUPPLIER);
-    LETHAL_WEAKNESS_EFFECT = resolveEntry(LETHAL_WEAKNESS_SUPPLIER);
-  }
-
-  private static RegistryEntry<StatusEffect> resolveEntry(RegistrySupplier<StatusEffect> supplier) {
-    StatusEffect effect = supplier.get();
-    Optional<RegistryKey<StatusEffect>> optKey = Registries.STATUS_EFFECT.getKey(effect);
-    if (optKey.isPresent()) {
-      Optional<RegistryEntry.Reference<StatusEffect>> optEntry = Registries.STATUS_EFFECT.getEntry(optKey.get());
-      if (optEntry.isPresent()) {
-        return optEntry.get();
-      }
-    }
-    Gemstones.LOGGER.warn("Failed to resolve proper RegistryEntry for effect, falling back to supplier");
-    return supplier;
+    BLEEDING_EFFECT = BLEEDING_SUPPLIER;
+    GUARDIAN_SMITE_EFFECT = GUARDIAN_SMITE_SUPPLIER;
+    HARVEST_MARK_EFFECT = HARVEST_MARK_SUPPLIER;
+    STUNNED_EFFECT = STUNNED_SUPPLIER;
+    DETONATE_EFFECT = DETONATE_SUPPLIER;
+    FREEZING_EFFECT = FREEZING_SUPPLIER;
+    LOOT_TOUCH_EFFECT = LOOT_TOUCH_SUPPLIER;
+    SCARAB_EFFECT = SCARAB_SUPPLIER;
+    SOUL_BURN_EFFECT = SOUL_BURN_SUPPLIER;
+    RADIANCE_EFFECT = RADIANCE_SUPPLIER;
+    LETHAL_WEAKNESS_EFFECT = LETHAL_WEAKNESS_SUPPLIER;
   }
 }

@@ -3,6 +3,7 @@ package name.modid.core.api.modifiers.config.utils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -139,7 +140,9 @@ public class ModifierUtils {
     double multipliedTotal = 1.0;
 
     for (Entry e : modifiersComponent.modifiers()) {
-      if (!e.attribute().equals(attribute)) {
+      if (!Objects.equals(
+          e.attribute().getKey().orElse(null),
+          attribute.getKey().orElse(null))) {
         continue;
       }
 

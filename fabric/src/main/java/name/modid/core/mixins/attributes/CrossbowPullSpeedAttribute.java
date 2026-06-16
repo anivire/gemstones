@@ -14,7 +14,7 @@ import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 
 @Mixin(CrossbowItem.class)
-public class CrossbowPullSpeedAttrbute {
+public class CrossbowPullSpeedAttribute {
   @Inject(method = "getPullTime", at = @At("RETURN"), cancellable = true)
   private static void gemstones$modifyPullTime(ItemStack stack, LivingEntity user, CallbackInfoReturnable<Integer> cir) {
     AttributeModifiersComponent itemAttributeModifiers = stack.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS,

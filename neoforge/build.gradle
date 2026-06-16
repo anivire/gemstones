@@ -19,6 +19,10 @@ configurations {
 }
 
 loom {
+	mixin {
+		useLegacyMixinAp = true
+		defaultRefmapName = "gemstones.neoforge-refmap.json"
+	}
 	mods {
 		'gemstones' {
 			sourceSet project(':common').sourceSets.main

@@ -7,6 +7,12 @@ architectury {
 	fabric()
 }
 
+loom {
+	mixin {
+		defaultRefmapName = "gemstones.fabric-refmap.json"
+	}
+}
+
 base {
 	archivesName = "fabric-${rootProject.archives_base_name}"
 }

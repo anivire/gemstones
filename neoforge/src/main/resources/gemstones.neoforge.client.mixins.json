@@ -2,7 +2,7 @@
   "required": true,
   "package": "name.modid.core.mixins",
   "compatibilityLevel": "JAVA_21",
-  "refmap": "gemstones.neoforge.client-refmap.json",
+  "refmap": "gemstones.neoforge-refmap.json",
   "client": [
     "ModelRenderer",
     "FeaturesRenderer",
