@@ -9,13 +9,14 @@ import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.components.GemstoneSlotsComponent;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierManager;
+import name.modid.core.api.modifiers.config.handlers.AttributeModifierHandler;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.registries.GemstonesRegistry;
-import name.modid.core.api.modifiers.config.handlers.AttributeModifierHandler;
 import name.modid.datapack.sockets.SocketSettingsConfig;
 import name.modid.datapack.sockets.SocketSettingsDataLoader;
+import net.minecraft.component.ComponentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -23,8 +24,9 @@ public class GemstoneSlotHelper {
   public static final int MAX_SLOTS = SocketSettingsConfig.DEFAULT_MAX_SLOTS;
 
   public static ArrayList<GemstoneComponent> contains(ItemStack itemStack, GemstoneType gemstoneType) {
-    ArrayList<GemstoneComponent> gemstones = itemStack.get(ComponentsRegistry.gemstones()) != null
-        ? new ArrayList<>(Arrays.asList(itemStack.get(ComponentsRegistry.gemstones()).gemstones()))
+    ComponentType<GemstoneSlotsComponent> type = ComponentsRegistry.gemstones();
+    ArrayList<GemstoneComponent> gemstones = type != null && itemStack.get(type) != null
+        ? new ArrayList<>(Arrays.asList(itemStack.get(type).gemstones()))
         : new ArrayList<>();
 
     gemstones.removeIf(g -> g.gemstoneType() != gemstoneType);
@@ -36,11 +38,22 @@ public class GemstoneSlotHelper {
   }
 
   public static boolean isGemstonesExists(ItemStack itemStack) {
-    return itemStack.get(ComponentsRegistry.gemstones()) != null;
+    ComponentType<GemstoneSlotsComponent> type = ComponentsRegistry.gemstones();
+    return type != null && itemStack.get(type) != null;
   }
 
   public static GemstoneSlotsComponent getGemstonesSlot(ItemStack itemStack) {
-    return itemStack.get(ComponentsRegistry.gemstones());
+    ComponentType<GemstoneSlotsComponent> type = ComponentsRegistry.gemstones();
+    if (type == null)
+      return null;
+
+    GemstoneSlotsComponent slots = itemStack.get(type);
+    if (slots == null && isItemValid(itemStack.getItem())) {
+      initializeSockets(itemStack, itemStack.getItem());
+      slots = itemStack.get(type);
+    }
+
+    return slots;
   }
 
   public static GemstoneComponent[] getGemstones(ItemStack itemStack) {
@@ -48,7 +61,12 @@ public class GemstoneSlotHelper {
       return new GemstoneComponent[0];
     }
 
-    GemstoneSlotsComponent slots = itemStack.get(ComponentsRegistry.gemstones());
+    ComponentType<GemstoneSlotsComponent> type = ComponentsRegistry.gemstones();
+    if (type == null) {
+      return new GemstoneComponent[0];
+    }
+
+    GemstoneSlotsComponent slots = itemStack.get(type);
     if (slots == null || slots.gemstones() == null) {
       return new GemstoneComponent[0];
     }
@@ -205,7 +223,12 @@ public class GemstoneSlotHelper {
       return false;
     }
 
-    GemstoneSlotsComponent currentSlots = itemStack.get(ComponentsRegistry.gemstones());
+    ComponentType<GemstoneSlotsComponent> type = ComponentsRegistry.gemstones();
+    if (type == null) {
+      return false;
+    }
+
+    GemstoneSlotsComponent currentSlots = itemStack.get(type);
     return currentSlots == null || currentSlots.gemstones() == null;
   }
 
@@ -327,10 +350,16 @@ public class GemstoneSlotHelper {
   }
 
   public static void copyGemstones(ItemStack source, ItemStack target) {
-    if (source == null || target == null || source.isEmpty() || target.isEmpty()) return;
-    GemstoneSlotsComponent gemstones = source.get(ComponentsRegistry.gemstones());
+    if (source == null || target == null || source.isEmpty() || target.isEmpty())
+      return;
+
+    ComponentType<GemstoneSlotsComponent> type = ComponentsRegistry.gemstones();
+    if (type == null)
+      return;
+
+    GemstoneSlotsComponent gemstones = source.get(type);
     if (gemstones != null && isItemValid(target.getItem())) {
-      target.set(ComponentsRegistry.gemstones(), gemstones);
+      target.set(type, gemstones);
     }
   }
 }

@@ -12,8 +12,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 public class ComponentsRegistry {
-  public static volatile boolean INITIALIZED = false;
-
   private static final DeferredRegister<ComponentType<?>> COMPONENTS = DeferredRegister.create(
       Gemstones.MOD_ID,
       RegistryKeys.DATA_COMPONENT_TYPE);
@@ -68,7 +66,6 @@ public class ComponentsRegistry {
   public static void initialize() {
     COMPONENTS.register();
     Gemstones.LOGGER.info("Registering {} components", Gemstones.MOD_ID);
-    INITIALIZED = true;
   }
 
   @SuppressWarnings("unchecked")
