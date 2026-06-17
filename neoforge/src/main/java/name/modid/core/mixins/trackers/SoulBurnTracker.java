@@ -39,7 +39,7 @@ public class SoulBurnTracker implements SoulBurnEntityAccessor {
   @Inject(method = "canHaveStatusEffect", at = @At("HEAD"), cancellable = true)
   private void blockSoulBurnForMagmaCubes(StatusEffectInstance effect, CallbackInfoReturnable<Boolean> cir) {
     if ((Object) this instanceof MagmaCubeEntity
-        && effect.getEffectType().equals(EffectsRegistry.SOUL_BURN_EFFECT)) {
+        && effect.getEffectType().equals(EffectsRegistry.soulBurnEntry())) {
       cir.setReturnValue(false);
     }
   }
@@ -51,7 +51,7 @@ public class SoulBurnTracker implements SoulBurnEntityAccessor {
   }
 
   private boolean hasSoulBurnStatusEffect(LivingEntity self) {
-    return self.hasStatusEffect(EffectsRegistry.SOUL_BURN_EFFECT)
+    return self.hasStatusEffect(EffectsRegistry.soulBurnEntry())
         || self.getStatusEffects().stream()
             .anyMatch(effect -> effect.getEffectType().value() instanceof SoulBurnEffect);
   }

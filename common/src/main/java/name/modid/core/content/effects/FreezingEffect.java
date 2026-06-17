@@ -18,8 +18,8 @@ public class FreezingEffect extends StatusEffect {
 
   @Override
   public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
-    if (entity.hasStatusEffect(EffectsRegistry.FREEZING_EFFECT)
-        && entity.getStatusEffect(EffectsRegistry.FREEZING_EFFECT).getDuration() <= 20) {
+    if (entity.hasStatusEffect(EffectsRegistry.freezingEntry())
+        && entity.getStatusEffect(EffectsRegistry.freezingEntry()).getDuration() <= 20) {
       entity.setFrozenTicks(0);
     } else {
       entity.setFrozenTicks(entity.getFrozenTicks() + 5);

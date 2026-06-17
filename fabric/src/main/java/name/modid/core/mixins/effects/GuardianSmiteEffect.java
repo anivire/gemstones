@@ -21,7 +21,7 @@ public class GuardianSmiteEffect {
       return;
 
     LivingEntity target = (LivingEntity) (Object) this;
-    StatusEffectInstance effect = target.getStatusEffect(EffectsRegistry.GUARDIAN_SMITE_EFFECT);
+    StatusEffectInstance effect = target.getStatusEffect(EffectsRegistry.guardianSmiteEntry());
 
     if (effect != null
         && target.getWorld() != null

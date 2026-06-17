@@ -17,7 +17,6 @@ import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.api.tooltips.QualityTooltipData;
-import name.modid.core.api.tooltips.TooltipHelper;
 import name.modid.core.api.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import net.minecraft.item.Item;

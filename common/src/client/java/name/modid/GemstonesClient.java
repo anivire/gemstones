@@ -33,11 +33,11 @@ public class GemstonesClient {
     }
 
     EntityRendererRegistry.register(
-        () -> EntitiesRegistry.SPARK_ENTITY,
+        () -> EntitiesRegistry.SPARK_ENTITY.get(),
         SparkProjectileRenderer::new);
 
     EntityRendererRegistry.register(
-        () -> EntitiesRegistry.RAIN_ARROW,
+        () -> EntitiesRegistry.RAIN_ARROW.get(),
         context -> new ArrowEntityRenderer(context));
 
     BlockEntityRendererRegistry.register(

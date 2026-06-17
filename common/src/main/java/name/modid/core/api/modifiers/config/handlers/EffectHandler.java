@@ -25,7 +25,7 @@ import net.minecraft.util.ActionResult;
 
 public class EffectHandler {
   private static boolean canApplyEffect(RegistryEntry<StatusEffect> effect, LivingEntity target) {
-    return !effect.equals(EffectsRegistry.STUNNED_EFFECT)
+    return !effect.equals(EffectsRegistry.stunnedEntry())
         || !StunnedEffect.isImmuneToStun(target);
   }
 

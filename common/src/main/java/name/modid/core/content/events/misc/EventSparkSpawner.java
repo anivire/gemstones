@@ -10,13 +10,13 @@ import net.minecraft.util.math.Vec3d;
 public class EventSparkSpawner {
   public static void setup(LivingEntity entity, DamageSource damageSource) {
     if (!(entity.getWorld() instanceof ServerWorld serverWorld)
-        || !entity.hasStatusEffect(EffectsRegistry.RADIANCE_EFFECT)) {
+        || !entity.hasStatusEffect(EffectsRegistry.radianceEntry())) {
       return;
     }
 
     int SPARK_COUNT = 3;
 
-    for (int i = 0; i < SPARK_COUNT + entity.getStatusEffect(EffectsRegistry.RADIANCE_EFFECT).getAmplifier(); i++) {
+    for (int i = 0; i < SPARK_COUNT + entity.getStatusEffect(EffectsRegistry.radianceEntry()).getAmplifier(); i++) {
       SparkProjectileEntity shard = new SparkProjectileEntity(serverWorld, entity);
 
       shard.setPosition(entity.getX(),

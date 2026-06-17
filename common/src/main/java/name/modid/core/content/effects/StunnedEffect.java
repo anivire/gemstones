@@ -51,7 +51,7 @@ public class StunnedEffect extends StatusEffect {
   @Override
   public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
     if (isImmuneToStun(entity)) {
-      entity.removeStatusEffect(EffectsRegistry.STUNNED_EFFECT);
+      entity.removeStatusEffect(EffectsRegistry.stunnedEntry());
       return false;
     }
 
@@ -63,7 +63,7 @@ public class StunnedEffect extends StatusEffect {
     super.onApplied(entity, amplifier);
 
     if (isImmuneToStun(entity)) {
-      entity.removeStatusEffect(EffectsRegistry.STUNNED_EFFECT);
+      entity.removeStatusEffect(EffectsRegistry.stunnedEntry());
       return;
     }
 

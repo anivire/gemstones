@@ -22,13 +22,13 @@ public class GetRandomBuff {
       StatusEffects.GLOWING,
       StatusEffects.DARKNESS,
       StatusEffects.INFESTED,
-      EffectsRegistry.BLEEDING_EFFECT,
-      EffectsRegistry.FREEZING_EFFECT,
-      EffectsRegistry.GUARDIAN_SMITE_EFFECT,
-      EffectsRegistry.SCARAB_EFFECT,
-      EffectsRegistry.SOUL_BURN_EFFECT,
-      EffectsRegistry.STUNNED_EFFECT,
-      EffectsRegistry.HARVEST_MARK_EFFECT);
+      EffectsRegistry.bleedingEntry(),
+      EffectsRegistry.freezingEntry(),
+      EffectsRegistry.guardianSmiteEntry(),
+      EffectsRegistry.scarabEntry(),
+      EffectsRegistry.soulBurnEntry(),
+      EffectsRegistry.stunnedEntry(),
+      EffectsRegistry.harvestMarkEntry());
   private static final List<RegistryEntry<StatusEffect>> POSITIVE_EFFECTS = List.of(
       StatusEffects.SPEED,
       StatusEffects.HASTE,

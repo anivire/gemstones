@@ -14,7 +14,7 @@ public class StunnedEffect {
   @Inject(method = "tick", at = @At("RETURN"), cancellable = true)
   private void onTick(CallbackInfo ci) {
     if ((Object) this instanceof MobEntity mob
-        && mob.hasStatusEffect(EffectsRegistry.STUNNED_EFFECT)) {
+        && mob.hasStatusEffect(EffectsRegistry.stunnedEntry())) {
       mob.updateVelocity(0, mob.getVelocity());
     }
   }

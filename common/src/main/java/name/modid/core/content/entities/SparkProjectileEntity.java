@@ -47,12 +47,12 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
   }
 
   public SparkProjectileEntity(World world, double x, double y, double z) {
-    this(EntitiesRegistry.SPARK_ENTITY, world);
+    this(EntitiesRegistry.SPARK_ENTITY.get(), world);
     this.setPosition(x, y, z);
   }
 
   public SparkProjectileEntity(World world, LivingEntity owner) {
-    this(EntitiesRegistry.SPARK_ENTITY, world);
+    this(EntitiesRegistry.SPARK_ENTITY.get(), world);
     this.setOwner(owner);
     this.setPosition(owner.getX(), owner.getEyeY() - 0.1, owner.getZ());
   }

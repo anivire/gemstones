@@ -55,7 +55,7 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
         || owner.isDead()
         || owner.isRemoved()
         || owner.isSpectator()
-        || owner.hasStatusEffect(EffectsRegistry.LETHAL_WEAKNESS_EFFECT)) {
+        || owner.hasStatusEffect(EffectsRegistry.lethalWeaknessEntry())) {
       return;
     }
 
@@ -109,7 +109,7 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
         true));
 
     owner.addStatusEffect(new StatusEffectInstance(
-        EffectsRegistry.LETHAL_WEAKNESS_EFFECT,
+        EffectsRegistry.lethalWeaknessEntry(),
         5 * 60 * 20,
         0,
         false,

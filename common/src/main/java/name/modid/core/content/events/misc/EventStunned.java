@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class EventStunned {
   public static ActionResult setupEvent(PlayerEntity player, World world, Hand hand, Entity entity,
       @Nullable EntityHitResult hitResult) {
-    if (player.hasStatusEffect(EffectsRegistry.STUNNED_EFFECT)) {
+    if (player.hasStatusEffect(EffectsRegistry.stunnedEntry())) {
       return ActionResult.FAIL;
     }
 

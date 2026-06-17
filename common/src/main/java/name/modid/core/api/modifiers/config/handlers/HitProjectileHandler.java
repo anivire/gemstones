@@ -13,7 +13,6 @@ import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.content.entities.RainArrowEntity;
-import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.utils.GetRandomBuff;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -22,8 +21,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
@@ -227,13 +228,17 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       final double spreadXZ = 3.0;
       final float baseVelocity = 1.3f;
       final float inaccuracy = 6.0f;
-      final int slowSeconds = 1;
-      final int slowAmplifier = 1;
 
       ServerWorld world = (ServerWorld) ctx.getWorld();
       LivingEntity owner = (ctx.getOwner() instanceof LivingEntity le) ? le : null;
       Random rng = world.getRandom();
       Vec3d center = target.getPos();
+
+      PersistentProjectileEntity sourceArrow = ctx.getProjectile();
+
+      ItemStack sourceStack = sourceArrow instanceof ArrowEntity arrowEntity
+          ? arrowEntity.getItemStack().copy()
+          : new ItemStack(Items.ARROW);
 
       for (int i = 0; i < arrows; i++) {
         double dx = (rng.nextDouble() * 2 - 1) * spreadXZ;
@@ -242,27 +247,27 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
         double spawnX = center.x + dx;
         double spawnY = center.y + height;
         double spawnZ = center.z + dz;
-        RainArrowEntity arrow = EntitiesRegistry.RAIN_ARROW.create(world);
 
-        if (arrow == null) {
-          continue;
-        }
+        RainArrowEntity arrow = owner != null
+            ? new RainArrowEntity(world, owner, sourceStack)
+            : new RainArrowEntity(world, spawnX, spawnY, spawnZ, sourceStack);
 
         arrow.refreshPositionAndAngles(spawnX, spawnY, spawnZ, 0, 0);
-
-        if (owner != null) {
-          arrow.setOwner(owner);
-        }
 
         Vec3d targetPoint = target.getPos().add(0.0, target.getHeight() * 0.5, 0.0);
         Vec3d from = new Vec3d(spawnX, spawnY, spawnZ);
         Vec3d dir = targetPoint.subtract(from).normalize();
         float velocity = baseVelocity + (rng.nextFloat() - 0.5f) * 0.3f;
 
-        arrow.setDamage(5.0 + rng.nextDouble() * 1.5);
+        arrow.setDamage(sourceArrow.getDamage());
         arrow.setVelocity(dir.x, dir.y, dir.z, velocity, inaccuracy);
-        arrow.setRainSlowness(slowSeconds * 20, slowAmplifier);
-        arrow.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+        arrow.setCritical(sourceArrow.isCritical());
+
+        if (sourceArrow.getFireTicks() > 0) {
+          arrow.setOnFireFor(Math.max(1, sourceArrow.getFireTicks() / 20));
+        }
+
+        arrow.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 
         world.spawnEntity(arrow);
       }

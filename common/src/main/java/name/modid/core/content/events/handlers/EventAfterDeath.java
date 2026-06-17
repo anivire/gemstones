@@ -42,7 +42,7 @@ public class EventAfterDeath {
   }
 
   private static void detonateIfMarked(LivingEntity entity) {
-    if (!entity.hasStatusEffect(EffectsRegistry.DETONATE_EFFECT)) {
+    if (!entity.hasStatusEffect(EffectsRegistry.detonateEntry())) {
       return;
     }
 
@@ -53,7 +53,7 @@ public class EventAfterDeath {
         entity.getX(),
         entity.getY(),
         entity.getZ(),
-        4.0F + entity.getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(),
+        4.0F + entity.getStatusEffect(EffectsRegistry.detonateEntry()).getAmplifier(),
         false,
         World.ExplosionSourceType.TNT);
   }

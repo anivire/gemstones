@@ -12,6 +12,7 @@ import name.modid.core.content.loot.LootConditionRegistry;
 import name.modid.core.content.registries.AttachmentsRegistry;
 import name.modid.core.content.registries.AttributesRegistry;
 import name.modid.core.content.registries.EffectsRegistry;
+import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.content.registries.EventsRegistry;
 import name.modid.core.content.registries.ParticlesRegistry;
 import name.modid.core.content.registries.TagsRegistry;
@@ -39,6 +40,7 @@ public class Gemstones {
     EventsRegistry.initialize();
     BlocksRegistry.initialize();
     ItemsRegistry.initialize();
+    EntitiesRegistry.initialize();
     EffectsRegistry.initialize();
     ParticlesRegistry.initialize();
     AttachmentsRegistry.initialize();

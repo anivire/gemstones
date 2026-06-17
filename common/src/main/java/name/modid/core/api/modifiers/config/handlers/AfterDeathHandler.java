@@ -56,7 +56,7 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
     if (!(ctx.getTarget() instanceof LivingEntity target)
-        || !target.hasStatusEffect(EffectsRegistry.DETONATE_EFFECT)) {
+        || !target.hasStatusEffect(EffectsRegistry.detonateEntry())) {
       return;
     }
 
@@ -67,7 +67,7 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
         target.getX(),
         target.getY(),
         target.getZ(),
-        3.0F + target.getStatusEffect(EffectsRegistry.DETONATE_EFFECT).getAmplifier(), false,
+        3.0F + target.getStatusEffect(EffectsRegistry.detonateEntry()).getAmplifier(), false,
         World.ExplosionSourceType.TNT);
   }
 
@@ -76,14 +76,14 @@ public class AfterDeathHandler implements ModifierHandler<ModifierConfig.AfterDe
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
     if (!(ctx.getTarget() instanceof LivingEntity target)
-        || !target.hasStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT)) {
+        || !target.hasStatusEffect(EffectsRegistry.harvestMarkEntry())) {
       return;
     }
 
     final int MIN_ADDITIONAL_XP = 3;
     final int MAX_ADDITIONAL_XP = 5;
 
-    int stackCount = target.getStatusEffect(EffectsRegistry.HARVEST_MARK_EFFECT).getAmplifier() + 1;
+    int stackCount = target.getStatusEffect(EffectsRegistry.harvestMarkEntry()).getAmplifier() + 1;
     int exp = (int) (Math.random() * (MAX_ADDITIONAL_XP - MIN_ADDITIONAL_XP + 1) + MIN_ADDITIONAL_XP);
 
     for (int i = 0; i < stackCount; i++) {
