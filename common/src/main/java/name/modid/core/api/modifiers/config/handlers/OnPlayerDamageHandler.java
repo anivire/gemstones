@@ -52,10 +52,13 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
 
   private void handleSaveLethal(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (!(ctx.getOwner() instanceof LivingEntity owner)
-        || owner.isDead()
         || owner.isRemoved()
         || owner.isSpectator()
         || owner.hasStatusEffect(EffectsRegistry.lethalWeaknessEntry())) {
+      return;
+    }
+
+    if (!(owner.getWorld() instanceof ServerWorld server)) {
       return;
     }
 
@@ -65,6 +68,7 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
 
     for (GemstoneModifier modifier : modifiers) {
       OnPlayerDamageConfig config = (OnPlayerDamageConfig) modifier.getConfig();
+
       duration += config.values().get(modifier.getRarityType());
       healthThreshold = Math.max(
           healthThreshold,
@@ -73,18 +77,16 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
 
     int buffDurationTicks = Math.max(0, duration) * 20;
 
-    if (buffDurationTicks <= 0
-        || owner.getHealth() > healthThreshold) {
+    if (buffDurationTicks <= 0) {
       return;
     }
 
+    // Так как этот handler теперь вызывается из LIVING_DEATH,
+    // значит урон уже летальный. Спасаем как тотем.
+    owner.setHealth(Math.max(1.0F, (float) healthThreshold));
     ctx.setIsHurtable(false);
 
-    if (owner.getWorld() == null) {
-      return;
-    }
-
-    owner.getWorld().playSound(
+    server.playSound(
         null,
         owner.getBlockPos(),
         net.minecraft.sound.SoundEvents.ITEM_TOTEM_USE,
@@ -124,22 +126,22 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
         true,
         true));
 
-    if (owner.getWorld() instanceof ServerWorld server) {
-      double x = owner.getX();
-      double y = owner.getBodyY(0.5);
-      double z = owner.getZ();
-      server.spawnParticles(
-          ParticleTypes.TOTEM_OF_UNDYING,
-          x, y, z,
-          50,
-          0.5, 0.8, 0.5,
-          0.1);
-      server.spawnParticles(
-          ParticleTypes.GLOW,
-          x, y, z,
-          20,
-          0.3, 0.6, 0.3,
-          0.02);
-    }
+    double x = owner.getX();
+    double y = owner.getBodyY(0.5);
+    double z = owner.getZ();
+
+    server.spawnParticles(
+        ParticleTypes.TOTEM_OF_UNDYING,
+        x, y, z,
+        50,
+        0.5, 0.8, 0.5,
+        0.1);
+
+    server.spawnParticles(
+        ParticleTypes.GLOW,
+        x, y, z,
+        20,
+        0.3, 0.6, 0.3,
+        0.02);
   }
 }

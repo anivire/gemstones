@@ -55,9 +55,19 @@ public class EventsRegistry {
       }
 
       EventOnMobDamage.setup(entity, source, amount, amount, false);
-      if (!EventOnPlayerDamage.setup(entity, source, amount, amount, false)) {
+
+      return EventResult.pass();
+    });
+
+    EntityEvent.LIVING_DEATH.register((entity, source) -> {
+      if (!EventOnPlayerDamage.setup(entity, source, 0.0F, 0.0F, true)) {
         return EventResult.interruptFalse();
       }
+
+      EventAfterDeath.setupEvent(entity, source);
+      PlayerRandomBuff.setupEvent(entity, source);
+      EventSparkSpawner.setup(entity, source);
+
       return EventResult.pass();
     });
 
@@ -90,16 +100,16 @@ public class EventsRegistry {
     PlayerEvent.PLAYER_JOIN.register(NetworkHandler::sendDatapackSync);
 
     // Other
-    PlayerEvent.ATTACK_ENTITY.register((player, world, target, hand, hitResult) ->
-        toEventResult(EventStunned.setupEvent(player, world, hand, target, hitResult)));
+    PlayerEvent.ATTACK_ENTITY.register((player, world, target, hand,
+        hitResult) -> toEventResult(EventStunned.setupEvent(player, world, hand, target, hitResult)));
     EntityEvent.ADD.register((entity, world) -> {
       if (world instanceof ServerWorld serverWorld) {
         EventProjectileSpeed.setup(entity, serverWorld);
       }
       return EventResult.pass();
     });
-    InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) ->
-        toEventResult(EventLastBrewer.setup(player, player.getWorld(), hand, pos)));
+    InteractionEvent.RIGHT_CLICK_BLOCK.register(
+        (player, hand, pos, face) -> toEventResult(EventLastBrewer.setup(player, player.getWorld(), hand, pos)));
 
     LootEvent.MODIFY_LOOT_TABLE.register(BlocksLootTable::setup);
     LootEvent.MODIFY_LOOT_TABLE.register(EntitiesLootTable::setup);
