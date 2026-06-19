@@ -66,7 +66,7 @@ public record GeodeDropChanceCondition(
     }
 
     double baseChance = getBaseChance();
-    double totalChance = baseChance * (1.0 + bonusChance);
+    double totalChance = baseChance + bonusChance;
 
     totalChance = Math.min(totalChance, 1.0);
 

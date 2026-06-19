@@ -4,7 +4,7 @@ license = "CC-BY-4.0"
 
 [[mods]]
 modId = "gemstones"
-version = "${version}"
+version = "1.21.1-${version}"
 displayName = "Legendary Gemstones"
 description = "Add various gemstones to your equipment, tools and weapons!"
 authors = '''

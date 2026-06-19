@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "gemstones",
-  "version": "${version}",
+  "version": "1.21.1-${version}",
   "name": "Legendary Gemstones",
   "description": "Add various gemstones to your equipment, tools and weapons!",
   "authors": [
