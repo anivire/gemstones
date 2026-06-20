@@ -14,7 +14,8 @@ YoukaiDrawing
 '''
 credits = '''
 Agentur, Deutsch translation,
-unije, Russian translation
+unije, Russian translation,
+na3an, Japanese translation
 '''
 logoFile = "assets/gemstones/icon.png"
 displayURL = "https://gemstones.anivire.xyz/"
