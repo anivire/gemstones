@@ -37,6 +37,7 @@
     "other.PreserveGemstonesOnGrindstone",
     "other.PreserveGemstonesOnCrafting",
     "trackers.SoulBurnTracker",
+    "trackers.StunnedTracker",
     "trackers.HomingArrowTracker"
   ],
   "injectors": {

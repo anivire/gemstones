@@ -2,13 +2,13 @@ package name.modid.core.api.features;
 
 import name.modid.Gemstones;
 import name.modid.core.api.RenderUtils;
+import name.modid.core.utils.accessors.StunnedEntityAccessor;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.util.Identifier;
 
 public class StunnedStarsFeature<T extends LivingEntity, M extends EntityModel<T>>
@@ -25,7 +25,7 @@ public class StunnedStarsFeature<T extends LivingEntity, M extends EntityModel<T
   public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
       T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress,
       float headYaw, float headPitch) {
-    if (entity.getAttributes().getValue(EntityAttributes.GENERIC_JUMP_STRENGTH) == 0.0) {
+    if (((StunnedEntityAccessor) entity).hasStunnedEffect()) {
       RenderUtils.renderCubeSprite(SPRITE_STAR_BIG, entity, matrices, vertexConsumers, light,
           tickDelta);
     }
