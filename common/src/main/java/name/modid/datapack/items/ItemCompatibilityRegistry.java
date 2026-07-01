@@ -47,7 +47,7 @@ public final class ItemCompatibilityRegistry {
       return true;
     }
 
-    return BLACKLISTED_TAGS.stream().anyMatch(tag -> item.getDefaultStack().isIn(tag));
+    return BLACKLISTED_TAGS.stream().anyMatch(tag -> item.getRegistryEntry().isIn(tag));
   }
 
   public static Optional<ModifierItemCategory> getConfiguredCategory(Item item) {
@@ -58,7 +58,7 @@ public final class ItemCompatibilityRegistry {
     }
 
     return TAG_CATEGORIES.entrySet().stream()
-        .filter(entry -> item.getDefaultStack().isIn(entry.getKey()))
+        .filter(entry -> item.getRegistryEntry().isIn(entry.getKey()))
         .map(Map.Entry::getValue)
         .findFirst();
   }

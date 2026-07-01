@@ -14,7 +14,7 @@ loom {
 }
 
 base {
-	archivesName = "fabric-${rootProject.archives_base_name}"
+	archivesName = "${rootProject.minecraft_version}-fabric-${rootProject.archives_base_name}"
 }
 
 configurations {

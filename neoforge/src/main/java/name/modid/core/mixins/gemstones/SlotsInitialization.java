@@ -16,10 +16,6 @@ public abstract class SlotsInitialization {
   @Inject(method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V", at = @At("TAIL"))
   private void onConstructWithChanges(RegistryEntry<Item> item, int count, ComponentChanges changes,
       CallbackInfo ci) {
-    if (!ComponentChanges.EMPTY.equals(changes)) {
-      return;
-    }
-
     ItemStack itemStack = (ItemStack) (Object) this;
     GemstoneSlotHelper.initializeSocketsIfEligible(itemStack, item.value());
   }

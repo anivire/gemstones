@@ -2,7 +2,6 @@ package name.modid.core.api.modifiers.helpers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import name.modid.core.api.components.ComponentsRegistry;
 import name.modid.core.api.components.GemstoneComponent;
@@ -22,6 +21,7 @@ import net.minecraft.item.ItemStack;
 
 public class GemstoneSlotHelper {
   public static final int MAX_SLOTS = SocketSettingsConfig.DEFAULT_MAX_SLOTS;
+  private static final int INITIAL_OPEN_SLOTS = 1;
 
   public static ArrayList<GemstoneComponent> contains(ItemStack itemStack, GemstoneType gemstoneType) {
     ComponentType<GemstoneSlotsComponent> type = ComponentsRegistry.gemstones();
@@ -193,23 +193,23 @@ public class GemstoneSlotHelper {
       return;
     }
 
-    int maxSlots = getMaxSlots();
-    GemstoneComponent[] gemstones = new GemstoneComponent[maxSlots];
-    int freeSlots = Math.min(maxSlots, 1 + new Random().nextInt(2));
-
-    for (int i = 0; i < maxSlots; i++) {
-      if (freeSlots != 0) {
-        gemstones[i] = new GemstoneComponent(GemstoneType.EMPTY,
-            GemstoneQuality.NONE);
-        freeSlots--;
-      } else {
-        gemstones[i] = new GemstoneComponent(GemstoneType.LOCKED,
-            GemstoneQuality.NONE);
-      }
-    }
+    GemstoneComponent[] gemstones = createInitialSockets(getMaxSlots());
 
     itemStack.set(ComponentsRegistry.gemstones(), new GemstoneSlotsComponent(gemstones));
     updateSocketsAttributes(itemStack, item);
+  }
+
+  public static GemstoneComponent[] createInitialSockets(int maxSlots) {
+    GemstoneComponent[] gemstones = new GemstoneComponent[Math.max(maxSlots, 0)];
+    int freeSlots = Math.min(gemstones.length, INITIAL_OPEN_SLOTS);
+
+    for (int i = 0; i < gemstones.length; i++) {
+      GemstoneType type = freeSlots > 0 ? GemstoneType.EMPTY : GemstoneType.LOCKED;
+      gemstones[i] = new GemstoneComponent(type, GemstoneQuality.NONE);
+      freeSlots--;
+    }
+
+    return gemstones;
   }
 
   public static void initializeSocketsIfEligible(ItemStack itemStack, Item item) {
