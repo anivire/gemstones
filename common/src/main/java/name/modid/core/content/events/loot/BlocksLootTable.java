@@ -22,15 +22,17 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 public class BlocksLootTable {
+  private static final Identifier GEODE_FROM_ORES = Identifier.of(
+      Gemstones.MOD_ID,
+      "blocks/geode_from_ores");
+
   public static void setup(RegistryKey<LootTable> key, LootEvent.LootTableModificationContext context,
       boolean builtin) {
-    if (isMinecraftBlockLootTable(key)) {
+    if (shouldInjectGeodeLoot(key.getValue())) {
       context.addPool(LootPool.builder()
           .with(LootTableEntry.builder(RegistryKey.of(
               RegistryKeys.LOOT_TABLE,
-              Identifier.of(
-                  Gemstones.MOD_ID,
-                  "blocks/geode_from_ores")))));
+              GEODE_FROM_ORES))));
     }
 
     Identifier id = key.getValue();
@@ -66,8 +68,7 @@ public class BlocksLootTable {
     context.addPool(pool);
   }
 
-  private static boolean isMinecraftBlockLootTable(RegistryKey<LootTable> key) {
-    Identifier id = key.getValue();
-    return id.getNamespace().equals("minecraft") && id.getPath().startsWith("blocks/");
+  static boolean shouldInjectGeodeLoot(Identifier id) {
+    return id.getPath().startsWith("blocks/") && !id.equals(GEODE_FROM_ORES);
   }
 }
