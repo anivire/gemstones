@@ -5,6 +5,7 @@ import java.util.Objects;
 import name.modid.Gemstones;
 import name.modid.GemstonesClient;
 import name.modid.core.api.entities.jeweleryTable.JewelryTableScreen;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.api.particles.BleedParticleFactory;
 import name.modid.core.api.particles.ScarabParticleFactory;
 import name.modid.core.api.particles.SparkParticleFactory;
@@ -31,11 +32,15 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.extensions.IItemStackExtension;
 
 @Mod(Gemstones.MOD_ID)
 public class GemstonesNeoForge {
   public GemstonesNeoForge(IEventBus eventBus) {
     Gemstones.init();
+
+    GemstoneAttributeModifiersHelper.setEffectiveProvider(
+        stack -> ((IItemStackExtension) stack).getAttributeModifiers());
 
     if (FMLEnvironment.dist.isClient()) {
       eventBus.addListener(this::registerParticleProviders);
