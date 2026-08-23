@@ -10,7 +10,10 @@ import name.modid.core.api.particles.BleedParticleFactory;
 import name.modid.core.api.particles.ScarabParticleFactory;
 import name.modid.core.api.particles.SparkParticleFactory;
 import name.modid.core.api.particles.StunnedParticleFactory;
+import name.modid.core.api.projectiles.spark.SparkProjectileModel;
+import name.modid.core.api.projectiles.spark.SparkProjectileRenderer;
 import name.modid.core.content.entities.RainArrowEntity;
+import name.modid.core.content.entities.SparkProjectileEntity;
 import name.modid.core.content.particles.ScarabParticleInstance;
 import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.content.registries.ParticlesRegistry;
@@ -46,6 +49,7 @@ public class GemstonesNeoForge {
       eventBus.addListener(this::registerParticleProviders);
       eventBus.addListener(this::clientSetup);
       eventBus.addListener(this::registerScreens);
+      eventBus.addListener(this::registerLayerDefinitions);
       eventBus.addListener(this::registerEntityRenderers);
 
       NeoForge.EVENT_BUS.addListener(GemstonesNeoForgeClientEvents::onItemTooltip);
@@ -80,11 +84,22 @@ public class GemstonesNeoForge {
   }
 
   private void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+    EntityType<SparkProjectileEntity> sparkType = Objects.requireNonNull(EntitiesRegistry.SPARK_ENTITY.get());
     EntityType<RainArrowEntity> rainArrowType = Objects.requireNonNull(EntitiesRegistry.RAIN_ARROW.get());
+
+    event.registerEntityRenderer(
+        sparkType,
+        SparkProjectileRenderer::new);
 
     event.registerEntityRenderer(
         rainArrowType,
         RainArrowRenderer::new);
+  }
+
+  private void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+    event.registerLayerDefinition(
+        Objects.requireNonNull(SparkProjectileModel.SPARK),
+        SparkProjectileModel::getTexturedModelData);
   }
 
   private static class RainArrowRenderer extends ProjectileEntityRenderer<RainArrowEntity> {
