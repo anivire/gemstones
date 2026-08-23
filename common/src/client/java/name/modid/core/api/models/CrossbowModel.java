@@ -2,6 +2,7 @@ package name.modid.core.api.models;
 
 import dev.architectury.registry.item.ItemPropertiesRegistry;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -18,8 +19,8 @@ public class CrossbowModel {
             return 0.0f;
           }
 
-          AttributeModifiersComponent itemAttributeModifiers = itemStack.getOrDefault(
-              DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+          AttributeModifiersComponent itemAttributeModifiers = GemstoneAttributeModifiersHelper
+              .getEffectiveModifiers(itemStack);
           float drawSpeedMultiplier = ModifierUtils.getAttributeMultiplier(
               itemAttributeModifiers,
               AttributesRegistry.PULL_SPEED_ATTRIBUTE);

@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.Gemstones;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.content.registries.AttributesRegistry;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -50,9 +50,7 @@ public abstract class ArmorPierceAttribute {
       return;
     }
 
-    AttributeModifiersComponent comp = stack.getOrDefault(
-        DataComponentTypes.ATTRIBUTE_MODIFIERS,
-        AttributeModifiersComponent.DEFAULT);
+    AttributeModifiersComponent comp = GemstoneAttributeModifiersHelper.getEffectiveModifiers(stack);
 
     if (comp.modifiers().isEmpty()) {
       return;

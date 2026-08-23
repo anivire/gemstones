@@ -5,7 +5,7 @@ import java.util.Objects;
 import name.modid.Gemstones;
 import name.modid.GemstonesClient;
 import name.modid.core.api.entities.jeweleryTable.JewelryTableScreen;
-import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
+import name.modid.core.api.components.ComponentsRegistry;
 import name.modid.core.api.particles.BleedParticleFactory;
 import name.modid.core.api.particles.ScarabParticleFactory;
 import name.modid.core.api.particles.SparkParticleFactory;
@@ -21,6 +21,7 @@ import name.modid.core.content.screen.JewelryTableScreenHandler;
 import name.modid.core.content.screen.ScreenRegistry;
 import name.modid.neoforge.client.GemstonesNeoForgeClientEvents;
 import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.client.render.entity.ProjectileEntityRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.particle.ParticleType;
@@ -35,15 +36,13 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.extensions.IItemStackExtension;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 
 @Mod(Gemstones.MOD_ID)
 public class GemstonesNeoForge {
   public GemstonesNeoForge(IEventBus eventBus) {
     Gemstones.init();
-
-    GemstoneAttributeModifiersHelper.setEffectiveProvider(
-        stack -> ((IItemStackExtension) stack).getAttributeModifiers());
+    NeoForge.EVENT_BUS.addListener(this::addGemstoneAttributeModifiers);
 
     if (FMLEnvironment.dist.isClient()) {
       eventBus.addListener(this::registerParticleProviders);
@@ -54,6 +53,17 @@ public class GemstonesNeoForge {
 
       NeoForge.EVENT_BUS.addListener(GemstonesNeoForgeClientEvents::onItemTooltip);
       NeoForge.EVENT_BUS.addListener(GemstonesNeoForgeClientEvents::onGatherTooltipComponents);
+    }
+  }
+
+  private void addGemstoneAttributeModifiers(ItemAttributeModifierEvent event) {
+    AttributeModifiersComponent modifiers = event.getItemStack().get(ComponentsRegistry.gemstoneAttributeModifiers());
+    if (modifiers == null) {
+      return;
+    }
+
+    for (AttributeModifiersComponent.Entry entry : modifiers.modifiers()) {
+      event.addModifier(entry.attribute(), entry.modifier(), entry.slot());
     }
   }
 

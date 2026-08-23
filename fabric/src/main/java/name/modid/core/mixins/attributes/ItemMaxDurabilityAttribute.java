@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.content.registries.AttributesRegistry;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.item.ItemStack;
 
@@ -17,8 +17,7 @@ public abstract class ItemMaxDurabilityAttribute {
   private void addDurabilityBonus(CallbackInfoReturnable<Integer> cir) {
     ItemStack itemStack = (ItemStack) (Object) this;
     int baseMax = cir.getReturnValueI();
-    AttributeModifiersComponent attr = itemStack
-        .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+    AttributeModifiersComponent attr = GemstoneAttributeModifiersHelper.getEffectiveModifiers(itemStack);
     double bonusDurability = ModifierUtils.getAttributeDelta(
         attr,
         AttributesRegistry.MAX_DURABILITY_ATTRIBUTE,

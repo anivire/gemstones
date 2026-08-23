@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "gemstones.fabric-refmap.json",
   "mixins": [
+    "attributes.GemstoneAttributeModifiers",
     "attributes.BowPullSpeedAttribute",
     "attributes.CrossbowPullSpeedAttribute",
     "attributes.CriticalHitDamageAttribute",

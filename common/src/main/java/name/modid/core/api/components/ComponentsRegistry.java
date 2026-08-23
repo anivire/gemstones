@@ -2,10 +2,11 @@ package name.modid.core.api.components;
 
 import com.mojang.serialization.Codec;
 
-import name.modid.Gemstones;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import name.modid.Gemstones;
 import net.minecraft.component.ComponentType;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.registry.RegistryKeys;
@@ -22,6 +23,15 @@ public class ComponentsRegistry {
   private static final RegistrySupplier<ComponentType<?>> GEMSTONES_SUPPLIER = COMPONENTS.register(
       "gemstones",
       () -> ComponentType.<GemstoneSlotsComponent>builder().codec(GemstoneSlotsComponent.GEMSTONE_SLOTS_CODEC).build());
+
+  // Separate gemstone attribute modifiers from vanilla components and other mods
+  // for better compatibility
+  private static final RegistrySupplier<ComponentType<?>> GEMSTONE_ATTRIBUTE_MODIFIERS_SUPPLIER = COMPONENTS.register(
+      "gemstone_attribute_modifiers",
+      () -> ComponentType.<AttributeModifiersComponent>builder()
+          .codec(AttributeModifiersComponent.CODEC)
+          .packetCodec(AttributeModifiersComponent.PACKET_CODEC)
+          .build());
 
   private static final RegistrySupplier<ComponentType<?>> POLISHING_SUPPLIER = COMPONENTS.register(
       "polishing",
@@ -45,6 +55,10 @@ public class ComponentsRegistry {
 
   public static ComponentType<GemstoneSlotsComponent> gemstones() {
     return get(GEMSTONES_SUPPLIER);
+  }
+
+  public static ComponentType<AttributeModifiersComponent> gemstoneAttributeModifiers() {
+    return get(GEMSTONE_ATTRIBUTE_MODIFIERS_SUPPLIER);
   }
 
   public static ComponentType<PolishingComponent> polishing() {

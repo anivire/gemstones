@@ -6,9 +6,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
@@ -23,8 +23,8 @@ public class ModelRenderer {
     ItemStack stack = player.getActiveItem();
 
     if (stack.getItem() instanceof BowItem && player.isUsingItem()) {
-      AttributeModifiersComponent itemAttributeModifiers = stack.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS,
-          AttributeModifiersComponent.DEFAULT);
+      AttributeModifiersComponent itemAttributeModifiers = GemstoneAttributeModifiersHelper
+          .getEffectiveModifiers(stack);
 
       float drawSpeedMultiplier = ModifierUtils.getAttributeMultiplier(
           itemAttributeModifiers,

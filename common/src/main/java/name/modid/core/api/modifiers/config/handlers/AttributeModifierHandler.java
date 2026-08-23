@@ -2,16 +2,14 @@ package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import name.modid.Gemstones;
+import name.modid.core.api.components.ComponentsRegistry;
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig.AttributeConfig;
 import name.modid.core.api.modifiers.config.ModifierConfig.MultiplyAttributeConfig;
-import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import net.minecraft.component.DataComponentTypes;
@@ -92,69 +90,55 @@ public class AttributeModifierHandler {
           ModifierHelper.getAttributeModifierSlot(item)));
     }
 
-    // If there are no gemstone attribute modifiers to apply, we must not write the
-    // ATTRIBUTE_MODIFIERS component onto the stack: doing so would shadow
-    // stack-aware
-    // dynamic attribute modifiers computed by other mods, even when no gemstones
-    // are present. Only clean up gemstone modifiers
-    // this mod previously wrote.
+    // Gemstone modifiers live in a dedicated component. This keeps separated
+    // ATTRIBUTE_MODIFIERS component from vanilla and other mods
     if (gemstoneEntries.isEmpty()) {
-      if (!hasGemstoneAttributeModifiers(itemStack)) {
-        return;
-      }
-
-      AttributeModifiersComponent stackComponent = itemStack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
-      if (stackComponent == null) {
-        return;
-      }
-
-      List<AttributeModifiersComponent.Entry> remaining = stackComponent.modifiers().stream()
-          .filter(e -> e.modifier().id() == null
-              || !e.modifier().id().getNamespace().equalsIgnoreCase(Gemstones.MOD_ID))
-          .toList();
-
-      if (remaining.isEmpty()) {
-        itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
-      } else {
-        itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS,
-            new AttributeModifiersComponent(remaining, stackComponent.showInTooltip()));
-      }
+      itemStack.remove(ComponentsRegistry.gemstoneAttributeModifiers());
+      removeLegacyGemstoneModifiers(itemStack);
       return;
     }
 
-    // Gemstone attribute modifiers are present: merge them with the stack's
-    // effective attribute modifiers. The effective set is platform-aware so that
-    // stack-aware dynamic modifiers contributed by other mods are preserved instead
-    // of being shadowed by the component we are about to write.
-    AttributeModifiersComponent existing = GemstoneAttributeModifiersHelper.getEffectiveModifiers(itemStack);
-
-    Map<String, AttributeModifiersComponent.Entry> combinedModifiersMap = new LinkedHashMap<>();
-    Function<AttributeModifiersComponent.Entry, String> entryKey = e -> String.format("%s.%s.%s", e.modifier().id(),
-        e.slot(), e.attribute().value());
-
-    existing.modifiers().forEach(e -> {
-      if (e.modifier().id() != null && !e.modifier().id().getNamespace().equalsIgnoreCase(Gemstones.MOD_ID)) {
-        combinedModifiersMap.put(entryKey.apply(e), e);
-      }
-    });
-
-    for (AttributeModifiersComponent.Entry entry : gemstoneEntries) {
-      combinedModifiersMap.put(entryKey.apply(entry), entry);
-    }
-
-    List<AttributeModifiersComponent.Entry> finalModifiers = new ArrayList<>(combinedModifiersMap.values());
-    AttributeModifiersComponent finalComponent = new AttributeModifiersComponent(finalModifiers, true);
-    itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, finalComponent);
+    itemStack.set(ComponentsRegistry.gemstoneAttributeModifiers(),
+        new AttributeModifiersComponent(gemstoneEntries, true));
+    removeLegacyGemstoneModifiers(itemStack);
   }
 
   public static boolean hasGemstoneAttributeModifiers(ItemStack itemStack) {
+    AttributeModifiersComponent gemstoneComponent = itemStack.get(ComponentsRegistry.gemstoneAttributeModifiers());
+    if (gemstoneComponent != null && !gemstoneComponent.modifiers().isEmpty()) {
+      return true;
+    }
+
     AttributeModifiersComponent component = itemStack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
     if (component == null) {
       return false;
     }
 
     return component.modifiers().stream()
-        .anyMatch(e -> e.modifier().id() != null
-            && e.modifier().id().getNamespace().equalsIgnoreCase(Gemstones.MOD_ID));
+        .anyMatch(e -> isGemstoneModifierId(e.modifier().id()));
+  }
+
+  static boolean isGemstoneModifierId(Identifier modifierId) {
+    return modifierId != null && modifierId.getNamespace().equalsIgnoreCase(Gemstones.MOD_ID);
+  }
+
+  // Legacy support for gemstone modifiers that were previously stored in
+  // vanilla ATTRIBUTE_MODIFIERS component
+  private static void removeLegacyGemstoneModifiers(ItemStack itemStack) {
+    AttributeModifiersComponent legacyComponent = itemStack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
+    if (legacyComponent == null || legacyComponent.modifiers().stream()
+        .noneMatch(entry -> isGemstoneModifierId(entry.modifier().id()))) {
+      return;
+    }
+
+    List<AttributeModifiersComponent.Entry> remaining = legacyComponent.modifiers().stream()
+        .filter(entry -> !isGemstoneModifierId(entry.modifier().id()))
+        .toList();
+    if (remaining.isEmpty()) {
+      itemStack.remove(DataComponentTypes.ATTRIBUTE_MODIFIERS);
+    } else {
+      itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS,
+          new AttributeModifiersComponent(remaining, legacyComponent.showInTooltip()));
+    }
   }
 }

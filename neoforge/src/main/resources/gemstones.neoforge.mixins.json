@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "gemstones.neoforge-refmap.json",
   "mixins": [
+    "attributes.GemstoneAttributeModifiers",
     "attributes.BowPullSpeedAttribute",
     "attributes.CrossbowPullSpeedAttribute",
     "attributes.CriticalHitDamageAttribute",

@@ -7,9 +7,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import name.modid.core.content.registries.AttributesRegistry;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
-import net.minecraft.component.DataComponentTypes;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
+import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BowItem;
@@ -26,8 +26,7 @@ public class BowPullSpeedAttribute {
   private void onUse(World world, PlayerEntity user, Hand hand,
       CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
     ItemStack stack = user.getStackInHand(hand);
-    AttributeModifiersComponent comp = stack.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS,
-        AttributeModifiersComponent.DEFAULT);
+    AttributeModifiersComponent comp = GemstoneAttributeModifiersHelper.getEffectiveModifiers(stack);
     drawSpeedMultiplier = ModifierUtils.getAttributeMultiplier(
         comp, AttributesRegistry.PULL_SPEED_ATTRIBUTE);
   }

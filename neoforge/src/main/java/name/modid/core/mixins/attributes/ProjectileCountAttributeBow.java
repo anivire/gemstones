@@ -6,12 +6,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.registries.AttributesRegistry;
 import name.modid.core.utils.HomingArrow;
 import name.modid.core.utils.accessors.HomingArrowAccessor;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -42,8 +42,7 @@ public class ProjectileCountAttributeBow {
       return;
     }
 
-    AttributeModifiersComponent mods = bowStack
-        .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+    AttributeModifiersComponent mods = GemstoneAttributeModifiersHelper.getEffectiveModifiers(bowStack);
     int projectileCount = (int) Math.floor(ModifierUtils.getAttributeValue(
         mods,
         AttributesRegistry.PROJECTILE_COUNT_ATTRIBUTE,

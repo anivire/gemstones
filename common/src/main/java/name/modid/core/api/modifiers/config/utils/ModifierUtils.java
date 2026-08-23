@@ -10,9 +10,9 @@ import java.util.stream.Stream;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
-import name.modid.core.api.modifiers.helpers.ModifierHelper;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
-import net.minecraft.component.DataComponentTypes;
+import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.AttributeModifiersComponent.Entry;
 import net.minecraft.entity.EquipmentSlot;
@@ -60,8 +60,8 @@ public class ModifierUtils {
           || slot == EquipmentSlot.HEAD
           || slot == EquipmentSlot.LEGS) {
         ItemStack itemStack = entity.getEquippedStack(slot);
-        AttributeModifiersComponent modifiersComponent = itemStack
-            .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+        AttributeModifiersComponent modifiersComponent = GemstoneAttributeModifiersHelper
+            .getEffectiveModifiers(itemStack);
 
         v += getAttributeDelta(modifiersComponent, attribute, 1.0);
       }
@@ -76,8 +76,8 @@ public class ModifierUtils {
     for (EquipmentSlot slot : EquipmentSlot.values()) {
       if (slot == EquipmentSlot.MAINHAND) {
         ItemStack itemStack = entity.getEquippedStack(slot);
-        AttributeModifiersComponent modifiersComponent = itemStack
-            .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+        AttributeModifiersComponent modifiersComponent = GemstoneAttributeModifiersHelper
+            .getEffectiveModifiers(itemStack);
 
         v += getAttributeDelta(modifiersComponent, attribute, 1.0);
       }

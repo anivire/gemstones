@@ -5,12 +5,12 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.content.registries.AttributesRegistry;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
@@ -35,9 +35,7 @@ public class BowPullSpeedHeldItemRenderer {
       return pullTime;
     }
 
-    AttributeModifiersComponent modifiers = item.getOrDefault(
-        DataComponentTypes.ATTRIBUTE_MODIFIERS,
-        AttributeModifiersComponent.DEFAULT);
+    AttributeModifiersComponent modifiers = GemstoneAttributeModifiersHelper.getEffectiveModifiers(item);
 
     return pullTime / ModifierUtils.getAttributeMultiplier(
         modifiers,

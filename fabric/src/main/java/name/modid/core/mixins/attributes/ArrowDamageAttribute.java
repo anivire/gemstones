@@ -5,8 +5,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.content.registries.AttributesRegistry;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -26,9 +26,7 @@ public abstract class ArrowDamageAttribute {
     if (shotFrom == null || shotFrom.isEmpty())
       return 0;
 
-    AttributeModifiersComponent modifiers = shotFrom.getOrDefault(
-        DataComponentTypes.ATTRIBUTE_MODIFIERS,
-        AttributeModifiersComponent.DEFAULT);
+    AttributeModifiersComponent modifiers = GemstoneAttributeModifiersHelper.getEffectiveModifiers(shotFrom);
 
     return (float) ModifierUtils.getAttributeDelta(
         modifiers,

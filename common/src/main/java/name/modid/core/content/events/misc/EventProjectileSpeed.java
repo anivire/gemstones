@@ -1,8 +1,8 @@
 package name.modid.core.content.events.misc;
 
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.content.registries.AttributesRegistry;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -26,8 +26,8 @@ public class EventProjectileSpeed {
       return;
     }
 
-    AttributeModifiersComponent modifiersComponent = weaponStack
-        .getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+    AttributeModifiersComponent modifiersComponent = GemstoneAttributeModifiersHelper
+        .getEffectiveModifiers(weaponStack);
 
     projectile.setVelocity(projectile.getVelocity().multiply(
         ModifierUtils.getAttributeMultiplier(
