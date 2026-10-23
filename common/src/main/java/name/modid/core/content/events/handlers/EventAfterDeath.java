@@ -25,6 +25,8 @@ import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
 
 public class EventAfterDeath {
+  private static final float DETONATE_BASE_POWER = 2.5F;
+  private static final float DETONATE_POWER_PER_LEVEL = 0.5F;
   private static final int MIN_HARVEST_MARK_XP = 3;
   private static final int MAX_HARVEST_MARK_XP = 5;
 
@@ -92,7 +94,7 @@ public class EventAfterDeath {
         entity.getX(),
         entity.getY(),
         entity.getZ(),
-        4.0F + entity.getStatusEffect(EffectsRegistry.detonateEntry()).getAmplifier(),
+        DETONATE_BASE_POWER + DETONATE_POWER_PER_LEVEL * entity.getStatusEffect(EffectsRegistry.detonateEntry()).getAmplifier(),
         false,
         World.ExplosionSourceType.NONE);
   }

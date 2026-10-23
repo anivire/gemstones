@@ -1,8 +1,10 @@
 package name.modid.core.api.modifiers.config.handlers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
@@ -16,6 +18,8 @@ import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.content.effects.StunnedEffect;
 import name.modid.core.content.registries.EffectsRegistry;
+import name.modid.core.content.registries.TagsRegistry;
+import name.modid.core.utils.guardianSmite.GuardianSmiteHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -24,9 +28,32 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.ActionResult;
 
 public class EffectHandler {
+  // Loot Touch (Restless Flame): no bosses and at most once per 30 seconds for each player,
+  // otherwise a mob farm turns into an endless dungeon loot source
+  private static final long LOOT_TOUCH_COOLDOWN_TICKS = 30 * 20;
+  private static final Map<UUID, Long> LOOT_TOUCH_COOLDOWNS = new HashMap<>();
+
   private static boolean canApplyEffect(RegistryEntry<StatusEffect> effect, LivingEntity target) {
     return !effect.equals(EffectsRegistry.stunnedEntry())
         || !StunnedEffect.isImmuneToStun(target);
+  }
+
+  private static boolean canApplyLootTouch(ModifierContext ctx, LivingEntity target) {
+    if (target.getType().isIn(TagsRegistry.BOSSES) || !(ctx.getOwner() instanceof PlayerEntity player)) {
+      return false;
+    }
+
+    long now = ctx.getWorld().getTime();
+    Long cooldownEnd = LOOT_TOUCH_COOLDOWNS.get(player.getUuid());
+    return cooldownEnd == null || now >= cooldownEnd;
+  }
+
+  private static void startLootTouchCooldown(ModifierContext ctx) {
+    if (ctx.getOwner() instanceof PlayerEntity player) {
+      long now = ctx.getWorld().getTime();
+      LOOT_TOUCH_COOLDOWNS.values().removeIf(end -> end <= now);
+      LOOT_TOUCH_COOLDOWNS.put(player.getUuid(), now + LOOT_TOUCH_COOLDOWN_TICKS);
+    }
   }
 
   private static void applyHitEffect(
@@ -48,6 +75,11 @@ public class EffectHandler {
     }
 
     target.addStatusEffect(new StatusEffectInstance(effect, durationSeconds * 20, appliedAmplifier));
+
+    // A fresh Guardian Smite gets its full set of boosted hits again
+    if (effect.equals(EffectsRegistry.guardianSmiteEntry())) {
+      GuardianSmiteHelper.resetCharges(target);
+    }
   }
 
   public static class Area implements ModifierHandler<ModifierConfig.AreaEffectConfig> {
@@ -145,10 +177,16 @@ public class EffectHandler {
           }
 
           double combinedChance = ModifierUtils.cappedProcChance(chances);
+          boolean isLootTouch = effect.equals(EffectsRegistry.lootTouchEntry());
 
           if (canApplyEffect(effect, target)
+              && (!isLootTouch || canApplyLootTouch(ctx, target))
               && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
             applyHitEffect(target, effect, maxDuration, maxAmplifier, stacking, maxStackCount);
+
+            if (isLootTouch) {
+              startLootTouchCooldown(ctx);
+            }
           }
         }
 

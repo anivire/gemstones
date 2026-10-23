@@ -1,5 +1,6 @@
 package name.modid.core.api.modifiers.config.handlers;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
+import net.minecraft.network.packet.s2c.play.WorldEventS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -39,14 +41,42 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.WorldEvents;
 
 public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBreakConfig> {
   private static final int UPDATE_FLAGS = Block.NOTIFY_ALL;
   private static final Set<Identifier> BLOCKED_ITEMS = new HashSet<>();
-  private static final ThreadLocal<Boolean> SUPPRESS_MINER = ThreadLocal.withInitial(() -> false);
+  // Set while the miner or chain lightning break extra blocks, so those breaks do not chain further
+  private static final ThreadLocal<Boolean> BREAKING_EXTRA_BLOCKS = ThreadLocal.withInitial(() -> false);
   private static final List<PendingRegeneration> PENDING_REGENERATIONS = new ArrayList<>();
+  private static final float MIN_SATURATION_HARDNESS = 1.0F;
+  private static final float MAX_EXTRA_ABSORPTION = 10.0F; // Five hearts
+  private static final int EXTRA_ABSORPTION_DURATION_TICKS = 90 * 20;
 
   private record PendingRegeneration(ServerWorld world, BlockPos pos, BlockState state, int ticksRemaining) {
+  }
+
+  // Sapphire chain lightning jumps to the next block of the same type every few ticks instead of breaking them at once
+  private static final int CHAIN_STEP_TICKS = 3;
+  private static final List<ChainLightning> ACTIVE_CHAINS = new ArrayList<>();
+
+  private static final class ChainLightning {
+    private final ServerWorld world;
+    private final ServerPlayerEntity player;
+    private final ItemStack tool;
+    private final Block block;
+    private final List<BlockPos> vein;
+    private int next = 0;
+    private int cooldown = CHAIN_STEP_TICKS;
+
+    private ChainLightning(ServerWorld world, ServerPlayerEntity player, ItemStack tool, Block block,
+        List<BlockPos> vein) {
+      this.world = world;
+      this.player = player;
+      this.tool = tool;
+      this.block = block;
+      this.vein = vein;
+    }
   }
 
   @Override
@@ -65,13 +95,19 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     types.forEach((type, group) -> {
       switch (type.getName()) {
         case "ON_BLOCK_BREAK_HEAL" -> handleHeal(group, ctx);
+        case "ON_BLOCK_BREAK_SATURATION" -> handleSaturation(group, ctx);
         case "ON_BLOCK_BREAK_REGENERATE_BLOCK" -> handleRegenerateBlock(group, ctx);
         case "ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP" -> handleAdditionalGoldDrop(group, ctx);
         case "ON_BLOCK_BREAK_EXTRA_HEALTH" -> handleExtraHealth(group, ctx);
         case "ON_BLOCK_BREAK_RANDOM_ITEM_DROP" -> handleRandomItemDrop(group, ctx);
         case "ON_BLOCK_BREAK_MINER" -> {
-          if (!SUPPRESS_MINER.get()) {
+          if (!BREAKING_EXTRA_BLOCKS.get()) {
             handleMiner(group, ctx);
+          }
+        }
+        case "ON_BLOCK_BREAK_CHAIN_LIGHTNING" -> {
+          if (!BREAKING_EXTRA_BLOCKS.get()) {
+            handleChainLightning(group, ctx);
           }
         }
         default -> {
@@ -123,6 +159,40 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     }
   }
 
+  // Feeds the player while mining without replacing healing in combat. Instantly broken blocks
+  // (torches, grass) do not count, so the effect cannot be farmed by placing and breaking them
+  private void handleSaturation(
+      List<GemstoneModifier> modifiers,
+      ModifierContext ctx) {
+    if (!(ctx.getOwner() instanceof PlayerEntity player)
+        || ctx.getBlockPos() == null
+        || ctx.getBlockState() == null
+        || ctx.getBlockState().getHardness(ctx.getWorld(), ctx.getBlockPos()) < MIN_SATURATION_HARDNESS) {
+      return;
+    }
+
+    List<Double> chances = new ArrayList<>();
+    float saturation = 0.0f;
+
+    for (GemstoneModifier modifier : modifiers) {
+      BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
+      chances.add(config.values().get(modifier.getRarityType()));
+      saturation = Math.max(saturation, config.additionalValues().get(modifier.getRarityType()).floatValue());
+    }
+
+    if (saturation <= 0.0f || !ModifierUtils.proc(ctx.getWorld(), ModifierUtils.cappedProcChance(chances))) {
+      return;
+    }
+
+    player.getHungerManager().add(0, saturation);
+    ctx.getWorld().playSound(null,
+        player.getBlockPos(),
+        SoundEvents.ENTITY_GENERIC_EAT,
+        SoundCategory.PLAYERS,
+        0.35f,
+        1.4f);
+  }
+
   private void handleRegenerateBlock(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
@@ -139,6 +209,11 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     }
 
     double combinedChance = ModifierUtils.cappedProcChance(chances);
+
+    // Ancient debris is too valuable to regenerate as often as regular ores
+    if (ctx.getBlockState().isOf(Blocks.ANCIENT_DEBRIS)) {
+      combinedChance *= 0.5;
+    }
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)
         && ctx.getWorld() instanceof ServerWorld serverWorld) {
@@ -187,7 +262,11 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
   private void handleAdditionalGoldDrop(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (ctx.getBlockPos() == null)
+    // Only blocks in the ore tags can yield gold nuggets.
+    if (ctx.getBlockPos() == null || ctx.getBlockState() == null)
+      return;
+    BlockState state = ctx.getBlockState();
+    if (!isOre(state))
       return;
 
     List<Double> chances = new ArrayList<>();
@@ -199,14 +278,8 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     double combinedChance = ModifierUtils.cappedProcChance(chances);
 
     if (ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-      ItemStack goldIngot = new ItemStack(Items.GOLD_INGOT);
-      goldIngot.setCount(1);
-
-      ItemStack goldNugget = new ItemStack(Items.GOLD_NUGGET);
-      goldNugget.setCount(ctx.getWorld().getRandom().nextBetween(3, 6));
-
-      Block.dropStack(ctx.getWorld(), ctx.getBlockPos(),
-          ctx.getWorld().getRandom().nextDouble() >= 0.6F ? goldIngot : goldNugget);
+      ItemStack goldNugget = new ItemStack(Items.GOLD_NUGGET, ctx.getWorld().getRandom().nextBetween(1, 3));
+      Block.dropStack(ctx.getWorld(), ctx.getBlockPos(), goldNugget);
     }
   }
 
@@ -217,28 +290,27 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       return;
     }
 
-    int totalMaxStacks = 0;
+    float absorptionPerProc = 0.0f;
     List<Double> chances = new ArrayList<>();
 
     for (GemstoneModifier modifier : modifiers) {
       BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
       chances.add(config.values().get(modifier.getRarityType()));
-      totalMaxStacks += config.additionalValues().get(modifier.getRarityType()).intValue();
+      absorptionPerProc = Math.max(absorptionPerProc,
+          config.additionalValues().get(modifier.getRarityType()).floatValue());
     }
 
     double combinedChance = ModifierUtils.cappedProcChance(chances);
 
-    if (totalMaxStacks > 0
+    if (absorptionPerProc > 0.0f
         && ModifierUtils.proc(ctx.getWorld(), combinedChance)) {
-      double healthPerProc = 1.0;
-      int buffDuration = totalMaxStacks < 3 ? 1800
-          : totalMaxStacks <= 5 ? 3600
-              : 4800;
-
       float currentAbsorption = player.getAbsorptionAmount();
-      player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, buffDuration,
-          (int) totalMaxStacks - 1, false, false, true));
-      player.setAbsorptionAmount(currentAbsorption + (float) healthPerProc);
+      // Absorption III removes up to 12 health when it expires, clearing the fixed
+      // 10-health Garnet shield even after repeated procs.
+      player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION,
+          EXTRA_ABSORPTION_DURATION_TICKS, 2, false, false, true));
+      player.setAbsorptionAmount(Math.max(currentAbsorption,
+          Math.min(MAX_EXTRA_ABSORPTION, currentAbsorption + absorptionPerProc)));
 
       if (player.getAbsorptionAmount() > currentAbsorption && ctx.getWorld() instanceof ServerWorld serverWorld) {
         serverWorld.spawnParticles(ParticleTypes.TOTEM_OF_UNDYING,
@@ -318,6 +390,129 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     return allItems.get(random.nextInt(allItems.size()));
   }
 
+  private void handleChainLightning(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+    if (ctx.getBlockPos() == null || ctx.getBlockState() == null) {
+      return;
+    }
+    if (!(ctx.getWorld() instanceof ServerWorld world)
+        || !(ctx.getOwner() instanceof ServerPlayerEntity player)) {
+      return;
+    }
+
+    // Any block works as long as the tool is the right one for it: pickaxes chain stone and ores,
+    // axes chain logs, shovels chain dirt and sand
+    BlockState origin = ctx.getBlockState();
+    if (player.getMainHandStack().getMiningSpeedMultiplier(origin) <= 1.0F) {
+      return;
+    }
+
+    List<Double> chances = new ArrayList<>();
+    int maxBlocks = 0;
+    for (GemstoneModifier modifier : modifiers) {
+      BlockBreakConfig config = (BlockBreakConfig) modifier.getConfig();
+      chances.add(config.values().get(modifier.getRarityType()));
+      maxBlocks = Math.max(maxBlocks, config.additionalValues().get(modifier.getRarityType()).intValue());
+    }
+
+    if (maxBlocks <= 0 || !ModifierUtils.proc(world, ModifierUtils.cappedProcChance(chances))) {
+      return;
+    }
+
+    List<BlockPos> vein = findVein(world, ctx.getBlockPos(), origin.getBlock(), maxBlocks);
+    if (vein.isEmpty()) {
+      return;
+    }
+
+    world.playSound(null, ctx.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.PLAYERS,
+        0.5f, 1.8f);
+    spawnChainSparks(world, ctx.getBlockPos());
+
+    ACTIVE_CHAINS.add(new ChainLightning(world, player, player.getMainHandStack(), origin.getBlock(), vein));
+  }
+
+  public static void tickChainLightnings() {
+    ACTIVE_CHAINS.removeIf(chain -> !stepChain(chain));
+  }
+
+  // Returns false once the chain is over
+  private static boolean stepChain(ChainLightning chain) {
+    ServerPlayerEntity player = chain.player;
+
+    // Leaving, dying, changing dimension or switching the tool ends the chain
+    if (player.isRemoved() || !player.isAlive() || player.getServerWorld() != chain.world
+        || player.getMainHandStack() != chain.tool) {
+      return false;
+    }
+
+    if (--chain.cooldown > 0) {
+      return true;
+    }
+    chain.cooldown = CHAIN_STEP_TICKS;
+
+    BlockPos pos = chain.vein.get(chain.next++);
+    BlockState state = chain.world.getBlockState(pos);
+
+    // The blocks may have changed meanwhile, or the tool can no longer harvest them
+    if (!state.isOf(chain.block) || !player.canHarvest(state)) {
+      return false;
+    }
+
+    // Chained blocks cost no durability, so the tool is never updated mid-chain and does not twitch
+    // in hand. A tool on its last point would still break inside the vanilla mining code, so the chain stops
+    ItemStack tool = chain.tool;
+    if (tool.isDamageable() && tool.getDamage() >= tool.getMaxDamage() - 1) {
+      return false;
+    }
+
+    int damage = tool.getDamage();
+    chain.world.playSound(null, pos, SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.PLAYERS,
+        0.35f, 1.6f + chain.world.getRandom().nextFloat() * 0.4f);
+    breakBlockAsPlayer(chain.world, player, pos, state);
+    if (tool.isDamageable()) {
+      tool.setDamage(damage);
+    }
+    spawnChainSparks(chain.world, pos);
+
+    return chain.next < chain.vein.size();
+  }
+
+  private static void spawnChainSparks(ServerWorld world, BlockPos pos) {
+    world.spawnParticles(ParticleTypes.ELECTRIC_SPARK,
+        pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+        12, 0.35, 0.35, 0.35, 0.6);
+  }
+
+  // Breadth-first walk over the touching blocks of the same type, nearest first
+  private static List<BlockPos> findVein(ServerWorld world, BlockPos start, Block block, int limit) {
+    List<BlockPos> vein = new ArrayList<>();
+    Set<BlockPos> visited = new HashSet<>();
+    ArrayDeque<BlockPos> queue = new ArrayDeque<>();
+    visited.add(start);
+    queue.add(start);
+
+    while (!queue.isEmpty() && vein.size() < limit) {
+      BlockPos current = queue.poll();
+
+      for (BlockPos neighbor : BlockPos.iterate(current.add(-1, -1, -1), current.add(1, 1, 1))) {
+        if (vein.size() >= limit) {
+          break;
+        }
+
+        BlockPos pos = neighbor.toImmutable();
+        if (visited.add(pos) && world.getBlockState(pos).isOf(block)) {
+          vein.add(pos);
+          queue.add(pos);
+        }
+      }
+    }
+
+    return vein;
+  }
+
+  private static boolean isOre(BlockState state) {
+    return state.isIn(TagsRegistry.ALL_ORES) || state.isIn(TagsRegistry.CONVENTIONAL_ORES);
+  }
+
   public void handleMiner(List<GemstoneModifier> modifiers, ModifierContext ctx) {
     if (ctx.getBlockPos() == null || ctx.getWorld() == null || ctx.getOwner() == null) {
       return;
@@ -384,18 +579,24 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     return hardness > 0.0F || centerHardness <= 0.0F;
   }
 
-  private void breakBlockAsPlayer(ServerWorld world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
+  private static void breakBlockAsPlayer(ServerWorld world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
     BlockPos immutablePos = pos.toImmutable();
-    boolean suppressMiner = SUPPRESS_MINER.get();
+    boolean breakingExtraBlocks = BREAKING_EXTRA_BLOCKS.get();
 
-    SUPPRESS_MINER.set(true);
+    BREAKING_EXTRA_BLOCKS.set(true);
     try {
       player.interactionManager.tryBreakBlock(immutablePos);
     } finally {
-      SUPPRESS_MINER.set(suppressMiner);
+      BREAKING_EXTRA_BLOCKS.set(breakingExtraBlocks);
     }
 
-    // player.networkHandler.send(new BlockUpdateS2CPacket(world, immutablePos));
+    // Vanilla sends the break particles to everyone except the breaking player, whose client
+    // normally spawns them itself. A server-side break never reaches that client, so send them here
+    if (!world.getBlockState(immutablePos).isOf(state.getBlock())) {
+      player.networkHandler.sendPacket(new WorldEventS2CPacket(
+          WorldEvents.BLOCK_BROKEN, immutablePos, Block.getRawIdFromState(state), false));
+    }
+
     world.updateListeners(immutablePos, state, world.getBlockState(immutablePos), UPDATE_FLAGS);
     world.getChunkManager().markForUpdate(immutablePos);
     world.updateNeighborsAlways(immutablePos, Blocks.AIR);

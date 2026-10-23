@@ -25,6 +25,8 @@ import net.minecraft.sound.SoundEvents;
 
 public class HitMeleeHandler
     implements ModifierHandler<ModifierConfig.HitMeleeConfig> {
+  private static final int EXPERIENCE_COST_PER_HIT = 1;
+
   private final Map<String, java.util.function.BiConsumer<List<GemstoneModifier>, ModifierContext>> handlers = Map.of(
       "ON_HIT_RANDOM_EFFECT", this::handleRandomEffect,
       "ON_HIT_LIFE_STEAL", this::handleLifesteal,
@@ -217,9 +219,19 @@ public class HitMeleeHandler
       return;
     }
 
-    float extraDamageMultiplier = 1.0f + (player.experienceLevel / levelOffset) * bonusDamageAmplifierPercent;
+    int steps = player.experienceLevel / levelOffset;
+    if (steps <= 0) {
+      return;
+    }
+
+    float extraDamageMultiplier = 1.0f + steps * bonusDamageAmplifierPercent;
     float newDamage = ctx.getDamageResult() * extraDamageMultiplier;
 
     ctx.setDamageResult(newDamage);
+
+    // Experience works as mana: every boosted hit costs one experience point
+    if (!player.isCreative()) {
+      player.addExperience(-EXPERIENCE_COST_PER_HIT);
+    }
   }
 }

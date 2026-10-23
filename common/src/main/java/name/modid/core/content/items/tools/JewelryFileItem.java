@@ -2,12 +2,11 @@ package name.modid.core.content.items.tools;
 
 import java.util.List;
 
-import name.modid.Gemstones;
 import name.modid.core.api.components.ComponentsRegistry;
 import name.modid.core.api.components.PolishingComponent;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
-import name.modid.core.api.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.api.tooltips.TooltipText;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import net.minecraft.entity.EquipmentSlot;
@@ -21,12 +20,9 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
@@ -129,39 +125,20 @@ public class JewelryFileItem extends Item implements ConsumableTool {
     tooltip.add(Text.translatable("item.gemstones.jewelry_file.info_1",
         Text.translatable("item.gemstones.jewelry_file.info_polishing").formatted(Formatting.GOLD)));
 
-    MutableText iconInfo = Text.literal(InlineIcons.INFO.getSymbol())
-        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-        .formatted(Formatting.WHITE);
-    MutableText iconUse = Text.literal(InlineIcons.MOUSE_RMB.getSymbol())
-        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-        .formatted(Formatting.WHITE);
-    MutableText infoIndent = Text.literal(InlineIcons.INFO_INDENT.getSymbol())
-        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())));
-
     tooltip.add(Text.empty());
-
-    MutableText text = Text
+    tooltip.add(TooltipText.info(Text
         .translatable("item.gemstones.jewelry_file.info_2",
-            iconUse,
+            TooltipText.icon(InlineIcons.MOUSE_RMB),
             Text.translatable("item.gemstones.jewelry_file.info_offhand").formatted(Formatting.GOLD))
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.GRAY);
-
-    MutableText breakChanceText = Text
+        .formatted(Formatting.GRAY)));
+    tooltip.add(TooltipText.indented(Text
         .translatable("item.gemstones.jewelry_file.info_break_chance",
             Text.translatable("item.gemstones.jewelry_file.info_break_chance_desc").formatted(Formatting.RED))
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.GRAY);
-
-    MutableText breakChanceTextPercent = Text
+        .formatted(Formatting.GRAY)));
+    tooltip.add(TooltipText.indented(Text
         .translatable("item.gemstones.jewelry_file.info_break_chance_2",
             Text.translatable("item.gemstones.jewelry_file.info_quality").formatted(Formatting.GOLD))
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.GRAY);
-
-    tooltip.add(iconInfo.copy().append(text));
-    tooltip.add(infoIndent.copy().append(breakChanceText));
-    tooltip.add(infoIndent.copy().append(breakChanceTextPercent));
+        .formatted(Formatting.GRAY)));
   }
 
   public static boolean canPolishGem(ItemStack stack) {

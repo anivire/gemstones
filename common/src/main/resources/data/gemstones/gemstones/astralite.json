@@ -15,6 +15,16 @@
       ],
       "event_type": "HOMING_ARROW"
     },
+    "TOOLS": {
+      "type": "ON_BLOCK_BREAK",
+      "chance_levels": [
+        1.0
+      ],
+      "value_levels": [
+        0.0
+      ],
+      "event_type": "ON_BLOCK_BREAK_MAGNET"
+    },
     "ARMOR": {
       "type": "ATTRIBUTE",
       "attribute_id": "gemstones:jump_count",

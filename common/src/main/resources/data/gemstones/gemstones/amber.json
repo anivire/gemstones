@@ -25,34 +25,25 @@
       ],
       "amplifier": 0,
       "effect_id": "gemstones:scarab",
-      "duration": 16,
+      "duration": 8,
       "is_stacking": false,
       "max_stack_count": 0
     },
-    "TOOLS": {
-      "type": "ATTRIBUTE",
-      "attribute_id": "minecraft:generic.luck",
+    "ARMOR": {
+      "type": "PLAYER",
+      "chance_levels": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
       "value_levels": [
-        0.5,
         1.0,
-        1.5,
+        1.0,
+        2.0,
         2.0
       ],
-      "operation": "ADD_VALUE"
-    },
-    "ARMOR": {
-      "type": "AREA_EFFECT",
-      "effect_id": "minecraft:resistance",
-      "radius_levels": [
-        1.0,
-        1.5,
-        2.0,
-        2.5
-      ],
-      "amplifier": 0,
-      "duration": 10,
-      "not_me": false,
-      "only_players": true
+      "event_type": "PLAYER_TICK_AMBER_SHELL"
     }
   }
 }

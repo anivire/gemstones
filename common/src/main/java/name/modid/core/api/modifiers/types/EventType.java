@@ -60,10 +60,18 @@ public final class EventType {
       "tooltip.gemstones.event_name.extra_health");
   public static final EventType ON_BLOCK_BREAK_HEAL = register("ON_BLOCK_BREAK_HEAL",
       "tooltip.gemstones.event_name.heal");
+  public static final EventType ON_BLOCK_BREAK_SATURATION = register("ON_BLOCK_BREAK_SATURATION",
+      "tooltip.gemstones.event_name.saturation");
+  public static final EventType ON_BLOCK_BREAK_MAGNET = register("ON_BLOCK_BREAK_MAGNET",
+      "tooltip.gemstones.event_name.magnet");
   public static final EventType ON_BLOCK_BREAK_MINER = register("ON_BLOCK_BREAK_MINER",
       "tooltip.gemstones.event_name.miner");
   public static final EventType ON_BLOCK_BREAK_RANDOM_ITEM_DROP = register("ON_BLOCK_BREAK_RANDOM_ITEM_DROP",
       "tooltip.gemstones.event_name.random_item_drop");
+  public static final EventType ON_BLOCK_BREAK_CHAIN_LIGHTNING = register("ON_BLOCK_BREAK_CHAIN_LIGHTNING",
+      "tooltip.gemstones.event_name.chain_lightning");
+  public static final EventType ON_BLOCK_BREAK_GAMBLE = register("ON_BLOCK_BREAK_GAMBLE",
+      "tooltip.gemstones.event_name.gamble");
 
   public static final EventType ON_POTION_BREW_INCREASE_DURATION = register("ON_POTION_BREW_INCREASE_DURATION",
       "tooltip.gemstones.event_name.potion_duration");
@@ -83,6 +91,8 @@ public final class EventType {
 
   public static final EventType PLAYER_TICK_ENDER_CYCLE = register("PLAYER_TICK_ENDER_CYCLE",
       "tooltip.gemstones.event_name.ender_cycle");
+  public static final EventType PLAYER_TICK_AMBER_SHELL = register("PLAYER_TICK_AMBER_SHELL",
+      "tooltip.gemstones.event_name.amber_shell");
   public static final EventType PLAYER_TICK_ORE_VISION = register("PLAYER_TICK_ORE_VISION",
       "tooltip.gemstones.event_name.ore_vision");
   public static final EventType PLAYER_TICK_INCREASE_MOB_SPAWNRATE = register("PLAYER_TICK_INCREASE_MOB_SPAWNRATE",

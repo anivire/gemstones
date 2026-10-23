@@ -6,8 +6,12 @@
       "height": 6,
       "ascent": 6,
       "chars": [
-        "\uE001\uE002\uE003\uE004\uE005\uE006"
+        "\uE981\uE982\uE983\uE984\uE985\uE986"
       ]
+    },
+    {
+      "type": "reference",
+      "id": "minecraft:default"
     }
   ]
 }

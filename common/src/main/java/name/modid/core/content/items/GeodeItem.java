@@ -5,11 +5,10 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Random;
 
-import name.modid.Gemstones;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
-import name.modid.core.api.tooltips.TooltipHelper.Icons;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.api.tooltips.TooltipText;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import name.modid.core.utils.geode.GeodeQualitySelector;
 import name.modid.datapack.geodes.GeodesConfig;
@@ -23,12 +22,9 @@ import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
@@ -157,24 +153,17 @@ public class GeodeItem extends Item {
           if (gemItem != null && totalWeight > 0f) {
             ItemStack gemStack = new ItemStack(gemItem);
 
-            MutableText icon = Text.literal(t.getGemstoneLiteral())
-                .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE_GEMSTONE.getPath())))
-                .formatted(Formatting.WHITE);
-
-            MutableText name = Text.literal("")
-                .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft", "default")))
-                .append(gemStack.toHoverableText());
-
             double percent = (rawWeight / totalWeight) * 100.0;
             BigDecimal v = BigDecimal.valueOf(percent)
                 .setScale(2, RoundingMode.HALF_UP)
                 .stripTrailingZeros();
 
-            MutableText chance = Text.literal(" " + v.toPlainString() + "%")
-                .formatted(Formatting.WHITE);
-
-            tooltip.add(Text.literal("∙ ").formatted(Formatting.DARK_GRAY)
-                .append(icon).append(Text.literal(" ")).append(name).append(chance));
+            tooltip.add(TooltipText.line(
+                Text.literal("∙ ").formatted(Formatting.DARK_GRAY),
+                TooltipText.gemstoneIcon(t),
+                Text.literal(" "),
+                gemStack.toHoverableText(),
+                Text.literal(" " + v.toPlainString() + "%").formatted(Formatting.WHITE)));
           }
         }
       }
@@ -182,22 +171,12 @@ public class GeodeItem extends Item {
 
     tooltip.add(Text.empty());
 
-    MutableText iconInfo = Text.literal(InlineIcons.INFO.getSymbol())
-        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-        .formatted(Formatting.WHITE);
-    MutableText iconOpen = Text.literal(InlineIcons.MOUSE_RMB.getSymbol())
-        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-        .formatted(Formatting.WHITE);
-
-    MutableText text = Text
+    tooltip.add(TooltipText.info(Text
         .translatable("tooltip.gemstones.utils.info_action",
-            iconOpen,
+            TooltipText.icon(InlineIcons.MOUSE_RMB),
             Text.translatable("tooltip.gemstones.utils.info_in_hand"),
             Text.translatable("tooltip.gemstones.geode.info_open").formatted(Formatting.GOLD))
-        .setStyle(Style.EMPTY.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.GRAY);
-
-    tooltip.add(iconInfo.append(text));
+        .formatted(Formatting.GRAY)));
   }
 
   private Item getItemFromType(GemstoneType type) {

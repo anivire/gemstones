@@ -23,7 +23,6 @@ import name.modid.datagen.ResourceHandler;
 public class Gemstones {
   public static final String MOD_ID = "gemstones";
   public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-  public static boolean ALT_STYLE = true;
 
   public static void init() {
     LOGGER.info("Initializing Gemstones");

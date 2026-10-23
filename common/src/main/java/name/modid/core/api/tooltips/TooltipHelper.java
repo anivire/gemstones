@@ -1,24 +1,22 @@
 package name.modid.core.api.tooltips;
 
-import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.Nullable;
 
 import name.modid.Gemstones;
-import name.modid.core.api.components.GemstoneComponent;
-import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
 
 public class TooltipHelper {
+  private static final Set<String> REPORTED_MISSING_KEYS = ConcurrentHashMap.newKeySet();
 
   public enum Icons {
-    SOCKET("gemstone_sockets_font"),
     INLINE_GEMSTONE("gemstone_inline_font"),
     INLINE("icons_font"),
     QUALITY("quality_font");
@@ -35,26 +33,26 @@ public class TooltipHelper {
   }
 
   public enum InlineIcons {
-    INFO_INDENT("\uE000"),
-    HALF_HEART("\uE001"),
-    BLEEDING("\uE002"),
-    GUARDIAN_SMITE("\uE003"),
-    HALF_EXTRA_HEART("\uE004"),
-    TIDE("\uE005"),
-    ARROW_UP("\uE006"),
-    LIGHTNING_STRIKE("\uE007"),
-    TORRENT("\uE008"),
-    HARVEST_MARK("\uE009"),
-    SLOWNESS("\uE010"),
-    STUNNED("\uE011"),
-    ARROW_DOWN("\uE012"),
-    LIFESTEAL("\uE013"),
-    MOUSE_RMB("\uE014"),
-    MOUSE_LMB("\uE015"),
-    SHIFT("\uE016"),
-    LOCKED("\uE017"),
-    EMPTY("\uE018"),
-    INFO("\uE019");
+    INFO_INDENT("\uE900"),
+    HALF_HEART("\uE901"),
+    BLEEDING("\uE902"),
+    GUARDIAN_SMITE("\uE903"),
+    HALF_EXTRA_HEART("\uE904"),
+    TIDE("\uE905"),
+    ARROW_UP("\uE906"),
+    LIGHTNING_STRIKE("\uE907"),
+    TORRENT("\uE908"),
+    HARVEST_MARK("\uE909"),
+    SLOWNESS("\uE90A"),
+    STUNNED("\uE90B"),
+    ARROW_DOWN("\uE90C"),
+    LIFESTEAL("\uE90D"),
+    MOUSE_RMB("\uE90E"),
+    MOUSE_LMB("\uE90F"),
+    SHIFT("\uE910"),
+    LOCKED("\uE911"),
+    EMPTY("\uE912"),
+    INFO("\uE913");
 
     private final String symbol;
 
@@ -67,7 +65,7 @@ public class TooltipHelper {
     }
 
     public MutableText asText() {
-      return Text.literal(symbol).styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())));
+      return TooltipText.icon(this);
     }
   }
 
@@ -89,28 +87,14 @@ public class TooltipHelper {
     };
   }
 
-  private static Text getGemstoneSprite(GemstoneType gemstoneType) {
-    if (gemstoneType == GemstoneType.UNDEFINED) {
-      return safeTranslatable(gemstoneType.getTranslationString()).formatted(Formatting.RED);
-    }
-
-    return Text.literal(gemstoneType.getGemstoneLiteral())
-        .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.SOCKET.getPath())));
-  }
-
-  public static Text getGemstoneSocketedRow(GemstoneComponent[] gemstones) {
-    MutableText row = Text.empty();
-    for (GemstoneComponent slot : gemstones) {
-      row.append(getGemstoneSprite(slot.gemstoneType()));
-    }
-    return row;
-  }
-
   public static MutableText safeTranslatable(String key, Object... args) {
     try {
       MutableText text = Text.translatable(key, args);
       if (Language.getInstance() != null && !Language.getInstance().hasTranslation(key)) {
-        Gemstones.LOGGER.warn("Missing lang key: {}", key);
+        // Tooltips are rebuilt every frame, report each key only once
+        if (REPORTED_MISSING_KEYS.add(key)) {
+          Gemstones.LOGGER.warn("Missing lang key: {}", key);
+        }
         return Text.literal("Missing lang key: " + key).formatted(Formatting.RED);
       }
       return text;
@@ -120,33 +104,10 @@ public class TooltipHelper {
     }
   }
 
-  public static MutableText makeRow(String icon, Icons fontIcon, Text content, Optional<Boolean> isGemstoneIcon) {
-    return makeRow(icon, fontIcon.getPath(), content, isGemstoneIcon);
-  }
-
-  public static MutableText makeRow(String icon, String fontPath, Text content, Optional<Boolean> isGemstoneIcon) {
-    Formatting iconColor = isGemstoneIcon.orElse(false) ? Formatting.WHITE : Formatting.DARK_GRAY;
-
-    MutableText prefix = Text.literal(icon).setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, fontPath)))
-        .formatted(iconColor)
-        .append(Text.literal(" > ").formatted(Formatting.DARK_GRAY).styled(s -> s.withFont(Style.DEFAULT_FONT_ID)));
-
-    return prefix.append(content);
-  }
-
   public static MutableText buildTextWithIcon(InlineIcons icon, String text) {
-    MutableText i = Text.literal(icon.getSymbol())
-        .styled(s -> s.withFont(Identifier.of(Gemstones.MOD_ID, Icons.INLINE.getPath())))
-        .formatted(Formatting.WHITE);
-
-    MutableText t = Text.literal(" " + text)
-        .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-        .formatted(Formatting.RED);
-
-    return Text.empty()
-        // .styled(s -> s.withFont(Style.DEFAULT_FONT_ID))
-        .append(i)
-        .append(t);
+    return TooltipText.line(
+        TooltipText.icon(icon),
+        Text.literal(" " + text).formatted(Formatting.RED));
   }
 
   public static MutableText buildChanceText(

@@ -9,7 +9,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -120,8 +119,6 @@ public class QualityTooltipComponent implements TooltipComponent {
   }
 
   private static MutableText getIconText(GemstoneQuality quality) {
-    return Text.literal(quality.getRarityLiteral())
-        .setStyle(Style.EMPTY.withFont(Identifier.of(Gemstones.MOD_ID, Icons.QUALITY.getPath())))
-        .formatted(Formatting.WHITE);
+    return TooltipText.icon(quality.getRarityLiteral(), Icons.QUALITY, Formatting.WHITE);
   }
 }

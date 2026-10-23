@@ -4,7 +4,7 @@ import name.modid.core.api.modifiers.config.ModifierCategoryType;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
-import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
+import name.modid.core.utils.tooltip.AttributeValueFormat;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -22,12 +22,12 @@ public class AttributeHandler extends BaseTooltipHandler<ModifierConfig.Attribut
 
   @Override
   protected double adjustValue(ModifierConfig.AttributeConfig cfg, double value) {
-    return cfg.operation().equals(Operation.ADD_VALUE) ? value : value * 100;
+    return AttributeValueFormat.toDisplay(cfg, value);
   }
 
   @Override
   protected String getPostfix(ModifierConfig.AttributeConfig cfg) {
-    return cfg.operation().equals(Operation.ADD_VALUE) ? "" : "%";
+    return AttributeValueFormat.postfix(cfg);
   }
 
   @Override
@@ -35,6 +35,6 @@ public class AttributeHandler extends BaseTooltipHandler<ModifierConfig.Attribut
     return Text.translatable(
         builder.getTranslationKeyByModifier(ModifierCategoryType.ATTRIBUTE),
         valueText,
-        Text.translatable(cfg.attribute().value().getTranslationKey().toLowerCase())).formatted(Formatting.BLUE);
+        AttributeValueFormat.name(cfg)).formatted(Formatting.BLUE);
   }
 }

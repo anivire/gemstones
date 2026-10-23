@@ -14,10 +14,13 @@ public class OnFirstHit {
   private float modifyOnFirstHit(float amount, DamageSource source) {
     LivingEntity target = (LivingEntity) (Object) this;
 
+    float result = amount;
+
     if (target.getHealth() == target.getMaxHealth()) {
-      return CustomEvents.ON_FIRST_HIT.invoker().onFirstHit(target, source, amount);
+      result = CustomEvents.ON_FIRST_HIT.invoker().onFirstHit(target, source, result);
     }
 
-    return amount;
+    // Bonus damage (Garnet armor) is added into the hit, so it never needs a separate hit with an i-frame reset
+    return CustomEvents.ON_OUTGOING_DAMAGE.invoker().onOutgoingDamage(target, source, result);
   }
 }

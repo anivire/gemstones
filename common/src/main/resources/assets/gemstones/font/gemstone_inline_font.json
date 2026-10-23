@@ -6,9 +6,13 @@
       "height": 9,
       "ascent": 8,
       "chars": [
-        "\uE002\uE003\uE004\uE005\uE006\uE007\uE008\uE009\uE010\uE011",
-        "\uE012\uE013\uE014\uE015\uE016\uE017\uE018\uE019\uE020\uE021"
+        "\uE940\uE941\uE942\uE943\uE944\uE945\uE946\uE947\uE948\uE949",
+        "\uE94A\uE94B\uE94C\uE94D\uE94E\uE94F\uE950\uE951\uE952\uE953"
       ]
+    },
+    {
+      "type": "reference",
+      "id": "minecraft:default"
     }
   ]
 }

@@ -291,6 +291,7 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
   }
 
   private static final String EXP_BONUS_APPLIED_TAG = "gemstones_exp_bonus_applied";
+  private static final int EXPERIENCE_COST_PER_HIT = 1;
 
   private void handleAdditionalDamage(
       List<GemstoneModifier> modifiers,
@@ -317,10 +318,20 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
       return;
     }
 
-    float extraDamageMultiplier = 1.0f + (player.experienceLevel / levelOffset) * bonusDamagePercent;
+    int steps = player.experienceLevel / levelOffset;
+    if (steps <= 0) {
+      return;
+    }
+
+    float extraDamageMultiplier = 1.0f + steps * bonusDamagePercent;
 
     // applyDamageModifier is the skeleton damage setter (value * 2 + random), so set the damage directly
     projectile.setDamage(projectile.getDamage() * extraDamageMultiplier);
     projectile.addCommandTag(EXP_BONUS_APPLIED_TAG);
+
+    // Experience works as mana: every boosted arrow costs one experience point
+    if (!player.isCreative()) {
+      player.addExperience(-EXPERIENCE_COST_PER_HIT);
+    }
   }
 }

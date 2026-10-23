@@ -43,10 +43,10 @@
     "ARMOR": {
       "type": "ON_POTION_BREW",
       "value_levels": [
-        15.0,
-        30.0,
-        45.0,
-        60.0
+        0.1,
+        0.15,
+        0.2,
+        0.25
       ],
       "additional_value_levels": [
         0.0,

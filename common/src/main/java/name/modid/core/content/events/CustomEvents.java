@@ -95,6 +95,26 @@ public final class CustomEvents {
         }
       });
 
+  // Fired before the damage is applied, used for bonus damage that is added into the hit itself
+  @FunctionalInterface
+  public interface OnOutgoingDamage {
+    float onOutgoingDamage(
+        LivingEntity target,
+        DamageSource source,
+        float amount);
+  }
+
+  public static final Event<OnOutgoingDamage> ON_OUTGOING_DAMAGE = EventFactory.of(
+      listeners -> (target, source, amount) -> {
+        float result = amount;
+
+        for (OnOutgoingDamage listener : listeners) {
+          result = listener.onOutgoingDamage(target, source, result);
+        }
+
+        return result;
+      });
+
   // Fired after a living entity has actually taken damage (not blocked by i-frames or a shield)
   @FunctionalInterface
   public interface OnLivingDamaged {

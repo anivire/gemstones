@@ -17,8 +17,13 @@ public class OnPotionBrewHandler extends BaseTooltipHandler<ModifierConfig.OnPot
   }
 
   @Override
+  protected double adjustValue(ModifierConfig.OnPotionBrewConfig cfg, double value) {
+    return value * 100;
+  }
+
+  @Override
   protected String getPostfix(ModifierConfig.OnPotionBrewConfig cfg) {
-    return Text.translatable("tooltip.gemstones.unit.second").getString();
+    return "%";
   }
 
   @Override

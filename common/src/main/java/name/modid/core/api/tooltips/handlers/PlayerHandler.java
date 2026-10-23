@@ -6,6 +6,7 @@ import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import name.modid.core.api.tooltips.TooltipHelper;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.utils.amber.AmberShellHelper;
 import name.modid.core.utils.oreVision.OreVisionRadius;
 import name.modid.core.utils.tooltip.BoostedValueFormatter;
 import name.modid.core.utils.witherGuard.WitherGuardSkullLimit;
@@ -36,6 +37,10 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
       return OreVisionRadius.fromValue(value);
     }
 
+    if (cfg.eventType() == EventType.PLAYER_TICK_AMBER_SHELL) {
+      return value;
+    }
+
     return value * 100;
   }
 
@@ -45,7 +50,8 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
       return "";
     }
 
-    if (cfg.eventType() == EventType.PLAYER_TICK_ORE_VISION) {
+    if (cfg.eventType() == EventType.PLAYER_TICK_ORE_VISION
+        || cfg.eventType() == EventType.PLAYER_TICK_AMBER_SHELL) {
       return "";
     }
 
@@ -65,11 +71,12 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
     if (type == EventType.PLAYER_WITHER_GUARD) {
       firstArg = secondArg;
       secondArg = valueText;
+    } else if (type == EventType.PLAYER_TICK_AMBER_SHELL) {
+      firstArg = Text.translatable("tooltip.gemstones.unit.seconds_amount", AmberShellHelper.RECHARGE_DELAY_SECONDS)
+          .formatted(Formatting.BLUE);
+      secondArg = buildHealthText(valueText, "tooltip.gemstones.unit.max_health");
     } else if (type == EventType.PLAYER_PROJECTILE_IMMUNE) {
-      firstArg = valueText.copy()
-          .append(Text.literal(" "))
-          .append(TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
-              Text.translatable("tooltip.gemstones.unit.health").getString().trim()));
+      firstArg = buildHealthText(valueText, "tooltip.gemstones.unit.health");
     } else if (type == EventType.PLAYER_RANDOM_EFFECT) {
       double chance = cfg.additionalValues().get(rarityType);
       double seconds = cfg.values().get(rarityType);
@@ -97,6 +104,14 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
         firstArg,
         secondArg,
         thirdArg).formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
+  }
+
+  // "↑2 ❤ Health"
+  private static MutableText buildHealthText(MutableText valueText, String unitKey) {
+    return valueText.copy()
+        .append(Text.literal(" "))
+        .append(TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
+            Text.translatable(unitKey).getString().trim()));
   }
 
   private MutableText buildSaveLethalThresholdText(ModifierConfig.PlayerConfig cfg) {

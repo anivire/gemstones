@@ -20,7 +20,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 
 public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnPlayerDamageConfig> {
-  private static final int SAVE_LETHAL_COOLDOWN_TICKS = 5 * 60 * 20;
+  private static final int SAVE_LETHAL_COOLDOWN_TICKS = 10 * 60 * 20;
 
   private final Map<String, java.util.function.BiConsumer<List<GemstoneModifier>, ModifierContext>> handlers = Map.of(
       "PLAYER_SAVE_LETHAL", this::handleSaveLethal);

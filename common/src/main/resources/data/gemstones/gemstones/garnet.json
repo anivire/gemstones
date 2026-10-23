@@ -48,10 +48,10 @@
     "ARMOR": {
       "type": "ON_MOB_DAMAGE",
       "value_levels": [
-        0.05,
-        0.09,
-        0.12,
-        0.15
+        0.015,
+        0.02,
+        0.025,
+        0.03
       ],
       "additional_value_levels": [
         0.0,

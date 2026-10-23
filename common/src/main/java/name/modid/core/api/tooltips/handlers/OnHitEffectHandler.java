@@ -3,12 +3,15 @@ package name.modid.core.api.tooltips.handlers;
 import name.modid.core.api.modifiers.config.ModifierCategoryType;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class OnHitEffectHandler<T extends ModifierConfig> extends BaseTooltipHandler<T> {
+  private static final String ON_HURT_EFFECT_KEY = "tooltip.gemstones.on_hurt_effect";
+
   private final boolean projectile;
 
   public OnHitEffectHandler(TooltipBuilder builder, ModifierConfig config, GemstoneQuality rarityType,
@@ -50,10 +53,15 @@ public class OnHitEffectHandler<T extends ModifierConfig> extends BaseTooltipHan
           .formatted(proj.effect().value().isBeneficial() ? Formatting.GREEN : Formatting.RED);
     }
 
-    return Text.translatable(
-        builder.getTranslationKeyByModifier(projectile
+    // In armor the effect is applied to the attacker when the wearer is hit
+    String translationKey = !projectile && builder.getItemCategory() == ModifierItemCategory.ARMOR
+        ? ON_HURT_EFFECT_KEY
+        : builder.getTranslationKeyByModifier(projectile
             ? ModifierCategoryType.ON_HIT_EFFECT_PROJECTILE
-            : ModifierCategoryType.ON_HIT_EFFECT_MELEE),
+            : ModifierCategoryType.ON_HIT_EFFECT_MELEE);
+
+    return Text.translatable(
+        translationKey,
         valueText,
         effectText).formatted(TooltipBuilder.DEFAULT_TEXT_COLOR);
   }

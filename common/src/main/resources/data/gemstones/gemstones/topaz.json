@@ -22,7 +22,7 @@
       ],
       "amplifier": 0,
       "effect_id": "gemstones:radiance",
-      "duration": 24,
+      "duration": 10,
       "is_stacking": false,
       "max_stack_count": 0
     },
@@ -48,20 +48,20 @@
         {
           "attribute_id": "minecraft:generic.armor",
           "value_levels": [
+            0.5,
             1.0,
             1.5,
-            2.0,
-            2.5
+            2.0
           ],
           "operation": "ADD_VALUE"
         },
         {
           "attribute_id": "minecraft:generic.armor_toughness",
           "value_levels": [
-            0.9,
-            1.4,
-            1.9,
-            2.4
+            0.25,
+            0.5,
+            0.75,
+            1.0
           ],
           "operation": "ADD_VALUE"
         }

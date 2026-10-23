@@ -267,7 +267,6 @@ public class SparkProjectileEntity extends PersistentProjectileEntity {
           10,
           0.3, 0.3, 0.3,
           0.05);
-      living.timeUntilRegen = 0;
       living.damage(this.getDamageSources().indirectMagic(this, this.getOwner()), SPARK_DAMAGE);
       living.setOnFireFor(FIRE_SECONDS);
       this.discard();

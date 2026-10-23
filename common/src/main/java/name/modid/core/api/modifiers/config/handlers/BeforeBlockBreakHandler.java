@@ -13,6 +13,7 @@ import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
+import name.modid.core.content.registries.TagsRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -31,6 +32,9 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.math.BlockPos;
 
 public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.BeforeBlockBreakConfig> {
+  // Opal gamble: losing the drop is half as likely as doubling it
+  public static final double GAMBLE_LOSS_RATIO = 0.5;
+
   @Override
   public boolean supports(GemstoneModifier modifier) {
     return modifier.getItemCategory() == ModifierItemCategory.TOOLS;
@@ -52,6 +56,7 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
       switch (type.getName()) {
         case "ON_BLOCK_BREAK_SMELTER" -> handleBlockSmelter(group, ctx);
         case "ON_BLOCK_BREAK_ENCHANTER" -> handleEnchanter(group, ctx);
+        case "ON_BLOCK_BREAK_GAMBLE" -> handleGamble(group, ctx);
         default -> {
         }
       }
@@ -197,6 +202,70 @@ public class BeforeBlockBreakHandler implements ModifierHandler<ModifierConfig.B
         ParticleTypes.ENCHANT,
         pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
         20, 0.5, 0.5, 0.5, 0.1);
+
+    ctx.cancel();
+  }
+
+  private void handleGamble(List<GemstoneModifier> modifiers, ModifierContext ctx) {
+    if (!(ctx.getOwner() instanceof PlayerEntity player)
+        || ctx.getBlockPos() == null
+        || ctx.getBlockState() == null) {
+      return;
+    }
+
+    ServerWorld world = ctx.getWorld();
+    BlockPos pos = ctx.getBlockPos();
+    BlockState state = ctx.getBlockState();
+    ItemStack tool = player.getMainHandStack();
+
+    if (!state.isIn(TagsRegistry.ALL_ORES) && !state.isIn(TagsRegistry.CONVENTIONAL_ORES)) {
+      return;
+    }
+    if (tool.isEmpty() || hasEnchantment(world, tool, Enchantments.SILK_TOUCH) || !player.canHarvest(state)) {
+      return;
+    }
+
+    List<Double> chances = new ArrayList<>();
+    for (GemstoneModifier modifier : modifiers) {
+      BeforeBlockBreakConfig config = (BeforeBlockBreakConfig) modifier.getConfig();
+      chances.add(config.values().get(modifier.getRarityType()));
+    }
+
+    double winChance = ModifierUtils.cappedProcChance(chances);
+    double roll = world.getRandom().nextDouble();
+    boolean won = roll < winChance;
+    boolean lost = !won && roll < winChance * (1.0 + GAMBLE_LOSS_RATIO);
+
+    if (!won && !lost) {
+      return;
+    }
+
+    List<ItemStack> drops = Block.getDroppedStacks(state, world, pos, world.getBlockEntity(pos), player, tool);
+    if (drops.isEmpty()) {
+      return;
+    }
+
+    List<ItemStack> finalDrops = new ArrayList<>();
+    if (won) {
+      for (ItemStack drop : drops) {
+        finalDrops.add(drop.copy());
+        finalDrops.add(drop.copy());
+      }
+    }
+
+    // Experience is not part of the bet
+    breakWithDrops(world, player, pos, state, tool, finalDrops, true);
+
+    double x = pos.getX() + 0.5;
+    double y = pos.getY() + 0.5;
+    double z = pos.getZ() + 0.5;
+    if (won) {
+      world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1.0f, 1.2f);
+      world.spawnParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 10, 0.35, 0.35, 0.35, 0.0);
+    } else {
+      world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.6f, 1.3f);
+      world.spawnParticles(ParticleTypes.SMOKE, x, y, z, 12, 0.3, 0.3, 0.3, 0.01);
+    }
 
     ctx.cancel();
   }

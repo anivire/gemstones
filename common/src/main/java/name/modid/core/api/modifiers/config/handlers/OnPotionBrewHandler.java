@@ -55,8 +55,10 @@ public class OnPotionBrewHandler implements ModifierHandler<ModifierConfig.OnPot
       return;
     }
 
-    double totalIncreasedDuration = modifiers.stream()
-        .mapToDouble(m -> ((OnPotionBrewConfig) m.getConfig()).values().get(m.getRarityType())).sum();
+    // Each gemstone contributes a percentage of the brewed potion's base duration.
+    double durationBonus = modifiers.stream()
+        .mapToDouble(m -> ((OnPotionBrewConfig) m.getConfig()).values().get(m.getRarityType()))
+        .sum();
 
     for (int i = 0; i < 3; i++) {
       ItemStack stack = ctx.getInventory().get(i);
@@ -76,7 +78,7 @@ public class OnPotionBrewHandler implements ModifierHandler<ModifierConfig.OnPot
       for (StatusEffectInstance effect : effects) {
         newEffects.add(new StatusEffectInstance(
             effect.getEffectType(),
-            effect.getDuration() + ((int) totalIncreasedDuration * 20),
+            (int) Math.round(effect.getDuration() * (1.0 + durationBonus)),
             effect.getAmplifier(),
             effect.isAmbient(),
             effect.shouldShowParticles(),

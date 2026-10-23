@@ -12,13 +12,10 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 
 public class OnMobDamageHandler implements ModifierHandler<ModifierConfig.OnMobDamageConfig> {
+  private static final int MISSING_HEALTH_STEPS = 10;
+
   private final Map<String, java.util.function.BiConsumer<List<GemstoneModifier>, ModifierContext>> handlers = Map.of(
       "PLAYER_BONUS_DAMAGE_MISSING_HEALTH", this::handleBonusDamageMissingHealth);
 
@@ -50,57 +47,36 @@ public class OnMobDamageHandler implements ModifierHandler<ModifierConfig.OnMobD
     }
   }
 
-  // NOTE: don't capped
+  // Garnet armor: +X% damage for every 10% of missing health, summed over all gems without a cap.
+  // The bonus is part of the hit itself, so it does not reset i-frames and cannot bypass shields
   private void handleBonusDamageMissingHealth(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getOwner() instanceof LivingEntity playerOwner) ||
-        !(ctx.getTarget() instanceof LivingEntity targetedMob)) {
+    if (!(ctx.getOwner() instanceof LivingEntity playerOwner)) {
       return;
     }
 
-    DamageSource bonusSource = ctx.getWorld().getDamageSources().generic();
-    float missingHealth = Math.max(0, playerOwner.getMaxHealth() - playerOwner.getHealth());
-    int missingHearts = (int) Math.ceil(missingHealth / 2.0f);
-
-    if (missingHearts <= 0) {
+    float maxHealth = playerOwner.getMaxHealth();
+    if (maxHealth <= 0.0f) {
       return;
     }
 
-    double bonusPercentPerHeart = modifiers.stream()
+    float missingFraction = Math.max(0.0f, 1.0f - playerOwner.getHealth() / maxHealth);
+    int missingSteps = (int) Math.floor(missingFraction * MISSING_HEALTH_STEPS + 1.0E-4);
+
+    if (missingSteps <= 0) {
+      return;
+    }
+
+    double bonusPercentPerStep = modifiers.stream()
         .mapToDouble(m -> ((OnMobDamageConfig) m.getConfig()).values().get(m.getRarityType()))
         .sum();
 
-    double bonusMultiplier = missingHearts * bonusPercentPerHeart;
-    float bonusDamage = (float) (ctx.getBaseDamageTaken() * bonusMultiplier);
-
-    if (bonusDamage <= 0 || !targetedMob.isAlive()) {
+    double bonusMultiplier = missingSteps * bonusPercentPerStep;
+    if (bonusMultiplier <= 0.0) {
       return;
     }
 
-    if (!targetedMob.isInvulnerableTo(bonusSource) && targetedMob.isAlive()) {
-      int originalHurtTime = targetedMob.hurtTime;
-
-      targetedMob.hurtTime = 0;
-      targetedMob.timeUntilRegen = 0;
-      targetedMob.hurtTime = Math.max(1, originalHurtTime / 2);
-      targetedMob.damage(bonusSource, bonusDamage);
-
-      ctx.getWorld().playSound(null, targetedMob.getBlockPos(),
-          SoundEvents.ENTITY_PLAYER_ATTACK_CRIT,
-          SoundCategory.PLAYERS,
-          0.8f, 1.2f + (missingHearts * 0.1f));
-
-      if (ctx.getWorld() instanceof ServerWorld serverWorld) {
-        serverWorld.spawnParticles(
-            ParticleTypes.ENCHANTED_HIT,
-            targetedMob.getX(),
-            targetedMob.getBodyY(0.5),
-            targetedMob.getZ(),
-            5,
-            0.5, 0.5, 0.5,
-            0.1);
-      }
-    }
+    ctx.setDamageResult((float) (ctx.getDamageResult() * (1.0 + bonusMultiplier)));
   }
 }

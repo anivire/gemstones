@@ -57,7 +57,7 @@ public class LootTouchEffect extends StatusEffect {
       List<ItemStack> loot = lootTable.generateLoot(lootContext);
       Collections.shuffle(loot);
 
-      int count = Math.min(2 + world.random.nextInt(3), loot.size());
+      int count = Math.min(1 + world.random.nextInt(2), loot.size());
       for (int i = 0; i < count; i++) {
         Block.dropStack(world, entity.getBlockPos(), loot.get(i));
       }

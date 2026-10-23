@@ -18,6 +18,7 @@ import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,8 @@ import net.minecraft.util.Identifier;
 
 public class AttributeModifierHandler {
   private static final String VANILLA_NAMESPACE = "minecraft";
+  // 1.8 blocks * (1 - 0.72) = 0.5 blocks
+  private static final float MIN_SCALE_TOTAL = -0.72F;
 
   private record AttributeGroupKey(RegistryEntry<EntityAttribute> attribute, Operation operation) {
   }
@@ -143,6 +146,11 @@ public class AttributeModifierHandler {
 
       if (firstModifier == null) {
         continue;
+      }
+
+      // Jade: the player can shrink to half a block (still able to walk through 1 block high gaps), not further
+      if (key.attribute().equals(EntityAttributes.GENERIC_SCALE) && key.operation() == Operation.ADD_MULTIPLIED_TOTAL) {
+        totalValue = Math.max(totalValue, MIN_SCALE_TOTAL);
       }
 
       EquipmentSlot slot = ModifierHelper.getEquipmentSlot(item);

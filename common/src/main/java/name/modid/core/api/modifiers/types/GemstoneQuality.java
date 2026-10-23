@@ -5,13 +5,13 @@ import com.mojang.serialization.Codec;
 import net.minecraft.util.Formatting;
 
 public enum GemstoneQuality {
-  NONE(-1, "\uE000", "item.gemstones.quality.none", Formatting.WHITE, 0xFFFFFF),
-  CRUDE(0, "\uE004", "item.gemstones.quality.crude", Formatting.GRAY, 0x4d4d4d),
-  REFINED(1, "\uE004", "item.gemstones.quality.refined", Formatting.BLUE, 0x5454fc),
-  FLAWLESS(2, "\uE004", "item.gemstones.quality.flawless", Formatting.LIGHT_PURPLE, 0xfc4dff),
-  RADIANT(3, "\uE004", "item.gemstones.quality.radiant", Formatting.GOLD, 0xff8214),
-  MYTHIC(4, "\uE005", "item.gemstones.quality.mythic", Formatting.DARK_PURPLE, 0x6000d6),
-  AMPLIFIER(5, "\uE006", "item.gemstones.quality.amplifier", Formatting.RED, 0xe6254e);
+  NONE(-1, "","item.gemstones.quality.none", Formatting.WHITE, 0xFFFFFF),
+  CRUDE(0, "\uE984", "item.gemstones.quality.crude", Formatting.GRAY, 0x4d4d4d),
+  REFINED(1, "\uE984", "item.gemstones.quality.refined", Formatting.BLUE, 0x5454fc),
+  FLAWLESS(2, "\uE984", "item.gemstones.quality.flawless", Formatting.LIGHT_PURPLE, 0xfc4dff),
+  RADIANT(3, "\uE984", "item.gemstones.quality.radiant", Formatting.GOLD, 0xff8214),
+  MYTHIC(4, "\uE985", "item.gemstones.quality.mythic", Formatting.DARK_PURPLE, 0x6000d6),
+  AMPLIFIER(5, "\uE986", "item.gemstones.quality.amplifier", Formatting.RED, 0xe6254e);
 
   private final Integer value;
   private final String fontLiteral;

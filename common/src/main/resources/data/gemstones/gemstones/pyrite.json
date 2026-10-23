@@ -11,7 +11,7 @@
       ],
       "amplifier": 0,
       "effect_id": "gemstones:soul_burn",
-      "duration": 11,
+      "duration": 8,
       "is_stacking": false,
       "max_stack_count": 0
     },
@@ -29,10 +29,10 @@
     "TOOLS": {
       "type": "ON_BLOCK_BREAK",
       "chance_levels": [
-        0.1,
-        0.16,
-        0.22,
-        0.31
+        0.02,
+        0.03,
+        0.04,
+        0.05
       ],
       "value_levels": [
         0.0,

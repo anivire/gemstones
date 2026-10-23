@@ -7,8 +7,8 @@ import name.modid.core.api.modifiers.config.ModifierCategoryType;
 import name.modid.core.api.modifiers.config.ModifierConfig;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
+import name.modid.core.utils.tooltip.AttributeValueFormat;
 import name.modid.core.utils.tooltip.BoostedValueFormatter;
-import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -40,9 +40,9 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
       ModifierConfig.AttributeConfig baseSub = i < baseInstances.size() ? baseInstances.get(i) : sub;
       double value = sub.values().get(rarityType);
       double displayValue = baseSub.values().get(rarityType);
-      double displayAdjusted = adjustValue(sub, displayValue);
-      double boostedAdjusted = adjustValue(sub, value);
-      String postfix = sub.operation() == Operation.ADD_VALUE ? "" : "%";
+      double displayAdjusted = AttributeValueFormat.toDisplay(sub, displayValue);
+      double boostedAdjusted = AttributeValueFormat.toDisplay(sub, value);
+      String postfix = AttributeValueFormat.postfix(sub);
       String formatted = builder.formatValue(Math.abs(displayAdjusted), postfix);
       boolean isPositive = displayValue > 0;
 
@@ -58,7 +58,7 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
       }
 
       part.append(" ")
-          .append(Text.translatable(sub.attribute().value().getTranslationKey().toLowerCase())
+          .append(AttributeValueFormat.name(sub)
               .formatted(Formatting.BLUE));
 
       parts.add(part);
@@ -84,9 +84,5 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
       MutableText valueText,
       boolean isPositive) {
     return Text.empty();
-  }
-
-  private double adjustValue(ModifierConfig.AttributeConfig cfg, double value) {
-    return cfg.operation() == Operation.ADD_VALUE ? value : value * 100;
   }
 }

@@ -41,7 +41,10 @@
     "trackers.HomingArrowTracker",
     "attributes.RangedWeaponItemInvoker",
     "modifiers.OnLivingDamaged",
-    "other.ReloadDropsBeforeLootTables"
+    "other.ReloadDropsBeforeLootTables",
+    "other.AmberMagnetBlockBreaking",
+    "other.AmberMagnetBlockDrops",
+    "other.AmberMagnetExperience"
   ],
   "injectors": {
     "defaultRequire": 1

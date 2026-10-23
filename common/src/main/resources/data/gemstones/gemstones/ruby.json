@@ -25,26 +25,26 @@
       "type": "ON_BLOCK_BREAK",
       "chance_levels": [
         0.1,
+        0.15,
         0.2,
-        0.3,
-        0.4
+        0.25
       ],
       "value_levels": [
         1.0,
         1.0,
-        2.0,
-        2.0
+        1.0,
+        1.0
       ],
-      "event_type": "ON_BLOCK_BREAK_HEAL"
+      "event_type": "ON_BLOCK_BREAK_SATURATION"
     },
     "ARMOR": {
       "type": "ATTRIBUTE",
       "attribute_id": "minecraft:generic.max_health",
       "value_levels": [
         1.0,
+        1.5,
         2.0,
-        3.0,
-        4.0
+        2.5
       ],
       "operation": "ADD_VALUE"
     }
