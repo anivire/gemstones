@@ -16,7 +16,8 @@ public class EventOnHitMelee {
   public static float setupEvent(
       ServerPlayerEntity serverPlayer,
       LivingEntity target,
-      float damage) {
+      float damage,
+      float attackStrength) {
     if (!(serverPlayer.getWorld() instanceof ServerWorld serverWorld)) {
       return damage;
     }
@@ -32,6 +33,7 @@ public class EventOnHitMelee {
         .withOwner(serverPlayer)
         .withTarget(target)
         .withBaseDamageTaken(damage)
+        .withAttackStrength(attackStrength)
         .build();
     ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctx);
 

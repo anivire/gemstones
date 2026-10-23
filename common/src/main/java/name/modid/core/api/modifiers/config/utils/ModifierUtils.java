@@ -35,6 +35,15 @@ public class ModifierUtils {
     return world.getRandom().nextDouble() < chance;
   }
 
+  // Hyperbolic stacking (S7): every copy adds less than the previous one, the limit is never reached
+  public static double softStack(double sum, double limit) {
+    if (sum <= 0.0 || limit <= 0.0) {
+      return Math.max(0.0, sum);
+    }
+
+    return sum / (1.0 + sum / limit);
+  }
+
   public static double cappedProcChance(Collection<Double> chances) {
     double result = 1.0;
     for (double p : chances) {

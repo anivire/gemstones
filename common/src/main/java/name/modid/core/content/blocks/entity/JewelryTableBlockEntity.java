@@ -18,6 +18,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -39,7 +40,9 @@ public class JewelryTableBlockEntity extends BlockEntity
       JewelryTableScreenHandler.SLOT_GEM
   };
 
-  private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
+  // Only the input slots are stored here, the result preview lives in the screen handler,
+  // otherwise it is dropped together with the inputs when the table is broken
+  private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
 
   public JewelryTableBlockEntity(BlockPos pos, BlockState state) {
     super(BlockEntitiesRegistry.JEWELRY_TABLE_BLOCK_ENTITY.get(), pos, state);
@@ -62,7 +65,12 @@ public class JewelryTableBlockEntity extends BlockEntity
 
   @Override
   public boolean canExtract(int slot, ItemStack stack, Direction side) {
-    return slot != JewelryTableScreenHandler.SLOT_RESULT;
+    return true;
+  }
+
+  @Override
+  public boolean canPlayerUse(PlayerEntity player) {
+    return Inventory.canPlayerUse(this, player);
   }
 
   public static boolean canAutomationInsert(int slot, ItemStack stack) {

@@ -1,10 +1,11 @@
 package name.modid.core.content.effects;
 
 import name.modid.Gemstones;
+import name.modid.core.utils.damage.DamageOverTimeHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.particle.ParticleTypes;
@@ -38,8 +39,7 @@ public class SoulBurnEffect extends StatusEffect {
     World world = entity.getWorld();
 
     float damage = 1.0f + (amplifier * 0.5f);
-    DamageSource damageSource = world.getDamageSources().onFire();
-    entity.damage(damageSource, damage);
+    DamageOverTimeHelper.applyTick(entity, DamageTypes.ON_FIRE, damage);
     entity.playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F);
 
     if (!world.isClient && world.getRandom().nextInt(2) == 0) {

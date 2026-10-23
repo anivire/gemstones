@@ -7,6 +7,7 @@ import name.modid.core.utils.airJump.AirJumpLogic;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 
@@ -37,6 +38,13 @@ public final class NetworkHandler {
     if (Platform.getEnvironment() == Env.SERVER) {
       NetworkManager.registerS2CPayloadType(OreVisionPayload.ID, OreVisionPayload.CODEC);
       NetworkManager.registerS2CPayloadType(DatapackSyncPayload.ID, DatapackSyncPayload.CODEC);
+    }
+  }
+
+  // Called by the platform modules after /reload: configs and baked item attributes must follow the new datapacks
+  public static void resyncAll(MinecraftServer server) {
+    for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+      sendDatapackSync(player);
     }
   }
 

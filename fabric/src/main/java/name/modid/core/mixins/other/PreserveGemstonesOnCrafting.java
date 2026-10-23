@@ -26,6 +26,18 @@ public abstract class PreserveGemstonesOnCrafting {
     if (result.isEmpty()) return;
     if (!GemstoneSlotHelper.isItemValid(result.getItem())) return;
 
+    // Sockets of only one item can be kept, so combining two items with gemstones would destroy gems
+    int itemsWithGemstones = 0;
+    for (int i = 0; i < craftingInventory.size(); i++) {
+      if (GemstoneSlotHelper.hasInsertedGemstones(craftingInventory.getStack(i))) {
+        itemsWithGemstones++;
+      }
+    }
+    if (itemsWithGemstones > 1) {
+      resultInventory.setStack(0, ItemStack.EMPTY);
+      return;
+    }
+
     for (int i = 0; i < craftingInventory.size(); i++) {
       ItemStack stack = craftingInventory.getStack(i);
       if (!stack.isEmpty() && GemstoneSlotHelper.isGemstonesExists(stack)) {

@@ -18,6 +18,15 @@ public final class GemstoneAttributeRefreshHelper {
 
   public static void refreshPlayer(PlayerEntity player) {
     refreshInventory(player.getInventory());
+    refreshInventory(player.getEnderChestInventory());
+  }
+
+  // Cheap periodic check: only items whose baked modifiers differ from the loaded configs are rewritten
+  public static void refreshStaleItems(PlayerEntity player) {
+    Inventory inventory = player.getInventory();
+    for (int i = 0; i < inventory.size(); i++) {
+      GemstoneSlotHelper.refreshAttributesIfStale(inventory.getStack(i));
+    }
   }
 
   private static void refreshInventory(Inventory inventory) {

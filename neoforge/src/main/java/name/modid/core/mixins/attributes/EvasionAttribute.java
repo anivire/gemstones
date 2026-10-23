@@ -16,6 +16,8 @@ import net.minecraft.sound.SoundEvents;
 
 @Mixin(LivingEntity.class)
 public class EvasionAttribute {
+  // Evasion stacks hyperbolically (S7): sum / (1 + sum / limit), 100% is never reached
+  private static final double EVASION_LIMIT = 1.0;
 
   @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"), cancellable = true, require = 0)
   private void gemstones$onDamage(
@@ -29,7 +31,7 @@ public class EvasionAttribute {
     double fromItem = ModifierUtils.collectAttributeValuesFromItem(
         self, AttributesRegistry.EVASION_ATTRIBUTE);
 
-    double evasionChance = Math.max(0.0, Math.min(1.0, fromArmor + fromItem));
+    double evasionChance = ModifierUtils.softStack(fromArmor + fromItem, EVASION_LIMIT);
     boolean evaded = self.getRandom().nextDouble() < evasionChance;
 
     if (evaded) {

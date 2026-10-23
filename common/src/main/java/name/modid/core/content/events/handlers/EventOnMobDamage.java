@@ -9,6 +9,7 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierContext.ContextBuilder;
 import name.modid.core.api.modifiers.config.ModifierManager;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.utils.damage.DamageSourceHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -23,8 +24,9 @@ public class EventOnMobDamage {
       float damageTaken,
       boolean blocked) {
 
-    // Проверяем, что атакующий — игрок
+    // Проверяем, что атакующий — игрок, и это прямой удар или стрела, а не DoT или бонусный урон
     if (!(source.getAttacker() instanceof ServerPlayerEntity serverPlayer)
+        || !DamageSourceHelper.isDirectPlayerHit(source)
         || !(targetEntity.getWorld() instanceof ServerWorld serverWorld)) {
       return;
     }

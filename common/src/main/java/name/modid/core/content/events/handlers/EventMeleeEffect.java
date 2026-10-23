@@ -32,13 +32,14 @@ public class EventMeleeEffect {
   }
 
   public static ActionResult apply(ServerPlayerEntity serverPlayer, ServerWorld serverWorld, LivingEntity target) {
-    return apply(serverPlayer, serverWorld, target, 0.0F);
+    return apply(serverPlayer, serverWorld, target, 0.0F, serverPlayer.getAttackCooldownProgress(0.5F));
   }
 
   public static ActionResult apply(ServerPlayerEntity serverPlayer,
       ServerWorld serverWorld,
       LivingEntity target,
-      float damage) {
+      float damage,
+      float attackStrength) {
     List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
         serverPlayer,
         HitEffectMeleeConfig.class);
@@ -50,7 +51,8 @@ public class EventMeleeEffect {
     ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
         .withOwner(serverPlayer)
         .withTarget(target)
-        .withBaseDamageTaken(damage);
+        .withBaseDamageTaken(damage)
+        .withAttackStrength(attackStrength);
     ModifierContext ctx = ctxBuilder.build();
     ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctx);
 

@@ -48,20 +48,38 @@ public final class CustomEvents {
     float onHitMelee(
         ServerPlayerEntity player,
         LivingEntity target,
-        float damage);
+        float damage,
+        float attackStrength);
   }
 
   public static final Event<OnHitMelee> ON_HIT_MELEE = EventFactory.of(
-      listeners -> (player, target, damage) -> {
+      listeners -> (player, target, damage, attackStrength) -> {
         float result = damage;
 
         for (OnHitMelee listener : listeners) {
-          result = listener.onHitMelee(player, target, result);
+          result = listener.onHitMelee(player, target, result, attackStrength);
         }
 
         return result;
       });
 
+  // Fired before the projectile damage is calculated, used only for damage modifiers
+  @FunctionalInterface
+  public interface OnProjectileDamage {
+    void onProjectileDamage(
+        PersistentProjectileEntity projectile,
+        ServerPlayerEntity player,
+        HitResult hitResult);
+  }
+
+  public static final Event<OnProjectileDamage> ON_PROJECTILE_DAMAGE = EventFactory.of(
+      listeners -> (projectile, player, hitResult) -> {
+        for (OnProjectileDamage listener : listeners) {
+          listener.onProjectileDamage(projectile, player, hitResult);
+        }
+      });
+
+  // Fired only after the projectile has actually damaged a living target
   @FunctionalInterface
   public interface OnHitProjectile {
     void onHitProjectile(
@@ -74,6 +92,22 @@ public final class CustomEvents {
       listeners -> (projectile, player, hitResult) -> {
         for (OnHitProjectile listener : listeners) {
           listener.onHitProjectile(projectile, player, hitResult);
+        }
+      });
+
+  // Fired after a living entity has actually taken damage (not blocked by i-frames or a shield)
+  @FunctionalInterface
+  public interface OnLivingDamaged {
+    void onLivingDamaged(
+        LivingEntity target,
+        DamageSource source,
+        float amount);
+  }
+
+  public static final Event<OnLivingDamaged> ON_LIVING_DAMAGED = EventFactory.of(
+      listeners -> (target, source, amount) -> {
+        for (OnLivingDamaged listener : listeners) {
+          listener.onLivingDamaged(target, source, amount);
         }
       });
 

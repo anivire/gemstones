@@ -13,6 +13,14 @@ import net.minecraft.util.ActionResult;
 
 public class ModifierManager {
   public static void applyAttributeModifiers(ArrayList<GemstoneModifier> modifiers, ItemStack stack) {
+    AttributeModifierHandler.apply(flattenAttributeModifiers(modifiers), stack);
+  }
+
+  public static boolean isAttributeModifiersStale(ArrayList<GemstoneModifier> modifiers, ItemStack stack) {
+    return AttributeModifierHandler.isStale(flattenAttributeModifiers(modifiers), stack);
+  }
+
+  private static ArrayList<GemstoneModifier> flattenAttributeModifiers(ArrayList<GemstoneModifier> modifiers) {
     ArrayList<GemstoneModifier> attributeModifiers = new ArrayList<>(modifiers.stream()
         .filter(x -> x.getConfig() instanceof ModifierConfig.AttributeConfig)
         .toList());
@@ -32,7 +40,7 @@ public class ModifierManager {
     List<GemstoneModifier> merged = Stream.concat(attributeModifiers.stream(), attributeMultiplyModifiers.stream())
         .toList();
 
-    AttributeModifierHandler.apply(new ArrayList<>(merged), stack);
+    return new ArrayList<>(merged);
   }
 
   public static void applyModifiers(ArrayList<GemstoneModifier> allModifiers, ModifierContext ctx) {

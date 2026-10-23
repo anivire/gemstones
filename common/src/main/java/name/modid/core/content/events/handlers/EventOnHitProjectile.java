@@ -10,6 +10,7 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierContext.ContextBuilder;
 import name.modid.core.api.modifiers.config.ModifierManager;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
+import name.modid.core.api.modifiers.types.EventType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -19,6 +20,28 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 
 public class EventOnHitProjectile {
+  // Before the hit: only modifiers that change the projectile damage
+  public static void setupDamageEvent(
+      PersistentProjectileEntity projectile,
+      ServerPlayerEntity serverPlayer,
+      HitResult hitResult) {
+    if (!(serverPlayer.getWorld() instanceof ServerWorld serverWorld)) {
+      return;
+    }
+
+    List<GemstoneModifier> damageModifiers = new ArrayList<>(ModifierUtils.collectGemstoneModifiersFromAllEquipment(
+        serverPlayer, HitProjectileConfig.class));
+    damageModifiers.removeIf(modifier -> !isDamageModifier(modifier));
+
+    if (damageModifiers.isEmpty()) {
+      return;
+    }
+
+    ModifierManager.applyModifiers(new ArrayList<>(damageModifiers), buildContext(serverWorld, projectile, serverPlayer,
+        hitResult));
+  }
+
+  // After the projectile actually damaged a living target
   public static void setupEvent(
       PersistentProjectileEntity projectile,
       ServerPlayerEntity serverPlayer,
@@ -27,20 +50,11 @@ public class EventOnHitProjectile {
       return;
     }
 
-    ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
-        .withOwner(serverPlayer)
-        .withProjectile(projectile)
-        .withBlockPos(BlockPos.ofFloored(hitResult.getPos()));
+    ModifierContext ctx = buildContext(serverWorld, projectile, serverPlayer, hitResult);
 
-    if (hitResult instanceof EntityHitResult ehr
-        && ehr.getEntity() instanceof LivingEntity living) {
-      ctxBuilder.withTarget(living);
-    }
-
-    ModifierContext ctx = ctxBuilder.build();
-
-    List<GemstoneModifier> hitModifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
-        serverPlayer, HitProjectileConfig.class);
+    List<GemstoneModifier> hitModifiers = new ArrayList<>(ModifierUtils.collectGemstoneModifiersFromAllEquipment(
+        serverPlayer, HitProjectileConfig.class));
+    hitModifiers.removeIf(EventOnHitProjectile::isDamageModifier);
 
     if (!hitModifiers.isEmpty()) {
       ModifierManager.applyModifiers(new ArrayList<>(hitModifiers), ctx);
@@ -52,5 +66,28 @@ public class EventOnHitProjectile {
     if (!effectModifiers.isEmpty()) {
       ModifierManager.applyModifiers(new ArrayList<>(effectModifiers), ctx);
     }
+  }
+
+  private static ModifierContext buildContext(
+      ServerWorld serverWorld,
+      PersistentProjectileEntity projectile,
+      ServerPlayerEntity serverPlayer,
+      HitResult hitResult) {
+    ContextBuilder ctxBuilder = new ContextBuilder(serverWorld)
+        .withOwner(serverPlayer)
+        .withProjectile(projectile)
+        .withBlockPos(BlockPos.ofFloored(hitResult.getPos()));
+
+    if (hitResult instanceof EntityHitResult ehr
+        && ehr.getEntity() instanceof LivingEntity living) {
+      ctxBuilder.withTarget(living);
+    }
+
+    return ctxBuilder.build();
+  }
+
+  private static boolean isDamageModifier(GemstoneModifier modifier) {
+    return modifier.getConfig() instanceof HitProjectileConfig config
+        && config.eventType() == EventType.ON_HIT_EXP_ADDITIONAL_DAMAGE;
   }
 }

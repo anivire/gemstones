@@ -13,6 +13,7 @@ import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.content.entities.RainArrowEntity;
+import name.modid.core.content.registries.TagsRegistry;
 import name.modid.core.utils.GetRandomBuff;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -84,7 +85,9 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
   private void handleLifesteal(List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getOwner() instanceof LivingEntity owner)) {
+    // Block hits also reach this handler (for the lightning), life steal needs a living target
+    if (!(ctx.getOwner() instanceof LivingEntity owner)
+        || !(ctx.getTarget() instanceof LivingEntity)) {
       return;
     }
 
@@ -113,7 +116,10 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
 
   private void handleLightingBolt(List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!ctx.getWorld().isRaining()) {
+    // Intended: the lightning procs both on entity hits and on block hits (the arrow calls the storm
+    // wherever it lands). It only works where it actually rains under the open sky, like Channeling
+    BlockPos pos = ctx.getTarget() != null ? ctx.getTarget().getBlockPos() : ctx.getBlockPos();
+    if (pos == null || !ctx.getWorld().hasRain(pos.up())) {
       return;
     }
 
@@ -123,22 +129,20 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
             .toList());
 
     if (ModifierUtils.proc(ctx.getWorld(), chance)) {
-      BlockPos pos = ctx.getTarget() != null
-          ? ctx.getTarget().getBlockPos()
-          : ctx.getBlockPos();
+      LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, ctx.getWorld());
+      lightning.refreshPositionAfterTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 
-      if (pos != null) {
-        LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, ctx.getWorld());
-        lightning.setPos(pos.getX(), pos.getY(), pos.getZ());
-
-        ctx.getWorld().spawnEntity(lightning);
-      }
+      ctx.getWorld().spawnEntity(lightning);
     }
   }
 
   private void handleCopyEntityLoot(List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getTarget() instanceof LivingEntity target)) {
+    // Copy loot only when the arrow killed the target, bosses are excluded
+    if (!(ctx.getTarget() instanceof LivingEntity target)
+        || target.isAlive()
+        || target instanceof PlayerEntity
+        || target.getType().isIn(TagsRegistry.BOSSES)) {
       return;
     }
 
@@ -260,6 +264,10 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
         float velocity = baseVelocity + (rng.nextFloat() - 0.5f) * 0.3f;
 
         arrow.setDamage(sourceArrow.getDamage());
+        // The copied damage already contains the Crystallized Experience bonus
+        if (sourceArrow.getCommandTags().contains(EXP_BONUS_APPLIED_TAG)) {
+          arrow.addCommandTag(EXP_BONUS_APPLIED_TAG);
+        }
         arrow.setVelocity(dir.x, dir.y, dir.z, velocity, inaccuracy);
         arrow.setCritical(sourceArrow.isCritical());
 
@@ -282,27 +290,37 @@ public class HitProjectileHandler implements ModifierHandler<ModifierConfig.HitP
     }
   }
 
+  private static final String EXP_BONUS_APPLIED_TAG = "gemstones_exp_bonus_applied";
+
   private void handleAdditionalDamage(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
+    // Piercing arrows hit several targets, the bonus must be applied only once per arrow
     if (!(ctx.getOwner() instanceof PlayerEntity player)
         || !(ctx.getProjectile() instanceof PersistentProjectileEntity projectile)
-        || player.experienceLevel == 0) {
+        || player.experienceLevel == 0
+        || projectile.getCommandTags().contains(EXP_BONUS_APPLIED_TAG)) {
       return;
     }
 
-    int levelOffset = 0;
+    // Every copy adds its bonus per step, the step is the shortest one among copies
+    int levelOffset = Integer.MAX_VALUE;
     float bonusDamagePercent = 0.0f;
 
     for (GemstoneModifier modifier : modifiers) {
       HitProjectileConfig config = (HitProjectileConfig) modifier.getConfig();
-      levelOffset += config.additionalValues().get(modifier.getRarityType()).intValue();
+      levelOffset = Math.min(levelOffset, config.additionalValues().get(modifier.getRarityType()).intValue());
       bonusDamagePercent += config.values().get(modifier.getRarityType());
     }
 
-    float extraDamageMultiplier = 1.0f + (player.experienceLevel / levelOffset) * bonusDamagePercent;
-    float newDamage = (float) projectile.getDamage() * extraDamageMultiplier;
+    if (levelOffset <= 0 || levelOffset == Integer.MAX_VALUE) {
+      return;
+    }
 
-    projectile.applyDamageModifier(newDamage);
+    float extraDamageMultiplier = 1.0f + (player.experienceLevel / levelOffset) * bonusDamagePercent;
+
+    // applyDamageModifier is the skeleton damage setter (value * 2 + random), so set the damage directly
+    projectile.setDamage(projectile.getDamage() * extraDamageMultiplier);
+    projectile.addCommandTag(EXP_BONUS_APPLIED_TAG);
   }
 }

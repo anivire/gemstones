@@ -22,9 +22,9 @@ public class EventPlayer {
       return true;
     }
 
-    List<GemstoneModifier> modifiers = ModifierUtils.collectGemstoneModifiersFromAllEquipment(
+    List<GemstoneModifier> modifiers = withoutTickEvents(ModifierUtils.collectGemstoneModifiersFromAllEquipment(
         serverPlayer,
-        PlayerConfig.class);
+        PlayerConfig.class));
 
     if (modifiers.isEmpty()) {
       return true;
@@ -52,12 +52,7 @@ public class EventPlayer {
     List<GemstoneModifier> modifiers = new ArrayList<>(
         ModifierUtils.collectGemstoneModifiersFromAllEquipment(serverPlayer, PlayerConfig.class));
 
-    modifiers.removeIf(x -> {
-      if (x.getConfig() instanceof PlayerConfig c) {
-        return !c.eventType().getName().startsWith("PLAYER_TICK_");
-      }
-      return true;
-    });
+    modifiers.removeIf(x -> !isTickEvent(x));
 
     if (modifiers.isEmpty()) {
       return;
@@ -65,5 +60,17 @@ public class EventPlayer {
 
     ContextBuilder ctxBuilder = new ContextBuilder(serverWorld).withOwner(serverPlayer);
     ModifierManager.applyModifiers(new ArrayList<>(modifiers), ctxBuilder.build());
+  }
+
+  // PLAYER_TICK_* modifiers belong to the end of the player tick only
+  public static List<GemstoneModifier> withoutTickEvents(List<GemstoneModifier> modifiers) {
+    List<GemstoneModifier> result = new ArrayList<>(modifiers);
+    result.removeIf(EventPlayer::isTickEvent);
+    return result;
+  }
+
+  private static boolean isTickEvent(GemstoneModifier modifier) {
+    return modifier.getConfig() instanceof PlayerConfig config
+        && config.eventType().getName().startsWith("PLAYER_TICK_");
   }
 }

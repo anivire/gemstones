@@ -20,6 +20,7 @@ public class ModifierContext {
   private final @Nullable BlockState blockState;
   private final @Nullable float baseDamageTaken;
   private final @Nullable DefaultedList<ItemStack> inventory;
+  private final float attackStrength;
 
   private boolean cancelledResult = false;
   private float damageResult = 0.0F;
@@ -35,6 +36,7 @@ public class ModifierContext {
     this.blockState = builder.blockState;
     this.baseDamageTaken = builder.baseDamageTaken;
     this.inventory = builder.inventory;
+    this.attackStrength = builder.attackStrength;
     this.isHurtable = true;
   }
 
@@ -103,6 +105,15 @@ public class ModifierContext {
     return this.inventory;
   }
 
+  // Attack cooldown progress of a melee hit (1.0 for fully charged attacks and non-melee contexts)
+  public float getAttackStrength() {
+    return this.attackStrength;
+  }
+
+  public boolean isFullStrengthAttack() {
+    return this.attackStrength > 0.9F;
+  }
+
   @Nullable
   public void setIsHurtable(boolean value) {
     this.isHurtable = value;
@@ -122,6 +133,7 @@ public class ModifierContext {
     private @Nullable BlockState blockState;
     private @Nullable float baseDamageTaken;
     private @Nullable DefaultedList<ItemStack> inventory;
+    private float attackStrength = 1.0F;
 
     public ContextBuilder(ServerWorld world) {
       this.world = world;
@@ -159,6 +171,11 @@ public class ModifierContext {
 
     public ContextBuilder withInventory(DefaultedList<ItemStack> inventory) {
       this.inventory = inventory;
+      return this;
+    }
+
+    public ContextBuilder withAttackStrength(float attackStrength) {
+      this.attackStrength = attackStrength;
       return this;
     }
 

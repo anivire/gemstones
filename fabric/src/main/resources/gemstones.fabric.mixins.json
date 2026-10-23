@@ -38,7 +38,10 @@
     "other.PreserveGemstonesOnCrafting",
     "trackers.SoulBurnTracker",
     "trackers.StunnedTracker",
-    "trackers.HomingArrowTracker"
+    "trackers.HomingArrowTracker",
+    "attributes.RangedWeaponItemInvoker",
+    "modifiers.OnLivingDamaged",
+    "other.ReloadDropsBeforeLootTables"
   ],
   "injectors": {
     "defaultRequire": 1

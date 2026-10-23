@@ -11,13 +11,16 @@ import name.modid.core.api.modifiers.config.ModifierManager;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
 public class EventOnFirstHit {
   public static float setupEvent(LivingEntity target, DamageSource source, float amount) {
+    // First hit bonus comes from the melee weapon, so it applies to direct melee attacks only
     if (!(target.getWorld() instanceof ServerWorld serverWorld)
-        || !(source.getAttacker() instanceof ServerPlayerEntity serverPlayer)) {
+        || !(source.getAttacker() instanceof ServerPlayerEntity serverPlayer)
+        || !source.isOf(DamageTypes.PLAYER_ATTACK)) {
       return amount;
     }
 

@@ -6,8 +6,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import name.modid.core.content.registries.EffectsRegistry;
+import name.modid.core.utils.damage.DamageSourceHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -47,6 +49,8 @@ public class GuardianSmiteEffect {
     }
 
     float bonusDamage = 3.0F * (effect.getAmplifier() + 1);
+    // Bonus damage is credited to the attacker of the triggering hit
+    DamageSource bonusSource = DamageSourceHelper.attributed(world, DamageTypes.MAGIC, source.getAttacker());
 
     server.execute(() -> {
       if (!target.isAlive()) {
@@ -57,7 +61,7 @@ public class GuardianSmiteEffect {
       try {
         target.hurtTime = 0;
         target.timeUntilRegen = 0;
-        target.damage(target.getDamageSources().magic(), bonusDamage);
+        target.damage(bonusSource, bonusDamage);
       } finally {
         IS_APPLYING_GUARDIAN_SMITE.set(false);
       }

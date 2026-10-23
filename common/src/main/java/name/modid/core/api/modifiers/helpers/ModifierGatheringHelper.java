@@ -1,6 +1,8 @@
 package name.modid.core.api.modifiers.helpers;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import name.modid.Gemstones;
 import name.modid.core.api.components.GemstoneComponent;
@@ -13,6 +15,18 @@ import name.modid.core.api.modifiers.types.GemstoneType;
 import net.minecraft.item.ItemStack;
 
 public class ModifierGatheringHelper {
+  // Gathering runs on every event and periodic refresh, a missing config is reported only once
+  private static final Set<String> REPORTED_MISSING_MODIFIERS = ConcurrentHashMap.newKeySet();
+
+  private static void logMissingModifier(GemstoneComponent gem, ItemStack itemStack) {
+    String key = gem.gemstoneType() + "|" + gem.gemstoneQualityType() + "|" + itemStack.getItem();
+    if (REPORTED_MISSING_MODIFIERS.add(key)) {
+      Gemstones.LOGGER.error("[WARN] No modifier found for gem=" + gem.gemstoneType()
+          + " quality=" + gem.gemstoneQualityType()
+          + " item=" + itemStack.getItem());
+    }
+  }
+
   public static ArrayList<GemstoneModifier> getAttributeModifiers(ItemStack itemStack) {
     ArrayList<GemstoneModifier> modifiers = new ArrayList<>();
     GemstoneComponent[] gemstones = GemstoneSlotHelper.getGemstones(itemStack);
@@ -32,9 +46,7 @@ public class ModifierGatheringHelper {
           itemStack.getItem());
 
       if (modifier == null) {
-        Gemstones.LOGGER.error("[WARN] No modifier found for gem=" + gem.gemstoneType()
-            + " quality=" + gem.gemstoneQualityType()
-            + " item=" + itemStack.getItem());
+        logMissingModifier(gem, itemStack);
         continue;
       }
 
@@ -74,9 +86,7 @@ public class ModifierGatheringHelper {
           itemStack.getItem());
 
       if (modifier == null) {
-        Gemstones.LOGGER.error("[WARN] No modifier found for gem=" + gem.gemstoneType()
-            + " quality=" + gem.gemstoneQualityType()
-            + " item=" + itemStack.getItem());
+        logMissingModifier(gem, itemStack);
         continue;
       }
 
@@ -111,9 +121,7 @@ public class ModifierGatheringHelper {
           itemStack.getItem());
 
       if (modifier == null) {
-        Gemstones.LOGGER.error("[WARN] No modifier found for gem=" + gem.gemstoneType()
-            + " quality=" + gem.gemstoneQualityType()
-            + " item=" + itemStack.getItem());
+        logMissingModifier(gem, itemStack);
         continue;
       }
 

@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonPart;
 import net.minecraft.entity.mob.EndermanEntity;
+import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.particle.DustParticleEffect;
@@ -220,12 +221,13 @@ public class HomingArrow {
         0.01);
   }
 
+  // Without an aimed target the arrow picks only hostile mobs, never pets, villagers or players
   private static LivingEntity findNearestTarget(ServerWorld world, PersistentProjectileEntity arrow, double radius) {
     Box searchBox = new Box(arrow.getBlockPos()).expand(radius);
     List<LivingEntity> potentialTargets = world.getEntitiesByClass(
         LivingEntity.class,
         searchBox,
-        entity -> isTargetable(entity, arrow.getOwner()));
+        entity -> entity instanceof Monster && isTargetable(entity, arrow.getOwner()));
 
     return potentialTargets.stream()
         .min(Comparator.comparingDouble(entity -> entity.squaredDistanceTo(arrow)))

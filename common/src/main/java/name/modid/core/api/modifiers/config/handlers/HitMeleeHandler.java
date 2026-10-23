@@ -13,7 +13,9 @@ import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.utils.GetRandomBuff;
+import name.modid.core.utils.damage.DamageSourceHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -71,7 +73,8 @@ public class HitMeleeHandler
   private void handleEnderJudgement(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getTarget() instanceof LivingEntity target)) {
+    if (!(ctx.getTarget() instanceof LivingEntity target)
+        || !ctx.isFullStrengthAttack()) {
       return;
     }
 
@@ -99,7 +102,8 @@ public class HitMeleeHandler
   private void handleMagicStrike(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
-    if (!(ctx.getTarget() instanceof LivingEntity target)) {
+    if (!(ctx.getTarget() instanceof LivingEntity target)
+        || !ctx.isFullStrengthAttack()) {
       return;
     }
 
@@ -116,7 +120,9 @@ public class HitMeleeHandler
           try {
             target.hurtTime = 0;
             target.timeUntilRegen = 0;
-            target.damage(target.getDamageSources().magic(), bonusDamage);
+            target.damage(
+                DamageSourceHelper.attributed(target.getWorld(), DamageTypes.MAGIC, ctx.getOwner()),
+                bonusDamage);
           } finally {
           }
         }
@@ -128,7 +134,8 @@ public class HitMeleeHandler
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
     if (!(ctx.getOwner() instanceof LivingEntity attacker)
-        || ctx.getTarget() == null) {
+        || ctx.getTarget() == null
+        || !ctx.isFullStrengthAttack()) {
       return;
     }
 
@@ -169,7 +176,8 @@ public class HitMeleeHandler
   }
 
   private void handleRandomEffect(List<GemstoneModifier> modifiers, ModifierContext ctx) {
-    if (!(ctx.getTarget() instanceof LivingEntity target)) {
+    if (!(ctx.getTarget() instanceof LivingEntity target)
+        || !ctx.isFullStrengthAttack()) {
       return;
     }
 
@@ -195,13 +203,18 @@ public class HitMeleeHandler
       return;
     }
 
-    int levelOffset = 0;
+    // Every copy adds its bonus per step, the step is the shortest one among copies
+    int levelOffset = Integer.MAX_VALUE;
     float bonusDamageAmplifierPercent = 0.0f;
 
     for (GemstoneModifier modifier : modifiers) {
       HitMeleeConfig config = (HitMeleeConfig) modifier.getConfig();
-      levelOffset += config.additionalValues().get(modifier.getRarityType()).intValue();
+      levelOffset = Math.min(levelOffset, config.additionalValues().get(modifier.getRarityType()).intValue());
       bonusDamageAmplifierPercent += config.values().get(modifier.getRarityType());
+    }
+
+    if (levelOffset <= 0 || levelOffset == Integer.MAX_VALUE) {
+      return;
     }
 
     float extraDamageMultiplier = 1.0f + (player.experienceLevel / levelOffset) * bonusDamageAmplifierPercent;

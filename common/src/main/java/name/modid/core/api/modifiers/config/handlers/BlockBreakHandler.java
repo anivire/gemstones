@@ -20,6 +20,7 @@ import name.modid.core.content.registries.TagsRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -335,6 +336,9 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
 
     int radius = getMinerRadius(modifiers);
     Box bounds = getPlaneBoundsByFace(targetPos, face, radius);
+    float centerHardness = ctx.getBlockState() != null
+        ? ctx.getBlockState().getHardness(world, targetPos)
+        : 0.0F;
 
     BlockPos.Mutable m = new BlockPos.Mutable();
     int minX = MathHelper.floor(bounds.minX);
@@ -354,7 +358,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
             continue;
 
           BlockState state = world.getBlockState(m);
-          if (!canBreak(world, m, state))
+          if (!canBreak(world, m, state, centerHardness))
             continue;
 
           breakBlockAsPlayer(world, player, m, state);
@@ -365,13 +369,19 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     world.updateNeighborsAlways(targetPos, Blocks.AIR);
   }
 
-  private boolean canBreak(ServerWorld world, BlockPos pos, BlockState state) {
+  private boolean canBreak(ServerWorld world, BlockPos pos, BlockState state, float centerHardness) {
     if (state.isAir())
+      return false;
+    if (state.getBlock() instanceof FluidBlock)
       return false;
     if (world.getBlockEntity(pos) != null)
       return false;
     float hardness = state.getHardness(world, pos);
-    return hardness >= 0.0F;
+    if (hardness < 0.0F)
+      return false;
+
+    // Mining stone must not wipe torches, rails, redstone or crops around the target
+    return hardness > 0.0F || centerHardness <= 0.0F;
   }
 
   private void breakBlockAsPlayer(ServerWorld world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
@@ -418,7 +428,7 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
   }
 
   private Direction computeHitFace(ServerPlayerEntity player, ServerWorld world, BlockPos targetPos) {
-    final double reach = 5.0;
+    final double reach = player.getBlockInteractionRange() + 1.0;
     final double EPS = 1e-6;
 
     Vec3d eye = player.getEyePos();

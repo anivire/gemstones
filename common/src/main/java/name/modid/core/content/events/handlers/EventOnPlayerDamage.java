@@ -12,6 +12,7 @@ import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
@@ -22,8 +23,10 @@ public class EventOnPlayerDamage {
       float baseDamageTaken,
       float damageTaken,
       boolean blocked) {
+    // Like the totem of undying, the lethal save does not work against /kill and the void
     if (!(targetEntity instanceof ServerPlayerEntity serverPlayer)
-        || !(targetEntity.getWorld() instanceof ServerWorld serverWorld)) {
+        || !(targetEntity.getWorld() instanceof ServerWorld serverWorld)
+        || source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
       return true;
     }
 

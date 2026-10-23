@@ -12,6 +12,7 @@ import name.modid.core.api.modifiers.config.handlers.BlockBreakHandler;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import name.modid.core.api.modifiers.types.EventType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EquipmentSlot;
@@ -113,6 +114,7 @@ public final class MultiMinerClientPreview {
       }
     }
 
+    float centerHardness = world.getBlockState(center).getHardness(world, center);
     BlockPos.Mutable mutable = new BlockPos.Mutable();
     for (int x = minX; x <= maxX; x++) {
       for (int y = minY; y <= maxY; y++) {
@@ -123,7 +125,7 @@ public final class MultiMinerClientPreview {
           }
 
           BlockState state = world.getBlockState(mutable);
-          if (canBreak(world, mutable, state)) {
+          if (canBreak(world, mutable, state, centerHardness)) {
             result.add(mutable.toImmutable());
           }
         }
@@ -203,14 +205,22 @@ public final class MultiMinerClientPreview {
     ACTIVE_HIGHLIGHTS.clear();
   }
 
-  public static boolean canBreak(ClientWorld world, BlockPos pos, BlockState state) {
+  // Must match BlockBreakHandler.canBreak on the server
+  public static boolean canBreak(ClientWorld world, BlockPos pos, BlockState state, float centerHardness) {
     if (state.isAir()) {
+      return false;
+    }
+    if (state.getBlock() instanceof FluidBlock) {
       return false;
     }
     if (world.getBlockEntity(pos) != null) {
       return false;
     }
-    return state.getHardness(world, pos) >= 0.0F;
+    float hardness = state.getHardness(world, pos);
+    if (hardness < 0.0F) {
+      return false;
+    }
+    return hardness > 0.0F || centerHardness <= 0.0F;
   }
 
   private static void spawnMiningParticle(ClientWorld world, BlockPos pos, BlockState state, Direction face, int index) {

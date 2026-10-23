@@ -1,7 +1,9 @@
 package name.modid.core.content.effects;
 
 import name.modid.core.content.registries.ParticlesRegistry;
+import name.modid.core.utils.damage.DamageOverTimeHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.server.world.ServerWorld;
@@ -28,7 +30,7 @@ public class BleedingEffect extends StatusEffect {
 
     if (entity.age % DAMAGE_INTERVAL_TICKS == 0) {
       float damage = 1.0f + amplifier * 0.5f;
-      entity.damage(entity.getDamageSources().generic(), damage);
+      DamageOverTimeHelper.applyTick(entity, DamageTypes.GENERIC, damage);
     }
 
     if (entity.age % PARTICLE_INTERVAL_TICKS == 0) {

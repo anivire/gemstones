@@ -115,11 +115,8 @@ public class EffectHandler {
 
     @Override
     public void apply(ArrayList<GemstoneModifier> modifiers, ModifierContext ctx) {
-      boolean hasDamageContext = ctx.getBaseDamageTaken() > 0.0F;
-
-      if (ctx.getOwner() instanceof PlayerEntity player
-          && !hasDamageContext
-          && player.getAttackCooldownProgress(0.0F) < 1.0F) {
+      // Spam-clicking must not proc on-hit effects with full chance
+      if (ctx.getOwner() instanceof PlayerEntity && !ctx.isFullStrengthAttack()) {
         ctx.setActionResult(ActionResult.PASS);
         return;
       }

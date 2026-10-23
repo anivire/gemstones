@@ -19,6 +19,7 @@ import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.content.registries.ParticlesRegistry;
 import name.modid.core.content.screen.JewelryTableScreenHandler;
 import name.modid.core.content.screen.ScreenRegistry;
+import name.modid.core.network.NetworkHandler;
 import name.modid.neoforge.client.GemstonesNeoForgeClientEvents;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.ProjectileEntityRenderer;
@@ -36,6 +37,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.extensions.IItemStackExtension;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 
 @Mod(Gemstones.MOD_ID)
 public class GemstonesNeoForge {
@@ -44,6 +46,9 @@ public class GemstonesNeoForge {
 
     GemstoneAttributeModifiersHelper.setEffectiveProvider(
         stack -> ((IItemStackExtension) stack).getAttributeModifiers());
+
+    // Fired for every player after /reload (and on join, which is already handled by PLAYER_JOIN)
+    NeoForge.EVENT_BUS.addListener(this::onDatapackSync);
 
     if (FMLEnvironment.dist.isClient()) {
       eventBus.addListener(this::registerParticleProviders);
@@ -54,6 +59,12 @@ public class GemstonesNeoForge {
 
       NeoForge.EVENT_BUS.addListener(GemstonesNeoForgeClientEvents::onItemTooltip);
       NeoForge.EVENT_BUS.addListener(GemstonesNeoForgeClientEvents::onGatherTooltipComponents);
+    }
+  }
+
+  private void onDatapackSync(OnDatapackSyncEvent event) {
+    if (event.getPlayer() == null) {
+      NetworkHandler.resyncAll(event.getPlayerList().getServer());
     }
   }
 

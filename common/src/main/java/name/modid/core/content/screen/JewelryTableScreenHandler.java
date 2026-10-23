@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import name.modid.core.api.components.GemstoneComponent;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
+import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
 import name.modid.core.content.items.ExpansionCrystalItem;
@@ -22,6 +23,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
@@ -36,8 +38,11 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
   public static final int SLOT_BASE = 1;
   public static final int SLOT_GEM = 2;
   public static final int SLOT_RESULT = 3;
+  private static final int TABLE_SLOT_COUNT = 4;
+  private static final int TABLE_INVENTORY_SIZE = 3;
 
   private final Inventory inventory;
+  private final Inventory resultInventory = new SimpleInventory(1);
   private final BlockPos pos;
   private boolean lastGemBroken = false;
   private Boolean preparedRemoveBreak = null;
@@ -55,12 +60,12 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     this.inventory = (Inventory) blockEntity;
     this.pos = blockEntity.getPos();
 
-    checkSize(this.inventory, 4);
+    checkSize(this.inventory, TABLE_INVENTORY_SIZE);
 
     addMonitoredSlot(new ToolActionSlot(this.inventory, SLOT_ACTION, 35, 35));
     addMonitoredSlot(new ToolSlot(this.inventory, SLOT_BASE, 53, 35));
     addMonitoredSlot(new GemstoneSlot(this.inventory, SLOT_GEM, 71, 35));
-    this.addSlot(new ResultSlot(this, this.inventory, SLOT_RESULT, 125, 35));
+    this.addSlot(new ResultSlot(this, this.resultInventory, 0, 125, 35));
 
     addPlayerInventory(playerInventory);
     addPlayerHotbar(playerInventory);
@@ -121,7 +126,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
   }
 
   public boolean canTakeResult() {
-    return getMode() != ActionMode.NONE && !inventory.getStack(SLOT_RESULT).isEmpty();
+    return getMode() != ActionMode.NONE && !resultInventory.getStack(0).isEmpty();
   }
 
   public void updateOutputs() {
@@ -135,7 +140,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
   }
 
   private void setResult(ItemStack stack) {
-    inventory.setStack(SLOT_RESULT, stack);
+    resultInventory.setStack(0, stack);
 
     if (SLOT_RESULT >= 0 && SLOT_RESULT < this.slots.size()) {
       Slot resultSlot = this.slots.get(SLOT_RESULT);
@@ -185,6 +190,12 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     GemstoneItem gemItem = (GemstoneItem) gem.getItem();
     GemstoneType gemType = gemItem.getType();
     GemstoneQuality gemQuality = gemItem.getRarityType();
+
+    // A gemstone without an effect for this item category would sit in the socket doing nothing
+    if (ModifierHelper.getGemstoneModifierForItem(gemType, gemQuality, base.getItem()) == null) {
+      setResult(ItemStack.EMPTY);
+      return;
+    }
 
     Map<GemstoneType, GemstoneQuality> g = Arrays.stream(GemstoneSlotHelper.getGemstones(base))
         .collect(Collectors.toMap(
@@ -451,7 +462,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
         return ItemStack.EMPTY;
       }
 
-      if (!this.insertItem(original, this.inventory.size(), this.slots.size(), true)) {
+      if (!this.insertItem(original, TABLE_SLOT_COUNT, this.slots.size(), true)) {
         clearPreparedRemoveBreak();
         return ItemStack.EMPTY;
       }
@@ -466,12 +477,12 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       return newStack;
     }
 
-    if (invSlot < this.inventory.size()) {
-      if (!this.insertItem(original, this.inventory.size(), this.slots.size(), true)) {
+    if (invSlot < TABLE_SLOT_COUNT) {
+      if (!this.insertItem(original, TABLE_SLOT_COUNT, this.slots.size(), true)) {
         return ItemStack.EMPTY;
       }
     } else {
-      if (!this.insertItem(original, 0, this.inventory.size(), false)) {
+      if (!this.insertItem(original, 0, TABLE_INVENTORY_SIZE, false)) {
         return ItemStack.EMPTY;
       }
     }

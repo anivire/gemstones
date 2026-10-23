@@ -12,17 +12,20 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.config.utils.ModifierUtils;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
+import name.modid.core.content.registries.TagsRegistry;
 import name.modid.core.network.OreVisionPayload;
 import name.modid.core.utils.GetRandomBuff;
 import name.modid.core.utils.oreVision.OreVisionRadius;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -33,11 +36,15 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.SpawnSettings.SpawnEntry;
 
 public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfig> {
+  private static final int MODDED_ORE_COLOR = 0xC9C9C9;
+
   enum SpawnEnviroment {
     GROUND, WATER, LAVA
   }
@@ -129,7 +136,12 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
         for (int dz = -radius; dz <= radius; dz++) {
           BlockPos pos = ORIGIN_POS.add(dx, dy, dz);
 
-          Integer color = valuableOres.get(serverWorld.getBlockState(pos).getBlock());
+          BlockState state = serverWorld.getBlockState(pos);
+          Integer color = valuableOres.get(state.getBlock());
+          if (color == null && state.isIn(TagsRegistry.CONVENTIONAL_ORES)) {
+            color = MODDED_ORE_COLOR;
+          }
+
           if (color != null) {
             found.add(new OreVisionPayload.HighlightedOre(pos.toImmutable(), color));
           }
@@ -163,7 +175,9 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
     if (!(ctx.getOwner() instanceof ServerPlayerEntity player)
         || !(ctx.getWorld() instanceof ServerWorld world)
         || player.age % (SPAWN_COOLDOWN * 20) != 0
-        || player.isSpectator()) {
+        || player.isSpectator()
+        || world.getDifficulty() == Difficulty.PEACEFUL
+        || !world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
       return;
     }
 
@@ -229,7 +243,8 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
             case GROUND -> isValidGroundSpawn(world, pos);
           };
 
-          if (!valid) {
+          // Vanilla spawn rules of the mob, including the light level: no monsters in a lit base
+          if (!valid || !SpawnRestriction.canSpawn(entry.type, world, SpawnReason.NATURAL, pos, random)) {
             continue;
           }
 

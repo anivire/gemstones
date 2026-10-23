@@ -250,6 +250,39 @@ public class GemstoneSlotHelper {
         : new ArrayList<>();
 
     ModifierManager.applyAttributeModifiers(modifiers, itemStack);
+    clampDamageToMaxDurability(itemStack);
+  }
+
+  // Refreshes baked attribute modifiers only when they differ from the current gemstone configs
+  public static boolean refreshAttributesIfStale(ItemStack itemStack) {
+    if (!shouldRefreshAttributes(itemStack)) {
+      return false;
+    }
+
+    ArrayList<GemstoneModifier> modifiers = isItemValid(itemStack.getItem())
+        ? ModifierGatheringHelper.getAttributeModifiers(itemStack)
+        : new ArrayList<>();
+
+    if (!ModifierManager.isAttributeModifiersStale(modifiers, itemStack)) {
+      return false;
+    }
+
+    ModifierManager.applyAttributeModifiers(modifiers, itemStack);
+    clampDamageToMaxDurability(itemStack);
+    return true;
+  }
+
+  // Removing a durability gem must not leave the item with more damage than its new maximum,
+  // otherwise it breaks on the next use
+  private static void clampDamageToMaxDurability(ItemStack itemStack) {
+    if (!itemStack.isDamageable()) {
+      return;
+    }
+
+    int maxDamage = itemStack.getMaxDamage();
+    if (maxDamage > 1 && itemStack.getDamage() >= maxDamage) {
+      itemStack.setDamage(maxDamage - 1);
+    }
   }
 
   public static void updateSocketsAttributes(ItemStack itemStack) {
@@ -347,6 +380,21 @@ public class GemstoneSlotHelper {
     }
 
     return -1;
+  }
+
+  // True when at least one socket holds a real gemstone (not empty or locked)
+  public static boolean hasInsertedGemstones(ItemStack stack) {
+    for (GemstoneComponent gem : getGemstones(stack)) {
+      if (gem != null
+          && gem.gemstoneType() != null
+          && gem.gemstoneType() != GemstoneType.EMPTY
+          && gem.gemstoneType() != GemstoneType.LOCKED
+          && gem.gemstoneType() != GemstoneType.UNDEFINED) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public static void copyGemstones(ItemStack source, ItemStack target) {

@@ -8,6 +8,7 @@ import dev.architectury.event.events.common.LootEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.event.events.common.TickEvent;
 import name.modid.core.api.modifiers.config.handlers.BlockBreakHandler;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeRefreshHelper;
 import name.modid.core.content.events.CustomEvents;
 import name.modid.core.content.events.handlers.EventAfterDeath;
 import name.modid.core.content.events.handlers.EventAreaEffect;
@@ -40,21 +41,25 @@ public class EventsRegistry {
     CustomEvents.ON_FISHING.register(EventOnFishing::setupEvent);
     CustomEvents.ON_HIT_MELEE.register(EventOnHitMelee::setupEvent);
     CustomEvents.ON_HIT_PROJECTILE.register(EventOnHitProjectile::setupEvent);
+    CustomEvents.ON_PROJECTILE_DAMAGE.register(EventOnHitProjectile::setupDamageEvent);
+    CustomEvents.ON_LIVING_DAMAGED.register(
+        (entity, source, amount) -> EventOnMobDamage.setup(entity, source, amount, amount, false));
     CustomEvents.ON_POTION_BREW.register(EventOnPotionBrew::setupEvent);
 
     // Effect related (Melee, Ranged and Area)
     TickEvent.SERVER_POST.register(server -> {
       BlockBreakHandler.tickPendingRegenerations();
       for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-        EventAreaEffect.setupEvent(player);
+        // Area effects last several seconds, there is no need to search for entities every tick
+        if (player.age % 20 == 0) {
+          EventAreaEffect.setupEvent(player);
+        }
       }
     });
     EntityEvent.LIVING_HURT.register((entity, source, amount) -> {
       if (!EventPlayer.setupEvent(entity, source, amount)) {
         return EventResult.interruptFalse();
       }
-
-      EventOnMobDamage.setup(entity, source, amount, amount, false);
 
       return EventResult.pass();
     });
@@ -74,27 +79,21 @@ public class EventsRegistry {
     // Block break
     BlockEvent.BREAK.register((world, pos, state, player, xp) -> {
       boolean canBreak = EventOnBeforeBlockBreak.setupEvent(world, player, pos, state, world.getBlockEntity(pos));
-      if (!canBreak) {
-        return EventResult.interruptFalse();
-      }
 
+      // Smelter and Enchanter break the block on their own, other tool gems still react to the break
       EventOnBlockBreak.setupEvent(world, player, pos, state, world.getBlockEntity(pos));
-      return EventResult.pass();
-    });
-
-    // TODO: rework
-    // After death
-    EntityEvent.LIVING_DEATH.register((entity, source) -> {
-      EventAfterDeath.setupEvent(entity, source);
-      PlayerRandomBuff.setupEvent(entity, source);
-      EventSparkSpawner.setup(entity, source);
-      return EventResult.pass();
+      return canBreak ? EventResult.pass() : EventResult.interruptFalse();
     });
 
     // Player (PLAYER_TICK_ events going in END_SERVER_TICK)
     TickEvent.PLAYER_POST.register(player -> {
       if (player instanceof ServerPlayerEntity serverPlayer) {
         EventPlayer.setupEventEndTick(serverPlayer);
+
+        // Items keep baked attribute values, refresh the ones that changed after a datapack reload
+        if (serverPlayer.age % 20 == 0) {
+          GemstoneAttributeRefreshHelper.refreshStaleItems(serverPlayer);
+        }
       }
     });
     PlayerEvent.PLAYER_JOIN.register(NetworkHandler::sendDatapackSync);

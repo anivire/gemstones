@@ -2,6 +2,7 @@ package name.modid.core.content.registries;
 
 import name.modid.Gemstones;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -19,6 +20,14 @@ public class TagsRegistry {
   public static final TagKey<Block> DEEPSLATE_ORES = TagKey.of(
       RegistryKeys.BLOCK,
       Identifier.of(Gemstones.MOD_ID, "deepslate_ores"));
+
+  public static final TagKey<Block> CONVENTIONAL_ORES = TagKey.of(
+      RegistryKeys.BLOCK,
+      Identifier.of("c", "ores"));
+
+  public static final TagKey<EntityType<?>> BOSSES = TagKey.of(
+      RegistryKeys.ENTITY_TYPE,
+      Identifier.of(Gemstones.MOD_ID, "bosses"));
 
   public static final TagKey<StatusEffect> STUNNED_EFFECT_TAG = TagKey.of(
       RegistryKeys.STATUS_EFFECT,

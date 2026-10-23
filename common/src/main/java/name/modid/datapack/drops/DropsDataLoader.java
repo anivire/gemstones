@@ -42,6 +42,16 @@ public class DropsDataLoader implements SynchronousResourceReloader {
 
   @Override
   public void reload(ResourceManager manager) {
+    load(manager);
+  }
+
+  // Loot tables are built before resource reloaders run, so the drops configs are loaded
+  // once more right before the loot tables are rebuilt (see the ReloadableRegistries mixin)
+  public static void preload(ResourceManager manager) {
+    load(manager);
+  }
+
+  private static void load(ResourceManager manager) {
     LOGGER.info("Reloading drops configs...");
 
     Map<String, String> newConfigSources = new LinkedHashMap<>();

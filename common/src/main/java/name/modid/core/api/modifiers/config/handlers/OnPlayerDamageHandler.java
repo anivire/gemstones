@@ -12,6 +12,7 @@ import name.modid.core.api.modifiers.config.ModifierContext;
 import name.modid.core.api.modifiers.config.ModifierHandler;
 import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import name.modid.core.content.registries.EffectsRegistry;
+import name.modid.core.utils.saveLethal.SaveLethalCooldownState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -19,6 +20,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 
 public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnPlayerDamageConfig> {
+  private static final int SAVE_LETHAL_COOLDOWN_TICKS = 5 * 60 * 20;
+
   private final Map<String, java.util.function.BiConsumer<List<GemstoneModifier>, ModifierContext>> handlers = Map.of(
       "PLAYER_SAVE_LETHAL", this::handleSaveLethal);
 
@@ -58,7 +61,8 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
       return;
     }
 
-    if (!(owner.getWorld() instanceof ServerWorld server)) {
+    if (!(owner.getWorld() instanceof ServerWorld server)
+        || SaveLethalCooldownState.isOnCooldown(server, owner.getUuid())) {
       return;
     }
 
@@ -85,6 +89,7 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
     // значит урон уже летальный. Спасаем как тотем.
     owner.setHealth(Math.max(1.0F, (float) healthThreshold));
     ctx.setIsHurtable(false);
+    SaveLethalCooldownState.startCooldown(server, owner.getUuid(), SAVE_LETHAL_COOLDOWN_TICKS);
 
     server.playSound(
         null,
@@ -112,7 +117,7 @@ public class OnPlayerDamageHandler implements ModifierHandler<ModifierConfig.OnP
 
     owner.addStatusEffect(new StatusEffectInstance(
         EffectsRegistry.lethalWeaknessEntry(),
-        5 * 60 * 20,
+        SAVE_LETHAL_COOLDOWN_TICKS,
         0,
         false,
         true,

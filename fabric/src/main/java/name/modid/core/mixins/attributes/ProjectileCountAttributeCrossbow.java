@@ -1,5 +1,6 @@
 package name.modid.core.mixins.attributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,33 +14,30 @@ import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.content.registries.AttributesRegistry;
 import name.modid.core.utils.HomingArrow;
 import name.modid.core.utils.accessors.HomingArrowAccessor;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.ChargedProjectilesComponent;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ArrowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Unit;
 import net.minecraft.world.World;
 
 @Mixin(CrossbowItem.class)
 public class ProjectileCountAttributeCrossbow {
-
   @Inject(method = "shootAll", at = @At("HEAD"), cancellable = true)
-  private static void onCrossbowShoot(
+  private void onCrossbowShoot(
       World world,
       LivingEntity shooter,
       Hand hand,
@@ -58,43 +56,29 @@ public class ProjectileCountAttributeCrossbow {
         mods,
         AttributesRegistry.PROJECTILE_COUNT_ATTRIBUTE,
         1.0));
-
     int requestedCount = Math.max(1, projectileCount);
+
     if (requestedCount <= 1) {
       return;
     }
 
     ci.cancel();
 
-    ChargedProjectilesComponent charged = crossbow.get(DataComponentTypes.CHARGED_PROJECTILES);
+    if (!(world instanceof ServerWorld serverWorld)) {
+      return;
+    }
+
+    ChargedProjectilesComponent charged = crossbow.set(DataComponentTypes.CHARGED_PROJECTILES,
+        ChargedProjectilesComponent.DEFAULT);
     if (charged == null || charged.isEmpty()) {
       return;
     }
 
-    if (world.isClient()) {
-      return;
-    }
+    // Ammo was already consumed while charging, extra projectiles are intangible copies
+    List<ItemStack> projectiles = new ArrayList<>(charged.getProjectiles());
+    addIntangibleCopies(projectiles, requestedCount + projectiles.size() - 1);
 
-    List<ItemStack> projectiles = charged.getProjectiles();
-    ItemStack projectileStack = projectiles.get(0).copy();
-    int totalProjectileCount = requestedCount + Math.max(0, projectiles.size() - 1);
-
-    var enchants = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
-    boolean hasInfinity = enchants.getEntry(Enchantments.INFINITY)
-        .map(e -> EnchantmentHelper.getLevel(e, crossbow) > 0).orElse(false);
-
-    multishoot((ServerWorld) world, player, crossbow, projectileStack, totalProjectileCount, speed, divergence);
-
-    if (!player.isCreative() && !hasInfinity) {
-      projectileStack.decrement(1);
-
-      if (projectileStack.isEmpty()) {
-        player.getInventory().removeOne(projectileStack);
-      }
-    }
-
-    crossbow.set(DataComponentTypes.CHARGED_PROJECTILES, null);
-    crossbow.remove(DataComponentTypes.CHARGED_PROJECTILES);
+    multishoot(serverWorld, player, hand, crossbow, projectiles, speed, divergence);
 
     world.playSound(
         null,
@@ -104,54 +88,63 @@ public class ProjectileCountAttributeCrossbow {
         1.0F,
         1.0F);
 
-    player.incrementStat(Stats.USED.getOrCreateStat(crossbow.getItem()));
+    if (player instanceof ServerPlayerEntity serverPlayer) {
+      Criteria.SHOT_CROSSBOW.trigger(serverPlayer, crossbow);
+      serverPlayer.incrementStat(Stats.USED.getOrCreateStat(crossbow.getItem()));
+    }
   }
 
-  private static void multishoot(
+  private static void addIntangibleCopies(List<ItemStack> projectiles, int totalCount) {
+    ItemStack template = projectiles.get(0).copyWithCount(1);
+    template.set(DataComponentTypes.INTANGIBLE_PROJECTILE, Unit.INSTANCE);
+
+    while (projectiles.size() < totalCount) {
+      projectiles.add(template.copy());
+    }
+  }
+
+  private void multishoot(
       ServerWorld world,
       PlayerEntity shooter,
+      Hand hand,
       ItemStack crossbow,
-      ItemStack projectileStack,
-      int projectileCount,
+      List<ItemStack> projectiles,
       float speed,
       float divergence) {
     final float SPREAD = 7.0F;
-
+    int projectileCount = projectiles.size();
     float g = projectileCount == 1 ? 0.0F : 2.0F * SPREAD / (float) (projectileCount - 1);
     float h = (float) ((projectileCount - 1) % 2) * g / 2.0F;
     float dir = 1.0F;
+
     boolean isHoming = !ModifierGatheringHelper.getModifiersByEventType(crossbow, EventType.HOMING_ARROW).isEmpty();
     LivingEntity preferredTarget = isHoming ? HomingArrow.findPreferredTarget(world, shooter) : null;
+
+    RangedWeaponItemInvoker weapon = (RangedWeaponItemInvoker) crossbow.getItem();
+    EquipmentSlot slot = LivingEntity.getSlotForHand(hand);
 
     for (int j = 0; j < projectileCount; ++j) {
       float offset = h + dir * (float) ((j + 1) / 2) * g;
       dir = -dir;
 
-      ProjectileEntity projectile;
+      // Vanilla creates fireworks and arrows here, player crossbow arrows are always critical
+      ItemStack projectileStack = projectiles.get(j);
+      ProjectileEntity projectile = weapon.gemstones$createArrowEntity(world, shooter, crossbow, projectileStack,
+          true);
 
-      if (projectileStack.isOf(Items.FIREWORK_ROCKET)) {
-        projectile = new FireworkRocketEntity(world, projectileStack, shooter,
-            shooter.getX(), shooter.getEyeY() - 0.15, shooter.getZ(), true);
-      } else {
-        ArrowItem arrowItem = (ArrowItem) (projectileStack.getItem() instanceof ArrowItem
-            ? projectileStack.getItem()
-            : Items.ARROW);
-        PersistentProjectileEntity arrow = arrowItem.createArrow(world, projectileStack.copy(), shooter, crossbow);
-
-        if (isHoming) {
-          ((HomingArrowAccessor) arrow).setHoming(true);
-          HomingArrow.setPreferredTarget(arrow, preferredTarget);
-        }
-
-        arrow.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
-        projectile = arrow;
+      if (isHoming && projectile instanceof PersistentProjectileEntity arrow) {
+        ((HomingArrowAccessor) arrow).setHoming(true);
+        HomingArrow.setPreferredTarget(arrow, preferredTarget);
       }
 
-      float yaw = shooter.getYaw() + offset;
-      float pitch = shooter.getPitch();
-
-      projectile.setVelocity(shooter, pitch, yaw, 0.0F, speed, divergence);
+      projectile.setVelocity(shooter, shooter.getPitch(), shooter.getYaw() + offset, 0.0F, speed, divergence);
       world.spawnEntity(projectile);
+
+      // Same durability cost as vanilla multishot: one per arrow, three per firework
+      crossbow.damage(weapon.gemstones$getWeaponStackDamage(projectileStack), shooter, slot);
+      if (crossbow.isEmpty()) {
+        break;
+      }
     }
   }
 }

@@ -14,7 +14,7 @@ public class OreHighlighter {
 
   private static final List<OreVisionPayload.HighlightedOre> highlighted = new ArrayList<>();
   private static long lastUpdate = 0L;
-  private static final long HIGHLIGHT_TIMEOUT_MS = 1000L;
+  private static final long HIGHLIGHT_TIMEOUT_MS = 1500L;
 
   public static void registerNetworking() {
     NetworkManager.registerReceiver(NetworkManager.s2c(), OreVisionPayload.ID, OreVisionPayload.CODEC,
