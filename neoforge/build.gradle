@@ -42,9 +42,11 @@ dependencies {
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rootProject.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rootProject.rei_version}"
 	modCompileOnly "dev.emi:emi-neoforge:${rootProject.emi_version}"
+	modCompileOnly "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
 
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rootProject.rei_version}"
 	modRuntimeOnly "dev.emi:emi-neoforge:${rootProject.emi_version}"
+	modRuntimeOnly "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
 
 	common(project(path: ':common', configuration: 'namedElements')) { transitive false }
 	shadowCommon(project(path: ':common', configuration: 'transformProductionNeoForge')) { transitive false }

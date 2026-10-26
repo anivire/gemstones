@@ -10,6 +10,7 @@ import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.config.GemstonesClientConfig;
 import name.modid.core.content.items.GemstoneItem;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import net.minecraft.client.gui.screen.Screen;
@@ -32,9 +33,23 @@ public final class SocketsTooltip {
       return;
     }
 
+    if (!GemstonesClientConfig.get().showEmptySockets && !hasSocketedGemstone(gemstones)) {
+      return;
+    }
+
     tooltip.add(Text.empty());
     tooltip.add(Text.translatable("tooltip.gemstones.category_name").formatted(Formatting.GRAY));
     tooltip.addAll(buildRows(gemstones, stack.getItem()));
+  }
+
+  private static boolean hasSocketedGemstone(GemstoneComponent[] gemstones) {
+    for (GemstoneComponent gemstone : gemstones) {
+      if (gemstone.gemstoneType() != GemstoneType.EMPTY && gemstone.gemstoneType() != GemstoneType.LOCKED) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private static List<Text> buildRows(GemstoneComponent[] gemstones, Item item) {

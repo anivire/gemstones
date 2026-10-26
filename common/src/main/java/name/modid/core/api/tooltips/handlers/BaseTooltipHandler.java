@@ -33,9 +33,7 @@ public abstract class BaseTooltipHandler<T extends ModifierConfig> implements To
     }
 
     boolean isPositive = displayRaw > 0;
-    String formatted = builder.formatValue(
-        Math.abs(adjustValue(config, displayRaw)),
-        getPostfix(config));
+    String formatted = formatAdjusted(config, Math.abs(adjustValue(config, displayRaw)));
 
     MutableText valueText = Text.empty()
         .append(builder.getArrowPrefix(isPositive))
@@ -47,7 +45,7 @@ public abstract class BaseTooltipHandler<T extends ModifierConfig> implements To
       double boostedAdjusted = Math.abs(adjustValue(config, raw));
 
       if (BoostedValueFormatter.isBoosted(baseAdjusted, boostedAdjusted)) {
-        String boostedFormatted = builder.formatValue(boostedAdjusted, getPostfix(config));
+        String boostedFormatted = formatAdjusted(config, boostedAdjusted);
         valueText.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
             .append(builder.getArrowPrefix(raw > 0, Formatting.LIGHT_PURPLE))
             .append(Text.literal(boostedFormatted).formatted(Formatting.LIGHT_PURPLE))
@@ -66,6 +64,10 @@ public abstract class BaseTooltipHandler<T extends ModifierConfig> implements To
 
   protected String getPostfix(T cfg) {
     return "";
+  }
+
+  protected String formatAdjusted(T cfg, double adjusted) {
+    return builder.formatValue(adjusted, getPostfix(cfg));
   }
 
   protected abstract MutableText buildText(T cfg, MutableText valueText, boolean isPositive);

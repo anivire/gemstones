@@ -35,6 +35,9 @@
     "emi": [
       "name.modid.compat.emi.GemstonesEmiPlugin"
     ],
+    "modmenu": [
+      "name.modid.fabric.client.GemstonesModMenu"
+    ],
     "fabric-datagen": [
       "name.modid.datagen.DataGenerator"
     ]
@@ -55,6 +58,8 @@
   },
   "suggests": {
     "roughlyenoughitems": "*",
-    "emi": "*"
+    "emi": "*",
+    "cloth-config": "*",
+    "modmenu": "*"
   }
 }

@@ -28,9 +28,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.packet.s2c.play.WorldEventS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
-import net.minecraft.network.packet.s2c.play.WorldEventS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -46,7 +46,8 @@ import net.minecraft.world.WorldEvents;
 public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBreakConfig> {
   private static final int UPDATE_FLAGS = Block.NOTIFY_ALL;
   private static final Set<Identifier> BLOCKED_ITEMS = new HashSet<>();
-  // Set while the miner or chain lightning break extra blocks, so those breaks do not chain further
+  // Set while the miner or chain lightning break extra blocks, so those breaks do
+  // not chain further
   private static final ThreadLocal<Boolean> BREAKING_EXTRA_BLOCKS = ThreadLocal.withInitial(() -> false);
   private static final List<PendingRegeneration> PENDING_REGENERATIONS = new ArrayList<>();
   private static final float MIN_SATURATION_HARDNESS = 1.0F;
@@ -56,7 +57,8 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
   private record PendingRegeneration(ServerWorld world, BlockPos pos, BlockState state, int ticksRemaining) {
   }
 
-  // Sapphire chain lightning jumps to the next block of the same type every few ticks instead of breaking them at once
+  // Sapphire chain lightning jumps to the next block of the same type every few
+  // ticks instead of breaking them at once
   private static final int CHAIN_STEP_TICKS = 3;
   private static final List<ChainLightning> ACTIVE_CHAINS = new ArrayList<>();
 
@@ -159,8 +161,10 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     }
   }
 
-  // Feeds the player while mining without replacing healing in combat. Instantly broken blocks
-  // (torches, grass) do not count, so the effect cannot be farmed by placing and breaking them
+  // Feeds the player while mining without replacing healing in combat. Instantly
+  // broken blocks
+  // (torches, grass) do not count, so the effect cannot be farmed by placing and
+  // breaking them
   private void handleSaturation(
       List<GemstoneModifier> modifiers,
       ModifierContext ctx) {
@@ -399,8 +403,6 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       return;
     }
 
-    // Any block works as long as the tool is the right one for it: pickaxes chain stone and ores,
-    // axes chain logs, shovels chain dirt and sand
     BlockState origin = ctx.getBlockState();
     if (player.getMainHandStack().getMiningSpeedMultiplier(origin) <= 1.0F) {
       return;
@@ -425,7 +427,6 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
 
     world.playSound(null, ctx.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.PLAYERS,
         0.5f, 1.8f);
-    spawnChainSparks(world, ctx.getBlockPos());
 
     ACTIVE_CHAINS.add(new ChainLightning(world, player, player.getMainHandStack(), origin.getBlock(), vein));
   }
@@ -457,29 +458,21 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       return false;
     }
 
-    // Chained blocks cost no durability, so the tool is never updated mid-chain and does not twitch
-    // in hand. A tool on its last point would still break inside the vanilla mining code, so the chain stops
     ItemStack tool = chain.tool;
     if (tool.isDamageable() && tool.getDamage() >= tool.getMaxDamage() - 1) {
       return false;
     }
 
     int damage = tool.getDamage();
-    chain.world.playSound(null, pos, SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.PLAYERS,
-        0.35f, 1.6f + chain.world.getRandom().nextFloat() * 0.4f);
+
+    chain.world.playSound(null, pos, SoundEvents.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.PLAYERS,
+        0.4f, 1.4f + chain.world.getRandom().nextFloat() * 0.6f);
     breakBlockAsPlayer(chain.world, player, pos, state);
     if (tool.isDamageable()) {
       tool.setDamage(damage);
     }
-    spawnChainSparks(chain.world, pos);
 
     return chain.next < chain.vein.size();
-  }
-
-  private static void spawnChainSparks(ServerWorld world, BlockPos pos) {
-    world.spawnParticles(ParticleTypes.ELECTRIC_SPARK,
-        pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-        12, 0.35, 0.35, 0.35, 0.6);
   }
 
   // Breadth-first walk over the touching blocks of the same type, nearest first
@@ -575,7 +568,8 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     if (hardness < 0.0F)
       return false;
 
-    // Mining stone must not wipe torches, rails, redstone or crops around the target
+    // Mining stone must not wipe torches, rails, redstone or crops around the
+    // target
     return hardness > 0.0F || centerHardness <= 0.0F;
   }
 
@@ -590,8 +584,10 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
       BREAKING_EXTRA_BLOCKS.set(breakingExtraBlocks);
     }
 
-    // Vanilla sends the break particles to everyone except the breaking player, whose client
-    // normally spawns them itself. A server-side break never reaches that client, so send them here
+    // Vanilla sends the break particles to everyone except the breaking player,
+    // whose client
+    // normally spawns them itself. A server-side break never reaches that client,
+    // so send them here
     if (!world.getBlockState(immutablePos).isOf(state.getBlock())) {
       player.networkHandler.sendPacket(new WorldEventS2CPacket(
           WorldEvents.BLOCK_BROKEN, immutablePos, Block.getRawIdFromState(state), false));

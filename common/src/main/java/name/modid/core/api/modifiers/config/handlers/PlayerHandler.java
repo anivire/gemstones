@@ -68,7 +68,8 @@ public class PlayerHandler implements ModifierHandler<ModifierConfig.PlayerConfi
   public boolean supports(GemstoneModifier modifier) {
     PlayerConfig config = (PlayerConfig) modifier.getConfig();
     return switch (config.eventType().getName()) {
-      case "PLAYER_TICK_ORE_VISION" -> modifier.getItemCategory() == ModifierItemCategory.TOOLS;
+      case "PLAYER_TICK_ORE_VISION", "PLAYER_TICK_DEPTH_PRESSURE" ->
+        modifier.getItemCategory() == ModifierItemCategory.TOOLS;
       case "PLAYER_RANDOM_EFFECT",
           "PLAYER_WITHER_GUARD",
           "PLAYER_PROJECTILE_IMMUNE",

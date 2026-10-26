@@ -90,7 +90,7 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
       firstArg = buildSaveLethalThresholdText(cfg);
       secondArg = builder.getEventText(type);
       thirdArg = TooltipHelper.buildSecondsText(builder, seconds, null);
-    } else if (type == EventType.PLAYER_TICK_ORE_VISION) {
+    } else if (type == EventType.PLAYER_TICK_ORE_VISION || type == EventType.PLAYER_TICK_DEPTH_PRESSURE) {
       firstArg = secondArg;
       secondArg = valueText;
     } else if (type == EventType.ITEM_EXPLOSION_IMMUNE) {

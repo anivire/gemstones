@@ -29,6 +29,16 @@
       "is_stacking": false,
       "max_stack_count": 0
     },
+    "TOOLS": {
+      "type": "PLAYER",
+      "value_levels": [
+        0.2,
+        0.3,
+        0.4,
+        0.5
+      ],
+      "event_type": "PLAYER_TICK_DEPTH_PRESSURE"
+    },
     "ARMOR": {
       "type": "PLAYER",
       "chance_levels": [

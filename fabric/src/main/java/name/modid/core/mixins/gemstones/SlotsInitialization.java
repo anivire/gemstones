@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import name.modid.core.api.modifiers.helpers.GemstoneSlotHelper;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 
@@ -20,15 +21,9 @@ public abstract class SlotsInitialization {
     GemstoneSlotHelper.initializeSocketsIfEligible(itemStack, item.value());
   }
 
-  @Inject(method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V", at = @At("TAIL"))
-  private void onConstruct(RegistryEntry<Item> item, int count, CallbackInfo ci) {
+  @Inject(method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V", at = @At("TAIL"))
+  private void onConstruct(ItemConvertible item, int count, CallbackInfo ci) {
     ItemStack itemStack = (ItemStack) (Object) this;
-    GemstoneSlotHelper.initializeSocketsIfEligible(itemStack, item.value());
-  }
-
-  @Inject(method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V", at = @At("TAIL"))
-  private void onConstructSimple(RegistryEntry<Item> item, CallbackInfo ci) {
-    ItemStack itemStack = (ItemStack) (Object) this;
-    GemstoneSlotHelper.initializeSocketsIfEligible(itemStack, item.value());
+    GemstoneSlotHelper.initializeSocketsIfEligible(itemStack, item.asItem());
   }
 }

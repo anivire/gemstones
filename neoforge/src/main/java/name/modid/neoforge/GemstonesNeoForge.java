@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import name.modid.Gemstones;
 import name.modid.GemstonesClient;
+import name.modid.compat.cloth.ClothConfigCompat;
+import name.modid.compat.cloth.GemstonesConfigScreen;
 import name.modid.core.api.entities.jeweleryTable.JewelryTableScreen;
 import name.modid.core.api.modifiers.helpers.GemstoneAttributeModifiersHelper;
 import name.modid.core.api.particles.BleedParticleFactory;
@@ -29,19 +31,21 @@ import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.extensions.IItemStackExtension;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 
 @Mod(Gemstones.MOD_ID)
 public class GemstonesNeoForge {
-  public GemstonesNeoForge(IEventBus eventBus) {
+  public GemstonesNeoForge(IEventBus eventBus, ModContainer container) {
     Gemstones.init();
 
     GemstoneAttributeModifiersHelper.setEffectiveProvider(
@@ -59,6 +63,11 @@ public class GemstonesNeoForge {
 
       NeoForge.EVENT_BUS.addListener(GemstonesNeoForgeClientEvents::onItemTooltip);
       NeoForge.EVENT_BUS.addListener(GemstonesNeoForgeClientEvents::onGatherTooltipComponents);
+
+      if (ClothConfigCompat.isLoaded()) {
+        container.registerExtensionPoint(IConfigScreenFactory.class,
+            (IConfigScreenFactory) (modContainer, parent) -> GemstonesConfigScreen.create(parent));
+      }
     }
   }
 

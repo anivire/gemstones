@@ -95,6 +95,8 @@ public final class EventType {
       "tooltip.gemstones.event_name.amber_shell");
   public static final EventType PLAYER_TICK_ORE_VISION = register("PLAYER_TICK_ORE_VISION",
       "tooltip.gemstones.event_name.ore_vision");
+  public static final EventType PLAYER_TICK_DEPTH_PRESSURE = register("PLAYER_TICK_DEPTH_PRESSURE",
+      "tooltip.gemstones.event_name.depth_pressure");
   public static final EventType PLAYER_TICK_INCREASE_MOB_SPAWNRATE = register("PLAYER_TICK_INCREASE_MOB_SPAWNRATE",
       "tooltip.gemstones.event_name.increase_mob_spawnrate");
 

@@ -4,7 +4,7 @@
     "MELEE": {
       "type": "ON_HIT_MELEE",
       "chance_levels": [
-        1.25
+        1.00
       ],
       "additional_value_levels": [
         0.0

@@ -219,12 +219,12 @@ public class GemstoneSlotHelper {
   }
 
   public static boolean shouldInitializeSockets(ItemStack itemStack, Item item) {
-    if (itemStack == null || itemStack.isEmpty() || !isItemValid(item)) {
+    if (itemStack == null || itemStack.isEmpty()) {
       return false;
     }
 
     ComponentType<GemstoneSlotsComponent> type = ComponentsRegistry.gemstones();
-    if (type == null) {
+    if (type == null || !isItemValid(item)) {
       return false;
     }
 

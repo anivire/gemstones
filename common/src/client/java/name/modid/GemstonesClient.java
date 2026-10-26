@@ -13,6 +13,7 @@ import name.modid.core.api.entities.jeweleryTable.JewelryTableScreen;
 import name.modid.core.api.models.ModelsRegistry;
 import name.modid.core.api.projectiles.spark.SparkProjectileModel;
 import name.modid.core.api.projectiles.spark.SparkProjectileRenderer;
+import name.modid.core.config.GemstonesClientConfig;
 import name.modid.core.content.blocks.entity.core.BlockEntitiesRegistry;
 import name.modid.core.content.registries.EntitiesRegistry;
 import name.modid.core.content.screen.ScreenRegistry;
@@ -20,6 +21,8 @@ import net.minecraft.client.render.entity.ArrowEntityRenderer;
 
 public class GemstonesClient {
   public static void initClient() {
+    GemstonesClientConfig.load();
+
     EntityModelLayerRegistry.register(
         SparkProjectileModel.SPARK,
         SparkProjectileModel::getTexturedModelData);

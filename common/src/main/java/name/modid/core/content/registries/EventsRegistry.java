@@ -34,6 +34,7 @@ import name.modid.core.content.events.misc.EventSparkSpawner;
 import name.modid.core.content.events.misc.EventStunned;
 import name.modid.core.network.NetworkHandler;
 import name.modid.core.utils.amber.AmberShellHelper;
+import name.modid.core.utils.amber.DepthPressureHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
@@ -99,6 +100,7 @@ public class EventsRegistry {
       if (player instanceof ServerPlayerEntity serverPlayer) {
         EventPlayer.setupEventEndTick(serverPlayer);
         GemstoneAttributeCapHelper.updateMaxHealthCap(serverPlayer);
+        DepthPressureHelper.tick(serverPlayer);
 
         // Items keep baked attribute values, refresh the ones that changed after a datapack reload
         if (serverPlayer.age % 20 == 0) {

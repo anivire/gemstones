@@ -42,6 +42,16 @@ public class OnBlockBreakHandler extends BaseTooltipHandler<ModifierConfig.Block
   }
 
   @Override
+  protected String formatAdjusted(ModifierConfig.BlockBreakConfig cfg, double adjusted) {
+    if (cfg.eventType() == EventType.ON_BLOCK_BREAK_MINER) {
+      int side = (int) adjusted;
+      return side + "x" + side;
+    }
+
+    return super.formatAdjusted(cfg, adjusted);
+  }
+
+  @Override
   protected MutableText buildText(ModifierConfig.BlockBreakConfig cfg, MutableText valueText, boolean isPositive) {
     // The magnet always works, a chance value would only be noise
     if (cfg.eventType() == EventType.ON_BLOCK_BREAK_MAGNET) {

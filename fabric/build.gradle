@@ -33,7 +33,16 @@ dependencies {
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}"
 	modCompileOnly "dev.emi:emi-fabric:${rootProject.emi_version}"
 
+	modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	modCompileOnly "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
+
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rootProject.rei_version}"
+	modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	modRuntimeOnly "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
 
 	common(project(path: ':common', configuration: 'namedElements')) { transitive false }
 	shadowCommon(project(path: ':common', configuration: 'transformProductionFabric')) { transitive false }
