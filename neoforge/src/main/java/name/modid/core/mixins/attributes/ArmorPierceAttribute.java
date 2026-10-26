@@ -1,10 +1,10 @@
 package name.modid.core.mixins.attributes;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import name.modid.Gemstones;
 import name.modid.core.content.registries.AttributesRegistry;
@@ -15,6 +15,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -25,29 +26,30 @@ public abstract class ArmorPierceAttribute {
   private static final Identifier TEMP_APPLY_ARMOR_PIERCE_ID = Identifier.of(Gemstones.MOD_ID,
       "temporary_armor_pierce");
 
-  private LivingEntity currentTarget;
-  private boolean applied = false;
-
-  @Shadow
-  public abstract void attack(Entity target);
-
-  @Inject(method = "attack", at = @At("HEAD"))
-  private void captureTarget(Entity target, CallbackInfo ci) {
-    this.currentTarget = target instanceof LivingEntity living ? living : null;
-    this.applied = false;
-  }
-
-  @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", shift = At.Shift.BEFORE))
-  private void applyPierceBeforeDamage(Entity target, CallbackInfo ci) {
-    if (!(this.currentTarget instanceof LivingEntity livingTarget)) {
-      return;
+  @WrapOperation(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
+  private boolean applyArmorPierce(Entity target, DamageSource source, float damage, Operation<Boolean> original) {
+    if (!(target instanceof LivingEntity livingTarget)) {
+      return original.call(target, source, damage);
     }
 
+    EntityAttributeInstance armorAttr = livingTarget.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
+    boolean applied = armorAttr != null && applyPierce(armorAttr);
+
+    try {
+      return original.call(target, source, damage);
+    } finally {
+      if (applied) {
+        armorAttr.removeModifier(TEMP_APPLY_ARMOR_PIERCE_ID);
+      }
+    }
+  }
+
+  private boolean applyPierce(EntityAttributeInstance armorAttr) {
     PlayerEntity player = (PlayerEntity) (Object) this;
     ItemStack stack = player.getMainHandStack();
 
     if (stack.isEmpty()) {
-      return;
+      return false;
     }
 
     AttributeModifiersComponent comp = stack.getOrDefault(
@@ -55,13 +57,7 @@ public abstract class ArmorPierceAttribute {
         AttributeModifiersComponent.DEFAULT);
 
     if (comp.modifiers().isEmpty()) {
-      return;
-    }
-
-    EntityAttributeInstance armorAttr = livingTarget.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
-
-    if (armorAttr == null) {
-      return;
+      return false;
     }
 
     double baseArmor = armorAttr.getBaseValue();
@@ -82,52 +78,16 @@ public abstract class ArmorPierceAttribute {
         .sum();
 
     if (armorPierce <= 0.0) {
-      return;
+      return false;
     }
 
     armorPierce = Math.min(armorPierce, currentArmor);
 
-    EntityAttributeModifier existing = armorAttr.getModifier(TEMP_APPLY_ARMOR_PIERCE_ID);
-
-    if (existing != null) {
-      armorAttr.removeModifier(existing);
-    }
-
-    EntityAttributeModifier minusArmor = new EntityAttributeModifier(
+    armorAttr.removeModifier(TEMP_APPLY_ARMOR_PIERCE_ID);
+    armorAttr.addTemporaryModifier(new EntityAttributeModifier(
         TEMP_APPLY_ARMOR_PIERCE_ID,
         -armorPierce,
-        EntityAttributeModifier.Operation.ADD_VALUE);
-
-    armorAttr.addTemporaryModifier(minusArmor);
-    this.applied = true;
-  }
-
-  @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", shift = At.Shift.AFTER))
-  private void removePierceAfterDamage(Entity target, CallbackInfo ci) {
-    this.cleanup();
-  }
-
-  @Inject(method = "attack", at = @At("TAIL"))
-  private void clear(Entity target, CallbackInfo ci) {
-    this.cleanup();
-    this.currentTarget = null;
-  }
-
-  private void cleanup() {
-    if (!this.applied || !(this.currentTarget instanceof LivingEntity living)) {
-      return;
-    }
-
-    EntityAttributeInstance armorAttr = living.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
-
-    if (armorAttr != null) {
-      EntityAttributeModifier curr = armorAttr.getModifier(TEMP_APPLY_ARMOR_PIERCE_ID);
-
-      if (curr != null) {
-        armorAttr.removeModifier(curr);
-      }
-    }
-
-    this.applied = false;
+        EntityAttributeModifier.Operation.ADD_VALUE));
+    return true;
   }
 }

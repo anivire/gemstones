@@ -22,7 +22,7 @@ public abstract class SoulburnFireDispatcher {
 
   @Inject(method = "render", at = @At(value = "INVOKE",
       target = "Lnet/minecraft/client/render/entity/EntityRenderer;render(Lnet/minecraft/entity/Entity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
-      shift = At.Shift.AFTER))
+      shift = At.Shift.AFTER), require = 0)
   private <E extends Entity> void renderSoulburnFire(E entity,
       double x,
       double y,

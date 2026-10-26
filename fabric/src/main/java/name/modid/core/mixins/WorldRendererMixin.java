@@ -31,7 +31,8 @@ public abstract class WorldRendererMixin {
   @ModifyVariable(
       method = "render",
       at = @At(value = "CONSTANT", args = "stringValue=blockentities", ordinal = 0),
-      ordinal = 3)
+      ordinal = 3,
+      require = 0)
   private boolean gemstones$renderOreVisionOutlinePostProcess(boolean value) {
     return value || OreHighlighter.hasActiveHighlights();
   }
@@ -41,7 +42,8 @@ public abstract class WorldRendererMixin {
       at = @At(
           value = "INVOKE",
           target = "Lnet/minecraft/client/render/OutlineVertexConsumerProvider;draw()V",
-          shift = At.Shift.BEFORE))
+          shift = At.Shift.BEFORE),
+      require = 0)
   private void gemstones$renderOreVisionHighlights(RenderTickCounter tickCounter,
       boolean renderBlockOutline,
       Camera camera,
