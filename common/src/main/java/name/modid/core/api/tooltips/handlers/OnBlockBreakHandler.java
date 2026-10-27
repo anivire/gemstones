@@ -77,7 +77,9 @@ public class OnBlockBreakHandler extends BaseTooltipHandler<ModifierConfig.Block
       int baseBlocks = base.additionalValues().get(rarityType).intValue();
       int blocks = cfg.additionalValues().get(rarityType).intValue();
 
-      MutableText blocksText = Text.literal(String.valueOf(baseBlocks)).formatted(Formatting.GREEN);
+      MutableText blocksText = Text.empty()
+          .append(builder.getArrowPrefix(true))
+          .append(Text.literal(String.valueOf(baseBlocks)).formatted(Formatting.GREEN));
       if (blocks != baseBlocks) {
         blocksText.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
             .append(builder.getArrowPrefix(blocks > baseBlocks, Formatting.LIGHT_PURPLE))

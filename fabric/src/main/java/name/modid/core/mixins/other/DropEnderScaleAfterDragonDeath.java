@@ -17,20 +17,31 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.GameRules;
 
 @Mixin(EnderDragonEntity.class)
 public abstract class DropEnderScaleAfterDragonDeath {
   @Unique
+  private static final int FIRST_EXPERIENCE_TICK = 150;
+
+  @Unique
   private boolean enderScaleDropped;
 
-  @Inject(method = "updatePostDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ExperienceOrbEntity;spawn(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;I)V", ordinal = 0, shift = At.Shift.BEFORE))
+  // Vanilla spawns the first experience orbs 150 ticks into the death animation, the scale drops
+  // at the same moment. Checked at HEAD so other mods changing the method body cannot break it
+  @Inject(method = "updatePostDeath", at = @At("HEAD"))
   private void dropEnderScaleWithFirstExperienceOrb(CallbackInfo ci) {
     EnderDragonEntity self = (EnderDragonEntity) (Object) this;
 
     if (enderScaleDropped
-        || !(self.getWorld() instanceof ServerWorld world)) {
+        || self.ticksSinceDeath < FIRST_EXPERIENCE_TICK
+        || !(self.getWorld() instanceof ServerWorld world)
+        || !world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
       return;
     }
+
+    // One roll per death, not one per experience burst
+    enderScaleDropped = true;
 
     DropsConfig.SpecialDrop config = DropsRegistry.getSpecialDrop("ender_dragon_death");
     if (config == null)
@@ -39,8 +50,6 @@ public abstract class DropEnderScaleAfterDragonDeath {
     if (!shouldDrop(config, world.random.nextFloat())) {
       return;
     }
-
-    enderScaleDropped = true;
 
     Item dropItem = resolveItem(config);
     if (dropItem == null)

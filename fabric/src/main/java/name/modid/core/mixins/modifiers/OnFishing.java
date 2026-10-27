@@ -19,7 +19,7 @@ public abstract class OnFishing {
   @Shadow
   private Entity hookedEntity;
 
-  @Inject(method = "use", at = @At("HEAD"), cancellable = true)
+  @Inject(method = "use", at = @At("HEAD"))
   private void onFishing(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
     FishingBobberEntity bobber = (FishingBobberEntity) (Object) this;
 
