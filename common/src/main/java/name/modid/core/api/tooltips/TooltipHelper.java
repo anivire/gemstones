@@ -52,7 +52,8 @@ public class TooltipHelper {
     SHIFT("\uE910"),
     LOCKED("\uE911"),
     EMPTY("\uE912"),
-    INFO("\uE913");
+    INFO("\uE913"),
+    EXPERIENCE("\uE914");
 
     private final String symbol;
 

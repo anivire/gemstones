@@ -166,7 +166,8 @@
   "item.gemstones.jewelry_pliers": "Ювелирные щипцы",
   "item.gemstones.jewelry_pliers.info_1": "Позволяет %s самоцвет из брони, оружия и инструментов.",
   "item.gemstones.jewelry_pliers.info_last": "извлекать последний",
-  "item.gemstones.jewelry_pliers.info_2": "Самоцвет имеет %s шанс сломаться при извлечении.",
+  "item.gemstones.jewelry_pliers.info_2": "Извлечение требует %s в зависимости от качества самоцвета.",
+  "item.gemstones.jewelry_pliers.info_levels": "Уровни опыта",
 
   "item.gemstones.jewelry_file": "Ювелирный напильник",
   "item.gemstones.jewelry_file.info_1": "Позволяет %s самоцвет для улучшения его качества.",
@@ -336,14 +337,15 @@
 
   "block.gemstones.jewelry_table": "Стол ювелира",
   "container.gemstones.jewelry_table": "Стол ювелира",
+  "container.gemstones.jewelry_table.level_cost": "Стоимость: %s ур.",
 
   "rei.gemstones.jewelry_table.insert": "Добавление самоцветов",
   "rei.gemstones.jewelry_table.remove": "Извлечение самоцветов",
   "rei.gemstones.jewelry_table.expand": "Расширение гнёзд",
-  "rei.gemstones.jewelry_table.remove.short_warning": "80% шанс разбить",
+  "rei.gemstones.jewelry_table.remove.short_warning": "Требует уровни опыта",
 
   "emi.category.gemstones.jewelry_table_insert": "Добавление самоцветов",
   "emi.category.gemstones.jewelry_table_remove": "Извлечение самоцветов",
   "emi.category.gemstones.jewelry_table_expand": "Расширение гнёзд",
-  "emi.gemstones.jewelry_table.remove.short_warning": "80% шанс разбить"
+  "emi.gemstones.jewelry_table.remove.short_warning": "Требует уровни опыта"
 }

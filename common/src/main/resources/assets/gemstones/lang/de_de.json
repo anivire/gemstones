@@ -166,7 +166,8 @@
   "item.gemstones.jewelry_pliers": "Schmuckzangen",
   "item.gemstones.jewelry_pliers.info_1": "Ermöglicht %s Edelsteins aus Ausrüstung, Waffen und Werkzeugen.",
   "item.gemstones.jewelry_pliers.info_last": "die Entfernung des letzten",
-  "item.gemstones.jewelry_pliers.info_2": "Edelsteine haben eine %s Chance bei Entnahme zu zerbrechen",
+  "item.gemstones.jewelry_pliers.info_2": "Entnahme kostet %s je nach Edelsteinqualität.",
+  "item.gemstones.jewelry_pliers.info_levels": "Erfahrungslevel",
 
   "item.gemstones.jewelry_file": "Feile des Goldschmieds",
   "item.gemstones.jewelry_file.info_1": "Erlaubt %s von Edelsteinen auf die nächste Qualitäts-Stufe",
@@ -336,14 +337,15 @@
 
   "block.gemstones.jewelry_table": "Schmucktisch",
   "container.gemstones.jewelry_table": "Jewelry Table",
+  "container.gemstones.jewelry_table.level_cost": "Kosten: %s Lvl",
 
   "rei.gemstones.jewelry_table.insert": "Edelstein Einsetzen",
   "rei.gemstones.jewelry_table.remove": "Edelstein Entnehmen",
   "rei.gemstones.jewelry_table.expand": "Sockel-Erweiterung",
-  "rei.gemstones.jewelry_table.remove.short_warning": "80% Chance auf Zerbrechen",
+  "rei.gemstones.jewelry_table.remove.short_warning": "Kostet Level",
 
   "emi.category.gemstones.jewelry_table_insert": "Edelstein Einsetzen",
   "emi.category.gemstones.jewelry_table_remove": "Edelstein Entnehmen",
   "emi.category.gemstones.jewelry_table_expand": "Sockel-Erweiterung",
-  "emi.gemstones.jewelry_table.remove.short_warning": "80% Chance auf Zerbrechen"
+  "emi.gemstones.jewelry_table.remove.short_warning": "Kostet Level"
 }

@@ -10,6 +10,8 @@ import dev.emi.emi.api.widget.FillingArrowWidget;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
+import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
+import name.modid.core.api.tooltips.TooltipText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -71,8 +73,11 @@ public class JewelryTableEmiRecipe implements EmiRecipe {
 
         if (riskyRemoval) {
             widgets.addText(
-                    Text.translatable("emi.gemstones.jewelry_table.remove.short_warning"),
-                    getDisplayWidth() / 2, 38, 0xFF5555, false)
+                    Text.empty()
+              .append(TooltipText.icon(InlineIcons.EXPERIENCE))
+              .append(" ")
+              .append(Text.translatable("emi.gemstones.jewelry_table.remove.short_warning")),
+                    getDisplayWidth() / 2, 38, 0x404040, false)
                     .horizontalAlign(TextWidget.Alignment.CENTER);
         }
     }

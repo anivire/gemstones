@@ -81,6 +81,16 @@ public enum GemstoneQuality {
     };
   }
 
+  public int getRemoveLevelCost() {
+    return switch (this) {
+      case CRUDE -> 1;
+      case REFINED -> 2;
+      case FLAWLESS -> 3;
+      case RADIANT, MYTHIC, AMPLIFIER -> 4;
+      default -> 0;
+    };
+  }
+
   // Legacy support for old qualities, will be removed in next updates
   private static GemstoneQuality fromSerializedName(String name) {
     if (name == null) {

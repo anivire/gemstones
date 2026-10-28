@@ -180,6 +180,15 @@
       ]
     },
     {
+      "type": "bitmap",
+      "file": "gemstones:gui/icons/experience_icon.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        ""
+      ]
+    },
+    {
       "type": "reference",
       "id": "minecraft:default"
     }

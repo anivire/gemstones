@@ -22,28 +22,22 @@ public class ResultSlot extends Slot {
   @Override
   public boolean canTakeItems(PlayerEntity player) {
     handler.updateOutputs();
-    return handler.canTakeResult();
+    return handler.canTakeResult(player);
   }
 
   @Override
   public void onTakeItem(PlayerEntity player, ItemStack taken) {
     handler.updateOutputs();
 
-    if (!handler.canTakeResult()) {
+    if (!handler.canTakeResult(player)) {
       taken.setCount(0);
       handler.sendContentUpdates();
       return;
     }
 
-    boolean removeBreaks = handler.prepareRemoveBreak(player);
-
     super.onTakeItem(player, taken);
 
     handler.finalizeTakeResult(player);
-
-    if (removeBreaks) {
-      taken.setCount(0);
-    }
 
     handler.updateOutputs();
     handler.sendContentUpdates();

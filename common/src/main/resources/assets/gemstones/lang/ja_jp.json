@@ -149,7 +149,8 @@
   "item.gemstones.jewelry_pliers": "ジュエリープライヤー",
   "item.gemstones.jewelry_pliers.info_1": "装備・武器・ツールから %s 個の宝石を取り外せます。",
   "item.gemstones.jewelry_pliers.info_last": "最後の宝石を取り外す",
-  "item.gemstones.jewelry_pliers.info_2": "取り外し時、宝石は %s の確率で破損します。",
+  "item.gemstones.jewelry_pliers.info_2": "取り外しには宝石の品質に応じて%sが必要です。",
+  "item.gemstones.jewelry_pliers.info_levels": "経験値レベル",
   "item.gemstones.jewelry_file": "ジュエリーヤスリ",
   "item.gemstones.jewelry_file.info_1": "宝石を %s してより高品質にできます。",
   "item.gemstones.jewelry_file.info_polishing": "研磨",
@@ -291,12 +292,13 @@
   "item.gemstones.gemstone_name.polychrome_crystal": "多彩結晶",
   "block.gemstones.jewelry_table": "ジュエリーテーブル",
   "container.gemstones.jewelry_table": "ジュエリーテーブル",
+  "container.gemstones.jewelry_table.level_cost": "コスト: %s Lv",
   "rei.gemstones.jewelry_table.insert": "宝石の装着",
   "rei.gemstones.jewelry_table.remove": "宝石の取り外し",
   "rei.gemstones.jewelry_table.expand": "ソケットの拡張",
-  "rei.gemstones.jewelry_table.remove.short_warning": "80%の確率で破壊",
+  "rei.gemstones.jewelry_table.remove.short_warning": "レベルを消費",
   "emi.category.gemstones.jewelry_table_insert": "宝石の装着",
   "emi.category.gemstones.jewelry_table_remove": "宝石の取り外し",
   "emi.category.gemstones.jewelry_table_expand": "ソケットの拡張",
-  "emi.gemstones.jewelry_table.remove.short_warning": "80%の確率で破壊"
+  "emi.gemstones.jewelry_table.remove.short_warning": "レベルを消費"
 }

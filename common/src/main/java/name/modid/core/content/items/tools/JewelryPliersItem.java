@@ -2,6 +2,7 @@ package name.modid.core.content.items.tools;
 
 import java.util.List;
 
+import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import name.modid.core.api.tooltips.TooltipText;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +28,10 @@ public class JewelryPliersItem extends Item implements ConsumableTool {
 
     tooltip.add(Text.empty());
     tooltip.add(TooltipText.info(Text.literal(" ").append(
-        Text.translatable("item.gemstones.jewelry_pliers.info_2", Text.literal("80%").formatted(Formatting.RED))
+        Text.translatable("item.gemstones.jewelry_pliers.info_2", Text.empty()
+            .append(TooltipText.icon(InlineIcons.EXPERIENCE))
+            .append(Text.literal(" "))
+            .append(Text.translatable("item.gemstones.jewelry_pliers.info_levels").formatted(Formatting.GREEN)))
             .formatted(Formatting.GRAY))));
   }
 }

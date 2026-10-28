@@ -149,7 +149,8 @@
   "item.gemstones.jewelry_pliers": "Jewelry Pliers",
   "item.gemstones.jewelry_pliers.info_1": "Allows %s gemstone from equipment, weapons and tools.",
   "item.gemstones.jewelry_pliers.info_last": "removing last",
-  "item.gemstones.jewelry_pliers.info_2": "Gemstones have an %s chance to break during removal.",
+  "item.gemstones.jewelry_pliers.info_2": "Removal costs %s depending on gemstone quality.",
+  "item.gemstones.jewelry_pliers.info_levels": "Experience Levels",
   "item.gemstones.jewelry_file": "Jewelry File",
   "item.gemstones.jewelry_file.info_1": "Allows %s gemstones to a higher quality.",
   "item.gemstones.jewelry_file.info_polishing": "polishing",
@@ -291,12 +292,13 @@
   "item.gemstones.gemstone_name.polychrome_crystal": "Polychrome Crystall",
   "block.gemstones.jewelry_table": "Jewelry Table",
   "container.gemstones.jewelry_table": "Jewelry Table",
+  "container.gemstones.jewelry_table.level_cost": "Cost: %s Lvl",
   "rei.gemstones.jewelry_table.insert": "Inserting Gemstones",
   "rei.gemstones.jewelry_table.remove": "Removing Gemstones",
   "rei.gemstones.jewelry_table.expand": "Expanding Sockets",
-  "rei.gemstones.jewelry_table.remove.short_warning": "80% destruction chance",
+  "rei.gemstones.jewelry_table.remove.short_warning": "Costs XP levels",
   "emi.category.gemstones.jewelry_table_insert": "Inserting Gemstones",
   "emi.category.gemstones.jewelry_table_remove": "Removing Gemstones",
   "emi.category.gemstones.jewelry_table_expand": "Expanding Sockets",
-  "emi.gemstones.jewelry_table.remove.short_warning": "80% destruction chance"
+  "emi.gemstones.jewelry_table.remove.short_warning": "Costs XP levels"
 }
