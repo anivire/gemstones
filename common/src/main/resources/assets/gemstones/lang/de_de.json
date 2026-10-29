@@ -152,6 +152,7 @@
   "tooltip.gemstones.polishing.progress": "Facettieren: %s / %s (%s%%)",
 
   "item.gemstones.expansion_crystal": "Erweiterungskristall",
+  "item.gemstones.gemstone_dust": "Edelsteinstaub",
 
   "item.gemstones.diamond_tipped_chisel": "Diamant Meißel",
   "item.gemstones.netherite_tipped_chisel": "Netherite Meißel",
@@ -174,9 +175,9 @@
   "item.gemstones.jewelry_file.info_polishing": "Schleifen",
   "item.gemstones.jewelry_file.info_2": " Halte %s in der Hand mit Edelstein in der %s.",
   "item.gemstones.jewelry_file.info_offhand": "Zweithand",
-  "item.gemstones.jewelry_file.info_break_chance": "Schleifen eines Edelsteins kann diesen %s.",
-  "item.gemstones.jewelry_file.info_break_chance_desc": "zerstören",
-  "item.gemstones.jewelry_file.info_break_chance_2": "Höhere %s bedeutet eine höhere Bruchwahrscheinlichkeit",
+  "item.gemstones.jewelry_file.info_dust": "Jede Stufe verbraucht %s.",
+  "item.gemstones.jewelry_file.info_dust_2": "Höhere %s braucht mehr Staub.",
+  "item.gemstones.jewelry_file.missing_dust": "Benötigt %s %s",
   "item.gemstones.jewelry_file.info_quality": "Qualität",
   "item.gemstones.jewelry_file.info_use": "Benutzung",
 

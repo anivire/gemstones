@@ -7,10 +7,11 @@ import name.modid.core.api.components.PolishingComponent;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import name.modid.core.api.tooltips.TooltipText;
+import name.modid.core.content.items.GemstoneDustItem;
 import name.modid.core.content.items.GemstoneItem;
+import name.modid.core.content.items.registries.ItemsRegistry;
 import name.modid.core.content.items.registries.GemstonesRegistry;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -46,9 +47,19 @@ public class JewelryFileItem extends Item implements ConsumableTool {
     if (!canPolishGem(gemStack))
       return TypedActionResult.pass(fileStack);
 
-    if (!world.isClient && !gemStack.contains(ComponentsRegistry.polishing())) {
-      gemStack.set(ComponentsRegistry.polishing(),
-          new PolishingComponent(0, 0, PolishingRules.nextStageDurationTicks(world.random)));
+    PolishingComponent progress = gemStack.get(ComponentsRegistry.polishing());
+    boolean stagePaid = progress != null && progress.stagePaid();
+    int dustCost = getStageDustCost(gemStack);
+    if (!stagePaid && !GemstoneDustItem.hasDust(player, dustCost)) {
+      if (!world.isClient)
+        sendMissingDust(player, dustCost);
+      return TypedActionResult.fail(fileStack);
+    }
+
+    if (!world.isClient) {
+      if (progress == null)
+        progress = PolishingComponent.start(PolishingRules.nextStageDurationTicks(world.random));
+      gemStack.set(ComponentsRegistry.polishing(), payStage(player, gemStack, progress));
     }
 
     player.setCurrentHand(hand);
@@ -80,8 +91,17 @@ public class JewelryFileItem extends Item implements ConsumableTool {
     if (progress == null) {
       if (world.isClient)
         return;
-      progress = new PolishingComponent(0, 0, PolishingRules.nextStageDurationTicks(world.random));
+      progress = PolishingComponent.start(PolishingRules.nextStageDurationTicks(world.random));
       gemStack.set(ComponentsRegistry.polishing(), progress);
+    }
+
+    if (!world.isClient && !progress.stagePaid()) {
+      progress = payStage(player, gemStack, progress);
+      gemStack.set(ComponentsRegistry.polishing(), progress);
+      if (!progress.stagePaid()) {
+        player.stopUsingItem();
+        return;
+      }
     }
 
     if (world.isClient) {
@@ -132,11 +152,11 @@ public class JewelryFileItem extends Item implements ConsumableTool {
             Text.translatable("item.gemstones.jewelry_file.info_offhand").formatted(Formatting.GOLD))
         .formatted(Formatting.GRAY)));
     tooltip.add(TooltipText.indented(Text
-        .translatable("item.gemstones.jewelry_file.info_break_chance",
-            Text.translatable("item.gemstones.jewelry_file.info_break_chance_desc").formatted(Formatting.RED))
+        .translatable("item.gemstones.jewelry_file.info_dust",
+            Text.empty().append(ItemsRegistry.gemstoneDust().getDefaultStack().toHoverableText()))
         .formatted(Formatting.GRAY)));
     tooltip.add(TooltipText.indented(Text
-        .translatable("item.gemstones.jewelry_file.info_break_chance_2",
+        .translatable("item.gemstones.jewelry_file.info_dust_2",
             Text.translatable("item.gemstones.jewelry_file.info_quality").formatted(Formatting.GOLD))
         .formatted(Formatting.GRAY)));
   }
@@ -170,12 +190,6 @@ public class JewelryFileItem extends Item implements ConsumableTool {
     fileStack.damage(1, player, EquipmentSlot.MAINHAND);
 
     GemstoneItem gemItem = (GemstoneItem) gemStack.getItem();
-    if (world.random.nextFloat() < gemItem.getRarityType().getBreakChance()) {
-      breakGem(world, player, gemStack);
-      player.stopUsingItem();
-      return;
-    }
-
     int completedStages = progress.completedStages() + 1;
     int totalStages = gemItem.getRarityType().getPolishStages();
     if (completedStages >= totalStages) {
@@ -186,10 +200,39 @@ public class JewelryFileItem extends Item implements ConsumableTool {
       return;
     }
 
-    gemStack.set(ComponentsRegistry.polishing(),
+    PolishingComponent next = payStage(player, gemStack,
         progress.nextStage(PolishingRules.nextStageDurationTicks(world.random)));
+    gemStack.set(ComponentsRegistry.polishing(), next);
     world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME,
         SoundCategory.PLAYERS, 0.35f, 1.0f + world.random.nextFloat() * 0.25f);
+
+    if (!next.stagePaid())
+      player.stopUsingItem();
+  }
+
+  // Dust is paid when a stage starts, an unpaid stage waits until the player has enough dust
+  private static PolishingComponent payStage(PlayerEntity player, ItemStack gemStack, PolishingComponent progress) {
+    if (progress.stagePaid())
+      return progress;
+
+    int dustCost = getStageDustCost(gemStack);
+    if (!GemstoneDustItem.consumeDust(player, dustCost)) {
+      sendMissingDust(player, dustCost);
+      return progress;
+    }
+
+    return progress.paid();
+  }
+
+  private static int getStageDustCost(ItemStack gemStack) {
+    return gemStack.getItem() instanceof GemstoneItem gemItem ? gemItem.getRarityType().getPolishDustCost() : 0;
+  }
+
+  private static void sendMissingDust(PlayerEntity player, int amount) {
+    player.sendMessage(Text.translatable("item.gemstones.jewelry_file.missing_dust",
+        Text.literal(String.valueOf(amount)).formatted(Formatting.GOLD),
+        ItemsRegistry.gemstoneDust().getName().copy().formatted(Formatting.GOLD))
+        .formatted(Formatting.RED), true);
   }
 
   private void upgradeGem(World world, PlayerEntity player, ItemStack gemStack, GemstoneItem gemItem) {
@@ -208,18 +251,6 @@ public class JewelryFileItem extends Item implements ConsumableTool {
     gemStack.remove(ComponentsRegistry.polishing());
     if (!player.getInventory().insertStack(upgraded))
       player.dropItem(upgraded, false);
-  }
-
-  private void breakGem(World world, PlayerEntity player, ItemStack gemStack) {
-    gemStack.remove(ComponentsRegistry.polishing());
-    gemStack.decrement(1);
-    if (gemStack.isEmpty())
-      player.setStackInHand(Hand.OFF_HAND, ItemStack.EMPTY);
-
-    world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK,
-        SoundCategory.PLAYERS, 0.9f, 0.8f + world.random.nextFloat() * 0.2f);
-    world.spawnEntity(new ExperienceOrbEntity(world, player.getX(), player.getY() + 0.5, player.getZ(),
-        1 + world.random.nextInt(3)));
   }
 
   private void playWorkingSound(World world, PlayerEntity player, int tickInStage) {

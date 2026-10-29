@@ -72,12 +72,42 @@ public enum GemstoneQuality {
     };
   }
 
-  public float getBreakChance() {
+  public int getPolishDustCost() {
     return switch (this) {
-      case CRUDE -> 0.1f;
-      case REFINED -> 0.15f;
-      case FLAWLESS -> 0.2f;
+      case CRUDE, REFINED -> 1;
+      case FLAWLESS -> 2;
+      default -> 0;
+    };
+  }
+
+  // Mythics and amplifiers cannot be ground, some of them are farmable
+  public int getDustYield() {
+    return switch (this) {
+      case CRUDE -> 1;
+      case REFINED -> 2;
+      case FLAWLESS -> 4;
+      case RADIANT -> 8;
+      default -> 0;
+    };
+  }
+
+  public float getGrindExperienceChance() {
+    return switch (this) {
+      case CRUDE -> 0.3f;
+      case REFINED -> 0.4f;
+      case FLAWLESS -> 0.55f;
+      case RADIANT -> 0.7f;
       default -> 0f;
+    };
+  }
+
+  public int getGrindMaxExperience() {
+    return switch (this) {
+      case CRUDE -> 1;
+      case REFINED -> 2;
+      case FLAWLESS -> 3;
+      case RADIANT -> 4;
+      default -> 0;
     };
   }
 

@@ -10,6 +10,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import name.modid.Gemstones;
 import name.modid.core.content.blocks.BlocksRegistry;
 import name.modid.core.content.items.ExpansionCrystalItem;
+import name.modid.core.content.items.GemstoneDustItem;
 import name.modid.core.content.items.GeodeItem;
 import name.modid.core.content.items.MossyBox;
 import name.modid.core.content.items.tools.ChiselItem;
@@ -60,6 +61,10 @@ public final class ItemsRegistry {
       settings -> new ExpansionCrystalItem(settings),
       new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.MAX_STACK_SIZE, 16));
 
+  public static final RegistrySupplier<Item> GEMSTONE_DUST = register("gemstone_dust",
+      settings -> new GemstoneDustItem(settings),
+      new Item.Settings().rarity(Rarity.UNCOMMON));
+
   public static RegistrySupplier<Item> register(String path, Function<Item.Settings, Item> factory,
       Item.Settings settings) {
     return register(path, factory, () -> settings);
@@ -83,6 +88,7 @@ public final class ItemsRegistry {
     all.add(jewelryPliers());
     all.add(jewelryHammer());
     all.add(expansionCrystal());
+    all.add(gemstoneDust());
     all.add(BlocksRegistry.jewelryTable().asItem());
     return all;
   }
@@ -129,5 +135,9 @@ public final class ItemsRegistry {
 
   public static Item expansionCrystal() {
     return EXPANSION_CRYSTAL.get();
+  }
+
+  public static Item gemstoneDust() {
+    return GEMSTONE_DUST.get();
   }
 }

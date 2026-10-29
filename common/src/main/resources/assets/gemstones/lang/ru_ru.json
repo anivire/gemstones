@@ -152,6 +152,7 @@
   "tooltip.gemstones.polishing.progress": "Полировка: %s / %s (%s%%)",
 
   "item.gemstones.expansion_crystal": "Кристал расширения",
+  "item.gemstones.gemstone_dust": "Самоцветная пыль",
 
   "item.gemstones.diamond_tipped_chisel": "Долото с алмазным наконечником",
   "item.gemstones.netherite_tipped_chisel": "Долото с незеритовым наконечником",
@@ -174,9 +175,9 @@
   "item.gemstones.jewelry_file.info_polishing": "полировать",
   "item.gemstones.jewelry_file.info_2": " Удерживайте %s в руке и самоцвет во %s.",
   "item.gemstones.jewelry_file.info_offhand": "второй руке",
-  "item.gemstones.jewelry_file.info_break_chance": "Полирование самоцвета может навсегда %s.",
-  "item.gemstones.jewelry_file.info_break_chance_desc": "разбить его",
-  "item.gemstones.jewelry_file.info_break_chance_2": "Чем выше %s, тем выше шанс разбить самоцвет.",
+  "item.gemstones.jewelry_file.info_dust": "Каждая стадия тратит %s.",
+  "item.gemstones.jewelry_file.info_dust_2": "Чем выше %s, тем больше нужно пыли.",
+  "item.gemstones.jewelry_file.missing_dust": "Требуется %2$s: %1$s",
   "item.gemstones.jewelry_file.info_quality": "качество",
   "item.gemstones.jewelry_file.info_use": "использовать",
 
