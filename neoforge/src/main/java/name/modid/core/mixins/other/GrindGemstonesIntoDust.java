@@ -1,5 +1,8 @@
 package name.modid.core.mixins.other;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
 import org.spongepowered.asm.mixin.Final;
@@ -23,23 +26,30 @@ public abstract class GrindGemstonesIntoDust implements GrindstoneGemAccessor {
 
   @ModifyReturnValue(method = "getOutputStack", at = @At("RETURN"))
   private ItemStack gemstones$grindGemIntoDust(ItemStack output) {
-    ItemStack gem = gemstones$getGrindingGem();
-    if (gem.isEmpty()) {
-      return output;
+    List<ItemStack> gems = gemstones$getGrindingGems();
+    if (gems.isEmpty()) {
+      boolean hasGem = GemstoneDustItem.isGrindable(input.getStack(0))
+          || GemstoneDustItem.isGrindable(input.getStack(1));
+      return hasGem ? ItemStack.EMPTY : output;
     }
 
-    return new ItemStack(ItemsRegistry.gemstoneDust(), GemstoneDustItem.getDustYield(gem));
+    int dust = gems.stream().mapToInt(GemstoneDustItem::getDustYield).sum();
+    return new ItemStack(ItemsRegistry.gemstoneDust(), dust);
   }
 
   @Override
-  public ItemStack gemstones$getGrindingGem() {
-    ItemStack first = input.getStack(0);
-    ItemStack second = input.getStack(1);
-    if (!first.isEmpty() && !second.isEmpty()) {
-      return ItemStack.EMPTY;
+  public List<ItemStack> gemstones$getGrindingGems() {
+    List<ItemStack> gems = new ArrayList<>();
+    for (ItemStack stack : List.of(input.getStack(0), input.getStack(1))) {
+      if (stack.isEmpty()) {
+        continue;
+      }
+      if (!GemstoneDustItem.isGrindable(stack)) {
+        return List.of();
+      }
+      gems.add(stack);
     }
 
-    ItemStack gem = first.isEmpty() ? second : first;
-    return GemstoneDustItem.isGrindable(gem) ? gem : ItemStack.EMPTY;
+    return gems;
   }
 }

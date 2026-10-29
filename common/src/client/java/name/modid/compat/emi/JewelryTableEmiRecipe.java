@@ -10,8 +10,6 @@ import dev.emi.emi.api.widget.FillingArrowWidget;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
-import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
-import name.modid.core.api.tooltips.TooltipText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -20,15 +18,15 @@ public class JewelryTableEmiRecipe implements EmiRecipe {
     private final EmiRecipeCategory category;
     private final List<EmiIngredient> inputs;
     private final List<EmiStack> outputs;
-    private final boolean riskyRemoval;
+    private final boolean costsLevels;
 
     public JewelryTableEmiRecipe(Identifier id, EmiRecipeCategory category,
-            List<EmiIngredient> inputs, List<EmiStack> outputs, boolean riskyRemoval) {
+            List<EmiIngredient> inputs, List<EmiStack> outputs, boolean costsLevels) {
         this.id = id;
         this.category = category;
         this.inputs = inputs;
         this.outputs = outputs;
-        this.riskyRemoval = riskyRemoval;
+        this.costsLevels = costsLevels;
     }
 
     @Override
@@ -58,7 +56,7 @@ public class JewelryTableEmiRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return riskyRemoval ? 52 : 36;
+        return costsLevels ? 52 : 36;
     }
 
     @Override
@@ -71,12 +69,9 @@ public class JewelryTableEmiRecipe implements EmiRecipe {
         int outputX = arrowX + 28;
         widgets.add(new SlotWidget(outputs.get(0), outputX, 5).large(true).recipeContext(this));
 
-        if (riskyRemoval) {
+        if (costsLevels) {
             widgets.addText(
-                    Text.empty()
-              .append(TooltipText.icon(InlineIcons.EXPERIENCE))
-              .append(" ")
-              .append(Text.translatable("emi.gemstones.jewelry_table.remove.short_warning")),
+                    Text.translatable("emi.gemstones.jewelry_table.remove.short_warning"),
                     getDisplayWidth() / 2, 38, 0x404040, false)
                     .horizontalAlign(TextWidget.Alignment.CENTER);
         }

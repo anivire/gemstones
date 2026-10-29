@@ -91,7 +91,7 @@ public class GemstonesReiPlugin implements REIClientPlugin {
               baseIngredient,
               ingredient(gem)),
           List.of(resultIngredient),
-          false));
+          true));
     }
 
     return displays;

@@ -11,6 +11,13 @@ base {
 	archivesName = "${rootProject.minecraft_version}-neoforge-${rootProject.archives_base_name}"
 }
 
+sourceSets {
+	gametest {
+		compileClasspath += main.compileClasspath + main.output + project(':common').sourceSets.gametest.output
+		runtimeClasspath += main.runtimeClasspath + main.output + project(':common').sourceSets.gametest.output
+	}
+}
+
 configurations {
 	common
 	shadowCommon
@@ -29,10 +36,32 @@ loom {
 			sourceSet project(':common').sourceSets.client
 			sourceSet sourceSets.main
 		}
+		'gemstones_gametest' {
+			sourceSet sourceSets.gametest
+			sourceSet project(':common').sourceSets.gametest
+		}
+	}
+}
+
+loom {
+	runs {
+		gameTestServer {
+			server()
+			forgeTemplate "gameTestServer"
+			name = "NeoForge Game Test"
+			property "neoforge.enableGameTest", "true"
+			property "neoforge.gameTestServer", "true"
+			runDir "build/gametest"
+			source sourceSets.gametest
+		}
 	}
 }
 
 tasks.named('runClient') {
+	jvmArgs '-Dmixin.env.disableRefMap=true'
+}
+
+tasks.named('runGameTestServer') {
 	jvmArgs '-Dmixin.env.disableRefMap=true'
 }
 

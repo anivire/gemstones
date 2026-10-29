@@ -12,8 +12,6 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import name.modid.core.content.blocks.BlocksRegistry;
-import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
-import name.modid.core.api.tooltips.TooltipText;
 import net.minecraft.text.Text;
 
 public class JewelryTableReiCategory implements DisplayCategory<JewelryTableReiDisplay> {
@@ -61,12 +59,9 @@ public class JewelryTableReiCategory implements DisplayCategory<JewelryTableReiD
         .entries(display.getOutputEntries().get(0))
         .markOutput());
 
-    if (display.isRiskyRemoval()) {
+    if (display.costsLevels()) {
       widgets.add(Widgets.createLabel(new Point(bounds.x + bounds.width / 2, bounds.y + 49),
-          Text.empty()
-              .append(TooltipText.icon(InlineIcons.EXPERIENCE))
-              .append(" ")
-              .append(Text.translatable("rei.gemstones.jewelry_table.remove.short_warning")))
+          Text.translatable("rei.gemstones.jewelry_table.remove.short_warning"))
           .centered()
           .noShadow()
           .color(0x404040, 0xBBBBBB));

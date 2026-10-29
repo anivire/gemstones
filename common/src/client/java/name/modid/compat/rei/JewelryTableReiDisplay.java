@@ -8,16 +8,16 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient;
 
 public class JewelryTableReiDisplay extends BasicDisplay {
   private final CategoryIdentifier<JewelryTableReiDisplay> category;
-  private final boolean riskyRemoval;
+  private final boolean costsLevels;
 
   public JewelryTableReiDisplay(
       CategoryIdentifier<JewelryTableReiDisplay> category,
       List<EntryIngredient> inputs,
       List<EntryIngredient> outputs,
-      boolean riskyRemoval) {
+      boolean costsLevels) {
     super(inputs, outputs);
     this.category = category;
-    this.riskyRemoval = riskyRemoval;
+    this.costsLevels = costsLevels;
   }
 
   @Override
@@ -25,7 +25,7 @@ public class JewelryTableReiDisplay extends BasicDisplay {
     return category;
   }
 
-  public boolean isRiskyRemoval() {
-    return riskyRemoval;
+  public boolean costsLevels() {
+    return costsLevels;
   }
 }

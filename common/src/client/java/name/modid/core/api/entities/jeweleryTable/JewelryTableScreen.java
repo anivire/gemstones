@@ -48,7 +48,7 @@ public class JewelryTableScreen extends HandledScreen<JewelryTableScreenHandler>
 
     context.drawTexture(CONTAINER_BACKGROUND_TEXTURE, x, bottomPartY, 0, 76, this.backgroundWidth, bottomPartHeight);
 
-    int cost = this.handler.getRemoveLevelCost();
+    int cost = this.handler.getLevelCost();
     if (cost > 0 && !canAfford(cost)) {
       context.drawGuiTexture(ERROR_TEXTURE, x + ERROR_X, y + ERROR_Y, 28, 21);
     }
@@ -68,7 +68,7 @@ public class JewelryTableScreen extends HandledScreen<JewelryTableScreenHandler>
   }
 
   private void drawLevelCost(DrawContext context) {
-    int cost = this.handler.getRemoveLevelCost();
+    int cost = this.handler.getLevelCost();
     if (cost <= 0 || this.client == null || this.client.player == null) {
       return;
     }

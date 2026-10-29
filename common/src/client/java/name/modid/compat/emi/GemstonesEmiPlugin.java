@@ -60,7 +60,7 @@ public class GemstonesEmiPlugin implements EmiPlugin {
                             EmiIngredient.of(bases.stream().map(EmiStack::of).toList()),
                             EmiIngredient.of(List.of(EmiStack.of(gem)))),
                     results.stream().map(EmiStack::of).toList(),
-                    false));
+                    true));
             idCounter++;
         }
 

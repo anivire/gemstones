@@ -127,14 +127,30 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       return false;
     }
 
-    return player.getAbilities().creativeMode || player.experienceLevel >= getRemoveLevelCost();
+    return player.getAbilities().creativeMode || player.experienceLevel >= getLevelCost();
   }
 
-  public int getRemoveLevelCost() {
-    if (getMode() != ActionMode.REMOVE) {
+  public int getLevelCost() {
+    if (resultInventory.getStack(0).isEmpty()) {
       return 0;
     }
 
+    return switch (getMode()) {
+      case INSERT -> getInsertLevelCost();
+      case REMOVE -> getRemoveLevelCost();
+      default -> 0;
+    };
+  }
+
+  private int getInsertLevelCost() {
+    if (!(inventory.getStack(SLOT_GEM).getItem() instanceof GemstoneItem gem)) {
+      return 0;
+    }
+
+    return gem.getRarityType().getInsertLevelCost();
+  }
+
+  private int getRemoveLevelCost() {
     ItemStack base = inventory.getStack(SLOT_BASE);
     int index = GemstoneSlotHelper.getLastFilledSlotIndex(base);
     GemstoneComponent[] gems = GemstoneSlotHelper.getGemstones(base);
@@ -264,6 +280,8 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
     ActionMode mode = getMode();
 
     if (mode == ActionMode.INSERT) {
+      chargeLevels(player, getLevelCost());
+
       ItemStack gem = inventory.getStack(SLOT_GEM);
 
       if (!gem.isEmpty()) {
@@ -285,10 +303,7 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
       int idx = GemstoneSlotHelper.getLastFilledSlotIndex(base);
 
       if (idx != -1) {
-        int cost = getRemoveLevelCost();
-        if (!player.getAbilities().creativeMode && cost > 0) {
-          player.addExperienceLevels(-cost);
-        }
+        chargeLevels(player, getLevelCost());
 
         GemstoneSlotHelper.clearGemstoneAtIndex(base, idx);
         inventory.setStack(SLOT_BASE, base);
@@ -326,6 +341,12 @@ public class JewelryTableScreenHandler extends ScreenHandler implements Inventor
 
       damageActionTool(player, 1);
       sendContentUpdates();
+    }
+  }
+
+  private void chargeLevels(PlayerEntity player, int cost) {
+    if (!player.getAbilities().creativeMode && cost > 0) {
+      player.addExperienceLevels(-cost);
     }
   }
 

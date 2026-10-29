@@ -1,8 +1,9 @@
 package name.modid.core.utils.accessors;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 
 public interface GrindstoneGemAccessor {
-  /** The gemstone being ground into dust, or an empty stack */
-  ItemStack gemstones$getGrindingGem();
+  List<ItemStack> gemstones$getGrindingGems();
 }

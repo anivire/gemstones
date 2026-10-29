@@ -74,8 +74,7 @@ public enum GemstoneQuality {
 
   public int getPolishDustCost() {
     return switch (this) {
-      case CRUDE, REFINED -> 1;
-      case FLAWLESS -> 2;
+      case CRUDE, REFINED, FLAWLESS -> 2;
       default -> 0;
     };
   }
@@ -119,6 +118,10 @@ public enum GemstoneQuality {
       case RADIANT, MYTHIC, AMPLIFIER -> 4;
       default -> 0;
     };
+  }
+
+  public int getInsertLevelCost() {
+    return (getRemoveLevelCost() + 1) / 2;
   }
 
   // Legacy support for old qualities, will be removed in next updates

@@ -15,6 +15,7 @@ import name.modid.core.api.particles.StunnedParticleFactory;
 import name.modid.core.api.projectiles.spark.SparkProjectileModel;
 import name.modid.core.api.projectiles.spark.SparkProjectileRenderer;
 import name.modid.core.content.entities.RainArrowEntity;
+import name.modid.core.content.items.GemstoneDustItem;
 import name.modid.core.content.entities.SparkProjectileEntity;
 import name.modid.core.content.particles.ScarabParticleInstance;
 import name.modid.core.content.registries.EntitiesRegistry;
@@ -26,6 +27,7 @@ import name.modid.neoforge.client.GemstonesNeoForgeClientEvents;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.ProjectileEntityRenderer;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.screen.ScreenHandlerType;
@@ -41,6 +43,7 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.extensions.IItemStackExtension;
+import net.neoforged.neoforge.event.GrindstoneEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 
 @Mod(Gemstones.MOD_ID)
@@ -53,6 +56,7 @@ public class GemstonesNeoForge {
 
     // Fired for every player after /reload (and on join, which is already handled by PLAYER_JOIN)
     NeoForge.EVENT_BUS.addListener(this::onDatapackSync);
+    NeoForge.EVENT_BUS.addListener(this::onGrindstoneTake);
 
     if (FMLEnvironment.dist.isClient()) {
       eventBus.addListener(this::registerParticleProviders);
@@ -75,6 +79,19 @@ public class GemstonesNeoForge {
     if (event.getPlayer() == null) {
       NetworkHandler.resyncAll(event.getPlayerList().getServer());
     }
+  }
+
+  private void onGrindstoneTake(GrindstoneEvent.OnTakeItem event) {
+    event.setNewTopItem(remainingAfterGrinding(event.getTopItem(), event.getNewTopItem()));
+    event.setNewBottomItem(remainingAfterGrinding(event.getBottomItem(), event.getNewBottomItem()));
+  }
+
+  private static ItemStack remainingAfterGrinding(ItemStack current, ItemStack remaining) {
+    if (GemstoneDustItem.isGrindable(current) && current.getCount() > 1) {
+      return current.copyWithCount(current.getCount() - 1);
+    }
+
+    return remaining;
   }
 
   private void clientSetup(FMLClientSetupEvent event) {

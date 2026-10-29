@@ -1,5 +1,7 @@
 package name.modid.core.mixins.other;
 
+import java.util.List;
+
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
@@ -26,18 +28,28 @@ public abstract class GrindstoneGemstoneResult {
   @Inject(method = "onTakeItem", at = @At("HEAD"))
   private void gemstones$onGemstoneGround(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
     if (!(player.getWorld() instanceof ServerWorld world)
-        || !(player.currentScreenHandler instanceof GrindstoneGemAccessor accessor)
-        || !(accessor.gemstones$getGrindingGem().getItem() instanceof GemstoneItem gem)) {
+        || !(player.currentScreenHandler instanceof GrindstoneGemAccessor accessor)) {
       return;
     }
 
-    GemstoneQuality quality = gem.getRarityType();
+    List<ItemStack> gems = accessor.gemstones$getGrindingGems();
+    if (gems.isEmpty()) {
+      return;
+    }
+
     world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK,
         SoundCategory.BLOCKS, 0.9f, 0.8f + world.random.nextFloat() * 0.2f);
 
-    if (world.random.nextFloat() < quality.getGrindExperienceChance()) {
-      ExperienceOrbEntity.spawn(world, player.getPos(),
-          1 + world.random.nextInt(quality.getGrindMaxExperience()));
+    for (ItemStack ground : gems) {
+      if (!(ground.getItem() instanceof GemstoneItem gem)) {
+        continue;
+      }
+
+      GemstoneQuality quality = gem.getRarityType();
+      if (world.random.nextFloat() < quality.getGrindExperienceChance()) {
+        ExperienceOrbEntity.spawn(world, player.getPos(),
+            1 + world.random.nextInt(quality.getGrindMaxExperience()));
+      }
     }
   }
 

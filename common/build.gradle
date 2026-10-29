@@ -9,6 +9,10 @@ sourceSets {
 			srcDir 'src/main/resources'
 		}
 	}
+	gametest {
+		compileClasspath += main.compileClasspath + main.output
+		runtimeClasspath += main.runtimeClasspath + main.output
+	}
 }
 
 loom {
@@ -32,6 +36,19 @@ dependencies {
 	modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
+
+	testImplementation platform("org.junit:junit-bom:${rootProject.junit_version}")
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation "net.fabricmc:fabric-loader-junit:${rootProject.loader_version}"
+}
+
+test {
+	useJUnitPlatform()
+	workingDir = layout.buildDirectory.dir('junit').get().asFile
+	doFirst { workingDir.mkdirs() }
+	systemProperty 'gemstones.resources', file('src/main/resources').absolutePath
+	systemProperty 'gemstones.sources', file('src/main/java').absolutePath
 }
 
 tasks.processResources {

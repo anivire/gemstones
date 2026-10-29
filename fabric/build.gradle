@@ -7,9 +7,34 @@ architectury {
 	fabric()
 }
 
+sourceSets {
+	gametest {
+		compileClasspath += main.compileClasspath + main.output
+		runtimeClasspath += main.runtimeClasspath + main.output + project(':common').sourceSets.gametest.output
+	}
+}
+
 loom {
+	mods {
+		'gemstones_gametest' {
+			sourceSet sourceSets.gametest
+			sourceSet project(':common').sourceSets.gametest
+		}
+	}
+
 	mixin {
 		defaultRefmapName = "gemstones.fabric-refmap.json"
+	}
+
+	runs {
+		gametest {
+			server()
+			name = "Fabric Game Test"
+			vmArg "-Dfabric-api.gametest"
+			vmArg "-Dfabric-api.gametest.report-file=${project.file('build/gametest/report.xml')}"
+			runDir "build/gametest"
+			source sourceSets.gametest
+		}
 	}
 }
 

@@ -596,8 +596,8 @@ public class BlockBreakHandler implements ModifierHandler<ModifierConfig.BlockBr
     // normally spawns them itself. A server-side break never reaches that client,
     // so send them here
     if (!world.getBlockState(immutablePos).isOf(state.getBlock())) {
-      player.networkHandler.sendPacket(new WorldEventS2CPacket(
-          WorldEvents.BLOCK_BROKEN, immutablePos, Block.getRawIdFromState(state), false));
+      player.networkHandler.send(new WorldEventS2CPacket(
+          WorldEvents.BLOCK_BROKEN, immutablePos, Block.getRawIdFromState(state), false), null);
     }
 
     world.updateListeners(immutablePos, state, world.getBlockState(immutablePos), UPDATE_FLAGS);
