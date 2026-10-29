@@ -67,7 +67,6 @@ public class JewelryTableScreen extends HandledScreen<JewelryTableScreenHandler>
     drawLevelCost(context);
   }
 
-  // Same placement and colors as the anvil cost, the bright text needs the dark plate behind it
   private void drawLevelCost(DrawContext context) {
     int cost = this.handler.getRemoveLevelCost();
     if (cost <= 0 || this.client == null || this.client.player == null) {
@@ -76,8 +75,8 @@ public class JewelryTableScreen extends HandledScreen<JewelryTableScreenHandler>
 
     boolean affordable = canAfford(cost);
     Text text = Text.translatable("container.gemstones.jewelry_table.level_cost", Text.empty()
-        .append(TooltipText.icon(InlineIcons.EXPERIENCE))
-        .append(Text.literal(" " + cost)))
+        .append(Text.literal(cost + " "))
+        .append(TooltipText.icon(InlineIcons.EXPERIENCE)))
         .styled(style -> style.withColor(affordable ? AFFORDABLE_COLOR : TOO_EXPENSIVE_COLOR));
 
     int textY = this.playerInventoryTitleY - 3;

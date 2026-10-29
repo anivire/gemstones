@@ -19,6 +19,8 @@ import net.minecraft.util.Formatting;
 
 public class TooltipBuilder {
   public static final Formatting DEFAULT_TEXT_COLOR = Formatting.GOLD;
+  // Positive values that stack with diminishing returns, plain additive ones stay green
+  public static final Formatting DIMINISHING_VALUE_COLOR = Formatting.AQUA;
 
   private final GemstoneType gemstoneType;
   private final ModifierItemCategory itemCategory;
@@ -113,6 +115,22 @@ public class TooltipBuilder {
     return getArrowPrefix(isPositive, isPositive ? Formatting.GREEN : Formatting.RED);
   }
 
+  public static Formatting getValueColor(boolean isPositive, boolean diminishing) {
+    if (!isPositive) {
+      return Formatting.RED;
+    }
+    return diminishing ? DIMINISHING_VALUE_COLOR : Formatting.GREEN;
+  }
+
+  // Diminishing bonuses get an arrow with a bar on top: the value grows towards a limit
+  public MutableText getValuePrefix(boolean isPositive, boolean diminishing) {
+    Formatting color = getValueColor(isPositive, diminishing);
+    if (isPositive && diminishing) {
+      return TooltipText.icon(InlineIcons.ARROW_UP_DIMINISHING, color);
+    }
+    return getArrowPrefix(isPositive, color);
+  }
+
   public MutableText getArrowPrefix(boolean isPositive, Formatting formatting) {
     return TooltipText.icon(isPositive ? InlineIcons.ARROW_UP : InlineIcons.ARROW_DOWN, formatting);
   }
@@ -137,7 +155,7 @@ public class TooltipBuilder {
 
   /**
    * Event name with its icon, e.g. "❤ Extra Health". A non-null {@code amount}
-   * goes between the icon and the name in the same color: "❤ 2 Extra Health"
+   * goes before the icon in the same color: "2 ❤ Extra Health"
    */
   public MutableText getEventText(EventType eventType, @Nullable String amount) {
     if (eventType == null) {
@@ -160,14 +178,14 @@ public class TooltipBuilder {
       }
     }
 
-    MutableText label = amount == null
-        ? TooltipHelper.safeTranslatable(eventType.getTranslationKey()).formatted(textColor)
-        : Text.literal(amount + " ")
-            .append(TooltipHelper.safeTranslatable(eventType.getTranslationKey()))
-            .formatted(textColor);
+    MutableText label = TooltipHelper.safeTranslatable(eventType.getTranslationKey()).formatted(textColor);
+    MutableText line = amount == null
+        ? TooltipText.line()
+        : TooltipText.line(Text.literal(amount + " ").formatted(textColor));
 
-    return icon == null
-        ? TooltipText.line(label)
-        : TooltipText.line(TooltipText.icon(icon), Text.literal(" "), label);
+    if (icon != null) {
+      line.append(TooltipText.icon(icon)).append(Text.literal(" "));
+    }
+    return line.append(label);
   }
 }

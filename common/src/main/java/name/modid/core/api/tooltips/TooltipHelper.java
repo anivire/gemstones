@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import name.modid.Gemstones;
 import name.modid.core.api.modifiers.types.GemstoneType;
+import name.modid.core.utils.tooltip.BoostedValueFormatter;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -53,7 +54,8 @@ public class TooltipHelper {
     LOCKED("\uE911"),
     EMPTY("\uE912"),
     INFO("\uE913"),
-    EXPERIENCE("\uE914");
+    EXPERIENCE("\uE914"),
+    ARROW_UP_DIMINISHING("\uE915");
 
     private final String symbol;
 
@@ -145,7 +147,16 @@ public class TooltipHelper {
         .formatted(actualColor);
   }
 
-  public static String formatHealth(TooltipBuilder builder, double health) {
-    return builder.formatValue(health, Text.translatable("tooltip.gemstones.unit.health").getString());
+  // "6 ❤ Health", a boosted value goes right after the number: "6 (8) ❤ Health"
+  public static MutableText buildHealthAmountText(TooltipBuilder builder, double health, double boostedHealth) {
+    MutableText amount = Text.literal(builder.formatValue(health, "")).formatted(Formatting.RED);
+    if (BoostedValueFormatter.isBoosted(health, boostedHealth)) {
+      amount.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
+          .append(Text.literal(builder.formatValue(boostedHealth, "")).formatted(Formatting.LIGHT_PURPLE))
+          .append(Text.literal(")").formatted(Formatting.DARK_GRAY));
+    }
+
+    return TooltipText.line(amount, Text.literal(" "), buildTextWithIcon(InlineIcons.HALF_HEART,
+        Text.translatable("tooltip.gemstones.unit.health").getString().trim()));
   }
 }

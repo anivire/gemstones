@@ -45,10 +45,12 @@ public class MultiplyAttributeHandler extends BaseTooltipHandler<ModifierConfig.
       String postfix = AttributeValueFormat.postfix(sub);
       String formatted = builder.formatValue(Math.abs(displayAdjusted), postfix);
       boolean isPositive = displayValue > 0;
+      boolean diminishing = AttributeValueFormat.hasDiminishingStack(sub, builder.getItemCategory());
+      Formatting valueColor = TooltipBuilder.getValueColor(isPositive, diminishing);
 
       MutableText part = Text.empty()
-          .append(builder.getArrowPrefix(isPositive))
-          .append(Text.literal(formatted).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
+          .append(builder.getValuePrefix(isPositive, diminishing))
+          .append(Text.literal(formatted).formatted(valueColor));
 
       if (BoostedValueFormatter.isBoosted(Math.abs(displayAdjusted), Math.abs(boostedAdjusted))) {
         part.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))

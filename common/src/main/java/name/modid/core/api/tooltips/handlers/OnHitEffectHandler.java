@@ -31,6 +31,12 @@ public class OnHitEffectHandler<T extends ModifierConfig> extends BaseTooltipHan
     }
   }
 
+  // Chances of the same effect are combined with cappedProcChance
+  @Override
+  protected boolean hasDiminishingStack(T cfg) {
+    return true;
+  }
+
   @Override
   protected double adjustValue(T cfg, double value) {
     return value * 100;

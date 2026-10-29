@@ -21,6 +21,11 @@ public class AttributeHandler extends BaseTooltipHandler<ModifierConfig.Attribut
   }
 
   @Override
+  protected boolean hasDiminishingStack(ModifierConfig.AttributeConfig cfg) {
+    return AttributeValueFormat.hasDiminishingStack(cfg, builder.getItemCategory());
+  }
+
+  @Override
   protected double adjustValue(ModifierConfig.AttributeConfig cfg, double value) {
     return AttributeValueFormat.toDisplay(cfg, value);
   }

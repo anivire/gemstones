@@ -1,6 +1,8 @@
 package name.modid.core.api.modifiers.helpers;
 
 import name.modid.Gemstones;
+import name.modid.core.api.modifiers.config.ModifierConfig;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
@@ -19,6 +21,12 @@ public final class GemstoneAttributeCapHelper {
       EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET };
 
   private GemstoneAttributeCapHelper() {
+  }
+
+  public static boolean isCapped(ModifierConfig.AttributeConfig cfg, ModifierItemCategory category) {
+    return category == ModifierItemCategory.ARMOR
+        && cfg.attribute().value() == EntityAttributes.GENERIC_MAX_HEALTH.value()
+        && cfg.operation() == EntityAttributeModifier.Operation.ADD_VALUE;
   }
 
   // Armor pieces add their modifiers separately, so the cap is a negative modifier on the player

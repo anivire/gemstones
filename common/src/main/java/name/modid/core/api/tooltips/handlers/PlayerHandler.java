@@ -8,7 +8,6 @@ import name.modid.core.api.tooltips.TooltipHelper;
 import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
 import name.modid.core.utils.amber.AmberShellHelper;
 import name.modid.core.utils.oreVision.OreVisionRadius;
-import name.modid.core.utils.tooltip.BoostedValueFormatter;
 import name.modid.core.utils.witherGuard.WitherGuardSkullLimit;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -124,16 +123,6 @@ public class PlayerHandler extends BaseTooltipHandler<ModifierConfig.PlayerConfi
       displayThreshold = basePlayerConfig.additionalValues().get(rarityType);
     }
 
-    MutableText thresholdText = TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
-        TooltipHelper.formatHealth(builder, displayThreshold));
-
-    if (BoostedValueFormatter.isBoosted(displayThreshold, boostedThreshold)) {
-      thresholdText.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
-          .append(Text.literal(TooltipHelper.formatHealth(builder, boostedThreshold))
-              .formatted(Formatting.LIGHT_PURPLE))
-          .append(Text.literal(")").formatted(Formatting.DARK_GRAY));
-    }
-
-    return thresholdText;
+    return TooltipHelper.buildHealthAmountText(builder, displayThreshold, boostedThreshold);
   }
 }

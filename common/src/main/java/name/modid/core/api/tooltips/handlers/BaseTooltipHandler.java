@@ -34,10 +34,12 @@ public abstract class BaseTooltipHandler<T extends ModifierConfig> implements To
 
     boolean isPositive = displayRaw > 0;
     String formatted = formatAdjusted(config, Math.abs(adjustValue(config, displayRaw)));
+    boolean diminishing = hasDiminishingStack(config);
+    Formatting valueColor = TooltipBuilder.getValueColor(isPositive, diminishing);
 
     MutableText valueText = Text.empty()
-        .append(builder.getArrowPrefix(isPositive))
-        .append(Text.literal(formatted).formatted(isPositive ? Formatting.GREEN : Formatting.RED));
+        .append(builder.getValuePrefix(isPositive, diminishing))
+        .append(Text.literal(formatted).formatted(valueColor));
 
     if (typedBaseConfig != null) {
       double baseRaw = removeValue(typedBaseConfig);
@@ -57,6 +59,12 @@ public abstract class BaseTooltipHandler<T extends ModifierConfig> implements To
   }
 
   protected abstract double removeValue(T cfg);
+
+  protected boolean hasDiminishingStack(T cfg) {
+    return cfg instanceof ModifierConfig.Events events
+        && events.eventType() != null
+        && events.eventType().hasDiminishingStack();
+  }
 
   protected double adjustValue(T cfg, double value) {
     return value;

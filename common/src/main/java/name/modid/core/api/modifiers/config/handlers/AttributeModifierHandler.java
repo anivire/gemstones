@@ -178,7 +178,7 @@ public class AttributeModifierHandler {
     return gemstoneEntries;
   }
 
-  private static List<AttributeConfig> getAttributeConfigs(GemstoneModifier modifier) {
+  public static List<AttributeConfig> getAttributeConfigs(GemstoneModifier modifier) {
     if (modifier.getConfig() instanceof AttributeConfig single) {
       return List.of(single);
     }

@@ -1,5 +1,6 @@
 package name.modid.core.api.modifiers.config.utils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,8 @@ import java.util.stream.Stream;
 
 import name.modid.core.api.modifiers.config.GemstoneModifier;
 import name.modid.core.api.modifiers.config.ModifierConfig;
+import name.modid.core.api.modifiers.config.ModifierConfig.AttributeConfig;
+import name.modid.core.api.modifiers.config.handlers.AttributeModifierHandler;
 import name.modid.core.api.modifiers.helpers.ModifierHelper;
 import name.modid.core.api.modifiers.helpers.ModifierGatheringHelper;
 import net.minecraft.component.DataComponentTypes;
@@ -35,15 +38,6 @@ public class ModifierUtils {
     return world.getRandom().nextDouble() < chance;
   }
 
-  // Hyperbolic stacking (S7): every copy adds less than the previous one, the limit is never reached
-  public static double softStack(double sum, double limit) {
-    if (sum <= 0.0 || limit <= 0.0) {
-      return Math.max(0.0, sum);
-    }
-
-    return sum / (1.0 + sum / limit);
-  }
-
   public static double cappedProcChance(Collection<Double> chances) {
     double result = 1.0;
     for (double p : chances) {
@@ -58,6 +52,38 @@ public class ModifierUtils {
     return collectValuesFromAllEquipment(
         player,
         itemStack -> ModifierGatheringHelper.getModifiers(itemStack, configClass));
+  }
+
+  // One value per socketed gemstone (armor and main hand), so each gem can roll its own chance
+  public static List<Double> collectGemstoneAttributeValues(
+      LivingEntity entity,
+      RegistryEntry<EntityAttribute> attribute) {
+    List<Double> values = new ArrayList<>();
+
+    for (EquipmentSlot slot : new EquipmentSlot[] {
+        EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET,
+        EquipmentSlot.MAINHAND }) {
+      ItemStack stack = entity.getEquippedStack(slot);
+      if (!isStackActiveInSlot(stack, slot)) {
+        continue;
+      }
+
+      for (GemstoneModifier modifier : ModifierGatheringHelper.getAttributeModifiers(stack)) {
+        double value = 0.0;
+        for (AttributeConfig config : AttributeModifierHandler.getAttributeConfigs(modifier)) {
+          // Config entries are vanilla references, the mod ones are Architectury suppliers
+          if (config.attribute().value() == attribute.value()) {
+            value += config.values().get(modifier.getRarityType());
+          }
+        }
+
+        if (value != 0.0) {
+          values.add(value);
+        }
+      }
+    }
+
+    return values;
   }
 
   public static double collectAttributeValuesFromArmor(LivingEntity entity, RegistryEntry<EntityAttribute> attribute) {

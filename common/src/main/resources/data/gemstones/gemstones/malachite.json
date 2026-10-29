@@ -53,10 +53,10 @@
           "type": "ATTRIBUTE",
           "attribute_id": "minecraft:generic.knockback_resistance",
           "value_levels": [
-            0.03,
             0.05,
             0.08,
-            0.1
+            0.12,
+            0.15
           ],
           "operation": "ADD_VALUE"
         }

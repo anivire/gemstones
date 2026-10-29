@@ -5,11 +5,7 @@ import name.modid.core.api.modifiers.types.EventType;
 import name.modid.core.api.modifiers.types.GemstoneQuality;
 import name.modid.core.api.tooltips.TooltipBuilder;
 import name.modid.core.api.tooltips.TooltipHelper;
-import name.modid.core.api.tooltips.TooltipHelper.InlineIcons;
-import name.modid.core.utils.tooltip.BoostedValueFormatter;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 public class OnPlayerDamageHandler extends BaseTooltipHandler<ModifierConfig.OnPlayerDamageConfig> {
 
@@ -71,16 +67,6 @@ public class OnPlayerDamageHandler extends BaseTooltipHandler<ModifierConfig.OnP
       displayThreshold = baseDamageConfig.additionalValues().get(rarityType);
     }
 
-    MutableText thresholdText = TooltipHelper.buildTextWithIcon(InlineIcons.HALF_HEART,
-        TooltipHelper.formatHealth(builder, displayThreshold));
-
-    if (BoostedValueFormatter.isBoosted(displayThreshold, boostedThreshold)) {
-      thresholdText.append(Text.literal(" (").formatted(Formatting.DARK_GRAY))
-          .append(Text.literal(TooltipHelper.formatHealth(builder, boostedThreshold))
-              .formatted(Formatting.LIGHT_PURPLE))
-          .append(Text.literal(")").formatted(Formatting.DARK_GRAY));
-    }
-
-    return thresholdText;
+    return TooltipHelper.buildHealthAmountText(builder, displayThreshold, boostedThreshold);
   }
 }

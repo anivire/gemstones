@@ -15,6 +15,8 @@ public final class EventType {
   private final Identifier id;
   private final String name;
   private final String translationKey;
+  // Chances combined as 1 - (1 - p1)(1 - p2)..., every next gemstone adds less than the previous one
+  private final boolean diminishingStack;
 
   public static final RegistryKey<Registry<EventType>> REGISTRY_KEY = RegistryKey
       .ofRegistry(Identifier.of(Gemstones.MOD_ID, "event_type"));
@@ -22,60 +24,60 @@ public final class EventType {
 
   private static final Map<String, EventType> BY_NAME = new ConcurrentHashMap<>();
 
-  public static final EventType ON_HIT_LIFE_STEAL = register("ON_HIT_LIFE_STEAL",
+  public static final EventType ON_HIT_LIFE_STEAL = registerDiminishing("ON_HIT_LIFE_STEAL",
       "tooltip.gemstones.event_name.lifesteal");
-  public static final EventType ON_HIT_LIGHTNING_BOLT = register("ON_HIT_LIGHTNING_BOLT",
+  public static final EventType ON_HIT_LIGHTNING_BOLT = registerDiminishing("ON_HIT_LIGHTNING_BOLT",
       "tooltip.gemstones.event_name.lighting_bolt");
   public static final EventType ON_HIT_TORRENT = register("ON_HIT_TORRENT", "tooltip.gemstones.event_name.torrent");
-  public static final EventType ON_HIT_SMALL_FLAT_EXPLOSION = register("ON_HIT_SMALL_FLAT_EXPLOSION",
+  public static final EventType ON_HIT_SMALL_FLAT_EXPLOSION = registerDiminishing("ON_HIT_SMALL_FLAT_EXPLOSION",
       "tooltip.gemstones.event_name.small_flat_explode");
-  public static final EventType ON_HIT_COPY_ENTITY_DROP = register("ON_HIT_COPY_ENTITY_DROP",
+  public static final EventType ON_HIT_COPY_ENTITY_DROP = registerDiminishing("ON_HIT_COPY_ENTITY_DROP",
       "tooltip.gemstones.event_name.copy_entity_drop");
   public static final EventType ON_HIT_MULTIPLY_DAMAGE_ARMORLESS = register("ON_HIT_MULTIPLY_DAMAGE_ARMORLESS",
       "tooltip.gemstones.event_name.multiply_damage_armorless");
-  public static final EventType ON_HIT_MAGIC_STRIKE = register("ON_HIT_MAGIC_STRIKE",
+  public static final EventType ON_HIT_MAGIC_STRIKE = registerDiminishing("ON_HIT_MAGIC_STRIKE",
       "tooltip.gemstones.event_name.magic_strike");
-  public static final EventType ON_HIT_ENDER_JUDGEMENT = register("ON_HIT_ENDER_JUDGEMENT",
+  public static final EventType ON_HIT_ENDER_JUDGEMENT = registerDiminishing("ON_HIT_ENDER_JUDGEMENT",
       "tooltip.gemstones.event_name.ender_judgement");
   public static final EventType ON_HIT_ENTITY_PULL = register("ON_HIT_ENTITY_PULL",
       "tooltip.gemstones.event_name.entity_pull");
-  public static final EventType ON_HIT_ARROW_RAIN = register("ON_HIT_ARROW_RAIN",
+  public static final EventType ON_HIT_ARROW_RAIN = registerDiminishing("ON_HIT_ARROW_RAIN",
       "tooltip.gemstones.event_name.arrow_rain");
-  public static final EventType ON_HIT_RANDOM_EFFECT = register("ON_HIT_RANDOM_EFFECT",
+  public static final EventType ON_HIT_RANDOM_EFFECT = registerDiminishing("ON_HIT_RANDOM_EFFECT",
       "tooltip.gemstones.event_name.target_random_effect");
   public static final EventType ON_HIT_EXP_ADDITIONAL_DAMAGE = register("ON_HIT_EXP_ADDITIONAL_DAMAGE",
       "tooltip.gemstones.event_name.exp_additional_damage");
   public static final EventType ON_FIRST_HIT_ADDITIONAL_DAMAGE = register("ON_FIRST_HIT_ADDITIONAL_DAMAGE",
       "tooltip.gemstones.event_name.additional_damage");
 
-  public static final EventType ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP = register("ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP",
+  public static final EventType ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP = registerDiminishing("ON_BLOCK_BREAK_ADDITIONAL_GOLD_DROP",
       "tooltip.gemstones.event_name.additional_gold_drop");
-  public static final EventType ON_BLOCK_BREAK_REGENERATE_BLOCK = register("ON_BLOCK_BREAK_REGENERATE_BLOCK",
+  public static final EventType ON_BLOCK_BREAK_REGENERATE_BLOCK = registerDiminishing("ON_BLOCK_BREAK_REGENERATE_BLOCK",
       "tooltip.gemstones.event_name.regenerate_block");
-  public static final EventType ON_BLOCK_BREAK_SMELTER = register("ON_BLOCK_BREAK_SMELTER",
+  public static final EventType ON_BLOCK_BREAK_SMELTER = registerDiminishing("ON_BLOCK_BREAK_SMELTER",
       "tooltip.gemstones.event_name.smelter");
-  public static final EventType ON_BLOCK_BREAK_ENCHANTER = register("ON_BLOCK_BREAK_ENCHANTER",
+  public static final EventType ON_BLOCK_BREAK_ENCHANTER = registerDiminishing("ON_BLOCK_BREAK_ENCHANTER",
       "tooltip.gemstones.event_name.block_enchanter");
-  public static final EventType ON_BLOCK_BREAK_EXTRA_HEALTH = register("ON_BLOCK_BREAK_EXTRA_HEALTH",
+  public static final EventType ON_BLOCK_BREAK_EXTRA_HEALTH = registerDiminishing("ON_BLOCK_BREAK_EXTRA_HEALTH",
       "tooltip.gemstones.event_name.extra_health");
-  public static final EventType ON_BLOCK_BREAK_HEAL = register("ON_BLOCK_BREAK_HEAL",
+  public static final EventType ON_BLOCK_BREAK_HEAL = registerDiminishing("ON_BLOCK_BREAK_HEAL",
       "tooltip.gemstones.event_name.heal");
-  public static final EventType ON_BLOCK_BREAK_SATURATION = register("ON_BLOCK_BREAK_SATURATION",
+  public static final EventType ON_BLOCK_BREAK_SATURATION = registerDiminishing("ON_BLOCK_BREAK_SATURATION",
       "tooltip.gemstones.event_name.saturation");
   public static final EventType ON_BLOCK_BREAK_MAGNET = register("ON_BLOCK_BREAK_MAGNET",
       "tooltip.gemstones.event_name.magnet");
   public static final EventType ON_BLOCK_BREAK_MINER = register("ON_BLOCK_BREAK_MINER",
       "tooltip.gemstones.event_name.miner");
-  public static final EventType ON_BLOCK_BREAK_RANDOM_ITEM_DROP = register("ON_BLOCK_BREAK_RANDOM_ITEM_DROP",
+  public static final EventType ON_BLOCK_BREAK_RANDOM_ITEM_DROP = registerDiminishing("ON_BLOCK_BREAK_RANDOM_ITEM_DROP",
       "tooltip.gemstones.event_name.random_item_drop");
-  public static final EventType ON_BLOCK_BREAK_CHAIN_LIGHTNING = register("ON_BLOCK_BREAK_CHAIN_LIGHTNING",
+  public static final EventType ON_BLOCK_BREAK_CHAIN_LIGHTNING = registerDiminishing("ON_BLOCK_BREAK_CHAIN_LIGHTNING",
       "tooltip.gemstones.event_name.chain_lightning");
-  public static final EventType ON_BLOCK_BREAK_GAMBLE = register("ON_BLOCK_BREAK_GAMBLE",
+  public static final EventType ON_BLOCK_BREAK_GAMBLE = registerDiminishing("ON_BLOCK_BREAK_GAMBLE",
       "tooltip.gemstones.event_name.gamble");
 
   public static final EventType ON_POTION_BREW_INCREASE_DURATION = register("ON_POTION_BREW_INCREASE_DURATION",
       "tooltip.gemstones.event_name.potion_duration");
-  public static final EventType ON_FISHING_INCREASE_MOSSY_BOX_DROP = register("ON_FISHING_INCREASE_MOSSY_BOX_DROP",
+  public static final EventType ON_FISHING_INCREASE_MOSSY_BOX_DROP = registerDiminishing("ON_FISHING_INCREASE_MOSSY_BOX_DROP",
       "tooltip.gemstones.event_name.increase_mossy_box_drop");
 
   public static final EventType PLAYER_WITHER_GUARD = register("PLAYER_WITHER_GUARD",
@@ -113,14 +115,23 @@ public final class EventType {
   public static final EventType ITEM_EXPLOSION_IMMUNE = register("ITEM_EXPLOSION_IMMUNE",
       "tooltip.gemstones.event_name.item_explosion_immune");
 
-  private EventType(String name, String translationKey) {
+  private EventType(String name, String translationKey, boolean diminishingStack) {
     this.name = name;
     this.translationKey = translationKey;
+    this.diminishingStack = diminishingStack;
     this.id = Identifier.of(Gemstones.MOD_ID, name.toLowerCase(Locale.ROOT));
   }
 
   private static EventType register(String name, String translationKey) {
-    EventType type = new EventType(name, translationKey);
+    return register(name, translationKey, false);
+  }
+
+  private static EventType registerDiminishing(String name, String translationKey) {
+    return register(name, translationKey, true);
+  }
+
+  private static EventType register(String name, String translationKey, boolean diminishingStack) {
+    EventType type = new EventType(name, translationKey, diminishingStack);
     Registry.register(REGISTRY, type.id, type);
     BY_NAME.put(name, type);
     return type;
@@ -155,6 +166,10 @@ public final class EventType {
 
   public String getTranslationKey() {
     return translationKey;
+  }
+
+  public boolean hasDiminishingStack() {
+    return diminishingStack;
   }
 
   @Override

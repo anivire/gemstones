@@ -1,11 +1,12 @@
 package name.modid.core.utils.tooltip;
 
 import java.util.Map;
-import java.util.Set;
 
-import name.modid.Gemstones;
 import name.modid.core.api.modifiers.config.ModifierConfig;
-import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
+import name.modid.core.api.modifiers.helpers.GemstoneAttributeCapHelper;
+import name.modid.core.api.modifiers.types.ModifierItemCategory;
+import name.modid.core.content.registries.AttributesRegistry;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -19,17 +20,13 @@ public final class AttributeValueFormat {
   private static final Map<Identifier, String> NAME_OVERRIDES = Map.of(
       Identifier.ofVanilla("generic.scale"), "tooltip.gemstones.attribute_name.player_scale");
 
-  // Attributes where an ADD_VALUE modifier already means a percent:
-  // - geode_drop_chance, knockback_resistance: the value is a 0..1 chance or resistance
-  // - submerged_mining_speed: the value is a share of the normal mining speed (base 0.2 = 20%)
-  // - oxygen_bonus: +N stretches breath time by N * 100% (air is lost with chance 1 / (bonus + 1))
-  private static final Set<Identifier> PERCENT_VALUE_ATTRIBUTES = Set.of(
-      Identifier.of(Gemstones.MOD_ID, "geode_drop_chance"),
-      Identifier.ofVanilla("generic.knockback_resistance"),
-      Identifier.ofVanilla("player.submerged_mining_speed"),
-      Identifier.ofVanilla("generic.oxygen_bonus"));
-
   private AttributeValueFormat() {
+  }
+
+  // Evasion rolls per gemstone (cappedProcChance), max health from armor is capped
+  public static boolean hasDiminishingStack(ModifierConfig.AttributeConfig cfg, ModifierItemCategory category) {
+    return cfg.attribute().value() == AttributesRegistry.EVASION
+        || GemstoneAttributeCapHelper.isCapped(cfg, category);
   }
 
   public static MutableText name(ModifierConfig.AttributeConfig cfg) {
@@ -39,9 +36,9 @@ public final class AttributeValueFormat {
     return Text.translatable(key != null ? key : cfg.attribute().value().getTranslationKey().toLowerCase());
   }
 
-  public static boolean isPercent(ModifierConfig.AttributeConfig cfg) {
-    return cfg.operation() != Operation.ADD_VALUE
-        || cfg.attribute().getKey().map(key -> PERCENT_VALUE_ATTRIBUTES.contains(key.getValue())).orElse(false);
+  // Multipliers are percents, flat additions are shown as is
+  private static boolean isPercent(ModifierConfig.AttributeConfig cfg) {
+    return cfg.operation() != EntityAttributeModifier.Operation.ADD_VALUE;
   }
 
   public static double toDisplay(ModifierConfig.AttributeConfig cfg, double value) {
